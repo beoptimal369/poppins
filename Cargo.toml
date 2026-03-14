@@ -1,6 +1,14 @@
 [package]
+license = "MIT"
 name = "poppins"
-version = "0.1.0"
 edition = "2024"
+version = "0.1.0"
+readme = "README.md"
+authors = ["Chris Carrington"]
+homepage = "https://github.com/beoptimal369/poppins"
+repository = "https://github.com/beoptimal369/poppins"
+categories = ["command-line-utilities", "algorithms"]
+description = "Our mission is to be the default way developers create custom LLMs"
+keywords = ["ai", "llm", "model", "bitnet", "ternary", "machine-learning", "quantization"]
 
 [dependencies]
