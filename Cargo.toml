@@ -7,8 +7,8 @@ readme = "README.md"
 authors = ["Chris Carrington"]
 homepage = "https://github.com/beoptimal369/poppins"
 repository = "https://github.com/beoptimal369/poppins"
-categories = ["command-line-utilities", "algorithms"]
+keywords = ["ai", "llm", "bitnet", "ternary", "machine-learning"]
+categories = ["command-line-utilities", "artificial-intelligence"]
 description = "Our mission is to be the default way developers create custom LLMs"
-keywords = ["ai", "llm", "model", "bitnet", "ternary", "machine-learning", "quantization"]
 
 [dependencies]
