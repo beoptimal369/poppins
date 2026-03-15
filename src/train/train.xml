@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<train xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://xsd.beoptimal369.workers.dev/?version=0.1.0">
+  <prompts>
+    <prompt id="1">What is a computer?</prompt>
+    <prompt id="2">What is computer programming?</prompt>
+    <prompt id="3">What is the internet?</prompt>
+    <prompt id="4">What is a computer network?</prompt>
+    <prompt id="5">What is a router?</prompt>
+    <prompt id="6">What is a modem?</prompt>
+    <prompt id="7">What is an ISP?</prompt>
+    <prompt id="8">What is an IP Address?</prompt>
+    <prompt id="9">What is a domain name?</prompt>
+  </prompts>
+
+
+
+  <responses>
+    <response id="1">A computer is a computing / information processing device.</response>
+    <response id="2">Computer programming is the process of composing and organizing a collection of instructions. These instructions tell a computer/software program what to do in a language that the computer understands. These instructions come in the form of many different languages such as JavaScript, HTML and Rust.</response>
+    <response id="3">The Internet is a large network of computers that communicate together. It began in the 1960s as a US-army-funded research project and then evolved into a public infrastructure in the 1980s with the support of many public universities and private companies.</response>
+    <response id="4">A computer network is group of communicating computers, connected via cables, Wi-Fi or Bluetooth.</response>
+    <response id="5">A router is a computer that knows how to forward messages between networks.</response>
+    <response id="6">Modems help us connect routers b/c a modem turns router information into information that can transport telephone infrastructure.</response>
+    <response id="7">Modems help us connect computers via telephone lines.</response>
+    <response id="8">An ISP (Internet Service Provider) is a company that manages special routers. All ISP Routers are linked together &amp; all internet traffic flow through ISP's.</response>
+    <response id="9">An IP (Internet Protocol) address is an address made of a series of four numbers separated by dots (example: 192.0.2.172). Any computer linked to a network has a unique IP address that identifies it. To reach a computer over the internet we may use its IP Address but b/c numbers are harder to remember then a name we alias IP Addresses w/ domain names.</response>
+    <response id="10">We can alias an IP address with a human-readable name called a domain name. For example (at the time of writing; IP addresses can change) google.com is the domain name used on top of the IP address 142.250.190.78. Using the domain name is the easiest way for us to reach a computer over the Internet.</response>
+  </responses>
+
+
+
+  <sources>
+    <source id="1" url="https://en-word.net/lemma/computer" />
+    <source id="2" url="https://developer.mozilla.org/en-US/docs/Glossary/Computer-Programming" />
+    <source id="3" url="https://developer.mozilla.org/en-US/docs/Learn-web-development/Howto/Web-mechanics/How-does-the-Internet-work" />
+    <source id="4" url="https://en.wikipedia.org/wiki/Computer-network" />
+    <source id="5" url="https://en-word.net/lemma/modem" />
+  </sources>
+
+
+
+  <code-snippets>
+    <code id="1" lang="ts">
+function example() {
+  console.log('hi')
+}
+    </code>
+  </code-snippets>
+
+  <samples>
+    <sample-ids prompt="1" response="1" source="1" />
+    <sample-ids prompt="2" response="2" source="2" />
+    <sample-ids prompt="3" response="3" source="3" />
+
+    <sample>
+      <prompt id="4" />
+      <response id="4" />
+      <source id="3" />
+      <source id="4" />
+      <code id="1" />
+    </sample>
+
+    <sample-ids prompt="5" response="5" source="3" />
+
+    <sample>
+      <prompt id="6" />
+      <response-ids response="6" source="3" />
+      <response-ids response="7" source="5" />
+    </sample>
+
+    <sample-ids prompt="7" response="8" source="3" />
+    <sample-ids prompt="8" response="9" source="3" />
+    <sample-ids prompt="9" response="10" source="3" />
+  </samples>
+
+
+
+  <constants>
+    <constant key="aim_train_gb" value="3.0" />
+    <constant key="aim_infer_f16_gb" value="0.9" />
+    <constant key="learning_rate" value="1e-3" />
+    <constant key="warmup_steps" value="100" />
+    <constant key="aim_loss" value="0.45" />
+    <constant key="val_interval" value="10" />
+
+    <constant key="weight_decay_response" value="0.1" />
+    <constant key="weight_decay_source" value="0.01" />
+    <constant key="weight_decay_code" value="0.05" />
+
+    <constant key="dropout_rate_response" value="0.05" />
+    <constant key="dropout_rate_source" value="0.0" />
+    <constant key="dropout_rate_code" value="0.1" />
+
+    <constant key="loss_scale_response" value="1.0" />
+    <constant key="loss_scale_source" value="0.2" />
+    <constant key="loss_scale_code" value="1.0" />
+
+    <constant key="gradient_scale_response" value="1.0" />
+    <constant key="gradient_scale_source" value="2.0" />
+    <constant key="gradient_scale_code" value="1.2" />
+
+    <constant key="gradient_clip_response" value="1.0" />
+    <constant key="gradient_clip_source" value="0.1" />
+    <constant key="gradient_clip_code" value="0.7" />
+  </constants>
+
+
+
+  <phrases>
+    <phrase key="b/c">
+      <variant value="because" />
+    </phrase>
+    <phrase key="w/ ">
+      <variant value="with " />
+    </phrase>
+    <phrase key="w/in">
+      <variant value="w/in" />
+    </phrase>
+    <phrase key="ty">
+      <variant value="thanks" />
+      <variant value="thank you" />
+    </phrase>
+    <phrase key="yp">
+      <variant value="yes please" />
+      <variant value="ok" />
+      <variant value="yes" />
+      <variant value="yep" />
+      <variant value="yup" />
+      <variant value="sure" />
+      <variant value="okay" />
+      <variant value="alright" />
+    </phrase>
+    <phrase key="What is a " remove-trailing-question-mark="true">
+      <variant value="Define " />
+      <variant value="Define: " />
+    </phrase>
+    <phrase key="What is an " remove-trailing-question-mark="true">
+      <variant value="Define " />
+      <variant value="Define: " />
+    </phrase>
+    <phrase key="What is the " remove-trailing-question-mark="true">
+      <variant value="Define " />
+      <variant value="Define: " />
+    </phrase>
+  </phrases>
+</train>

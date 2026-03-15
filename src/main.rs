@@ -1,31 +1,25 @@
 // src/main.rs
 
-use std::env;
-use std::process;
-
-pub mod help;
+pub mod cli;
 pub mod train;
 pub mod infer;
 pub mod bootstrap;
 
+use crate::{
+    train::train,
+    infer::infer,
+    bootstrap::bootstrap,
+    cli::{Cli, CliCommand},
+};
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
-
-    if args.len() < 2 {
-        crate::help::help();
-        process::exit(0);
-    }
-
-    match args[1].as_str() {
-        "help" | "--help" | "-h" => crate::help::help(),
-        "bootstrap" => crate::bootstrap::bootstrap(),
-        "train" => crate::train::train(),
-        "infer" => crate::infer::infer(),
-        _ => {
-            println!("❌ Unknown command: {}\n", args[1]);
-            crate::help::help();
-            process::exit(1);
-        }
+    let cli = Cli::parse_args();
+    
+    match cli.command {
+        CliCommand::Bootstrap => bootstrap(),
+        CliCommand::Train { input } => {
+            train(input.as_deref()).expect("Should train");
+        },
+        CliCommand::Infer => infer(),
     }
 }

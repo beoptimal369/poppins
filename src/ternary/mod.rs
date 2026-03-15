@@ -1,10 +1,10 @@
 // src/ternary/mod.rs
 
-pub mod ternary;
-pub mod ternary_layer;
-pub mod ternary_weights;
-pub mod ternary_computation;
-pub mod ternary_layer_forward;
+mod ternary;
+mod ternary_layer;
+mod ternary_weights;
+mod ternary_computation;
+mod ternary_layer_forward;
 
 pub use ternary::Ternary;
 pub use ternary_layer::TernaryLayer;

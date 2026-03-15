@@ -1,0 +1,60 @@
+// src/cli/cli_command.rs
+
+use clap::Subcommand;
+use std::path::PathBuf;
+
+
+/// Poppins CLI Commands
+#[derive(Subcommand, Debug, PartialEq)]
+pub enum CliCommand {
+    /// Create a sample train.xml in the current directory
+    Bootstrap,
+    
+    /// Train an Ai model based on the training xml
+    Train {
+        /// Path to the training XML file (defaults to ./train.xml)
+        #[clap(short = 'i', long = "input", value_name = "PATH")]
+        input: Option<PathBuf>,
+    },
+    
+    /// Send a prompt to an Ai model & get back a response
+    Infer,
+}
+
+
+
+#[cfg(test)]
+mod tests {
+    use clap::Parser;
+    use std::path::PathBuf;
+    use crate::{Cli, CliCommand};
+
+    #[test]
+    fn test_train_command() {
+        let args_input_long = vec!["poppins", "train", "--input", "custom.xml"];
+        
+        match Cli::try_parse_from(args_input_long).expect("Should parse --input").command {
+            CliCommand::Train { input } => {
+                assert_eq!(input, Some(PathBuf::from("custom.xml")));
+            }
+            _ => panic!("Expected Train variant"),
+        }
+
+        let args_input_short = vec!["poppins", "train", "-i", "custom.xml"];
+        
+        match Cli::try_parse_from(args_input_short).expect("Should parse -i").command {
+            CliCommand::Train { input } => {
+                assert_eq!(input, Some(PathBuf::from("custom.xml")));
+            }
+            _ => panic!("Expected Train variant"),
+        }
+    }
+
+    #[test]
+    fn test_unknown_command() {
+        let args = vec!["poppins", "fly"];
+        let result = Cli::try_parse_from(args);
+        
+        assert!(result.is_err());
+    }
+}

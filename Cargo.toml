@@ -11,4 +11,8 @@ keywords = ["ai", "llm", "bitnet", "ternary", "machine-learning"]
 categories = ["command-line-utilities", "artificial-intelligence"]
 description = "Our mission is to be the default way developers create custom LLMs"
 
+[dev-dependencies]
+tempfile = "3.27.0"
+
 [dependencies]
+clap = { version = "4.6.0", features = ["derive"] }

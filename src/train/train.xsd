@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema 
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
+  vc:minVersion="1.1">
+
+  <!-- Root element -->
+  <xs:element name="train">
+    <xs:complexType>
+      <xs:all>
+        <xs:element name="samples" type="SamplesType"/>
+        <xs:element name="prompts" type="PromptsType" minOccurs="0"/>
+        <xs:element name="responses" type="ResponsesType" minOccurs="0"/> <!-- Renamed from paragraphs -->
+        <xs:element name="sources" type="SourcesType" minOccurs="0"/>
+        <xs:element name="code-snippets" type="CodeSnippetsType" minOccurs="0"/>
+        <xs:element name="constants" type="ConstantsType" minOccurs="0"/>
+        <xs:element name="phrases" type="PhrasesType" minOccurs="0"/>
+      </xs:all>
+    </xs:complexType>
+
+    <!-- Unique constraints for cross-referencing -->
+    <xs:key name="promptIdKey">
+      <xs:selector xpath="prompts/prompt"/>
+      <xs:field xpath="@id"/>
+    </xs:key>
+
+    <xs:key name="responseIdKey"> <!-- Renamed from paragraphIdKey -->
+      <xs:selector xpath="responses/response"/>
+      <xs:field xpath="@id"/>
+    </xs:key>
+
+    <xs:key name="sourceIdKey">
+      <xs:selector xpath="sources/source"/>
+      <xs:field xpath="@id"/>
+    </xs:key>
+
+    <xs:key name="codeIdKey">
+      <xs:selector xpath="code-snippets/code"/>
+      <xs:field xpath="@id"/>
+    </xs:key>
+
+    <!-- References for sample-ids attributes -->
+    <xs:keyref name="sampleIdsPromptRef" refer="promptIdKey">
+      <xs:selector xpath="samples/sample-ids"/>
+      <xs:field xpath="@prompt"/>
+    </xs:keyref>
+
+    <xs:keyref name="sampleIdsResponseRef" refer="responseIdKey"> <!-- Renamed from paragraph -->
+      <xs:selector xpath="samples/sample-ids"/>
+      <xs:field xpath="@response"/>
+    </xs:keyref>
+
+    <xs:keyref name="sampleIdsSourceRef" refer="sourceIdKey">
+      <xs:selector xpath="samples/sample-ids"/>
+      <xs:field xpath="@source"/>
+    </xs:keyref>
+
+    <xs:keyref name="sampleIdsCodeRef" refer="codeIdKey">
+      <xs:selector xpath="samples/sample-ids"/>
+      <xs:field xpath="@code"/>
+    </xs:keyref>
+
+    <!-- References for response-ids attributes (renamed from paragraph-ids) -->
+    <xs:keyref name="responseIdsResponseRef" refer="responseIdKey">
+      <xs:selector xpath=".//response-ids"/>
+      <xs:field xpath="@response"/>
+    </xs:keyref>
+
+    <xs:keyref name="responseIdsSourceRef" refer="sourceIdKey">
+      <xs:selector xpath=".//response-ids"/>
+      <xs:field xpath="@source"/>
+    </xs:keyref>
+
+    <!-- References for source-id elements -->
+    <xs:keyref name="sourceIdElementRef" refer="sourceIdKey">
+      <xs:selector xpath=".//source-id"/>
+      <xs:field xpath="."/>
+    </xs:keyref>
+
+    <!-- References for code-id elements -->
+    <xs:keyref name="codeIdElementRef" refer="codeIdKey">
+      <xs:selector xpath=".//code-id"/>
+      <xs:field xpath="."/>
+    </xs:keyref>
+
+    <!-- References for child elements in verbose samples -->
+    <xs:keyref name="promptIdRef" refer="promptIdKey">
+      <xs:selector xpath="samples/sample/prompt"/>
+      <xs:field xpath="@id"/>
+    </xs:keyref>
+
+    <xs:keyref name="responseIdRef" refer="responseIdKey">
+      <xs:selector xpath="samples/sample/response"/>
+      <xs:field xpath="@id"/>
+    </xs:keyref>
+
+    <xs:keyref name="responseIdsResponseIdRef" refer="responseIdKey">
+      <xs:selector xpath="samples/sample/response-ids"/>
+      <xs:field xpath="@response"/>
+    </xs:keyref>
+
+    <xs:keyref name="sourceIdRef" refer="sourceIdKey">
+      <xs:selector xpath="samples/sample/source"/>
+      <xs:field xpath="@id"/>
+    </xs:keyref>
+
+    <xs:keyref name="codeIdRef" refer="codeIdKey">
+      <xs:selector xpath="samples/sample/code"/>
+      <xs:field xpath="@id"/>
+    </xs:keyref>
+  </xs:element>
+
+  <!-- Samples type definition - now flat list of mixed elements -->
+  <xs:complexType name="SamplesType">
+    <xs:sequence>
+      <xs:choice maxOccurs="unbounded">
+
+        <!-- Compact ID-based sample (attributes only) -->
+        <xs:element name="sample-ids">
+          <xs:complexType>
+            <xs:attribute name="prompt" type="xs:string" use="required"/>
+            <xs:attribute name="response" type="xs:string" use="optional"/> <!-- Renamed from paragraph -->
+            <xs:attribute name="code" type="xs:string" use="optional"/>
+            <xs:attribute name="source" type="xs:string" use="optional"/>
+          </xs:complexType>
+        </xs:element>
+
+        <!-- Verbose sample with flat child elements -->
+        <xs:element name="sample">
+          <xs:complexType>
+            <xs:choice minOccurs="1" maxOccurs="unbounded">
+              <!-- Prompt reference (required at least once) -->
+              <xs:element name="prompt">
+                <xs:complexType>
+                  <xs:attribute name="id" type="xs:string" use="required"/>
+                </xs:complexType>
+              </xs:element>
+
+              <!-- Response reference (can appear multiple times) -->
+              <xs:element name="response">
+                <xs:complexType>
+                  <xs:attribute name="id" type="xs:string" use="required"/>
+                </xs:complexType>
+              </xs:element>
+
+              <!-- Source reference -->
+              <xs:element name="source">
+                <xs:complexType>
+                  <xs:attribute name="id" type="xs:string" use="required"/>
+                </xs:complexType>
+              </xs:element>
+
+              <!-- Code reference -->
+              <xs:element name="code">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="id" type="xs:string" use="required"/>
+                      <xs:attribute name="indent" use="optional">
+                        <xs:simpleType>
+                          <xs:restriction base="xs:integer">
+                            <xs:enumeration value="1"/>
+                            <xs:enumeration value="2"/>
+                            <xs:enumeration value="3"/>
+                            <xs:enumeration value="4"/>
+                            <xs:enumeration value="5"/>
+                            <xs:enumeration value="6"/>
+                          </xs:restriction>
+                        </xs:simpleType>
+                      </xs:attribute>
+                      <xs:attribute name="inline" type="xs:boolean" use="optional" default="false"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+
+              <!-- Response-ids element (renamed from paragraph-ids) -->
+              <xs:element name="response-ids">
+                <xs:complexType>
+                  <xs:attribute name="response" type="xs:string" use="required"/>
+                  <xs:attribute name="source" type="xs:string" use="required"/>
+                </xs:complexType>
+              </xs:element>
+
+              <!-- Line break element -->
+              <xs:element name="br">
+                <xs:complexType/>
+              </xs:element>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Responses type definition (renamed from ParagraphsType) -->
+  <xs:complexType name="ResponsesType">
+    <xs:sequence>
+      <xs:element name="response" maxOccurs="unbounded">
+        <xs:complexType mixed="true">
+          <xs:attribute name="id" type="xs:string" use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Prompts type definition -->
+  <xs:complexType name="PromptsType">
+    <xs:sequence>
+      <xs:element name="prompt" maxOccurs="unbounded">
+        <xs:complexType mixed="true">
+          <xs:attribute name="id" type="xs:string" use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Sources type definition -->
+  <xs:complexType name="SourcesType">
+    <xs:sequence>
+      <xs:element name="source" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attribute name="id" type="xs:string" use="required"/>
+          <xs:attribute name="url" type="xs:string" use="required"/>
+          <xs:attribute name="title" type="xs:string" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- CodeSnippets type definition with restricted languages -->
+  <xs:complexType name="CodeSnippetsType">
+    <xs:sequence>
+      <xs:element name="code" maxOccurs="unbounded">
+        <xs:complexType mixed="true">
+          <xs:attribute name="id" type="xs:string" use="required"/>
+          <xs:attribute name="lang" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="rust"/>
+                <xs:enumeration value="html"/>
+                <xs:enumeration value="css"/>
+                <xs:enumeration value="ts"/>
+                <xs:enumeration value="tsx"/>
+                <xs:enumeration value="bash"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Constants type definition with updated key names -->
+  <xs:complexType name="ConstantsType">
+    <xs:sequence>
+      <xs:element name="constant" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attribute name="key" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="aim_train_gb"/>
+                <xs:enumeration value="aim_infer_f16_gb"/>
+                <xs:enumeration value="learning_rate"/>
+                <xs:enumeration value="warmup_steps"/>
+                <xs:enumeration value="aim_loss"/>
+                <xs:enumeration value="val_interval"/>
+                <xs:enumeration value="weight_decay_response"/>
+                <xs:enumeration value="weight_decay_source"/>
+                <xs:enumeration value="weight_decay_code"/>
+                <xs:enumeration value="dropout_rate_response"/>
+                <xs:enumeration value="dropout_rate_source"/>
+                <xs:enumeration value="dropout_rate_code"/>
+                <xs:enumeration value="loss_scale_response"/>
+                <xs:enumeration value="loss_scale_source"/>
+                <xs:enumeration value="loss_scale_code"/>
+                <xs:enumeration value="gradient_scale_response"/>
+                <xs:enumeration value="gradient_scale_source"/>
+                <xs:enumeration value="gradient_scale_code"/>
+                <xs:enumeration value="gradient_clip_response"/>
+                <xs:enumeration value="gradient_clip_source"/>
+                <xs:enumeration value="gradient_clip_code"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="value" use="required">
+            <xs:simpleType>
+              <xs:union>
+                <xs:simpleType>
+                  <xs:restriction base="xs:float"/>
+                </xs:simpleType>
+                <xs:simpleType>
+                  <xs:restriction base="xs:integer"/>
+                </xs:simpleType>
+              </xs:union>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Phrases type definition -->
+  <xs:complexType name="PhrasesType">
+    <xs:sequence>
+      <xs:element name="phrase" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="variant" maxOccurs="unbounded">
+              <xs:complexType>
+                <xs:attribute name="value" type="xs:string" use="required"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute name="key" type="xs:string" use="required"/>
+          <xs:attribute name="remove-trailing-question-mark" type="xs:boolean" use="optional" default="false"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
