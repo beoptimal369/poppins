@@ -7,8 +7,6 @@ use std::path::Path;
 pub fn train_xml_read(path_option: Option<&Path>) -> Result<String, Box<dyn std::error::Error>> {
     let path = path_option.unwrap_or(Path::new("./train.xml"));
     
-    println!("📖 Reading training configuration from: {}", path.display());
-    
     if !path.exists() {
         return Err(format!("❌ Error: File not found: {}", path.display()).into());
     }

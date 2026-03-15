@@ -32,8 +32,8 @@
 - `train()`:
     - ✅ Read `train.xml`
     - ✅ Parse `train.xml`
-    - Validate `train.xml`
-    - Create `TrainXML`
+    - ✅ Validate `train.xml`
+    - ✅ Create `TrainXML`
     - Writes `.poppins/vocab.json`
     - Writes `.poppins/manifest.json`
 - ...

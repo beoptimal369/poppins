@@ -37,7 +37,7 @@ pub struct TrainXMLSamplesSampleIds {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct TrainXMLSamplesSample {
     /// The sequence of prompt elements
-    pub prompt: Vec<TrainXMLSamplesPrompt>,
+    pub prompt: TrainXMLSamplesPrompt,
 
     /// The sequence of response-ids elements
     #[serde(rename = "response-ids")]

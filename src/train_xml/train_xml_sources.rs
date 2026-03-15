@@ -18,5 +18,9 @@ pub struct TrainXMLSourcesSource {
 
     /// URL for this source
     #[serde(rename = "@url")]
-    pub url: String
+    pub url: String,
+
+    /// Title for this source
+    #[serde(rename = "@title")]
+    pub title: Option<String>
 }
