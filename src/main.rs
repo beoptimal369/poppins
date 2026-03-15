@@ -1,16 +1,11 @@
 // src/main.rs
 
 pub mod cli;
-pub mod train;
-pub mod infer;
-pub mod bootstrap;
+pub mod ternary;
 
-use crate::{
-    train::train,
-    infer::infer,
-    bootstrap::bootstrap,
-    cli::{Cli, CliCommand},
-};
+use crate::cli::{Cli, CliCommand};
+use poppins::{bootstrap, train, infer};
+
 
 fn main() {
     let cli = Cli::parse_args();

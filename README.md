@@ -31,6 +31,7 @@
 - ✅ Deploy [`train.xsd` to Cloudflare Worker](https://xsd.beoptimal369.workers.dev/?version=0.1.0)
 - `train()`:
     - ✅ Read `train.xml`
+    - ✅ Parse `train.xml`
     - Validate `train.xml`
     - Create `TrainXML`
     - Writes `.poppins/vocab.json`
