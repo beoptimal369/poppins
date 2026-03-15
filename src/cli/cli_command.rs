@@ -15,6 +15,10 @@ pub enum CliCommand {
         /// Path to the training XML file (defaults to ./train.xml)
         #[clap(short = 'i', long = "input", value_name = "PATH")]
         input: Option<PathBuf>,
+
+        /// Path to the output directory (defaults to ./poppins)
+        #[clap(short = 'o', long = "output", value_name = "PATH")]
+        output: Option<PathBuf>,
     },
     
     /// Send a prompt to an Ai model & get back a response
@@ -31,20 +35,22 @@ mod tests {
 
     #[test]
     fn test_train_command() {
-        let args_input_long = vec!["poppins", "train", "--input", "custom.xml"];
+        let args_input_long = vec!["poppins", "train", "--input", "custom.xml", "--output", "src/random"];
         
         match Cli::try_parse_from(args_input_long).expect("Should parse --input").command {
-            CliCommand::Train { input } => {
+            CliCommand::Train { input, output } => {
                 assert_eq!(input, Some(PathBuf::from("custom.xml")));
+                assert_eq!(output, Some(PathBuf::from("src/random")));
             }
             _ => panic!("Expected Train variant"),
         }
 
-        let args_input_short = vec!["poppins", "train", "-i", "custom.xml"];
+        let args_input_short = vec!["poppins", "train", "-i", "custom.xml", "-o", "src/random"];
         
         match Cli::try_parse_from(args_input_short).expect("Should parse -i").command {
-            CliCommand::Train { input } => {
+            CliCommand::Train { input, output } => {
                 assert_eq!(input, Some(PathBuf::from("custom.xml")));
+                assert_eq!(output, Some(PathBuf::from("src/random")));
             }
             _ => panic!("Expected Train variant"),
         }

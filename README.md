@@ -30,10 +30,11 @@
 - ✅ Push to [crates.io](https://crates.io/crates/poppins)
 - ✅ Deploy [`train.xsd` to Cloudflare Worker](https://xsd.beoptimal369.workers.dev/?version=0.1.0)
 - `train()`:
-    - ✅ Read `train.xml`
+    - ✅ Read training file (default to `train.xml`)
     - ✅ Parse `train.xml`
     - ✅ Validate `train.xml`
     - ✅ Create `TrainXML`
+    - ✅ Write output directory (default to `.poppins`)
     - Writes `.poppins/vocab.json`
     - Writes `.poppins/manifest.json`
 - ...

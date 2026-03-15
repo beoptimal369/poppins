@@ -12,8 +12,8 @@ fn main() {
     
     match cli.command {
         CliCommand::Bootstrap => bootstrap(),
-        CliCommand::Train { input } => {
-            train(input.as_deref()).expect("Should train");
+        CliCommand::Train { input, output } => {
+            train(input.as_deref(), output.as_deref()).expect("Should train");
         },
         CliCommand::Infer => infer(),
     }
