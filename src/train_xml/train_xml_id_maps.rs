@@ -1,85 +1,91 @@
-// src/train_xml/train_xml_ids.rs
+// src/train_xml/train_xml_id_maps.rs
 
-use crate::train_xml::TrainXML;
-use std::collections::HashSet;
+use std::collections::HashMap;
+use crate::train_xml::{
+    TrainXML,
+    TrainXMLSourcesSource,
+    TrainXMLPromptsPrompt,
+    TrainXMLCodeSnippetsCode,
+    TrainXMLResponsesResponse,
+};
 
 
-/// Validates and collects all IDs from a TrainXML document
+/// Validates and collects all IDs from a TrainXML document with references to original data
 #[derive(Debug)]
-pub struct TrainXMLIds {
-    /// Set of all prompt IDs
-    pub prompt_ids: HashSet<String>,
+pub struct TrainXMLIdMaps<'a> {
+    /// Map of prompt IDs to their corresponding prompt data
+    pub prompts: HashMap<String, &'a TrainXMLPromptsPrompt>,
     
-    /// Set of all response IDs
-    pub response_ids: HashSet<String>,
+    /// Map of response IDs to their corresponding response data
+    pub responses: HashMap<String, &'a TrainXMLResponsesResponse>,
     
-    /// Set of all source IDs
-    pub source_ids: HashSet<String>,
+    /// Map of source IDs to their corresponding source data
+    pub sources: HashMap<String, &'a TrainXMLSourcesSource>,
     
-    /// Set of all code snippet IDs
-    pub code_ids: HashSet<String>,
+    /// Map of code snippet IDs to their corresponding code data
+    pub code_snippets: HashMap<String, &'a TrainXMLCodeSnippetsCode>,
 }
 
 
-impl TrainXMLIds {
-    /// Create a new TrainXMLIds by validating and collecting all IDs from TrainXML
+impl<'a> TrainXMLIdMaps<'a> {
+    /// Create a new TrainXMLIdMaps by validating and collecting all IDs from TrainXML
     ///
     /// # Arguments
     /// * `train_xml` - Reference to a parsed TrainXML document
     ///
     /// # Returns
-    /// * `Result<Self, String>` - TrainXMLIds if all IDs are unique, error message otherwise
+    /// * `Result<Self, String>` - TrainXMLIdMaps if all IDs are unique, error message otherwise
     ///
     /// # Errors
     /// Returns an error if any duplicate IDs are found within the same category
     /// (prompts, responses, sources, or code-snippets)
-    pub fn create(train_xml: &TrainXML) -> Result<Self, String> {
-        let mut prompt_ids = HashSet::new();
-        let mut response_ids = HashSet::new();
-        let mut source_ids = HashSet::new();
-        let mut code_ids = HashSet::new();
+    pub fn create(train_xml: &'a TrainXML) -> Result<Self, String> {
+        let mut prompts = HashMap::new();
+        let mut responses = HashMap::new();
+        let mut sources = HashMap::new();
+        let mut code_snippets = HashMap::new();
         
         // Validate prompts
-        if let Some(prompts) = &train_xml.prompts {
-            for prompt in &prompts.prompt {
-                if !prompt_ids.insert(prompt.id.clone()) {
+        if let Some(prompts_section) = &train_xml.prompts {
+            for prompt in &prompts_section.prompt {
+                if prompts.insert(prompt.id.clone(), prompt).is_some() {
                     return Err(format!("Duplicate prompt ID: '{}'", prompt.id));
                 }
             }
         }
         
         // Validate responses
-        if let Some(responses) = &train_xml.responses {
-            for response in &responses.response {
-                if !response_ids.insert(response.id.clone()) {
+        if let Some(responses_section) = &train_xml.responses {
+            for response in &responses_section.response {
+                if responses.insert(response.id.clone(), response).is_some() {
                     return Err(format!("Duplicate response ID: '{}'", response.id));
                 }
             }
         }
         
         // Validate sources
-        if let Some(sources) = &train_xml.sources {
-            for source in &sources.source {
-                if !source_ids.insert(source.id.clone()) {
+        if let Some(sources_section) = &train_xml.sources {
+            for source in &sources_section.source {
+                if sources.insert(source.id.clone(), source).is_some() {
                     return Err(format!("Duplicate source ID: '{}'", source.id));
                 }
             }
         }
         
         // Validate code snippets
-        if let Some(code_snippets) = &train_xml.code_snippets {
-            for code in &code_snippets.code {
-                if !code_ids.insert(code.id.clone()) {
+        if let Some(code_snippets_section) = &train_xml.code_snippets {
+            for code in &code_snippets_section.code {
+                if code_snippets.insert(code.id.clone(), code).is_some() {
                     return Err(format!("Duplicate code snippet ID: '{}'", code.id));
                 }
             }
         }
         
         Ok(Self {
-            prompt_ids,
-            response_ids,
-            source_ids,
-            code_ids,
+            prompts,
+            responses,
+            sources,
+            code_snippets,
         })
     }
 }
@@ -90,11 +96,17 @@ impl TrainXMLIds {
 mod tests {
     use crate::train_xml::{
         TrainXML,
-        TrainXMLIds,
-        train_xml_prompts::{TrainXMLPrompts, TrainXMLPromptsPrompt},
-        train_xml_sources::{TrainXMLSources, TrainXMLSourcesSource},
-        train_xml_responses::{TrainXMLResponses, TrainXMLResponsesResponse},
-        train_xml_code_snippets::{TrainXMLCodeSnippets, TrainXMLCodeSnippetsCode},
+        TrainXMLIdMaps,
+        TrainXMLSourcesSource,
+        TrainXMLPromptsPrompt,
+        TrainXMLCodeSnippetsCode,
+        TrainXMLResponsesResponse,
+        train_xml_structs::{
+            TrainXMLPrompts,
+            TrainXMLSources,
+            TrainXMLResponses,
+            TrainXMLCodeSnippets,
+        },
     };
 
     #[test]
@@ -143,20 +155,25 @@ mod tests {
             phrases: None,
         };
 
-        let ids = TrainXMLIds::create(&train_xml).unwrap();
+        let ids = TrainXMLIdMaps::create(&train_xml).unwrap();
         
-        assert_eq!(ids.prompt_ids.len(), 2);
-        assert!(ids.prompt_ids.contains("prompt1"));
-        assert!(ids.prompt_ids.contains("prompt2"));
+        assert_eq!(ids.prompts.len(), 2);
+        assert!(ids.prompts.contains_key("prompt1"));
+        assert!(ids.prompts.contains_key("prompt2"));
+        assert_eq!(ids.prompts.get("prompt1").unwrap().content, "Content 1");
+        assert_eq!(ids.prompts.get("prompt2").unwrap().content, "Content 2");
         
-        assert_eq!(ids.response_ids.len(), 1);
-        assert!(ids.response_ids.contains("response1"));
+        assert_eq!(ids.responses.len(), 1);
+        assert!(ids.responses.contains_key("response1"));
+        assert_eq!(ids.responses.get("response1").unwrap().content, "Response 1");
         
-        assert_eq!(ids.source_ids.len(), 1);
-        assert!(ids.source_ids.contains("source1"));
+        assert_eq!(ids.sources.len(), 1);
+        assert!(ids.sources.contains_key("source1"));
+        assert_eq!(ids.sources.get("source1").unwrap().url, "https://example.com");
         
-        assert_eq!(ids.code_ids.len(), 1);
-        assert!(ids.code_ids.contains("code1"));
+        assert_eq!(ids.code_snippets.len(), 1);
+        assert!(ids.code_snippets.contains_key("code1"));
+        assert_eq!(ids.code_snippets.get("code1").unwrap().lang, "rust");
     }
 
     #[test]
@@ -201,19 +218,25 @@ mod tests {
             phrases: None,
         };
 
-        let ids = TrainXMLIds::create(&train_xml).unwrap();
+        let ids = TrainXMLIdMaps::create(&train_xml).unwrap();
         
-        assert_eq!(ids.prompt_ids.len(), 1);
-        assert!(ids.prompt_ids.contains("id123"));
+        assert_eq!(ids.prompts.len(), 1);
+        assert!(ids.prompts.contains_key("id123"));
         
-        assert_eq!(ids.response_ids.len(), 1);
-        assert!(ids.response_ids.contains("id123"));
+        assert_eq!(ids.responses.len(), 1);
+        assert!(ids.responses.contains_key("id123"));
         
-        assert_eq!(ids.source_ids.len(), 1);
-        assert!(ids.source_ids.contains("id123"));
+        assert_eq!(ids.sources.len(), 1);
+        assert!(ids.sources.contains_key("id123"));
         
-        assert_eq!(ids.code_ids.len(), 1);
-        assert!(ids.code_ids.contains("id123"));
+        assert_eq!(ids.code_snippets.len(), 1);
+        assert!(ids.code_snippets.contains_key("id123"));
+        
+        // Verify we can access the actual data
+        assert_eq!(ids.prompts.get("id123").unwrap().content, "Prompt");
+        assert_eq!(ids.responses.get("id123").unwrap().content, "Response");
+        assert_eq!(ids.sources.get("id123").unwrap().url, "https://example.com");
+        assert_eq!(ids.code_snippets.get("id123").unwrap().lang, "rust");
     }
 
     #[test]
@@ -228,11 +251,11 @@ mod tests {
             phrases: None,
         };
 
-        let ids = TrainXMLIds::create(&train_xml).unwrap();
+        let ids = TrainXMLIdMaps::create(&train_xml).unwrap();
         
-        assert_eq!(ids.prompt_ids.len(), 0);
-        assert_eq!(ids.response_ids.len(), 0);
-        assert_eq!(ids.source_ids.len(), 0);
-        assert_eq!(ids.code_ids.len(), 0);
+        assert_eq!(ids.prompts.len(), 0);
+        assert_eq!(ids.responses.len(), 0);
+        assert_eq!(ids.sources.len(), 0);
+        assert_eq!(ids.code_snippets.len(), 0);
     }
 }

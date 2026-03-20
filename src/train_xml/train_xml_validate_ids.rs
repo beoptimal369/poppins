@@ -1,28 +1,32 @@
 // src/train_xml/train_xml_validate_ids.rs
 
-use crate::train_xml::{TrainXML, TrainXMLIds};
+use crate::train_xml::{
+    TrainXML,
+    TrainXMLIdMaps,
+    TrainXMLSamplesSampleChildren,
+};
 
 
-/// Validates that every ID referenced in the train XML exists in TrainXMLIds
-pub fn train_xml_validate_ids(train_xml: &TrainXML, ids: &TrainXMLIds) -> Result<(), Vec<String>> {
+/// Validates that every ID referenced in the train XML exists in TrainXMLIdMaps
+pub fn train_xml_validate_ids(train_xml: &TrainXML, ids: &TrainXMLIdMaps) -> Result<(), Vec<String>> {
     let mut errors: Vec<String> = Vec::new();
     
     // Check prompt IDs in samples
     if let Some(samples) = &train_xml.samples {
         // Check sample-ids elements
-        if let Some(sample_ids) = &samples.sample_ids {
-            for sample_id in sample_ids {
+        if let Some(sample_with_ids) = &samples.sample_ids {
+            for sample_id in sample_with_ids {
                 // Check prompt ID
-                if !ids.prompt_ids.contains(&sample_id.prompt) {
+                if !ids.prompts.contains_key(&sample_id.prompt) {
                     errors.push(format!(
                         "Sample-ids references unknown prompt ID '{}'",
                         sample_id.prompt
                     ));
                 }
-                
+
                 // Check response ID if present
                 if let Some(response_id) = &sample_id.response {
-                    if !ids.response_ids.contains(response_id) {
+                    if !ids.responses.contains_key(response_id) {
                         errors.push(format!(
                             "Sample-ids references unknown response ID '{}'",
                             response_id
@@ -32,7 +36,7 @@ pub fn train_xml_validate_ids(train_xml: &TrainXML, ids: &TrainXMLIds) -> Result
                 
                 // Check source ID if present
                 if let Some(source_id) = &sample_id.source {
-                    if !ids.source_ids.contains(source_id) {
+                    if !ids.sources.contains_key(source_id) {
                         errors.push(format!(
                             "Sample-ids references unknown source ID '{}'",
                             source_id
@@ -42,7 +46,7 @@ pub fn train_xml_validate_ids(train_xml: &TrainXML, ids: &TrainXMLIds) -> Result
                 
                 // Check code ID if present
                 if let Some(code_id) = &sample_id.code {
-                    if !ids.code_ids.contains(code_id) {
+                    if !ids.code_snippets.contains_key(code_id) {
                         errors.push(format!(
                             "Sample-ids references unknown code ID '{}'",
                             code_id
@@ -52,72 +56,70 @@ pub fn train_xml_validate_ids(train_xml: &TrainXML, ids: &TrainXMLIds) -> Result
             }
         }
         
-        // Check verbose sample elements
-        if let Some(samples_verbose) = &samples.sample {
-            for sample in samples_verbose {
+        // Process children xml tags of <sample> parent
+        if let Some(sample_with_children_tags) = &samples.sample {
+            for sample in sample_with_children_tags {
                 // Check prompt ID
-                if !ids.prompt_ids.contains(&sample.prompt.id) {
+                if !ids.prompts.contains_key(&sample.prompt.id) {
                     errors.push(format!(
                         "Sample references unknown prompt ID '{}'",
                         sample.prompt.id
                     ));
                 }
                 
-                // Check response IDs if present
-                if let Some(responses) = &sample.response {
-                    for response in responses {
-                        if !ids.response_ids.contains(&response.id) {
-                            errors.push(format!(
-                                "Sample references unknown response ID '{}'",
-                                response.id
-                            ));
-                        }
-                    }
-                }
-                
-                // Check response-ids if present
-                if let Some(response_ids) = &sample.response_ids {
-                    for response_id in response_ids {
-                        if !ids.response_ids.contains(&response_id.response) {
-                            errors.push(format!(
-                                "Sample response-ids references unknown response ID '{}'",
-                                response_id.response
-                            ));
-                        }
-                        
-                        // Check source ID in response-ids if present
-                        if let Some(source_id) = &response_id.source {
-                            if !ids.source_ids.contains(source_id) {
+                // Check all children for ID references
+                for child in &sample.children {
+                    match child {
+                        TrainXMLSamplesSampleChildren::Response(response) => {
+                            if !ids.responses.contains_key(&response.id) {
                                 errors.push(format!(
-                                    "Sample response-ids references unknown source ID '{}'",
-                                    source_id
+                                    "Sample references unknown response ID '{}'",
+                                    response.id
                                 ));
                             }
-                        }
-                    }
-                }
-                
-                // Check source IDs if present
-                if let Some(sources) = &sample.source {
-                    for source in sources {
-                        if !ids.source_ids.contains(&source.id) {
-                            errors.push(format!(
-                                "Sample references unknown source ID '{}'",
-                                source.id
-                            ));
-                        }
-                    }
-                }
-                
-                // Check code IDs if present
-                if let Some(codes) = &sample.code {
-                    for code in codes {
-                        if !ids.code_ids.contains(&code.id) {
-                            errors.push(format!(
-                                "Sample references unknown code ID '{}'",
-                                code.id
-                            ));
-                        }
+                        },
+                        
+                        TrainXMLSamplesSampleChildren::Source(source) => {
+                            if !ids.sources.contains_key(&source.id) {
+                                errors.push(format!(
+                                    "Sample references unknown source ID '{}'",
+                                    source.id
+                                ));
+                            }
+                        },
+                        
+                        TrainXMLSamplesSampleChildren::Code(code) => {
+                            if !ids.code_snippets.contains_key(&code.id) {
+                                errors.push(format!(
+                                    "Sample references unknown code ID '{}'",
+                                    code.id
+                                ));
+                            }
+                        },
+                        
+                        TrainXMLSamplesSampleChildren::ResponseIds(response_id) => {
+                            // Check response ID
+                            if !ids.responses.contains_key(&response_id.response) {
+                                errors.push(format!(
+                                    "Sample response-ids references unknown response ID '{}'",
+                                    response_id.response
+                                ));
+                            }
+                            
+                            // Check source ID if present
+                            if let Some(source_id) = &response_id.source {
+                                if !ids.sources.contains_key(source_id) {
+                                    errors.push(format!(
+                                        "Sample response-ids references unknown source ID '{}'",
+                                        source_id
+                                    ));
+                                }
+                            }
+                        },
+                        
+                        TrainXMLSamplesSampleChildren::LineBreak(_) => {
+                            // Line breaks don't have IDs, nothing to validate
+                        },
                     }
                 }
             }
@@ -132,45 +134,88 @@ pub fn train_xml_validate_ids(train_xml: &TrainXML, ids: &TrainXMLIds) -> Result
 }
 
 
-
 #[cfg(test)]
 mod tests {
-    use std::collections::HashSet;
+    use std::collections::HashMap;
+    use crate::sample::SampleIndent;
     use crate::train_xml::{
         TrainXML,
-        TrainXMLIds,
+        TrainXMLIdMaps,
         train_xml_validate_ids::train_xml_validate_ids,
-        train_xml_prompts::{TrainXMLPrompts, TrainXMLPromptsPrompt},
-        train_xml_sources::{TrainXMLSources, TrainXMLSourcesSource},
-        train_xml_responses::{TrainXMLResponses, TrainXMLResponsesResponse},
-        train_xml_code_snippets::{TrainXMLCodeSnippets, TrainXMLCodeSnippetsCode},
-        train_xml_samples::{TrainXMLSamples, TrainXMLSamplesCode, TrainXMLSamplesPrompt, TrainXMLSamplesResponse, TrainXMLSamplesResponseIds, TrainXMLSamplesSample, TrainXMLSamplesSampleIds, TrainXMLSamplesSource},
+        train_xml_structs::{
+            TrainXMLSamples,
+            TrainXMLPrompts,
+            TrainXMLSources,
+            TrainXMLResponses,
+            TrainXMLCodeSnippets,
+            TrainXMLPromptsPrompt,
+            TrainXMLSourcesSource,
+            TrainXMLSamplesSample,
+            TrainXMLSamplesPrompt,
+            TrainXMLCodeSnippetsCode,
+            TrainXMLResponsesResponse,
+            TrainXMLSamplesSampleIds,
+            TrainXMLSamplesSampleChildren,
+            TrainXMLSamplesResponse,
+            TrainXMLSamplesSource,
+            TrainXMLSamplesCode,
+            TrainXMLSamplesResponseIds,
+            TrainXMLLineBreak,
+        }
     };
+
+    fn create_test_prompt(id: &str, content: &str) -> TrainXMLPromptsPrompt {
+        TrainXMLPromptsPrompt {
+            id: id.to_string(),
+            content: content.to_string(),
+        }
+    }
+
+    fn create_test_response(id: &str, content: &str) -> TrainXMLResponsesResponse {
+        TrainXMLResponsesResponse {
+            id: id.to_string(),
+            content: content.to_string(),
+        }
+    }
+
+    fn create_test_source(id: &str, url: &str) -> TrainXMLSourcesSource {
+        TrainXMLSourcesSource {
+            id: id.to_string(),
+            url: url.to_string(),
+            title: None,
+        }
+    }
+
+    fn create_test_code(id: &str, lang: &str, content: &str) -> TrainXMLCodeSnippetsCode {
+        TrainXMLCodeSnippetsCode {
+            id: id.to_string(),
+            lang: lang.to_string(),
+            content: content.to_string(),
+        }
+    }
 
     #[test]
     fn test_validate_ids_success() {
-        // Create minimal valid train XML
+        // Create prompt, response, source, code data
+        let prompt1 = create_test_prompt("p1", "Test prompt");
+        let prompt2 = create_test_prompt("p2", "Another prompt");
+        let response1 = create_test_response("r1", "Test response");
+        let source1 = create_test_source("s1", "https://example.com");
+        let code1 = create_test_code("c1", "rust", "fn main() {}");
+
+        // Create train XML with children
         let train_xml = TrainXML {
             prompts: Some(TrainXMLPrompts {
-                prompt: vec![
-                    TrainXMLPromptsPrompt { id: "p1".to_string(), content: "Test prompt".to_string() },
-                    TrainXMLPromptsPrompt { id: "p2".to_string(), content: "Another prompt".to_string() },
-                ],
+                prompt: vec![prompt1.clone(), prompt2.clone()],
             }),
             responses: Some(TrainXMLResponses {
-                response: vec![
-                    TrainXMLResponsesResponse { id: "r1".to_string(), content: "Test response".to_string() },
-                ],
+                response: vec![response1.clone()],
             }),
             sources: Some(TrainXMLSources {
-                source: vec![
-                    TrainXMLSourcesSource { id: "s1".to_string(), url: "https://example.com".to_string(), title: None },
-                ],
+                source: vec![source1.clone()],
             }),
             code_snippets: Some(TrainXMLCodeSnippets {
-                code: vec![
-                    TrainXMLCodeSnippetsCode { id: "c1".to_string(), lang: "rust".to_string(), content: "fn main() {}".to_string() },
-                ],
+                code: vec![code1.clone()],
             }),
             samples: Some(TrainXMLSamples {
                 sample_ids: Some(vec![
@@ -184,10 +229,20 @@ mod tests {
                 sample: Some(vec![
                     TrainXMLSamplesSample {
                         prompt: TrainXMLSamplesPrompt { id: "p2".to_string() },
-                        response_ids: None,
-                        response: Some(vec![TrainXMLSamplesResponse { id: "r1".to_string() }]),
-                        source: Some(vec![TrainXMLSamplesSource { id: "s1".to_string() }]),
-                        code: Some(vec![TrainXMLSamplesCode { id: "c1".to_string() }]),
+                        children: vec![
+                            TrainXMLSamplesSampleChildren::Response(TrainXMLSamplesResponse { id: "r1".to_string() }),
+                            TrainXMLSamplesSampleChildren::Source(TrainXMLSamplesSource { id: "s1".to_string() }),
+                            TrainXMLSamplesSampleChildren::Code(TrainXMLSamplesCode { 
+                                id: "c1".to_string(), 
+                                indent: Some(SampleIndent::One), 
+                                inline: Some(false) 
+                            }),
+                            TrainXMLSamplesSampleChildren::ResponseIds(TrainXMLSamplesResponseIds {
+                                response: "r1".to_string(),
+                                source: Some("s1".to_string()),
+                            }),
+                            TrainXMLSamplesSampleChildren::LineBreak(TrainXMLLineBreak { count: 1 }),
+                        ],
                     },
                 ]),
             }),
@@ -195,11 +250,25 @@ mod tests {
             phrases: None,
         };
 
-        let ids = TrainXMLIds {
-            prompt_ids: HashSet::from(["p1".to_string(), "p2".to_string()]),
-            response_ids: HashSet::from(["r1".to_string()]),
-            source_ids: HashSet::from(["s1".to_string()]),
-            code_ids: HashSet::from(["c1".to_string()]),
+        // Create IDs with references to the actual data
+        let mut prompts = HashMap::new();
+        prompts.insert("p1".to_string(), &prompt1);
+        prompts.insert("p2".to_string(), &prompt2);
+        
+        let mut responses = HashMap::new();
+        responses.insert("r1".to_string(), &response1);
+        
+        let mut sources = HashMap::new();
+        sources.insert("s1".to_string(), &source1);
+        
+        let mut code_snippets = HashMap::new();
+        code_snippets.insert("c1".to_string(), &code1);
+
+        let ids = TrainXMLIdMaps {
+            prompts,
+            responses,
+            sources,
+            code_snippets,
         };
 
         let result = train_xml_validate_ids(&train_xml, &ids);
@@ -208,27 +277,25 @@ mod tests {
 
     #[test]
     fn test_validate_ids_errors() {
-        // Create train XML with multiple ID errors
+        // Create valid data
+        let prompt1 = create_test_prompt("p1", "Test prompt");
+        let response1 = create_test_response("r1", "Test response");
+        let source1 = create_test_source("s1", "https://example.com");
+        let code1 = create_test_code("c1", "rust", "fn main() {}");
+
+        // Create train XML with multiple ID errors using children
         let train_xml = TrainXML {
             prompts: Some(TrainXMLPrompts {
-                prompt: vec![
-                    TrainXMLPromptsPrompt { id: "p1".to_string(), content: "Test prompt".to_string() },
-                ],
+                prompt: vec![prompt1.clone()],
             }),
             responses: Some(TrainXMLResponses {
-                response: vec![
-                    TrainXMLResponsesResponse { id: "r1".to_string(), content: "Test response".to_string() },
-                ],
+                response: vec![response1.clone()],
             }),
             sources: Some(TrainXMLSources {
-                source: vec![
-                    TrainXMLSourcesSource { id: "s1".to_string(), url: "https://example.com".to_string(), title: None },
-                ],
+                source: vec![source1.clone()],
             }),
             code_snippets: Some(TrainXMLCodeSnippets {
-                code: vec![
-                    TrainXMLCodeSnippetsCode { id: "c1".to_string(), lang: "rust".to_string(), content: "fn main() {}".to_string() },
-                ],
+                code: vec![code1.clone()],
             }),
             samples: Some(TrainXMLSamples {
                 sample_ids: Some(vec![
@@ -248,29 +315,29 @@ mod tests {
                 sample: Some(vec![
                     TrainXMLSamplesSample {
                         prompt: TrainXMLSamplesPrompt { id: "p99".to_string() },  // Invalid prompt ID
-                        response_ids: None,
-                        response: Some(vec![TrainXMLSamplesResponse { id: "r99".to_string() }]),  // Invalid response ID
-                        source: Some(vec![
-                            TrainXMLSamplesSource { id: "s1".to_string() },
-                            TrainXMLSamplesSource { id: "s99".to_string() },  // Invalid source ID
-                        ]),
-                        code: Some(vec![TrainXMLSamplesCode { id: "c99".to_string() }]),  // Invalid code ID
+                        children: vec![
+                            TrainXMLSamplesSampleChildren::Response(TrainXMLSamplesResponse { id: "r99".to_string() }),  // Invalid response ID
+                            TrainXMLSamplesSampleChildren::Source(TrainXMLSamplesSource { id: "s99".to_string() }),  // Invalid source ID
+                            TrainXMLSamplesSampleChildren::Code(TrainXMLSamplesCode { 
+                                id: "c99".to_string(), 
+                                indent: None, 
+                                inline: None 
+                            }),  // Invalid code ID
+                        ],
                     },
                     TrainXMLSamplesSample {
                         prompt: TrainXMLSamplesPrompt { id: "p1".to_string() },
-                        response_ids: Some(vec![
-                            TrainXMLSamplesResponseIds { 
+                        children: vec![
+                            TrainXMLSamplesSampleChildren::ResponseIds(TrainXMLSamplesResponseIds { 
                                 response: "r99".to_string(),  // Invalid response ID
                                 source: Some("s1".to_string()) 
-                            },
-                            TrainXMLSamplesResponseIds { 
+                            }),
+                            TrainXMLSamplesSampleChildren::ResponseIds(TrainXMLSamplesResponseIds { 
                                 response: "r1".to_string(), 
                                 source: Some("s99".to_string())  // Invalid source ID
-                            },
-                        ]),
-                        response: None,
-                        source: None,
-                        code: None,
+                            }),
+                            TrainXMLSamplesSampleChildren::LineBreak(TrainXMLLineBreak { count: 1 }), // Valid, no IDs
+                        ],
                     },
                 ]),
             }),
@@ -278,18 +345,40 @@ mod tests {
             phrases: None,
         };
 
-        let ids = TrainXMLIds {
-            prompt_ids: HashSet::from(["p1".to_string()]),
-            response_ids: HashSet::from(["r1".to_string()]),
-            source_ids: HashSet::from(["s1".to_string()]),
-            code_ids: HashSet::from(["c1".to_string()]),
+        // Create IDs with only valid references
+        let mut prompts = HashMap::new();
+        prompts.insert("p1".to_string(), &prompt1);
+        
+        let mut responses = HashMap::new();
+        responses.insert("r1".to_string(), &response1);
+        
+        let mut sources = HashMap::new();
+        sources.insert("s1".to_string(), &source1);
+        
+        let mut code_snippets = HashMap::new();
+        code_snippets.insert("c1".to_string(), &code1);
+
+        let ids = TrainXMLIdMaps {
+            prompts,
+            responses,
+            sources,
+            code_snippets,
         };
 
         let result = train_xml_validate_ids(&train_xml, &ids);
         assert!(result.is_err());
         
         let errors = result.unwrap_err();
-        assert!(errors.len() >= 7);  // We expect multiple errors
+        
+        // Print errors for debugging
+        println!("Errors: {:#?}", errors);
+        
+        // We expect at least 9 errors:
+        // - sample-ids: 4 errors (r99, s99, c99, p99)
+        // - first sample with children: 4 errors (p99, r99, s99, c99)
+        // - second sample with response-ids: 2 errors (r99, s99)
+        // Total: 10 errors
+        assert!(errors.len() >= 9, "Expected at least 9 errors, got {}", errors.len());
         
         // Verify some specific errors are present
         let error_string = errors.join("\n");

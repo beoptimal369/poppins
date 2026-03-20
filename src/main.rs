@@ -1,7 +1,6 @@
 // src/main.rs
 
-pub mod cli;
-pub mod ternary;
+mod cli;
 
 use crate::cli::{Cli, CliCommand};
 use poppins::{bootstrap, train, infer};

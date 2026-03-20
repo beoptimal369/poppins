@@ -14,7 +14,10 @@ pub fn train_xml_parse(train_xml_content: &str) -> Result<TrainXML, Box<dyn std:
 
 #[cfg(test)]
 mod tests {
-    use crate::train_xml::train_xml_parse;
+    use crate::train_xml::{
+        train_xml_parse,
+        TrainXMLSamplesSampleChildren,
+    };
 
     #[test]
     fn test_train_xml_parse_success() {
@@ -43,13 +46,21 @@ mod tests {
         let constants = train_xml.constants.as_ref().unwrap();
         assert_eq!(constants.constant[0].value, "3.0");
 
-        // Verify nested Sample and ResponseIds
+        // Verify nested Sample and ResponseIds via children
         let samples = train_xml.samples.as_ref().unwrap();
         let first_sample = &samples.sample.as_ref().unwrap()[0];
-        let resp_ids = first_sample.response_ids.as_ref().unwrap();
         
-        assert_eq!(resp_ids[0].response, "6");
-        assert_eq!(resp_ids[0].source.as_deref(), Some("3"));
+        // Find the ResponseIds in the children
+        let resp_ids = first_sample.children.iter().find_map(|child| {
+            if let TrainXMLSamplesSampleChildren::ResponseIds(ids) = child {
+                Some(ids)
+            } else {
+                None
+            }
+        }).expect("Should find ResponseIds in children");
+        
+        assert_eq!(resp_ids.response, "6");
+        assert_eq!(resp_ids.source.as_deref(), Some("3"));
     }
 
     #[test]
