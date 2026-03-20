@@ -61,84 +61,88 @@ pub struct SampleAiCode {
     pub token_stats: SampleTokenStats,
 }
 
-#[derive(Debug, Clone)]
-pub enum SampleLanguage {
-    Html,
-    Css,
-    Js,
-    Ts,
-    Jsx,
-    Tsx,
-    Rust,
-    Bash,
-    Xml,
-    Json,
-    Txt,
-    Md,
+macro_rules! define_languages {
+    ($($variant:ident => $string:expr),* $(,)?) => {
+        #[derive(Debug, Clone)]
+        pub enum SampleLanguage {
+            $($variant),*
+        }
+
+        impl SampleLanguage {
+            /// Generated automatically from the macro list
+            pub const ALL: &[SampleLanguage] = &[
+                $(SampleLanguage::$variant),*
+            ];
+
+            pub fn as_str(&self) -> &'static str {
+                match self {
+                    $(SampleLanguage::$variant => $string),*
+                }
+            }
+
+            pub fn from_str(s: &str) -> Self {
+                match s {
+                    $($string => SampleLanguage::$variant,)*
+                    _ => SampleLanguage::Txt,
+                }
+            }
+        }
+    };
 }
 
-impl SampleLanguage {
-    pub fn as_str(&self) -> &'static str {
-        match self {
-            SampleLanguage::Html => "html",
-            SampleLanguage::Css => "css",
-            SampleLanguage::Js => "js",
-            SampleLanguage::Ts => "ts",
-            SampleLanguage::Jsx => "jsx",
-            SampleLanguage::Tsx => "tsx",
-            SampleLanguage::Rust => "rust",
-            SampleLanguage::Bash => "bash",
-            SampleLanguage::Xml => "xml",
-            SampleLanguage::Json => "json",
-            SampleLanguage::Txt => "txt",
-            SampleLanguage::Md => "md",
-        }
-    }
-
-    pub fn from_str(s: &str) -> Self {
-        match s {
-            "html" => SampleLanguage::Html,
-            "css" => SampleLanguage::Css,
-            "js" => SampleLanguage::Js,
-            "ts" => SampleLanguage::Ts,
-            "jsx" => SampleLanguage::Jsx,
-            "tsx" => SampleLanguage::Tsx,
-            "rust" => SampleLanguage::Rust,
-            "bash" => SampleLanguage::Bash,
-            "xml" => SampleLanguage::Xml,
-            "json" => SampleLanguage::Json,
-            "txt" => SampleLanguage::Txt,
-            "md" => SampleLanguage::Md,
-            _ => SampleLanguage::Txt,
-        }
-    }
+define_languages! {
+    Html => "html",
+    Css  => "css",
+    Js   => "js",
+    Ts   => "ts",
+    Jsx  => "jsx",
+    Tsx  => "tsx",
+    Rust => "rust",
+    Bash => "bash",
+    Xml  => "xml",
+    Json => "json",
+    Txt  => "txt",
+    Md   => "md",
 }
 
+macro_rules! define_indents {
+    ($($variant:ident => $value:expr),* $(,)?) => {
+        #[derive(Debug, Clone, Copy, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+        #[repr(u8)]
+        pub enum SampleIndent {
+            $($variant = $value),*
+        }
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
-pub enum SampleIndent {
-    Zero = 0,
-    One = 1,
-    Two = 2,
-    Three = 3,
-    Four = 4,
-    Five = 5,
-    Six = 6,
+        impl SampleIndent {
+            /// Generated automatically: all valid indent levels
+            pub const ALL: &[SampleIndent] = &[
+                $(SampleIndent::$variant),*
+            ];
+
+            /// Safely converts a u8 to a SampleIndent variant
+            pub fn from_u8(value: u8) -> Option<Self> {
+                match value {
+                    $($value => Some(SampleIndent::$variant),)*
+                    _ => None,
+                }
+            }
+
+            /// Returns the numeric value for formatting
+            pub fn as_u8(&self) -> u8 {
+                *self as u8
+            }
+        }
+    };
 }
 
-impl SampleIndent {
-    pub fn from_u8(value: u8) -> Option<Self> {
-        match value {
-            0 => Some(SampleIndent::Zero),
-            1 => Some(SampleIndent::One),
-            2 => Some(SampleIndent::Two),
-            3 => Some(SampleIndent::Three),
-            4 => Some(SampleIndent::Four),
-            5 => Some(SampleIndent::Five),
-            6 => Some(SampleIndent::Six),
-            _ => None,
-        }
-    }
+define_indents! {
+    Zero  => 0,
+    One   => 1,
+    Two   => 2,
+    Three => 3,
+    Four  => 4,
+    Five  => 5,
+    Six   => 6,
 }
 
 #[derive(Debug, Clone)]

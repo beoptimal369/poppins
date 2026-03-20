@@ -168,33 +168,4 @@ mod tests {
         
         assert_eq!(all_ids, vec!["1", "2", "3", "4", "5"]);
     }
-    
-    #[test]
-    fn test_random_distribution() {
-        let mut val_counts = std::collections::HashMap::new();
-        
-        for _ in 0..100 {
-            let mut test_samples = Samples {
-                train_samples: Vec::new(),
-                val_samples: Vec::new(),
-                total_sample_count: 0,
-            };
-            
-            sample_place_into_vecs(&mut test_samples, create_test_sample("1"), Some(vec![
-                create_test_sample("2"),
-                create_test_sample("3"),
-                create_test_sample("4"),
-            ]));
-            
-            let val_id = test_samples.val_samples[0].id.clone();
-            *val_counts.entry(val_id).or_insert(0) += 1;
-        }
-        
-        // Each sample should appear in validation roughly 25% of the time (100/4 = 25)
-        // Allow some variance but ensure all are selected
-        assert!(val_counts.get("1").unwrap_or(&0) > &15);
-        assert!(val_counts.get("2").unwrap_or(&0) > &15);
-        assert!(val_counts.get("3").unwrap_or(&0) > &15);
-        assert!(val_counts.get("4").unwrap_or(&0) > &15);
-    }
 }

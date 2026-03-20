@@ -2,6 +2,7 @@
 
 use std::fs;
 use std::{path::Path, error::Error};
+use crate::tokens::tokens_get_special;
 use crate::sample::{Samples, sample_create_samples};
 use crate::train::train_create_corpus::train_create_corpus;
 use crate::train_xml::{train_xml_parse, train_xml_validate};
@@ -16,11 +17,13 @@ pub fn train(train_xml_path: Option<&Path>, output_dir_path: Option<&Path>) -> R
 
     write_xml_corpuses(&samples, output_dir)?;
 
+    print!("{:?}", tokens_get_special());
+
     Ok(())
 }
 
 
-fn get_samples(input_path: &Path, output_dir: &Path) -> Result<(Samples), Box<dyn std::error::Error>> {
+fn get_samples(input_path: &Path, output_dir: &Path) -> Result<Samples, Box<dyn std::error::Error>> {
     let train_content = fs::read_to_string(input_path).map_err(|e| format!("❌ Failed to read training file {}: {}", input_path.display(), e))?;
 
     let train_xml = train_xml_parse(&train_content)?;
