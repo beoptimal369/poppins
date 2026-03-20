@@ -28,8 +28,8 @@
     - ✅ Create `TrainXML`
     - ✅ Write output directory (default to `.poppins`)
     - ✅ Create `Samples` (holds `training` & `validation` `samples`)
-    - Write `output_dir/train.txt`
-    - Write `output_dir/val.txt`
+    - ✅ Write `output_dir/train_corpus.xml`
+    - ✅ Write `output_dir/val_corpus.xml`
     - Write `output_dir/vocab.json`
     - Write `output_dir/manifest.json`
 - ...

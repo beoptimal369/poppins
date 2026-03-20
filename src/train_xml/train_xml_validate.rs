@@ -10,7 +10,7 @@ use crate::train_xml::{
 };
 
 
-pub fn train_xml_validate(train_xml: &TrainXML) -> (TrainXMLIdMaps<'_>, TrainXMLConstantParsed, HashMap<&str, Vec<&str>>) {
+pub fn train_xml_validate(train_xml: &TrainXML) -> (TrainXMLIdMaps<'_>, TrainXMLConstantParsed) {
     let train_xml_id_maps_map = TrainXMLIdMaps::create(train_xml).expect("❌ Should have valid id's");
     let train_xml_constants_parsed = train_xml_constants_parse(&train_xml.constants).expect("❌ Should have valid constants:");
 
@@ -18,9 +18,7 @@ pub fn train_xml_validate(train_xml: &TrainXML) -> (TrainXMLIdMaps<'_>, TrainXML
     
     validate_line_breaks(train_xml).expect("❌ Line break count must be 1 or 2");
 
-    let train_xml_phrase_map = create_phrase_map(&train_xml);
-
-    (train_xml_id_maps_map, train_xml_constants_parsed, train_xml_phrase_map)
+    (train_xml_id_maps_map, train_xml_constants_parsed)
 }
 
 
@@ -48,25 +46,10 @@ fn validate_line_breaks(train_xml: &TrainXML) -> Result<(), String> {
 }
 
 
-/// Create phrase map using pattern instead of key
-fn create_phrase_map(train_xml: &TrainXML) -> HashMap<&str, Vec<&str>> {
-    train_xml.phrases
-        .as_ref()  // Handle Option
-        .iter()
-        .flat_map(|p| p.phrase.iter())
-        .map(|phrase| {
-            let pattern = phrase.pattern.as_str();
-            let variants: Vec<&str> = phrase.variant.iter().map(|v| v.value.as_str()).collect();
-            (pattern, variants)
-        })
-        .collect()
-}
-
-
 
 #[cfg(test)]
 mod tests {
-    use super::{create_phrase_map, validate_line_breaks};
+    use super::validate_line_breaks;
     use crate::train_xml::{
         TrainXML,
         TrainXMLPrompts,
@@ -204,59 +187,6 @@ mod tests {
         assert!(validate_line_breaks(&train_xml).is_ok());
     }
 
-    #[test]
-    fn test_create_phrase_map() {
-        let train_xml = TrainXML {
-            prompts: None,
-            responses: None,
-            sources: None,
-            code_snippets: None,
-            samples: None,
-            constants: None,
-            phrases: Some(TrainXMLPhrases {
-                phrase: vec![
-                    TrainXMLPhrasesPhrase {
-                        pattern: "What is a (.*?)\\?".to_string(),
-                        variant: vec![
-                            TrainXMLPhrasesVariant { value: "Define $1.".to_string() },
-                            TrainXMLPhrasesVariant { value: "Define: $1.".to_string() },
-                        ],
-                    },
-                    TrainXMLPhrasesPhrase {
-                        pattern: "ty".to_string(),
-                        variant: vec![
-                            TrainXMLPhrasesVariant { value: "thanks".to_string() },
-                            TrainXMLPhrasesVariant { value: "thank you".to_string() },
-                        ],
-                    },
-                ],
-            }),
-        };
-        
-        let phrase_map = create_phrase_map(&train_xml);
-        assert_eq!(phrase_map.len(), 2);
-        assert!(phrase_map.contains_key("What is a (.*?)\\?"));
-        assert!(phrase_map.contains_key("ty"));
-        assert_eq!(phrase_map["What is a (.*?)\\?"].len(), 2);
-        assert_eq!(phrase_map["ty"].len(), 2);
-    }
-
-    #[test]
-    fn test_create_phrase_map_no_phrases() {
-        let train_xml = TrainXML {
-            prompts: None,
-            responses: None,
-            sources: None,
-            code_snippets: None,
-            samples: None,
-            constants: None,
-            phrases: None,
-        };
-        
-        let phrase_map = create_phrase_map(&train_xml);
-        assert!(phrase_map.is_empty());
-    }
-    
     #[test]
     fn test_train_xml_validate_with_line_breaks() {
         // Test that the main validate function properly calls validate_line_breaks

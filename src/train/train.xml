@@ -10,11 +10,8 @@
 
   <responses>
     <response id="1">A computer is a computing / information processing device.</response>
-    <response id="2">JavaScript (JS) is a lightweight interpreted (or just-in-time compiled)
-      programming language.</response>
-    <response id="3">JavaScript contains a standard library of objects, such as Array, Map, and
-      Math, and a core set of language elements such as operators, control structures, and
-      statements. Example Code:</response>
+    <response id="2">JavaScript (JS) is a lightweight interpreted (or just-in-time compiled) programming language.</response>
+    <response id="3">JavaScript contains a standard library of objects, such as Array, Map, and Math, and a core set of language elements such as operators, control structures, and statements. Example Code:</response>
   </responses>
 
 
@@ -26,7 +23,9 @@
 
 
   <code-snippets>
-    <code id="1" lang="ts"> function example() { console.log('hi world') } </code>
+    <code id="1" lang="ts">function example() {
+  console.log('hi world')
+}</code>
   </code-snippets>
 
   <samples>
