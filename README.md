@@ -12,15 +12,16 @@
     - https://arxiv.org/pdf/2411.04965v1
     - https://arxiv.org/pdf/2504.12285
 - ✅ Stub Poppins front doors
-    - `bootstrap()`: `println!("Will write to cwd a simple train.xml")`
-    - `train()`: `println!("Will train / create a model based on a train.xml")`
-    - `infer()`: `println!("Will send a prompt to an Ai model and provide the response")`
+    - `bootstrap()`: Will create example `train.xml`
+    - `train()`: Will create model based on `train.xml`
+    - `infer()`: Will get response from model
     - `poppins bootstrap`: CLI command that calls `bootstrap()`
     - `poppins train`: CLI command that calls `train()`
     - `poppins infer`: CLI command that calls `infer()`
 - ✅ Push to [GitHub](https://github.com/beoptimal369/poppins)
 - ✅ Push to [crates.io](https://crates.io/crates/poppins)
 - ✅ Deploy [`train.xsd` to a Cloudflare Worker](https://xsd.beoptimal369.workers.dev/?version=0.1.0)
+- ✅ Implement `bootstrap()` & `poppins bootstrap`
 - `train()`:
     - ✅ Read training file (default to `train.xml`)
     - ✅ Parse `train.xml`
@@ -40,24 +41,27 @@
 - ...
 - MLA
     - https://arxiv.org/pdf/2602.10718
-- Swiglu
-- RMS Norm
+- RMSNorm
+- RoPE
+- ReLU²
+- KV Cache
 - Memory
     - Multi Turn
     - Turso
     - RLM
     - Abstract Syntax Tree
 
+
 ## FAQ
 
 ### What is a neural network?
 - A neural network is a mathematical function that transforms an input into an output through a series of calculations
-- A neural network is composed of many simple operations arranged in sequence
-- A neural network's mathematical function includes weights and biases that are used to calculate the output. At the beginning of training the weights and biases are random & through training these numbers get good enough to produce quality outputs
+- A neural network's mathematical function includes weights and biases that are used to calculate the output
+- At the beginning of training the weights and biases are random & through training these numbers get good enough to produce quality outputs
 
 
 ### What is a model?
-- A model is an instance of a neural network that has been trained w/ samples, can recieve inputs (prompt) and provides quality outputs (response)
+- A model is an instance of a neural network that has been trained w/ samples, can recieve inputs (prompts) and provides quality outputs (responses)
 
 
 ### What is training?
@@ -71,7 +75,7 @@
 
 
 ### What is a multi-turn sample?
-- A multi-turn sample is an example w/ multiple prompts and responses, to teach the model how to:
+- A multi-turn sample is a sample w/ multiple prompts and responses, to teach the model how to:
     - Have a conversation
     - Ask good follow up questions
     - Build on previous responses
@@ -81,26 +85,55 @@
 - A corpus is a collection of samples
 
 
+### What is a hidden state?
+- Math anotation is `h`
+- The hidden state is the "current understanding" of the input as it flows through the model
+- Input tokens start as embeddings (not yet hidden states)
+- After passing through the first transformer layer, they become hidden states
+- Each layer transforms the hidden state further
+- A hidden state is a token vector after it has passed through atleast one layers
+- Hidden b/c
+    - Internal
+    - Not directly visible
+    - Intermediate representations
+- Identifies what the model “knows” about the sequence
+
+
+### What is the final hidden state?
+- The final hidden state (last layer's output) is what gets multiplied by output weights to predict the next token
+
+
 ### What is a weight?
-- A weight is a number that determines how much an input influences the output
-- Larger weight = more influence
-- Smaller weight = less influence
-- A weight gets multiplied by an input
-- Fixed during training
+- Updated during training
+- Fixed during inference
+- Weights are the learned parameters that transform inputs
 - Raw weights are `f32`
 - Quantized weights are `-1`, `0` or `1`
 
 
-### What is the output weight?
-- An output weight is computed during training & does not change during inference
-- An output weight is a vector of embedding dimension length for a token that identifies what hidden state pattern predicts this token
+### What is an Output Projection Vector?
+- Annotation: `W_out[i]`
+- An Output Projection Vector is a vector of weights of `embedding_dim` length for a token that identifies what hidden state pattern predicts this token
+- Each token w/in the model's vocabulary has an Output Projection Vector
+- When we multiply the Output Projection Vector with the hidden state, we get a score indicating how well the hidden state matches the token
 
 
-### What does influence mean?
-- `Influence` means 'how much does a specific input number contribute to the score of a specific candidate next token'?
+### What is an Output Projection Matrix?
+- Annotation: `W_out`
+- Output Projection Matrix is `embedding_dim` length and `vocab_size` height (`[vocab_size, hidden_dim]`)
 
 
-## What is a bias?
+### What is a Linear Layer Row?
+- A Linear Layer Row is a vector of `input_dim` length that identifies what hidden state pattern predicts this neuron
+- Each neuron w/in a layer has a Linear Layer Row
+- When we multiply the Linear Layer Row with the hidden state, we get a score indicating how well the hidden state matches the neuron
+
+
+### What is a Linear Layer Matrix?
+- A Linear Layer Matrix is `input_dim` length and `output_dim` height (`[output_dim, input_dim]`)
+
+
+### What is a bias?
 - A bias is single number added during the output calculation
 - Fixed during training
 - The bias is a constant number added after the weighted sum
@@ -111,7 +144,7 @@
 
 
 ### What is the output bias?
-- An ouput bias is computed during training, is a unique value for each token and identifies baseline tendencies for a token
+- An output bias is computed during training, is a unique value for each token and identifies baseline tendencies for a token
 - High bias -> token appears often in many contexts
 - Small bias -> token rarely appears
 
@@ -203,7 +236,7 @@
 
 
 ### What is an output?
-- A vector that is provided by a layer after aligning inputs w/ ternary weights (not raw weights)
+- An output is a vector that is provided by a layer after aligning inputs w/ ternary weights
 - The output size is equal to the number of neurons in a layer
 - During attention & ffn compress the output size is equal to the embedding dimension
 - During ffn expand the output size is equal to the embedding dimension * 4
@@ -293,21 +326,6 @@ output = [1.5, 1.0, -1.0]  // length 3
 - Larger logits mean the model thinks that token is more likely
 - Logits aren't probabilities (they don't sum to 1 & they can be negative)
 - Logits tells us, how compatible a token is w/ the current hidden state
-
-
-### What is a hidden state (h)?
-- A hidden state is a token vector after it has passed through one or more layers of the network
-- Hidden b/c
-    - Internal
-    - Not directly visible
-    - Intermediate representations
-- Identifies what the model “knows” about the context
-
-
-
-### What is the final hidden state?
-- The last layer’s output (used to predict next token)
-
 
 
 ### What is softmax?
