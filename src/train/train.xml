@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- train.xml -->
+<!-- src/train/train.xml -->
 <train xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="https://xsd.beoptimal369.workers.dev/?version=0.1.0">
   <prompts>

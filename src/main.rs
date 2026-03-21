@@ -10,7 +10,9 @@ fn main() {
     let cli = Cli::parse_args();
     
     match cli.command {
-        CliCommand::Bootstrap => bootstrap(),
+        CliCommand::Bootstrap { output } => {
+            bootstrap(output.as_deref());
+        },
         CliCommand::Train { input, output } => {
             train(input.as_deref(), output.as_deref()).expect("Should train");
         },
