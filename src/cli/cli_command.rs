@@ -23,6 +23,10 @@ pub enum CliCommand {
         /// Path to the output directory (defaults to ./poppins)
         #[clap(short = 'o', long = "output", value_name = "PATH")]
         output: Option<PathBuf>,
+
+        /// Model version (semver, defaults to 0.1.0)
+        #[clap(short = 'v', long = "version", value_name = "VERSION")]
+        version: Option<String>,
     },
     
     /// Send a prompt to an Ai model & get back a response
@@ -69,22 +73,24 @@ mod tests {
 
     #[test]
     fn test_train_command() {
-        let args_input_long = vec!["poppins", "train", "--input", "custom.xml", "--output", "src/random"];
+        let args_input_long = vec!["poppins", "train", "--input", "custom.xml", "--output", "src/random", "--version", "1.2.3"];
         
         match Cli::try_parse_from(args_input_long).expect("Should parse").command {
-            CliCommand::Train { input, output } => {
+            CliCommand::Train { input, output, version } => {
                 assert_eq!(input, Some(PathBuf::from("custom.xml")));
                 assert_eq!(output, Some(PathBuf::from("src/random")));
+                assert_eq!(version, Some("1.2.3".to_owned()));
             }
             _ => panic!("Expected Train variant"),
         }
 
-        let args_input_short = vec!["poppins", "train", "-i", "custom.xml", "-o", "src/random"];
+        let args_input_short = vec!["poppins", "train", "-i", "custom.xml", "-o", "src/random", "-v", "1.2.3"];
         
         match Cli::try_parse_from(args_input_short).expect("Should parse").command {
-            CliCommand::Train { input, output } => {
+            CliCommand::Train { input, output, version } => {
                 assert_eq!(input, Some(PathBuf::from("custom.xml")));
                 assert_eq!(output, Some(PathBuf::from("src/random")));
+                assert_eq!(version, Some("1.2.3".to_owned()));
             }
             _ => panic!("Expected Train variant"),
         }
@@ -92,9 +98,10 @@ mod tests {
         let args_default = vec!["poppins", "train"];
 
         match Cli::try_parse_from(args_default).expect("Should parse").command {
-            CliCommand::Train { input, output } => {
+            CliCommand::Train { input, output, version } => {
                 assert_eq!(input, None);
                 assert_eq!(output, None);
+                assert_eq!(version, None);
             }
             _ => panic!("Expected Train variant"),
         }

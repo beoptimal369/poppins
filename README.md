@@ -31,9 +31,7 @@
     - ✅ Create `Samples` (holds `training` & `validation` `samples`)
     - ✅ Write `output_dir/train_corpus.xml`
     - ✅ Write `output_dir/val_corpus.xml`
-    - ✅ Get Special Tokens
-    - Heap's Law
-    - BPE
+    - ✅ Write `output_dir/tokenizer.json` (BPE)
     - Write `output_dir/train_corpus.bin`
     - Write `output_dir/val_corpus.bin`
     - Write `output_dir/vocab.json`
@@ -159,11 +157,43 @@
     - Words
     - Parts of words
     - Punctuation
+    - Individual characters
 - Spaces are typically attached to the following word & not separate tokens
 
 
 ### What is a tokenizer?
-- A tokenizer turns text into token IDs
+- A tokenizer is a tool that converts text into numbers (and back)
+- Computers don't understand words like "hi" - they only understand numbers
+- A tokenizer finds the middle ground: - it 
+    - IF we give every word a unique number THEN we need a very large dictionary & can't handle words we've never seen
+    - IF we give every character a unique number THEN we lose word meanings
+    - Tokenizers splits text into pieces called "tokens" and gives each token a unique number ID
+
+
+### What is BPE?
+- BPE stands for Byte Pair Encoding
+- BPE is a method for deciding how to split text into tokens
+- BPE learns from the corpus which character & token combinations appear most frequently together, then merges them into tokens
+
+
+### How does BPE work?
+- Start with individual characters, spaces and punctuations marks as separate tokens
+- Count how often each adjacent pair of tokens appears next to each other in the entire corpus
+- Find the most frequent pair
+- IF the most frequent pair occurs more then MIN_MERGE_FREQUENCY (ex: 3) times THEN merge them into a new token and repeat the process ELSE stop merging
+
+
+### What are merge rules?
+- Merge rules tell us how to build bigger tokens from smaller ones
+- When we get NEW text (not in the training data) (like a user prompt), we apply the merge rules to tokenize the text
+
+
+### How are merge rules used?
+- Split prompt into characters, spaces and punctuation marks
+- Apply merge rules in the exact same order they were learned to build tokens & ensure consistency
+- Look up each token in the vocabulary to get its token ID
+- Look up each token embedding based on the token ID
+
 
 ### What is embedding?
 - Embedding is the process of turning a token into a token embedding

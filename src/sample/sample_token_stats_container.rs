@@ -66,7 +66,7 @@ impl SampleTokenStatsContainer {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use crate::{sample::SampleTokenStatsContainer, train_xml::TrainXMLConstantParsed};
 
     #[test]
     fn test_token_stats_map() {

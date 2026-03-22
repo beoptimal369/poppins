@@ -13,8 +13,8 @@ fn main() {
         CliCommand::Bootstrap { output } => {
             bootstrap(output.as_deref());
         },
-        CliCommand::Train { input, output } => {
-            train(input.as_deref(), output.as_deref()).expect("Should train");
+        CliCommand::Train { input, output , version } => {
+            train(input.as_deref(), output.as_deref(), version.as_deref()).expect("Should train");
         },
         CliCommand::Infer => infer(),
     }
