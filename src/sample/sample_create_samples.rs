@@ -142,29 +142,7 @@ mod tests {
         let ids = TrainXMLIdMaps::create(&train_xml).expect("Failed to create ID maps");
         
         // Create constants - using struct literal instead of method calls
-        let constants = TrainXMLConstantParsed {
-            weight_decay_response: 0.1,
-            weight_decay_source: 0.01,
-            weight_decay_code: 0.05,
-            dropout_rate_response: 0.05,
-            dropout_rate_source: 0.0,
-            dropout_rate_code: 0.1,
-            loss_scale_response: 1.0,
-            loss_scale_source: 0.2,
-            loss_scale_code: 1.0,
-            gradient_scale_response: 1.0,
-            gradient_scale_source: 2.0,
-            gradient_scale_code: 1.2,
-            gradient_clip_response: 1.0,
-            gradient_clip_source: 0.1,
-            gradient_clip_code: 0.7,
-            warmup_steps: 100,
-            val_interval: 10,
-            aim_train_gb: 3.0,
-            aim_infer_f16_gb: 0.9,
-            learning_rate: 0.001,
-            aim_loss: 0.45,
-        };
+        let constants = TrainXMLConstantParsed::default();
         
         // Create samples
         let samples = sample_create_samples(&train_xml, &ids, &constants);
@@ -436,27 +414,29 @@ mod tests {
         // Constants
         let constants = TrainXMLConstants {
             constant: vec![
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::WeightDecayResponse, value: "0.1".to_string() },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::WeightDecaySource, value: "0.01".to_string() },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::WeightDecayCode, value: "0.05".to_string() },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::DropoutRateResponse, value: "0.05".to_string() },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::DropoutRateSource, value: "0.0".to_string() },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::DropoutRateCode, value: "0.1".to_string() },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::LossScaleResponse, value: "1.0".to_string() },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::LossScaleSource, value: "0.2".to_string() },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::LossScaleCode, value: "1.0".to_string() },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::GradientScaleResponse, value: "1.0".to_string() },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::GradientScaleSource, value: "2.0".to_string() },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::GradientScaleCode, value: "1.2".to_string() },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::GradientClipResponse, value: "1.0".to_string() },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::GradientClipSource, value: "0.1".to_string() },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::GradientClipCode, value: "0.7".to_string() },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::AimTrainGb, value: "3.0".to_string() },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::AimInferF16Gb, value: "0.9".to_string() },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::LearningRate, value: "1e-3".to_string() },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::WarmupSteps, value: "100".to_string() },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::AimLoss, value: "0.45".to_string() },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::ValInterval, value: "10".to_string() },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::WeightDecayResponse, value: "0.1".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::WeightDecaySource, value: "0.01".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::WeightDecayCode, value: "0.05".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::DropoutRateResponse, value: "0.05".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::DropoutRateSource, value: "0.0".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::DropoutRateCode, value: "0.1".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::LossScaleResponse, value: "1.0".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::LossScaleSource, value: "0.2".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::LossScaleCode, value: "1.0".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::GradientScaleResponse, value: "1.0".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::GradientScaleSource, value: "2.0".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::GradientScaleCode, value: "1.2".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::GradientClipResponse, value: "1.0".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::GradientClipSource, value: "0.1".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::GradientClipCode, value: "0.7".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::AimTrainGb, value: "3.0".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::AimInferF16Gb, value: "0.9".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::LearningRate, value: "1e-3".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::WarmupSteps, value: "100".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::AimLoss, value: "0.45".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::ValInterval, value: "10".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::BpeMinMergeFrequency, value: "3".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::BpeRequestedTokens, value: "a,b".to_string(), delimiter: Some(",".to_owned()) },
             ],
         };
         

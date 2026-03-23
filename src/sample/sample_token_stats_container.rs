@@ -71,65 +71,37 @@ mod tests {
     #[test]
     fn test_token_stats_map() {
         // Create test constants
-        let constants = TrainXMLConstantParsed {
-            warmup_steps: 100,
-            val_interval: 10,
-            aim_train_gb: 3.0,
-            aim_infer_f16_gb: 0.9,
-            learning_rate: 0.001,
-            aim_loss: 0.45,
-
-            weight_decay_response: 0.1,
-            weight_decay_source: 0.01,
-            weight_decay_code: 0.05,
-
-            dropout_rate_response: 0.05,
-            dropout_rate_source: 0.0,
-            dropout_rate_code: 0.1,
-
-            loss_scale_response: 1.0,
-            loss_scale_source: 0.2,
-            loss_scale_code: 1.0,
-
-            gradient_scale_response: 1.0,
-            gradient_scale_source: 2.0,
-            gradient_scale_code: 1.2,
-
-            gradient_clip_response: 1.0,
-            gradient_clip_source: 0.1,
-            gradient_clip_code: 0.7,
-        };
-
+        let constants = TrainXMLConstantParsed::default();
         let stats_map = SampleTokenStatsContainer::new(&constants);
 
         // Test response stats
         let response_stats = stats_map.get("response").unwrap();
-        assert_eq!(response_stats.weight_decay, 0.1);
-        assert_eq!(response_stats.dropout, 0.05);
-        assert_eq!(response_stats.loss_scale, 1.0);
-        assert_eq!(response_stats.gradient_scale, 1.0);
-        assert_eq!(response_stats.gradient_clip, 1.0);
+        assert_eq!(response_stats.weight_decay, constants.weight_decay_response);
+        assert_eq!(response_stats.dropout, constants.dropout_rate_response);
+        assert_eq!(response_stats.loss_scale, constants.loss_scale_response);
+        assert_eq!(response_stats.gradient_scale, constants.gradient_scale_response);
+        assert_eq!(response_stats.gradient_clip, constants.gradient_clip_response);
 
         // Test source stats
         let source_stats = stats_map.get("source").unwrap();
-        assert_eq!(source_stats.weight_decay, 0.01);
-        assert_eq!(source_stats.dropout, 0.0);
-        assert_eq!(source_stats.loss_scale, 0.2);
-        assert_eq!(source_stats.gradient_scale, 2.0);
-        assert_eq!(source_stats.gradient_clip, 0.1);
+        assert_eq!(source_stats.weight_decay, constants.weight_decay_source);
+        assert_eq!(source_stats.dropout, constants.dropout_rate_source);
+        assert_eq!(source_stats.loss_scale, constants.loss_scale_source);
+        assert_eq!(source_stats.gradient_scale, constants.gradient_scale_source);
+        assert_eq!(source_stats.gradient_clip, constants.gradient_clip_source);
 
         // Test code stats
         let code_stats = stats_map.get("code").unwrap();
-        assert_eq!(code_stats.weight_decay, 0.05);
-        assert_eq!(code_stats.dropout, 0.1);
-        assert_eq!(code_stats.loss_scale, 1.0);
-        assert_eq!(code_stats.gradient_scale, 1.2);
-        assert_eq!(code_stats.gradient_clip, 0.7);
+        assert_eq!(code_stats.weight_decay, constants.weight_decay_code);
+        assert_eq!(code_stats.dropout, constants.dropout_rate_code);
+        assert_eq!(code_stats.loss_scale, constants.loss_scale_code);
+        assert_eq!(code_stats.gradient_scale, constants.gradient_scale_code);
+        assert_eq!(code_stats.gradient_clip, constants.gradient_clip_code);
 
         // Test line-break returns response stats
         let line_break_stats = stats_map.get("line-break").unwrap();
-        assert_eq!(line_break_stats.weight_decay, 0.1);
-        assert_eq!(line_break_stats.dropout, 0.05);
+        assert_eq!(line_break_stats.weight_decay, constants.weight_decay_response);
+        assert_eq!(line_break_stats.dropout, constants.dropout_rate_response);
         
         // They should be the same reference
         assert!(std::ptr::eq(response_stats, line_break_stats));

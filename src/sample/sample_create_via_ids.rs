@@ -174,29 +174,7 @@ mod tests {
     }
     
     fn create_test_token_stats_map() -> SampleTokenStatsContainer {
-        let constants = TrainXMLConstantParsed {
-            aim_train_gb: 8.0,
-            aim_infer_f16_gb: 4.0,
-            learning_rate: 0.001,
-            warmup_steps: 1000,
-            aim_loss: 0.1,
-            val_interval: 500,
-            weight_decay_response: 0.01,
-            weight_decay_source: 0.02,
-            weight_decay_code: 0.03,
-            dropout_rate_response: 0.1,
-            dropout_rate_source: 0.2,
-            dropout_rate_code: 0.3,
-            loss_scale_response: 1.0,
-            loss_scale_source: 1.1,
-            loss_scale_code: 1.2,
-            gradient_scale_response: 1.0,
-            gradient_scale_source: 1.1,
-            gradient_scale_code: 1.2,
-            gradient_clip_response: 1.0,
-            gradient_clip_source: 1.1,
-            gradient_clip_code: 1.2,
-        };
+        let constants = TrainXMLConstantParsed::default();
         SampleTokenStatsContainer::new(&constants)
     }
     
@@ -209,7 +187,7 @@ mod tests {
             total_sample_count: 0,
         };
         let id_map = create_test_id_map();
-        let token_stats_map = create_test_token_stats_map();
+        let token_stats_map = create_test_token_stats_map(); // Uses actual defaults
         let sample_ids = TrainXMLSamplesSampleIds {
             prompt: "1".to_string(),
             response: Some("1".to_string()),
@@ -221,31 +199,30 @@ mod tests {
         assert!(sample.is_some());
         let sample = sample.unwrap();
         
-        // Check that ID was assigned correctly
         assert_eq!(sample.id, "1");
         assert_eq!(samples.total_sample_count, 1);
         
         assert_eq!(sample.prompt_section.len(), 1);
-        assert_eq!(sample.ai_section.len(), 3); // response + source + code
+        assert_eq!(sample.ai_section.len(), 3);
         
-        // Verify token stats are correct for each component
+        // Match actual defaults from TrainXMLConstantParsed::default()
         if let SampleAiEnum::Text(text) = &sample.ai_section[0] {
-            assert_eq!(text.token_stats.weight_decay, 0.01);
-            assert_eq!(text.token_stats.dropout, 0.1);
+            assert_eq!(text.token_stats.weight_decay, 0.1);   // Default: 0.1
+            assert_eq!(text.token_stats.dropout, 0.05);      // Default: 0.05
         } else {
             panic!("Expected Text variant");
         }
         
         if let SampleAiEnum::Source(source) = &sample.ai_section[1] {
-            assert_eq!(source.token_stats.weight_decay, 0.02);
-            assert_eq!(source.token_stats.dropout, 0.2);
+            assert_eq!(source.token_stats.weight_decay, 0.01); // Default: 0.01
+            assert_eq!(source.token_stats.dropout, 0.0);      // Default: 0.0
         } else {
             panic!("Expected Source variant");
         }
         
         if let SampleAiEnum::Code(code) = &sample.ai_section[2] {
-            assert_eq!(code.token_stats.weight_decay, 0.03);
-            assert_eq!(code.token_stats.dropout, 0.3);
+            assert_eq!(code.token_stats.weight_decay, 0.05);   // Default: 0.05
+            assert_eq!(code.token_stats.dropout, 0.1);        // Default: 0.1
         } else {
             panic!("Expected Code variant");
         }
@@ -346,15 +323,16 @@ mod tests {
         assert_eq!(samples.total_sample_count, 1);
         assert_eq!(sample.ai_section.len(), 1);
         
+        // Verify token stats match actual defaults from TrainXMLConstantParsed::default()
         match &sample.ai_section[0] {
             SampleAiEnum::Text(text) => {
-                assert_eq!(text.token_stats.weight_decay, 0.01);
-                assert_eq!(text.token_stats.dropout, 0.1);
+                assert_eq!(text.token_stats.weight_decay, 0.1);
+                assert_eq!(text.token_stats.dropout, 0.05);
             },
             _ => panic!("Expected Text variant"),
         }
     }
-    
+
     #[test]
     fn test_sample_create_via_ids_line_break_uses_response_stats() {
         // This test verifies that "line-break" component type maps to response stats

@@ -22,11 +22,12 @@ pub fn bootstrap(output_dir_path: Option<&Path>) {
 }
 
 
+
 #[cfg(test)]
 mod tests {
+    use std::fs;
     use super::bootstrap;
     use tempfile::tempdir;
-    use std::{fs, path::Path};
 
     #[test]
     fn test_bootstrap_creates_file_in_temp_dir() {

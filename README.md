@@ -7,21 +7,28 @@
 
 ## Plan to 1.0
 - ✅ Create **fundamentals** for `Ternary Quantization` based on `BitNet` research:
-    - https://arxiv.org/pdf/2310.11453v1
-    - https://arxiv.org/pdf/2402.17764v1
-    - https://arxiv.org/pdf/2411.04965v1
-    - https://arxiv.org/pdf/2504.12285
+    - ✅ https://arxiv.org/pdf/2310.11453v1
+    - ✅ https://arxiv.org/pdf/2402.17764v1
+    - ✅ https://arxiv.org/pdf/2411.04965v1
+    - ✅ https://arxiv.org/pdf/2504.12285
 - ✅ Stub Poppins front doors
-    - `bootstrap()`: Will create example `train.xml`
-    - `train()`: Will create model based on `train.xml`
-    - `infer()`: Will get response from model
-    - `poppins bootstrap`: CLI command that calls `bootstrap()`
-    - `poppins train`: CLI command that calls `train()`
-    - `poppins infer`: CLI command that calls `infer()`
+    - ✅ `bootstrap()`: Will create example `train.xml`
+    - ✅ `train()`: Will create model based on `train.xml`
+    - ✅ `infer()`: Will get response from model
+    - ✅ `poppins bootstrap`: CLI command that calls `bootstrap()`
+    - ✅ `poppins train`: CLI command that calls `train()`
+    - ✅ `poppins infer`: CLI command that calls `infer()`
 - ✅ Push to [GitHub](https://github.com/beoptimal369/poppins)
 - ✅ Push to [crates.io](https://crates.io/crates/poppins)
 - ✅ Deploy [`train.xsd` to a Cloudflare Worker](https://xsd.beoptimal369.workers.dev/?version=0.1.0)
-- ✅ Implement `bootstrap()` & `poppins bootstrap`
+- ✅ `bootstrap()`
+    - ✅ Accept an `output_dir_path` default to `cwd` & write example `train.xml`
+    - ✅ May also be called via cli @ `poppins bootstrap`
+    - ✅ CLI accepts `-o` or `--output` params for `output_dir_path`
+- ✅ `BPETokenizer`
+    - ✅ Write `tokenizer.json` based on `train.xml` samples
+    - ✅ Add `bpe_requested_tokens` to `train.xml` constants
+    - ✅ Add `bpe_min_merge_frequency` to `train.xml` constants
 - `train()`:
     - ✅ Read training file (default to `train.xml`)
     - ✅ Parse `train.xml`
@@ -31,7 +38,7 @@
     - ✅ Create `Samples` (holds `training` & `validation` `samples`)
     - ✅ Write `output_dir/train_corpus.xml`
     - ✅ Write `output_dir/val_corpus.xml`
-    - ✅ Write `output_dir/tokenizer.json` (BPE)
+    - ✅ Write `output_dir/tokenizer.json`
     - Write `output_dir/train_corpus.bin`
     - Write `output_dir/val_corpus.bin`
     - Write `output_dir/vocab.json`
@@ -50,7 +57,65 @@
     - Abstract Syntax Tree
 
 
-## FAQ
+## FAQ's about Poppins
+
+### Why is Poppins written in Rust?
+- **Predictable Performance:**
+    - Languages w/ a Garbage Collector (`Python`/`Java`/`JavaScript`) may pause during a model response for garbase collector maintenance
+    - `Rust` does not have a garbage collector, so token generation during inference remains smooth
+- **Deploy Everywhere:**
+    - Compile to `WASM` to run in the browser
+    - Compile to native `iOS` & `Android` libraries to run in mobile applications
+    - Deploy to small devices (ex: `Rasberry Pi`) b/c no operating system is required 
+- **Concurrency:**
+    - Python's Global Interpreter Lock (GIL) prevents true parallelism
+    - `Rust` can use all CPU cores efficiently which helps us scale optimally
+- **Peace:**
+    - C++ solutions like `llama.cpp` (typically called from Python via `llama-cpp-python`) can crash with memory errors that are hard to debug
+    - With `Rust` developers never see common Python errors (ex: segmentation faults, memory corruption or hard to debug crashes in production) b/c `Rust` guarantees safety at the language level
+
+
+## FAQ's about Ai
+
+### What is a weight?
+- Weights are the learned parameters (numbers)
+- Weights are updated during training & fixed during inference
+- Raw Weights are `f32` (big numbers that require 4 bytes to store)
+- Quantized Ternary Weights are `-1`, `0` or `1` (require 2 bits to store)
+
+
+### What is gradient descent?
+- Gradient descent is the process of optimizing weights
+- With machine learning, at the begining of training weights are random numbers
+- Then a prediction is made
+- Then we compute the error
+- Then we adjust the weights to reduce error
+- How much we adjust the weights is based on the learning rate
+
+
+### What is a learning rate?
+- The gradient tells us the direction and magnitude to change the weight (positive means increase, negative means decrease)
+- The learning rate is a small number (ex: 0.001) that controls how much we trust the gradient
+- If the learning rate is too large, weights jump around and never settle (divergence)
+- If learning rate is too small, training takes forever
+
+
+### What is deep learning?
+- Deep is a machine learning architecture w/ many layers (3 to hundreds)
+- Each layer transforms the data
+- Each layer learns different patterns
+- Each layer builds on the previous layer's representations
+
+
+### What is Ai?
+- AI is a system that receives inputs and provides outputs using learned weights
+- With traditional programming a human writes a function to identify cats
+- With Ai programming a model attempts to identify a cat, adjusts weights & repeats till it's good at identifying cats 
+
+
+### What is a model?
+- A model is an instance of a neural network that has been trained w/ samples, can receive inputs (prompts) and provides quality outputs (responses)
+
 
 ### What is a neural network?
 - A neural network is a mathematical function that transforms an input into an output through a series of calculations
@@ -58,8 +123,59 @@
 - At the beginning of training the weights and biases are random & through training these numbers get good enough to produce quality outputs
 
 
-### What is a model?
-- A model is an instance of a neural network that has been trained w/ samples, can recieve inputs (prompts) and provides quality outputs (responses)
+### What is an LLM?
+- An LLM is a Large Language Model
+- An LLM is a specific type of neural network designed to work with language (text)
+- The LLM receives an input (prompt) and gives back a probability distribution over the next token. Then the LLM receives another input (prompt + last token) and gives back another probability distribution. This continues till the most likely next token is a stop responding token.
+
+
+### What is Attention?
+- Attention computes, how much each token should pay attention to all other tokens w/in a sequence
+- Each token w/in the sequence is given 3 vectors, the query, key and value vectors
+- Attention refers to the weights (probabilities) that determine how much information to take from all visible tokens
+
+
+### What are Attention scores?
+- Logits
+- Raw dot products (Q·K), gives us a single value score for each token
+
+
+### What are Attention weights?
+- Attention weights are attention scores after softmax
+- Attention weights are probabilities that sum to 1
+- Attention weights tells us 'this token contributes `attention_weight` percent of its `Value` to the `output` for the current token'
+
+
+### What is Attention output?
+- Attention output is the weighted sum of values using the attention weights
+
+
+### What is a Transformer?
+- A Transformer is an deep learning architecture where each token w/in a sequence is aware of all other tokens w/in the sequence (Attention)
+
+
+### What is a Query vector?
+- A Query vector is given to a token an answers (what is this token looking for in other tokens)
+- A Query vector helps us search for related tokens w/in a sequence by comparing the Query vector of the current token w/ the Key vector of other tokens
+- During inference we get a query vector for the last token and compare to all other tokens
+- During training we get a query vector for all tokens w/in the ai response and compare to all other tokens simultaneously
+
+
+### What is a Key vector?
+- A Key vector contains information about what a token offers to others
+- We match the Key vector w/ the Query vector to determine if there is a relationship between 2 tokens
+
+
+### What is a Value vector?
+- A Value vector contains the actual data that will be passed forward if this token is selected
+
+
+### What is token selection?
+- Token selection in attention identifies which past tokens are most relevant to the current token
+
+
+### What is token prediction?
+- Token prediction in attention identifies what token is most likely to come after the current token
 
 
 ### What is training?
@@ -99,14 +215,6 @@
 
 ### What is the final hidden state?
 - The final hidden state (last layer's output) is what gets multiplied by output weights to predict the next token
-
-
-### What is a weight?
-- Updated during training
-- Fixed during inference
-- Weights are the learned parameters that transform inputs
-- Raw weights are `f32`
-- Quantized weights are `-1`, `0` or `1`
 
 
 ### What is an Output Projection Vector?
@@ -360,6 +468,7 @@ output = [1.5, 1.0, -1.0]  // length 3
 
 ### What is softmax?
 - Softmax is the process of converting logits to probabilities
+- Softmax helps the much bigger score dominate
 - `probability = eulers_num^(logit) / sum(eulers_num^(all_logits))`
 - Numerator is Euler's number raised to the logit for one token
 - Denomenator is the sum of Euler's number raised to the logit for all tokens
@@ -381,7 +490,7 @@ output = [1.5, 1.0, -1.0]  // length 3
 
 
 ### What is Euler's number?
-- Euler's number, approximately 2.71828 is a mathematical constant like `π`
+- Euler's number (`e`), approximately 2.71828 is a mathematical constant like `π`
 - In neural networks, euler's number appears in the softmax formula because euler's number:
     - Raised to any power is always positive (no negative numbers)
     - Grows exponentially (large logits become much larger, small logits become tiny)
@@ -458,13 +567,3 @@ e^(-2) = 0.135
 
     a ⊙ b = [2×1, 4×3, 6×5] = [2, 12, 30]
     ```
-
-
-### Why is Poppins written in Rust?
-- **Predictable Performance:** Languages w/ a Garbage Collector (Python/Java/JavaScript) will pause programs for garbase collector maintenance. Rust does not have a garbage collector, so token generation during inference remains smooth
-- **Deploy Everywhere:** Rust can deploy anywhere with 3 millisecond startup times, detect the current runtime and optimize for it & remains a tiny executable in every environment (python requires shipping the python runtime). Rust can:
-    - Compile to native iOS/Android libraries
-    - Compile to WASM, so Poppins models may run in the browser optimally
-    - Deploy to small devices like a Rasberry Pi b/c no operating system is required 
-- **Concurrency:** Python's Global Interpreter Lock (GIL) prevents true parallelism. Rust can use all CPU cores efficiently which helps us scale optimally
-- **Peace:** C++ solutions like `llama.cpp` (typically called from Python via `llama-cpp-python`) can crash with memory errors that are hard to debug. With Rust developers never see common Python errors like segmentation faults, memory corruption or hard to debug crashes in production b/c Rust guarantees safety at the language level

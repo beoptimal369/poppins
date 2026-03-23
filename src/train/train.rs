@@ -4,7 +4,7 @@ use std::fs;
 use std::{path::Path, error::Error};
 use crate::sample::{Samples, sample_create_samples};
 use crate::train::train_create_corpus::train_create_corpus;
-use crate::train_xml::{train_xml_parse, train_xml_validate};
+use crate::train_xml::{TrainXMLConstantParsed, train_xml_parse, train_xml_validate};
 use crate::bpe::{bpe_get_special_tokens, bpe_train, bpe_write_tokenizer_json};
 
 
@@ -13,21 +13,25 @@ pub fn train(train_xml_path: Option<&Path>, output_dir_path: Option<&Path>, mode
 
     let output_dir = output_dir_path.unwrap_or(Path::new("./.poppins"));
 
-    let samples = get_samples(&input_path, &output_dir)?;
+    let (samples, train_xml_constant_parsed) = get_samples(&input_path, &output_dir)?;
 
     write_xml_corpuses(&samples, output_dir)?;
 
-    let tokenizer = bpe_train(&samples.train_samples, &bpe_get_special_tokens(), &vec!["console.log".to_owned()])?;
+    let tokenizer = bpe_train(
+        &samples.train_samples,
+        &bpe_get_special_tokens(), 
+        &train_xml_constant_parsed.bpe_requested_tokens,
+        train_xml_constant_parsed.bpe_min_merge_frequency,
+    )?;
+    println!("tokenizer: {:?}", tokenizer);
 
     bpe_write_tokenizer_json(&tokenizer, &output_dir, &model_version.unwrap_or("0.1.0")).expect("Should write vocab.json");
-
-    println!("tokenizer: {:?}", tokenizer);
 
     Ok(())
 }
 
 
-fn get_samples(input_path: &Path, output_dir: &Path) -> Result<Samples, Box<dyn std::error::Error>> {
+fn get_samples(input_path: &Path, output_dir: &Path) -> Result<(Samples, TrainXMLConstantParsed), Box<dyn std::error::Error>> {
     let train_content = fs::read_to_string(input_path).map_err(|e| format!("❌ Failed to read training file {}: {}", input_path.display(), e))?;
 
     let train_xml = train_xml_parse(&train_content)?;
@@ -38,7 +42,7 @@ fn get_samples(input_path: &Path, output_dir: &Path) -> Result<Samples, Box<dyn 
 
     let samples = sample_create_samples(&train_xml, &train_xml_id_maps, &train_xml_constant_parsed);
 
-    Ok(samples)
+    Ok((samples, train_xml_constant_parsed))
 }
 
 

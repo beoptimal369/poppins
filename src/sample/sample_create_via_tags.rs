@@ -221,29 +221,7 @@ mod tests {
     }
 
     fn create_test_token_stats_map() -> SampleTokenStatsContainer {
-        let constants = TrainXMLConstantParsed {
-            aim_train_gb: 8.0,
-            aim_infer_f16_gb: 4.0,
-            learning_rate: 0.001,
-            warmup_steps: 1000,
-            aim_loss: 0.1,
-            val_interval: 500,
-            weight_decay_response: 0.1,
-            weight_decay_source: 0.01,
-            weight_decay_code: 0.05,
-            dropout_rate_response: 0.05,
-            dropout_rate_source: 0.0,
-            dropout_rate_code: 0.1,
-            loss_scale_response: 1.0,
-            loss_scale_source: 0.2,
-            loss_scale_code: 1.0,
-            gradient_scale_response: 1.0,
-            gradient_scale_source: 2.0,
-            gradient_scale_code: 1.2,
-            gradient_clip_response: 1.0,
-            gradient_clip_source: 0.1,
-            gradient_clip_code: 0.7,
-        };
+        let constants = TrainXMLConstantParsed::default();
         SampleTokenStatsContainer::new(&constants)
     }
 

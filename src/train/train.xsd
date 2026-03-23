@@ -274,19 +274,27 @@
                 <xs:enumeration value="learning_rate"/>
                 <xs:enumeration value="warmup_steps"/>
                 <xs:enumeration value="aim_loss"/>
-                <xs:enumeration value="val_interval"/>
+                <xs:enumeration value="val_interval" />
+
+                <xs:enumeration value="bpe_requested_tokens" />
+                <xs:enumeration value="bpe_min_merge_frequency" />
+
                 <xs:enumeration value="weight_decay_response"/>
                 <xs:enumeration value="weight_decay_source"/>
                 <xs:enumeration value="weight_decay_code"/>
+
                 <xs:enumeration value="dropout_rate_response"/>
                 <xs:enumeration value="dropout_rate_source"/>
                 <xs:enumeration value="dropout_rate_code"/>
+
                 <xs:enumeration value="loss_scale_response"/>
                 <xs:enumeration value="loss_scale_source"/>
                 <xs:enumeration value="loss_scale_code"/>
+
                 <xs:enumeration value="gradient_scale_response"/>
                 <xs:enumeration value="gradient_scale_source"/>
                 <xs:enumeration value="gradient_scale_code"/>
+
                 <xs:enumeration value="gradient_clip_response"/>
                 <xs:enumeration value="gradient_clip_source"/>
                 <xs:enumeration value="gradient_clip_code"/>
@@ -302,9 +310,13 @@
                 <xs:simpleType>
                   <xs:restriction base="xs:integer"/>
                 </xs:simpleType>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string" />
+                </xs:simpleType>
               </xs:union>
             </xs:simpleType>
           </xs:attribute>
+          <xs:attribute name="delimiter" use="optional" type="xs:string" />
         </xs:complexType>
       </xs:element>
     </xs:sequence>

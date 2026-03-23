@@ -1,6 +1,5 @@
 // src/train_xml/train_xml_validate.rs
 
-use std::collections::HashMap;
 pub use crate::train_xml::{TrainXML, TrainXMLIdMaps};
 use crate::train_xml::{
     TrainXMLConstantParsed,
@@ -59,9 +58,6 @@ mod tests {
         TrainXMLSamplesPrompt,
         TrainXMLSamplesSampleChildren,
         TrainXMLLineBreak,
-        TrainXMLPhrases,
-        TrainXMLPhrasesPhrase,
-        TrainXMLPhrasesVariant,
         train_xml_validate,
     };
 

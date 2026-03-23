@@ -14,7 +14,11 @@ fn main() {
             bootstrap(output.as_deref());
         },
         CliCommand::Train { input, output , version } => {
-            train(input.as_deref(), output.as_deref(), version.as_deref()).expect("Should train");
+            train(
+                input.as_deref(), 
+                output.as_deref(), 
+                version.as_deref()
+            ).expect("❌ train() Error:");
         },
         CliCommand::Infer => infer(),
     }

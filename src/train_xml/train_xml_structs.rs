@@ -279,6 +279,10 @@ pub struct TrainXMLConstantsConstant {
     /// The value for this constant
     #[serde(rename = "@value")]
     pub value: String,
+
+    /// The optional delimeter for this constant
+    #[serde(rename = "@delimiter")]
+    pub delimiter: Option<String>,
 }
 
 
@@ -291,18 +295,26 @@ pub enum TrainXMLConstantsKey {
     WarmupSteps,
     AimLoss,
     ValInterval,
+
+    BpeRequestedTokens,
+    BpeMinMergeFrequency,
+
     WeightDecayResponse,
     WeightDecaySource,
     WeightDecayCode,
+
     DropoutRateResponse,
     DropoutRateSource,
     DropoutRateCode,
+
     LossScaleResponse,
     LossScaleSource,
     LossScaleCode,
+
     GradientScaleResponse,
     GradientScaleSource,
     GradientScaleCode,
+
     GradientClipResponse,
     GradientClipSource,
     GradientClipCode,
@@ -317,7 +329,10 @@ pub struct TrainXMLConstantParsed {
     pub aim_infer_f16_gb: f32,
     pub learning_rate: f32,
     pub aim_loss: f32,
-    
+
+    pub bpe_min_merge_frequency: usize,
+    pub bpe_requested_tokens: Vec<String>,
+
     pub weight_decay_response: f32,
     pub weight_decay_source: f32,
     pub weight_decay_code: f32,
@@ -349,6 +364,9 @@ impl Default for TrainXMLConstantParsed {
             aim_infer_f16_gb: 0.9,
             learning_rate: 1e-3,
             aim_loss: 0.45,
+
+            bpe_min_merge_frequency: 3,
+            bpe_requested_tokens: Vec::new(),
 
             weight_decay_response: 0.1,
             weight_decay_source: 0.01,

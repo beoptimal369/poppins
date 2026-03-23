@@ -14,32 +14,25 @@ use crate::bpe::{
 /// This function orchestrates the complete BPE training process:
 /// 1. Initializes vocabulary with special tokens, requested tokens, and characters
 /// 2. Converts samples to initial token sequence
-/// 3. Iteratively merges the most frequent token pairs until stopping condition
+/// 3. Iteratively merges the most frequent token pairs until no pair meets the frequency threshold
 /// 4. Saves the final vocabulary and merges to vocab.json
 ///
 /// # Arguments
 /// * `samples` - Slice of samples to train on
 /// * `special_tokens` - List of special tokens to protect from merging
 /// * `requested_tokens` - List of tokens to force-add to vocabulary
-/// * `output_dir` - Directory where vocab.json will be written
+/// * `min_merge_frequency` - Minimum frequency for a token pair to be merged.
+///   Higher values result in smaller vocabularies. Typical range: 2-100.
+///   Training stops automatically when the most frequent pair falls below this threshold.
 ///
 /// # Returns
 /// * `BPETokenizer` - The trained tokenizer
-/// * `std::io::Result<()>` - Result of saving the vocab file
 pub fn bpe_train(
     samples: &[Sample],
     special_tokens: &[String],
     requested_tokens: &[String],
+    min_merge_frequency: usize,
 ) -> Result<BPETokenizer, std::io::Error> {
-    // Hardcoded parameters
-    const MIN_MERGE_FREQUENCY: usize = 3;
-    const MAX_VOCAB_SIZE: usize = 32768;
-    
-    println!("Starting BPE training...");
-    println!("Number of samples: {}", samples.len());
-    println!("Initial special tokens count: {}", special_tokens.len());
-    println!("Requested tokens: {:?}", requested_tokens);
-    
     // Create tokenizer
     let mut tokenizer = BPETokenizer {
         vocab: Vec::new(),
@@ -48,25 +41,17 @@ pub fn bpe_train(
         special_token_count: 0,
     };
     
-    // Step 1: Initialize vocabulary
+    // Initialize vocabulary
     bpe_init_vocab(&mut tokenizer, samples, special_tokens, requested_tokens);
-    println!("Initial vocab size: {} (special tokens: {})", 
-        tokenizer.vocab.len(), tokenizer.special_token_count);
     
-    // Step 2: Convert samples to initial token sequence
+    // Convert samples to initial token sequence
     let mut token_sequence = bpe_create_sequence(&tokenizer, samples);
-    println!("Initial token sequence length: {}", token_sequence.len());
     
-    // Step 3: Train merges
-    let mut current_vocab_size = tokenizer.vocab.len();
-    let mut merge_count = 0;
-    
-    while current_vocab_size < MAX_VOCAB_SIZE {
+    loop {
         // Count pair frequencies
         let pair_counts = bpe_create_pair_counts_map(&tokenizer, &token_sequence);
         
         if pair_counts.is_empty() {
-            println!("No more pairs to merge");
             break;
         }
         
@@ -77,8 +62,7 @@ pub fn bpe_train(
             .unwrap();
         
         // Stop if the most frequent pair falls below threshold
-        if count < MIN_MERGE_FREQUENCY {
-            println!("Stopping: merge frequency {} < {}", count, MIN_MERGE_FREQUENCY);
+        if count < min_merge_frequency {
             break;
         }
         
@@ -86,21 +70,16 @@ pub fn bpe_train(
         let token_a = tokenizer.vocab[a as usize].clone();
         let token_b = tokenizer.vocab[b as usize].clone();
         let new_token = format!("{}{}", token_a, token_b);
-        
-        // Log interesting merges (first 100, and any with letters)
-        if merge_count < 100 || new_token.chars().any(|c| c.is_alphanumeric()) {
-            println!("Merge #{}: '{}' + '{}' (freq: {}) -> '{}'", 
-                merge_count + 1, token_a, token_b, count, new_token);
-        }
-        
+
         // Add new token to vocabulary
-        let new_id = current_vocab_size as u32;
+        let new_id = tokenizer.vocab.len() as u32;
         tokenizer.vocab.push(new_token.clone());
         tokenizer.token_to_id.insert(new_token, new_id);
         tokenizer.merges.push((token_a, token_b));
         
         // Update the token sequence
         let mut i = 0;
+
         while i < token_sequence.len() - 1 {
             if token_sequence[i] == a && token_sequence[i + 1] == b {
                 token_sequence[i] = new_id;
@@ -109,16 +88,8 @@ pub fn bpe_train(
                 i += 1;
             }
         }
-        
-        current_vocab_size += 1;
-        merge_count += 1;
     }
-    
-    println!("Training complete!");
-    println!("Final vocab size: {} ({} merges performed)", 
-        tokenizer.vocab.len(), merge_count);
-    println!("Special tokens count: {}", tokenizer.special_token_count);
-    
+
     Ok(tokenizer)
 }
 
@@ -201,8 +172,9 @@ mod tests {
         let samples = create_test_samples();
         let special_tokens = bpe_get_special_tokens();
         let requested_tokens = vec!["console.log".to_string()];
+        let min_merge_frequency = 3;
         
-        let result = bpe_train(&samples, &special_tokens, &requested_tokens);
+        let result = bpe_train(&samples, &special_tokens, &requested_tokens, min_merge_frequency);
         
         assert!(result.is_ok());
         let tokenizer = result.unwrap();
@@ -221,8 +193,9 @@ mod tests {
         let samples: Vec<Sample> = vec![];
         let special_tokens = bpe_get_special_tokens();
         let requested_tokens = vec!["test".to_string()];
+        let min_merge_frequency = 3;
         
-        let result = bpe_train(&samples, &special_tokens, &requested_tokens);
+        let result = bpe_train(&samples, &special_tokens, &requested_tokens, min_merge_frequency);
         
         assert!(result.is_ok());
         let tokenizer = result.unwrap();
@@ -240,8 +213,9 @@ mod tests {
         let samples = create_test_samples();
         let special_tokens = bpe_get_special_tokens();
         let requested_tokens: Vec<String> = vec![];
+        let min_merge_frequency = 3;
         
-        let result = bpe_train(&samples, &special_tokens, &requested_tokens);
+        let result = bpe_train(&samples, &special_tokens, &requested_tokens, min_merge_frequency);
         
         assert!(result.is_ok());
         let tokenizer = result.unwrap();
@@ -252,27 +226,46 @@ mod tests {
     }
 
     #[test]
-    fn test_bpe_train_stops_at_max_vocab() {
-        // Create many samples to generate many merges
-        let mut samples = create_test_samples();
-        // Duplicate samples to increase frequencies
-        for _ in 0..10 {
-            samples.extend(create_test_samples());
-        }
+    fn test_bpe_train_with_high_min_frequency() {
+        let samples = create_test_samples();
+        let special_tokens = bpe_get_special_tokens();
+        let requested_tokens = vec![];
+        let min_merge_frequency = 1000;
         
-        let special_tokens = vec!["<unknown>".to_string()];
-        let requested_tokens: Vec<String> = vec![];
-        
-        // Use a very small max vocab to test stopping condition
-        // We can't easily test the actual MAX_VOCAB_SIZE since it's large,
-        // but we can test that training completes
-        let result = bpe_train(&samples, &special_tokens, &requested_tokens);
+        let result = bpe_train(&samples, &special_tokens, &requested_tokens, min_merge_frequency);
         
         assert!(result.is_ok());
         let tokenizer = result.unwrap();
         
-        // Should have some merges
-        assert!(tokenizer.merges.len() > 0);
+        // No merges should happen because frequency threshold is too high
+        assert_eq!(tokenizer.merges.len(), 0);
+        
+        // Vocab size should be greater than just special tokens
+        // (includes characters from the samples)
+        assert!(tokenizer.vocab.len() > special_tokens.len());
+        
+        // With no merges, vocab size should be exactly the initial vocab size
+        // Initial vocab includes: special_tokens + all unique chars from samples + requested_tokens
+        // Let's verify it's not just special_tokens + 1
+        assert!(tokenizer.vocab.len() > special_tokens.len() + 1);
+    }
+
+    #[test]
+    fn test_bpe_train_with_low_min_frequency() {
+        let samples = create_test_samples();
+        let special_tokens = bpe_get_special_tokens();
+        let requested_tokens = vec![];
+        // Very low threshold - should merge until no pairs left
+        let min_merge_frequency = 1;
+        
+        let result = bpe_train(&samples, &special_tokens, &requested_tokens, min_merge_frequency);
+        
+        assert!(result.is_ok());
+        let tokenizer = result.unwrap();
+        
+        // Should have many merges
+        assert!(tokenizer.merges.len() > 10);
+        assert!(tokenizer.vocab.len() > 50);
     }
 
     #[test]
@@ -280,8 +273,9 @@ mod tests {
         let samples = create_test_samples();
         let special_tokens = bpe_get_special_tokens();
         let requested_tokens = vec!["console.log".to_string()];
+        let min_merge_frequency = 3;
         
-        let result = bpe_train(&samples, &special_tokens, &requested_tokens);
+        let result = bpe_train(&samples, &special_tokens, &requested_tokens, min_merge_frequency);
         
         assert!(result.is_ok());
         let tokenizer = result.unwrap();
