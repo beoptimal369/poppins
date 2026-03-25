@@ -5,37 +5,23 @@ use serde::{Serialize, Deserialize};
 
 #[derive(Debug)]
 pub struct Sample {
-    pub id: String,
     pub prompt_section: Vec<SamplePromptEnum>,
     pub ai_section: Vec<SampleAiEnum>,
 }
 
 #[derive(Debug, Clone)]
 pub enum SamplePromptEnum {
-    /// Not using SampleText b/c we don't need token_stats w/in the prompt
     Text(String),
-    Code(SamplePromptCode),
+    Code(SampleCode),
     LineBreak(SampleLineBreak),
 }
 
 #[derive(Debug, Clone)]
 pub enum SampleAiEnum {
-    Text(SampleText),
-    Source(SampleSource),
-    Code(SampleAiCode),
+    Text(String),
+    Source(String),
+    Code(SampleCode),
     LineBreak(SampleLineBreak),
-}
-
-#[derive(Debug, Clone)]
-pub struct SampleText {
-    pub content: String,
-    pub token_stats: SampleTokenStats,
-}
-
-#[derive(Debug, Clone)]
-pub struct SampleSource {
-    pub id: String,
-    pub token_stats: SampleTokenStats,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -43,22 +29,12 @@ pub struct SampleLineBreak {
     pub count: u8,
 }
 
-/// The model does not predict prompts so no need for token_stats here
 #[derive(Debug, Clone)]
-pub struct SamplePromptCode {
+pub struct SampleCode {
     pub lang: SampleLanguage,
     pub inline: bool,
     pub indent: SampleIndent,
     pub content: String,
-}
-
-#[derive(Debug, Clone)]
-pub struct SampleAiCode {
-    pub lang: SampleLanguage,
-    pub inline: bool,
-    pub indent: SampleIndent,
-    pub content: String,
-    pub token_stats: SampleTokenStats,
 }
 
 macro_rules! define_languages {
@@ -145,15 +121,6 @@ define_indents! {
     Six   => 6,
 }
 
-#[derive(Debug, Clone)]
-pub struct SampleTokenStats {
-    pub weight_decay: f32,
-    pub dropout: f32,
-    pub loss_scale: f32,
-    pub gradient_scale: f32,
-    pub gradient_clip: f32,
-}
-
 /// Container for all training and validation samples
 ///
 /// This struct manages the collection of samples and provides
@@ -165,29 +132,13 @@ pub struct Samples {
     
     /// Samples used for validation
     pub val_samples: Vec<Sample>,
-    
-    /// Total number of samples created (used to assign unique IDs)
-    /// This counter increments with each new sample added
-    pub total_sample_count: usize,
 }
 
-impl Samples {
-    /// Get the next available ID and increment the counter
-    ///
-    /// # Returns
-    /// * `String` - The next ID as a string (e.g., "1", "2", "3")
-    pub fn next_id(&mut self) -> String {
-        self.total_sample_count += 1;
-        self.total_sample_count.to_string()
-    }
-}
-
-/// Where is this sample w/in train.bin or val.bin
-pub struct SampleIndex {
-    /// Helps us randomly jump to samples w/in bin files
-    pub sample_start: usize,
-    /// Helps us extract samples from bin files
-    pub sample_length: usize,
-    /// Helps us provide a starting point of known information for the model (mimic inference where the prompt is known) (predictions will begin after this token in training & validation)
-    pub prompt_length: usize,
+#[derive(Debug, Clone)]
+pub struct SampleTokenStats {
+    pub weight_decay: f32,
+    pub dropout: f32,
+    pub loss_scale: f32,
+    pub gradient_scale: f32,
+    pub gradient_clip: f32,
 }

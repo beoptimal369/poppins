@@ -18,7 +18,7 @@ fn main() {
                 input.as_deref(), 
                 output.as_deref(), 
                 version.as_deref()
-            ).expect("❌ train() Error:");
+            ).expect("❌ Failed to train:");
         },
         CliCommand::Infer => infer(),
     }

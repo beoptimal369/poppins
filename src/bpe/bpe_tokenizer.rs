@@ -5,11 +5,7 @@ use std::collections::HashMap;
 
 /// BPE Tokenizer
 ///
-/// Implements Byte Pair Encoding tokenization with support for:
-/// - Special tokens (protected from merging)
-/// - Requested tokens (pre-inserted into vocabulary)
-/// - Configurable merge frequency threshold
-/// - Vocabulary size limits
+/// Implements Byte Pair Encoding tokenization:
 #[derive(Debug, Clone)]
 pub struct BPETokenizer {
     /// Vocabulary mapping token ID to token string
@@ -22,9 +18,11 @@ pub struct BPETokenizer {
     /// Each entry is (left_token, right_token) that were merged
     pub merges: Vec<(String, String)>,
     
-    /// Number of special tokens at the start of vocab
-    /// These tokens are never merged with other tokens
+    /// Total umber of special tokens at the start of vocab
     pub special_token_count: u32,
+    
+    /// Total umber of initial tokens (special + requested) at the start of vocab
+    pub initial_token_count: u32,
 }
 
 
@@ -45,6 +43,7 @@ mod tests {
             },
             merges: vec![("a".to_string(), "b".to_string())],
             special_token_count: 1,
+            initial_token_count: 3,
         };
         
         assert_eq!(tokenizer.vocab.len(), 2);

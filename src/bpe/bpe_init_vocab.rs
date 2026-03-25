@@ -8,7 +8,7 @@ use crate::sample::{Sample, SamplePromptEnum, SampleAiEnum};
 /// Build initial vocabulary from samples
 ///
 /// This function:
-/// 1. Adds all special tokens
+/// 1. Adds all special tokens (including <unknown> as first)
 /// 2. Adds all requested tokens
 /// 3. Collects all characters from samples (text and code content)
 /// 4. Adds common programming characters and digits
@@ -17,7 +17,7 @@ use crate::sample::{Sample, SamplePromptEnum, SampleAiEnum};
 /// # Arguments
 /// * `tokenizer` - Mutable reference to the tokenizer to initialize
 /// * `samples` - Slice of samples to scan for characters
-/// * `special_tokens` - List of special tokens to add
+/// * `special_tokens` - List of special tokens to add (must include <unknown> as first)
 /// * `requested_tokens` - List of tokens to force-add to vocabulary
 pub fn bpe_init_vocab(
     tokenizer: &mut BPETokenizer,
@@ -28,93 +28,113 @@ pub fn bpe_init_vocab(
     tokenizer.vocab.clear();
     tokenizer.token_to_id.clear();
     
-    // Add all special tokens
-    for token in special_tokens {
-        tokenizer.vocab.push(token.clone());
-    }
-    tokenizer.special_token_count = special_tokens.len() as u32;
+    // Track added tokens to avoid duplicates
+    let mut added_tokens = HashSet::new();
     
-    // Add requested tokens
-    for token in requested_tokens {
-        if !tokenizer.vocab.contains(token) {
+    // Add all special tokens (including <unknown>)
+    for token in special_tokens {
+        if !added_tokens.contains(token) {
             tokenizer.vocab.push(token.clone());
+            added_tokens.insert(token.clone());
         }
     }
     
-    // Collect all characters from samples
-    let mut all_chars = HashSet::new();
+    // Set special token count
+    tokenizer.special_token_count = tokenizer.vocab.len() as u32;
     
-    for sample in samples {
-        // Scan prompt section
-        for item in &sample.prompt_section {
-            match item {
-                SamplePromptEnum::Text(text) => {
-                    for c in text.chars() {
-                        all_chars.insert(c);
+    // Add requested tokens
+    for token in requested_tokens {
+        if !added_tokens.contains(token) {
+            tokenizer.vocab.push(token.clone());
+            added_tokens.insert(token.clone());
+        }
+    }
+    
+    // Set initial token count
+    tokenizer.initial_token_count = tokenizer.vocab.len() as u32;
+    
+    // Only collect characters if there are samples
+    if !samples.is_empty() {
+        // 3. Collect all characters from samples
+        let mut all_chars = HashSet::new();
+        
+        for sample in samples {
+            // Scan prompt section
+            for item in &sample.prompt_section {
+                match item {
+                    SamplePromptEnum::Text(text) => {
+                        for c in text.chars() {
+                            all_chars.insert(c);
+                        }
+                    }
+                    SamplePromptEnum::Code(code) => {
+                        for c in code.content.chars() {
+                            all_chars.insert(c);
+                        }
+                    }
+                    SamplePromptEnum::LineBreak(_) => {
+                        // LineBreak doesn't contain text content
                     }
                 }
-                SamplePromptEnum::Code(code) => {
-                    for c in code.content.chars() {
-                        all_chars.insert(c);
+            }
+            
+            // Scan AI section
+            for item in &sample.ai_section {
+                match item {
+                    SampleAiEnum::Text(text) => {
+                        for c in text.chars() {
+                            all_chars.insert(c);
+                        }
                     }
-                }
-                SamplePromptEnum::LineBreak(_) => {
-                    // LineBreak doesn't contain text content
+                    SampleAiEnum::Code(code) => {
+                        for c in code.content.chars() {
+                            all_chars.insert(c);
+                        }
+                    }
+                    SampleAiEnum::Source(source) => {
+                        for c in source.chars() {
+                            all_chars.insert(c);
+                        }
+                    }
+                    SampleAiEnum::LineBreak(_) => {
+                        // LineBreak doesn't contain text content
+                    }
                 }
             }
         }
         
-        // Scan AI section
-        for item in &sample.ai_section {
-            match item {
-                SampleAiEnum::Text(text) => {
-                    for c in text.content.chars() {
-                        all_chars.insert(c);
-                    }
-                }
-                SampleAiEnum::Code(code) => {
-                    for c in code.content.chars() {
-                        all_chars.insert(c);
-                    }
-                }
-                SampleAiEnum::Source(source) => {
-                    for c in source.id.chars() {
-                        all_chars.insert(c);
-                    }
-                }
-                SampleAiEnum::LineBreak(_) => {
-                    // LineBreak doesn't contain text content
-                }
+        // Add all characters to vocab
+        let mut chars: Vec<char> = all_chars.into_iter().collect();
+        chars.sort();
+
+        for c in chars {
+            let token = c.to_string();
+            if !added_tokens.contains(&token) {
+                tokenizer.vocab.push(token.clone());
+                added_tokens.insert(token);
             }
         }
-    }
-    
-    // Add all characters to vocab
-    let mut chars: Vec<char> = all_chars.into_iter().collect();
-    chars.sort();
-    for c in chars {
-        let token = c.to_string();
-        if !tokenizer.vocab.contains(&token) {
-            tokenizer.vocab.push(token);
+        
+        // Add common programming characters
+        let common_chars = [
+            '!', '@', '#', '$', '%', '^', '&', '*', '+', '=', '~', '`', '|', '\\', ';', ':'
+        ];
+
+        for c in common_chars {
+            let token = c.to_string();
+            if !added_tokens.contains(&token) {
+                tokenizer.vocab.push(token.clone());
+                added_tokens.insert(token);
+            }
         }
-    }
-    
-    // Add common programming characters
-    let common_chars = [
-        '!', '@', '#', '$', '%', '^', '&', '*', '+', '=', '~', '`', '|', '\\', ';', ':'
-    ];
-    for c in common_chars {
-        let token = c.to_string();
-        if !tokenizer.vocab.contains(&token) {
-            tokenizer.vocab.push(token);
-        }
-    }
-    
-    // Add digits 0-9 if missing
-    for digit in '0'..='9' {
-        let token = digit.to_string();
-        if !tokenizer.vocab.contains(&token) {
-            tokenizer.vocab.push(token);
+        
+        // Add digits 0-9 if missing
+        for digit in '0'..='9' {
+            let token = digit.to_string();
+            if !added_tokens.contains(&token) {
+                tokenizer.vocab.push(token.clone());
+                added_tokens.insert(token);
+            }
         }
     }
     
@@ -129,44 +149,26 @@ pub fn bpe_init_vocab(
 #[cfg(test)]
 mod tests {
     use std::collections::HashMap;
-    use crate::bpe::{BPETokenizer, bpe_init_vocab};
+    use crate::bpe::{BPETokenizer, bpe_init_vocab, bpe_get_special_tokens};
     use crate::sample::{
-        Sample, SamplePromptEnum, SampleAiEnum, SampleText, 
-        SampleTokenStats, SampleAiCode, SampleLanguage, SampleIndent
+        Sample,
+        SampleAiEnum,
+        SampleIndent,
+        SampleLanguage,
+        SamplePromptEnum,
     };
 
-    fn create_test_sample() -> Sample {
-        Sample {
-            id: "1".to_string(),
-            prompt_section: vec![
-                SamplePromptEnum::Text("What is a computer?".to_string()),
-            ],
-            ai_section: vec![
-                SampleAiEnum::Text(SampleText {
-                    content: "A computer is a computing device.".to_string(),
-                    token_stats: SampleTokenStats {
-                        weight_decay: 0.1,
-                        dropout: 0.05,
-                        loss_scale: 1.0,
-                        gradient_scale: 1.0,
-                        gradient_clip: 1.0,
-                    },
-                }),
-                SampleAiEnum::Code(SampleAiCode {
-                    lang: SampleLanguage::Ts,
-                    inline: false,
-                    indent: SampleIndent::Zero,
-                    content: "function example() {\n  console.log('hi')\n}".to_string(),
-                    token_stats: SampleTokenStats {
-                        weight_decay: 0.1,
-                        dropout: 0.05,
-                        loss_scale: 1.0,
-                        gradient_scale: 1.0,
-                        gradient_clip: 1.0,
-                    },
-                }),
-            ],
-        }
+    fn create_test_samples() -> Vec<Sample> {
+        vec![
+            Sample {
+                prompt_section: vec![
+                    SamplePromptEnum::Text("Hi".to_string()),
+                ],
+                ai_section: vec![
+                    SampleAiEnum::Text("World".to_string()),
+                ],
+            },
+        ]
     }
 
     #[test]
@@ -176,166 +178,79 @@ mod tests {
             token_to_id: HashMap::new(),
             merges: Vec::new(),
             special_token_count: 0,
+            initial_token_count: 0,
         };
         
-        let samples = vec![create_test_sample()];
-        let special_tokens = vec!["<unknown>".to_string(), "<sample>".to_string(), "</sample>".to_string()];
-        let requested_tokens: Vec<String> = vec![];
+        let samples = create_test_samples();
+        let special_tokens = bpe_get_special_tokens();
+        let requested_tokens = vec!["custom".to_string()];
         
         bpe_init_vocab(&mut tokenizer, &samples, &special_tokens, &requested_tokens);
         
-        // Check special tokens are added
+        // Verify <unknown> is always first
         assert_eq!(tokenizer.vocab[0], "<unknown>");
-        assert_eq!(tokenizer.vocab[1], "<sample>");
-        assert_eq!(tokenizer.vocab[2], "</sample>");
-        assert_eq!(tokenizer.special_token_count, 3);
-    }
-
-    #[test]
-    fn test_init_vocab_with_requested_tokens() {
-        let mut tokenizer = BPETokenizer {
-            vocab: Vec::new(),
-            token_to_id: HashMap::new(),
-            merges: Vec::new(),
-            special_token_count: 0,
-        };
+        assert_eq!(tokenizer.token_to_id.get("<unknown>"), Some(&0));
         
-        let samples = vec![create_test_sample()];
-        let special_tokens = vec!["<unknown>".to_string()];
-        let requested_tokens = vec!["console.log".to_string(), "Array".to_string()];
+        // special_token_count should equal the number of special tokens
+        assert_eq!(tokenizer.special_token_count, special_tokens.len() as u32);
         
-        bpe_init_vocab(&mut tokenizer, &samples, &special_tokens, &requested_tokens);
+        // Verify requested tokens are added after special tokens
+        let expected_initial_count = special_tokens.len() + requested_tokens.len();
+        assert_eq!(tokenizer.initial_token_count, expected_initial_count as u32);
         
-        // Check requested tokens are added
-        assert!(tokenizer.vocab.contains(&"console.log".to_string()));
-        assert!(tokenizer.vocab.contains(&"Array".to_string()));
-    }
-
-    #[test]
-    fn test_init_vocab_collects_characters() {
-        let mut tokenizer = BPETokenizer {
-            vocab: Vec::new(),
-            token_to_id: HashMap::new(),
-            merges: Vec::new(),
-            special_token_count: 0,
-        };
+        // Verify specific special tokens exist
+        for token in &special_tokens {
+            assert!(tokenizer.vocab.contains(token));
+            assert!(tokenizer.token_to_id.contains_key(token));
+        }
         
-        let samples = vec![create_test_sample()];
-        let special_tokens = vec!["<unknown>".to_string()];
-        let requested_tokens: Vec<String> = vec![];
+        // Verify requested token exists
+        assert!(tokenizer.vocab.contains(&"custom".to_string()));
+        assert!(tokenizer.token_to_id.contains_key("custom"));
         
-        bpe_init_vocab(&mut tokenizer, &samples, &special_tokens, &requested_tokens);
-        
-        // Check characters from text are collected
+        // Verify character tokens exist
+        assert!(tokenizer.vocab.contains(&"H".to_string()));
+        assert!(tokenizer.vocab.contains(&"i".to_string()));
         assert!(tokenizer.vocab.contains(&"W".to_string()));
-        assert!(tokenizer.vocab.contains(&"h".to_string()));
-        assert!(tokenizer.vocab.contains(&"a".to_string()));
-        assert!(tokenizer.vocab.contains(&"t".to_string()));
-        
-        // Check characters from code are collected (including newline)
-        assert!(tokenizer.vocab.contains(&"\n".to_string()));
-        assert!(tokenizer.vocab.contains(&"{".to_string()));
-        assert!(tokenizer.vocab.contains(&"}".to_string()));
-        assert!(tokenizer.vocab.contains(&"'".to_string()));
+        assert!(tokenizer.vocab.contains(&"o".to_string()));
+        assert!(tokenizer.vocab.contains(&"r".to_string()));
+        assert!(tokenizer.vocab.contains(&"l".to_string()));
+        assert!(tokenizer.vocab.contains(&"d".to_string()));
     }
 
     #[test]
-    fn test_init_vocab_adds_common_chars() {
+    fn test_init_vocab_without_requested_tokens() {
         let mut tokenizer = BPETokenizer {
             vocab: Vec::new(),
             token_to_id: HashMap::new(),
             merges: Vec::new(),
             special_token_count: 0,
+            initial_token_count: 0,
         };
         
-        let samples: Vec<Sample> = vec![];
-        let special_tokens = vec!["<unknown>".to_string()];
+        let samples = create_test_samples();
+        let special_tokens = bpe_get_special_tokens();
         let requested_tokens: Vec<String> = vec![];
         
         bpe_init_vocab(&mut tokenizer, &samples, &special_tokens, &requested_tokens);
         
-        // Check common programming characters are added
-        assert!(tokenizer.vocab.contains(&"!".to_string()));
-        assert!(tokenizer.vocab.contains(&"@".to_string()));
-        assert!(tokenizer.vocab.contains(&"#".to_string()));
-        assert!(tokenizer.vocab.contains(&"$".to_string()));
-        assert!(tokenizer.vocab.contains(&"%".to_string()));
-        assert!(tokenizer.vocab.contains(&"^".to_string()));
-        assert!(tokenizer.vocab.contains(&"&".to_string()));
-        assert!(tokenizer.vocab.contains(&"*".to_string()));
-        assert!(tokenizer.vocab.contains(&"+".to_string()));
-        assert!(tokenizer.vocab.contains(&"=".to_string()));
-        assert!(tokenizer.vocab.contains(&"~".to_string()));
-        assert!(tokenizer.vocab.contains(&"`".to_string()));
-        assert!(tokenizer.vocab.contains(&"|".to_string()));
-        assert!(tokenizer.vocab.contains(&"\\".to_string()));
-        assert!(tokenizer.vocab.contains(&";".to_string()));
-        assert!(tokenizer.vocab.contains(&":".to_string()));
-    }
-
-    #[test]
-    fn test_init_vocab_adds_digits() {
-        let mut tokenizer = BPETokenizer {
-            vocab: Vec::new(),
-            token_to_id: HashMap::new(),
-            merges: Vec::new(),
-            special_token_count: 0,
-        };
+        // Verify <unknown> is first
+        assert_eq!(tokenizer.vocab[0], "<unknown>");
         
-        let samples: Vec<Sample> = vec![];
-        let special_tokens = vec!["<unknown>".to_string()];
-        let requested_tokens: Vec<String> = vec![];
+        // special_token_count should equal the number of special tokens
+        assert_eq!(tokenizer.special_token_count, special_tokens.len() as u32);
         
-        bpe_init_vocab(&mut tokenizer, &samples, &special_tokens, &requested_tokens);
+        // With no requested tokens, initial_token_count equals special_token_count
+        assert_eq!(tokenizer.initial_token_count, tokenizer.special_token_count);
         
-        // Check all digits are added
-        for digit in '0'..='9' {
-            assert!(tokenizer.vocab.contains(&digit.to_string()));
-        }
-    }
-
-    #[test]
-    fn test_init_vocab_no_duplicates() {
-        let mut tokenizer = BPETokenizer {
-            vocab: Vec::new(),
-            token_to_id: HashMap::new(),
-            merges: Vec::new(),
-            special_token_count: 0,
-        };
-        
-        let samples = vec![create_test_sample()];
-        let special_tokens = vec!["<unknown>".to_string(), "<sample>".to_string()];
-        let requested_tokens = vec!["a".to_string()]; // 'a' is also in text
-        
-        bpe_init_vocab(&mut tokenizer, &samples, &special_tokens, &requested_tokens);
-        
-        // Check no duplicates
-        let unique_tokens: std::collections::HashSet<_> = tokenizer.vocab.iter().collect();
-        assert_eq!(unique_tokens.len(), tokenizer.vocab.len());
-    }
-
-    #[test]
-    fn test_init_vocab_builds_token_to_id() {
-        let mut tokenizer = BPETokenizer {
-            vocab: Vec::new(),
-            token_to_id: HashMap::new(),
-            merges: Vec::new(),
-            special_token_count: 0,
-        };
-        
-        let samples = vec![create_test_sample()];
-        let special_tokens = vec!["<unknown>".to_string(), "<sample>".to_string()];
-        let requested_tokens: Vec<String> = vec![];
-        
-        bpe_init_vocab(&mut tokenizer, &samples, &special_tokens, &requested_tokens);
-        
-        // Check each token has correct ID
-        for (id, token) in tokenizer.vocab.iter().enumerate() {
-            assert_eq!(tokenizer.token_to_id.get(token), Some(&(id as u32)));
-        }
-        
-        // Check ID count matches vocab length
-        assert_eq!(tokenizer.token_to_id.len(), tokenizer.vocab.len());
+        // Verify character tokens exist
+        assert!(tokenizer.vocab.contains(&"H".to_string()));
+        assert!(tokenizer.vocab.contains(&"i".to_string()));
+        assert!(tokenizer.vocab.contains(&"W".to_string()));
+        assert!(tokenizer.vocab.contains(&"o".to_string()));
+        assert!(tokenizer.vocab.contains(&"r".to_string()));
+        assert!(tokenizer.vocab.contains(&"l".to_string()));
+        assert!(tokenizer.vocab.contains(&"d".to_string()));
     }
 
     #[test]
@@ -345,20 +260,108 @@ mod tests {
             token_to_id: HashMap::new(),
             merges: Vec::new(),
             special_token_count: 0,
+            initial_token_count: 0,
         };
         
         let samples: Vec<Sample> = vec![];
-        let special_tokens = vec!["<unknown>".to_string()];
-        let requested_tokens = vec!["console.log".to_string()];
+        let special_tokens = vec!["<unknown>".to_string(), "<custom>".to_string()];
+        let requested_tokens = vec!["test".to_string()];
         
         bpe_init_vocab(&mut tokenizer, &samples, &special_tokens, &requested_tokens);
         
-        // Should still have special tokens and requested tokens
+        // Verify <unknown> is first
         assert_eq!(tokenizer.vocab[0], "<unknown>");
-        assert!(tokenizer.vocab.contains(&"console.log".to_string()));
+        assert_eq!(tokenizer.token_to_id.get("<unknown>"), Some(&0));
         
-        // Should still have common chars and digits
-        assert!(tokenizer.vocab.contains(&"!".to_string()));
-        assert!(tokenizer.vocab.contains(&"0".to_string()));
+        // Verify special tokens are present
+        assert!(tokenizer.vocab.contains(&"<custom>".to_string()));
+        
+        // special_token_count should be number of special tokens
+        assert_eq!(tokenizer.special_token_count, special_tokens.len() as u32);
+        
+        // Verify requested token is present
+        assert!(tokenizer.vocab.contains(&"test".to_string()));
+        
+        // initial_token_count = special_token_count + requested_tokens.len()
+        let expected_initial_count = special_tokens.len() + requested_tokens.len();
+        assert_eq!(tokenizer.initial_token_count, expected_initial_count as u32);
+        
+        // No character tokens from samples
+        assert_eq!(tokenizer.vocab.len(), expected_initial_count as usize);
+    }
+
+    #[test]
+    fn test_init_vocab_duplicate_tokens() {
+        let mut tokenizer = BPETokenizer {
+            vocab: Vec::new(),
+            token_to_id: HashMap::new(),
+            merges: Vec::new(),
+            special_token_count: 0,
+            initial_token_count: 0,
+        };
+        
+        let samples = create_test_samples();
+        let special_tokens = vec!["<unknown>".to_string(), "<test>".to_string(), "<test>".to_string()];
+        let requested_tokens = vec!["duplicate".to_string(), "duplicate".to_string()];
+        
+        bpe_init_vocab(&mut tokenizer, &samples, &special_tokens, &requested_tokens);
+        
+        // Should not add duplicates
+        assert_eq!(tokenizer.vocab[0], "<unknown>");
+        
+        // special_token_count = <unknown> + <test>
+        assert_eq!(tokenizer.special_token_count, 2);
+        
+        // requested tokens should be added once
+        assert!(tokenizer.vocab.contains(&"duplicate".to_string()));
+        
+        // initial_token_count = special_token_count + unique requested tokens
+        assert_eq!(tokenizer.initial_token_count, 3);
+        
+        // Verify character tokens are added
+        assert!(tokenizer.vocab.contains(&"H".to_string()));
+    }
+
+    #[test]
+    fn test_init_vocab_with_code_sample() {
+        let mut tokenizer = BPETokenizer {
+            vocab: Vec::new(),
+            token_to_id: HashMap::new(),
+            merges: Vec::new(),
+            special_token_count: 0,
+            initial_token_count: 0,
+        };
+        
+        let samples = vec![
+            Sample {
+                prompt_section: vec![
+                    SamplePromptEnum::Code(crate::sample::SampleCode {
+                        lang: SampleLanguage::Js,
+                        inline: false,
+                        indent: SampleIndent::Zero,
+                        content: "console.log()".to_string(),
+                    }),
+                ],
+                ai_section: vec![],
+            },
+        ];
+        
+        let special_tokens = bpe_get_special_tokens();
+        let requested_tokens: Vec<String> = vec![];
+        
+        bpe_init_vocab(&mut tokenizer, &samples, &special_tokens, &requested_tokens);
+        
+        // Verify <unknown> is first
+        assert_eq!(tokenizer.vocab[0], "<unknown>");
+        
+        // Verify special tokens are present
+        assert!(tokenizer.vocab.contains(&"<js>".to_string()));
+        assert!(tokenizer.vocab.contains(&"</js>".to_string()));
+        
+        // Verify characters from code are added
+        let code_chars = ['c', 'o', 'n', 's', 'l', 'e', '.', 'g', '(', ')'];
+        for c in code_chars {
+            assert!(tokenizer.vocab.contains(&c.to_string()));
+        }
     }
 }

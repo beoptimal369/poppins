@@ -1,10 +1,11 @@
 // src/bpe/bpe_train.rs
 
+use std::collections::HashMap;
 use crate::sample::Sample;
 use crate::bpe::{
     BPETokenizer,
     bpe_init_vocab,
-    bpe_create_sequence,
+    bpe_train_tokenize,
     bpe_create_pair_counts_map,
 };
 
@@ -36,16 +37,17 @@ pub fn bpe_train(
     // Create tokenizer
     let mut tokenizer = BPETokenizer {
         vocab: Vec::new(),
-        token_to_id: std::collections::HashMap::new(),
+        token_to_id: HashMap::new(),
         merges: Vec::new(),
         special_token_count: 0,
+        initial_token_count: 0,
     };
     
     // Initialize vocabulary
     bpe_init_vocab(&mut tokenizer, samples, special_tokens, requested_tokens);
     
     // Convert samples to initial token sequence
-    let mut token_sequence = bpe_create_sequence(&tokenizer, samples);
+    let mut token_sequence = bpe_train_tokenize(&tokenizer, samples);
     
     loop {
         // Count pair frequencies
@@ -99,68 +101,36 @@ pub fn bpe_train(
 mod tests {
     use crate::bpe::{bpe_train, bpe_get_special_tokens};
     use crate::sample::{
-        Sample, SamplePromptEnum, SampleAiEnum, SampleText, SampleSource,
-        SampleAiCode, SampleLanguage, SampleIndent, SampleTokenStats,
+        Sample,
+        SampleCode,
+        SampleIndent,
+        SampleAiEnum,
+        SampleLanguage,
+        SamplePromptEnum,
     };
 
     fn create_test_samples() -> Vec<Sample> {
         vec![
             Sample {
-                id: "1".to_string(),
                 prompt_section: vec![
                     SamplePromptEnum::Text("Define computer.".to_string()),
                 ],
                 ai_section: vec![
-                    SampleAiEnum::Text(SampleText {
-                        content: "A computer is a computing device.".to_string(),
-                        token_stats: SampleTokenStats {
-                            weight_decay: 0.1,
-                            dropout: 0.05,
-                            loss_scale: 1.0,
-                            gradient_scale: 1.0,
-                            gradient_clip: 1.0,
-                        },
-                    }),
-                    SampleAiEnum::Source(SampleSource {
-                        id: "1".to_string(),
-                        token_stats: SampleTokenStats {
-                            weight_decay: 0.01,
-                            dropout: 0.0,
-                            loss_scale: 0.2,
-                            gradient_scale: 2.0,
-                            gradient_clip: 0.1,
-                        },
-                    }),
+                    SampleAiEnum::Text("A computer is a computing device.".to_string()),
+                    SampleAiEnum::Source("1".to_string()),
                 ],
             },
             Sample {
-                id: "2".to_string(),
                 prompt_section: vec![
                     SamplePromptEnum::Text("What is JavaScript?".to_string()),
                 ],
                 ai_section: vec![
-                    SampleAiEnum::Text(SampleText {
-                        content: "JavaScript is a programming language.".to_string(),
-                        token_stats: SampleTokenStats {
-                            weight_decay: 0.1,
-                            dropout: 0.05,
-                            loss_scale: 1.0,
-                            gradient_scale: 1.0,
-                            gradient_clip: 1.0,
-                        },
-                    }),
-                    SampleAiEnum::Code(SampleAiCode {
+                    SampleAiEnum::Text("JavaScript is a programming language.".to_string()),
+                    SampleAiEnum::Code(SampleCode {
                         lang: SampleLanguage::Js,
                         inline: false,
                         indent: SampleIndent::Zero,
                         content: "console.log('hello')".to_string(),
-                        token_stats: SampleTokenStats {
-                            weight_decay: 0.05,
-                            dropout: 0.1,
-                            loss_scale: 1.0,
-                            gradient_scale: 1.2,
-                            gradient_clip: 0.7,
-                        },
                     }),
                 ],
             },

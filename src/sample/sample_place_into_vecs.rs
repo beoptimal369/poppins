@@ -61,27 +61,17 @@ pub fn sample_place_into_vecs(
 #[cfg(test)]
 mod tests {
     use crate::sample::{
-        sample_structs::{Samples, Sample, SamplePromptEnum, SampleAiEnum, SampleText, SampleTokenStats},
         sample_place_into_vecs::sample_place_into_vecs,
+        sample_structs::{Samples, Sample, SamplePromptEnum, SampleAiEnum},
     };
     
     fn create_test_sample(id: &str) -> Sample {
         Sample {
-            id: id.to_string(),
             prompt_section: vec![
                 SamplePromptEnum::Text(format!("Prompt {}", id)),
             ],
             ai_section: vec![
-                SampleAiEnum::Text(SampleText {
-                    content: format!("Response {}", id),
-                    token_stats: SampleTokenStats {
-                        weight_decay: 0.1,
-                        dropout: 0.05,
-                        loss_scale: 1.0,
-                        gradient_scale: 1.0,
-                        gradient_clip: 1.0,
-                    },
-                }),
+                SampleAiEnum::Text(format!("Response {}", id)),
             ],
         }
     }
@@ -91,7 +81,6 @@ mod tests {
         let mut samples = Samples {
             train_samples: Vec::new(),
             val_samples: Vec::new(),
-            total_sample_count: 5, // Just for tracking
         };
         
         let original = create_test_sample("1");
@@ -100,7 +89,6 @@ mod tests {
         
         assert_eq!(samples.train_samples.len(), 1);
         assert_eq!(samples.val_samples.len(), 0);
-        assert_eq!(samples.train_samples[0].id, "1");
     }
     
     #[test]
@@ -108,7 +96,6 @@ mod tests {
         let mut samples = Samples {
             train_samples: Vec::new(),
             val_samples: Vec::new(),
-            total_sample_count: 5,
         };
         
         let original = create_test_sample("1");
@@ -124,17 +111,6 @@ mod tests {
         
         // Exactly one sample should be in validation
         assert_eq!(samples.val_samples.len(), 1);
-        
-        // The validation sample should be one of the three
-        let val_id = &samples.val_samples[0].id;
-        assert!(val_id == "1" || val_id == "2" || val_id == "3");
-        
-        // All samples should be present (no duplicates, no missing)
-        let mut all_ids: Vec<String> = samples.train_samples.iter().map(|s| s.id.clone()).collect();
-        all_ids.extend(samples.val_samples.iter().map(|s| s.id.clone()));
-        all_ids.sort();
-        
-        assert_eq!(all_ids, vec!["1".to_string(), "2".to_string(), "3".to_string()]);
     }
     
     #[test]
@@ -142,7 +118,6 @@ mod tests {
         let mut samples = Samples {
             train_samples: Vec::new(),
             val_samples: Vec::new(),
-            total_sample_count: 0,
         };
         
         // First group
@@ -160,12 +135,5 @@ mod tests {
         
         // Should have 2 validation samples (one from each group)
         assert_eq!(samples.val_samples.len(), 2);
-        
-        // All samples should be present
-        let mut all_ids: Vec<String> = samples.train_samples.iter().map(|s| s.id.clone()).collect();
-        all_ids.extend(samples.val_samples.iter().map(|s| s.id.clone()));
-        all_ids.sort();
-        
-        assert_eq!(all_ids, vec!["1", "2", "3", "4", "5"]);
     }
 }

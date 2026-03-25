@@ -17,9 +17,7 @@ pub use sample_token_stats_container::SampleTokenStatsContainer;
 pub use sample_structs::{
     Sample,
     Samples,
-    SampleText,
-    SampleSource, 
-    SampleAiCode,
+    SampleCode,
     SampleIndent,
     SampleAiEnum,
     SampleLanguage,

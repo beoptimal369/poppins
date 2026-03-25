@@ -7,26 +7,20 @@ use crate::train_xml::{
 };
 use crate::sample::{
     Sample,
-    Samples,
-    SampleText,
+    SampleCode,
     SampleAiEnum,
-    SampleSource,
-    SampleAiCode,
     SampleIndent,
     SampleLanguage,
     SampleLineBreak,
     SamplePromptEnum,
-    SampleTokenStatsContainer,
 };
 
 
 /// Create a Sample via its children xml tags
 ///
 /// # Arguments
-/// * `samples` - Mutable reference to Samples container (for ID assignment)
 /// * `sample_tags` - The <sample> element from train.xml containing child tags
 /// * `ids` - The parsed IDs container with all prompts, responses, sources, and code snippets
-/// * `token_stats_map` - Token stats map for different component types
 ///
 /// # Returns
 /// * `Option<Sample>` - The constructed sample with a unique ID, or None if required references are missing
@@ -35,10 +29,8 @@ use crate::sample::{
 /// * The sample ID is automatically assigned using samples.next_id()
 /// * The sample is NOT automatically added to train/val vectors - that's handled separately
 pub fn sample_create_via_tags(
-    samples: &mut Samples,
     sample_tags: &TrainXMLSamplesSample,
     ids: &TrainXMLIdMaps,
-    token_stats_map: &SampleTokenStatsContainer,
 ) -> Option<Sample> {
     // Get the prompt (required)
     let prompt = ids.prompts.get(&sample_tags.prompt.id)?;
@@ -55,63 +47,40 @@ pub fn sample_create_via_tags(
         match child {
             TrainXMLSamplesSampleChildren::Response(response_ref) => {
                 if let Some(response) = ids.responses.get(&response_ref.id) {
-                    if let Some(token_stats) = token_stats_map.get("response") {
-                        ai_section.push(SampleAiEnum::Text(SampleText {
-                            content: response.content.clone(),
-                            token_stats: token_stats.clone(),
-                        }));
-                    }
+                    ai_section.push(SampleAiEnum::Text(response.content.clone()));
                 }
             },
             
             TrainXMLSamplesSampleChildren::Source(source_ref) => {
                 if let Some(_source) = ids.sources.get(&source_ref.id) {
-                    if let Some(token_stats) = token_stats_map.get("source") {
-                        ai_section.push(SampleAiEnum::Source(SampleSource {
-                            id: source_ref.id.clone(),
-                            token_stats: token_stats.clone(),
-                        }));
-                    }
+                    ai_section.push(SampleAiEnum::Source(source_ref.id.clone()));
                 }
             },
             
             TrainXMLSamplesSampleChildren::Code(code_ref) => {
                 if let Some(code) = ids.code_snippets.get(&code_ref.id) {
-                    if let Some(token_stats) = token_stats_map.get("code") {
-                        let lang = SampleLanguage::from_str(&code.lang);
-                        let indent = code_ref.indent.as_ref().copied().unwrap_or(SampleIndent::Zero);
-                        
-                        ai_section.push(SampleAiEnum::Code(SampleAiCode {
-                            lang,
-                            inline: code_ref.inline.unwrap_or(false),
-                            indent,
-                            content: code.content.clone(),
-                            token_stats: token_stats.clone(),
-                        }));
-                    }
+                    let lang = SampleLanguage::from_str(&code.lang);
+                    let indent = code_ref.indent.as_ref().copied().unwrap_or(SampleIndent::Zero);
+                    
+                    ai_section.push(SampleAiEnum::Code(SampleCode {
+                        lang,
+                        inline: code_ref.inline.unwrap_or(false),
+                        indent,
+                        content: code.content.clone(),
+                    }));
                 }
             },
             
             TrainXMLSamplesSampleChildren::ResponseIds(response_id_ref) => {
                 // Add the response first
                 if let Some(response) = ids.responses.get(&response_id_ref.response) {
-                    if let Some(token_stats) = token_stats_map.get("response") {
-                        ai_section.push(SampleAiEnum::Text(SampleText {
-                            content: response.content.clone(),
-                            token_stats: token_stats.clone(),
-                        }));
-                    }
+                    ai_section.push(SampleAiEnum::Text(response.content.clone()));
                 }
                 
                 // Then add the source if present
                 if let Some(source_id) = &response_id_ref.source {
                     if let Some(_source) = ids.sources.get(source_id) {
-                        if let Some(token_stats) = token_stats_map.get("source") {
-                            ai_section.push(SampleAiEnum::Source(SampleSource {
-                                id: source_id.clone(),
-                                token_stats: token_stats.clone(),
-                            }));
-                        }
+                        ai_section.push(SampleAiEnum::Source(source_id.to_string()));
                     }
                 }
             },
@@ -127,7 +96,6 @@ pub fn sample_create_via_tags(
         None
     } else {
         Some(Sample {
-            id: samples.next_id(), // Use the Samples counter for unique ID
             prompt_section,
             ai_section,
         })
@@ -140,10 +108,7 @@ pub fn sample_create_via_tags(
 mod tests {
     use std::collections::HashMap;
     use crate::sample::{
-        Samples,
         SampleAiEnum,
-        SampleLineBreak,
-        SampleTokenStatsContainer,
         sample_create_via_tags,
     };
     use crate::train_xml::{
@@ -155,7 +120,6 @@ mod tests {
         TrainXMLSourcesSource,
         TrainXMLSamplesSample,
         TrainXMLPromptsPrompt,
-        TrainXMLConstantParsed,
         TrainXMLSamplesResponse,
         TrainXMLCodeSnippetsCode,
         TrainXMLResponsesResponse,
@@ -220,20 +184,9 @@ mod tests {
         }
     }
 
-    fn create_test_token_stats_map() -> SampleTokenStatsContainer {
-        let constants = TrainXMLConstantParsed::default();
-        SampleTokenStatsContainer::new(&constants)
-    }
-
     #[test]
     fn test_sample_create_via_tags_preserves_order() {
-        let mut samples = Samples {
-            train_samples: Vec::new(),
-            val_samples: Vec::new(),
-            total_sample_count: 0,
-        };
         let ids = create_test_ids();
-        let token_stats_map = create_test_token_stats_map();
         
         // Create a sample with interleaved elements to test order preservation
         let sample_tags = TrainXMLSamplesSample {
@@ -269,26 +222,26 @@ mod tests {
             ],
         };
         
-        let sample = sample_create_via_tags(&mut samples, &sample_tags, &ids, &token_stats_map).unwrap();
+        let sample = sample_create_via_tags(&sample_tags, &ids).unwrap();
         
         // Verify the order matches the XML
         assert_eq!(sample.ai_section.len(), 8); // 4 responses + 2 sources + 1 code + 1 line break
         
         // Position 0: First response
         match &sample.ai_section[0] {
-            SampleAiEnum::Text(text) => assert_eq!(text.content, "A computer network is group of communicating computers."),
+            SampleAiEnum::Text(text) => assert_eq!(text, "A computer network is group of communicating computers."),
             _ => panic!("Expected Text at position 0"),
         }
         
         // Position 1: Source
         match &sample.ai_section[1] {
-            SampleAiEnum::Source(source) => assert_eq!(source.id, "1"),
+            SampleAiEnum::Source(source) => assert_eq!(source, "1"),
             _ => panic!("Expected Source at position 1"),
         }
         
         // Position 2: Second response
         match &sample.ai_section[2] {
-            SampleAiEnum::Text(text) => assert_eq!(text.content, "Additional response about networks."),
+            SampleAiEnum::Text(text) => assert_eq!(text, "Additional response about networks."),
             _ => panic!("Expected Text at position 2"),
         }
         
@@ -300,13 +253,13 @@ mod tests {
         
         // Position 4: Response from response-ids
         match &sample.ai_section[4] {
-            SampleAiEnum::Text(text) => assert_eq!(text.content, "A computer network is group of communicating computers."),
+            SampleAiEnum::Text(text) => assert_eq!(text, "A computer network is group of communicating computers."),
             _ => panic!("Expected Text at position 4"),
         }
         
         // Position 5: Source from response-ids
         match &sample.ai_section[5] {
-            SampleAiEnum::Source(source) => assert_eq!(source.id, "1"),
+            SampleAiEnum::Source(source) => assert_eq!(source, "1"),
             _ => panic!("Expected Source at position 5"),
         }
         
@@ -318,20 +271,14 @@ mod tests {
         
         // Position 7: Final response
         match &sample.ai_section[7] {
-            SampleAiEnum::Text(text) => assert_eq!(text.content, "A computer network is group of communicating computers."),
+            SampleAiEnum::Text(text) => assert_eq!(text, "A computer network is group of communicating computers."),
             _ => panic!("Expected Text at position 7"),
         }
     }
 
     #[test]
     fn test_sample_create_via_tags_line_break_counts() {
-        let mut samples = Samples {
-            train_samples: Vec::new(),
-            val_samples: Vec::new(),
-            total_sample_count: 0,
-        };
         let ids = create_test_ids();
-        let token_stats_map = create_test_token_stats_map();
         
         let sample_tags = TrainXMLSamplesSample {
             prompt: TrainXMLSamplesPrompt { id: "1".to_string() },
@@ -342,7 +289,7 @@ mod tests {
             ],
         };
         
-        let sample = sample_create_via_tags(&mut samples, &sample_tags, &ids, &token_stats_map).unwrap();
+        let sample = sample_create_via_tags(&sample_tags, &ids).unwrap();
         
         // With struct approach, we have 3 line break items, each with a count
         assert_eq!(sample.ai_section.len(), 3);
@@ -361,13 +308,7 @@ mod tests {
     
     #[test]
     fn test_sample_create_via_tags_missing_prompt() {
-        let mut samples = Samples {
-            train_samples: Vec::new(),
-            val_samples: Vec::new(),
-            total_sample_count: 0,
-        };
         let ids = create_test_ids();
-        let token_stats_map = create_test_token_stats_map();
         
         let sample_tags = TrainXMLSamplesSample {
             prompt: TrainXMLSamplesPrompt { id: "999".to_string() }, // Non-existent
@@ -376,8 +317,7 @@ mod tests {
             ],
         };
         
-        let sample = sample_create_via_tags(&mut samples, &sample_tags, &ids, &token_stats_map);
+        let sample = sample_create_via_tags(&sample_tags, &ids);
         assert!(sample.is_none());
-        assert_eq!(samples.total_sample_count, 0);
     }
 }

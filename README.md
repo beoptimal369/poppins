@@ -39,9 +39,10 @@
     - ✅ Write `output_dir/train_corpus.xml`
     - ✅ Write `output_dir/val_corpus.xml`
     - ✅ Write `output_dir/tokenizer.json`
-    - Write `output_dir/train_corpus.bin`
-    - Write `output_dir/val_corpus.bin`
-    - Write `output_dir/vocab.json`
+    - ✅ Write `output_dir/train_corpus.bin`
+    - ✅ Write `output_dir/val_corpus.bin`
+    - ✅ Write `output_dir/train_index.bin`
+    - ✅ Write `output_dir/val_index.bin`
     - Write `output_dir/manifest.json`
 - ...
 - MLA
@@ -282,6 +283,7 @@
 - BPE stands for Byte Pair Encoding
 - BPE is a method for deciding how to split text into tokens
 - BPE learns from the corpus which character & token combinations appear most frequently together, then merges them into tokens
+- BPE training can merge ANY two adjacent tokens, regardless of whether they're special, requested, or learned
 
 
 ### How does BPE work?
@@ -294,6 +296,8 @@
 ### What are merge rules?
 - Merge rules tell us how to build bigger tokens from smaller ones
 - When we get NEW text (not in the training data) (like a user prompt), we apply the merge rules to tokenize the text
+- The sequence may have console.log("hi world"), vocab may have console & console.log so the merge rules will make it so the sequence token is the largest token we have in the vocab
+- Post merge, pre merge tokens remain
 
 
 ### How are merge rules used?
@@ -301,6 +305,20 @@
 - Apply merge rules in the exact same order they were learned to build tokens & ensure consistency
 - Look up each token in the vocabulary to get its token ID
 - Look up each token embedding based on the token ID
+
+
+### What are special tokens?
+- Special tokens are pre-added to vocabulary
+- Structural tokens that define the corpus format (ex: `<sample>`, `</sample>`)
+- They can NOT be merged with adjacent tokens to form larger tokens
+- They appear in the token sequence as single units
+
+
+### What are requested tokens?
+- Requested tokens are pre-added to vocabulary
+- They can still be merged with adjacent tokens to form larger tokens
+- They appear in the token sequence as single units (unless merged to make even larger tokens)
+- Example: If `console.log` is a requested token then it starts as one token, & during BPE training, if `console.log` + `(` appears frequently then BPE can still merge into `console.log(`
 
 
 ### What is embedding?

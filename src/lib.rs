@@ -1,6 +1,7 @@
 // src/lib.rs
 
 mod bpe;
+mod tag;
 mod sample;
 mod train_xml;
 

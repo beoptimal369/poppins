@@ -1,13 +1,12 @@
 // src/sample/sample_get_variants.rs
 
 use crate::train_xml::TrainXML;
-use crate::sample::sample_structs::{Sample, SamplePromptEnum, Samples};
+use crate::sample::sample_structs::{Sample, SamplePromptEnum};
 
 
 /// Generates variant samples by applying regex patterns to the prompt
 ///
 /// # Arguments
-/// * `samples` - Mutable reference to Samples container (for ID assignment)
 /// * `original` - The original Sample to check for patterns
 /// * `train_xml` - The parsed train XML containing phrases with regex patterns
 ///
@@ -30,7 +29,6 @@ use crate::sample::sample_structs::{Sample, SamplePromptEnum, Samples};
 /// </phrase>
 /// ```
 pub fn sample_get_variants(
-    samples: &mut Samples,
     original: &Sample,
     train_xml: &TrainXML,
 ) -> Option<Vec<Sample>> {
@@ -103,11 +101,7 @@ pub fn sample_get_variants(
                 }
             }
             
-            // Add the variant with a new ID from samples
-            let variant_id = samples.next_id();
-            
             all_variants.push(Sample {
-                id: variant_id,
                 prompt_section: new_prompt,
                 ai_section: original.ai_section.clone(),
             });
@@ -128,14 +122,11 @@ mod tests {
     use crate::sample::{
         sample_get_variants::sample_get_variants,
         sample_structs:: {
-            Samples,
             Sample,
-            SampleText,
+            SampleCode,
             SampleAiEnum,
             SampleIndent,
             SampleLanguage,
-            SamplePromptCode,
-            SampleTokenStats,
             SamplePromptEnum,
         }
     };
@@ -179,37 +170,21 @@ mod tests {
     
     fn create_test_sample() -> Sample {
         Sample {
-            id: "1".to_string(),
             prompt_section: vec![
                 SamplePromptEnum::Text("What is a computer? ty Ai".to_string()),
             ],
             ai_section: vec![
-                SampleAiEnum::Text(SampleText {
-                    content: "A computer is a computing device.".to_string(),
-                    token_stats: SampleTokenStats {
-                        weight_decay: 0.1,
-                        dropout: 0.05,
-                        loss_scale: 1.0,
-                        gradient_scale: 1.0,
-                        gradient_clip: 1.0,
-                    },
-                }),
+                SampleAiEnum::Text("A computer is a computing device.".to_string()),
             ],
         }
     }
     
     #[test]
     fn test_success_case_example() {
-        let mut samples = Samples {
-            train_samples: Vec::new(),
-            val_samples: Vec::new(),
-            total_sample_count: 1, // Starting with original sample having ID 1
-        };
-        
         let sample = create_test_sample();
         let train_xml = create_test_train_xml();
 
-        let variants = sample_get_variants(&mut samples, &sample, &train_xml)
+        let variants = sample_get_variants( &sample, &train_xml)
             .expect("Should find variants");
         
         // Expected variants:
@@ -217,7 +192,6 @@ mod tests {
         // - Complex pattern with capture group: 2 variants
         // Total: 4 variants
         assert_eq!(variants.len(), 4);
-        assert_eq!(samples.total_sample_count, 5); // Started at 1, added 4 variants = 5
         
         // Collect all variant prompts
         let variant_prompts: Vec<String> = variants
@@ -238,24 +212,11 @@ mod tests {
         assert!(variant_prompts.contains(&"What is a computer? thank you Ai".to_string()));
         assert!(variant_prompts.contains(&"Define computer. ty Ai".to_string()));
         assert!(variant_prompts.contains(&"Define: computer. ty Ai".to_string()));
-        
-        // Verify IDs are sequential and start from 2
-        let ids: Vec<&String> = variants.iter().map(|v| &v.id).collect();
-        for (i, id) in ids.iter().enumerate() {
-            assert_eq!(id.parse::<usize>().unwrap(), i + 2);
-        }
     }
     
     #[test]
     fn test_complex_pattern_with_capture() {
-        let mut samples = Samples {
-            train_samples: Vec::new(),
-            val_samples: Vec::new(),
-            total_sample_count: 1,
-        };
-        
         let sample = Sample {
-            id: "1".to_string(),
             prompt_section: vec![
                 SamplePromptEnum::Text("What is a modem?".to_string()),
             ],
@@ -264,13 +225,12 @@ mod tests {
         
         let train_xml = create_test_train_xml();
         
-        let variants = sample_get_variants(&mut samples, &sample, &train_xml)
+        let variants = sample_get_variants( &sample, &train_xml)
             .expect("Should find variants");
         
         // Only the complex pattern applies here
         // 2 variants = 2 variants
         assert_eq!(variants.len(), 2);
-        assert_eq!(samples.total_sample_count, 3); // Started at 1, added 2 variants = 3
         
         // Collect all texts
         let texts: Vec<String> = variants
@@ -287,23 +247,11 @@ mod tests {
         // Check that capture group was properly inserted
         assert!(texts.contains(&"Define modem.".to_string()));
         assert!(texts.contains(&"Define: modem.".to_string()));
-        
-        // Verify IDs are sequential and start from 2
-        let ids: Vec<&String> = variants.iter().map(|v| &v.id).collect();
-        assert_eq!(ids[0], "2");
-        assert_eq!(ids[1], "3");
     }
     
     #[test]
     fn test_simple_pattern() {
-        let mut samples = Samples {
-            train_samples: Vec::new(),
-            val_samples: Vec::new(),
-            total_sample_count: 1,
-        };
-        
         let sample = Sample {
-            id: "1".to_string(),
             prompt_section: vec![
                 SamplePromptEnum::Text("Hello ty world".to_string()),
             ],
@@ -312,13 +260,12 @@ mod tests {
         
         let train_xml = create_test_train_xml();
         
-        let variants = sample_get_variants(&mut samples, &sample, &train_xml)
+        let variants = sample_get_variants( &sample, &train_xml)
             .expect("Should find variants");
         
         // Only the simple pattern applies here
         // 2 variants = 2 variants
         assert_eq!(variants.len(), 2);
-        assert_eq!(samples.total_sample_count, 3); // Started at 1, added 2 variants = 3
         
         // Collect all texts
         let texts: Vec<String> = variants
@@ -339,14 +286,7 @@ mod tests {
     
     #[test]
     fn test_multiple_matches_same_pattern() {
-        let mut samples = Samples {
-            train_samples: Vec::new(),
-            val_samples: Vec::new(),
-            total_sample_count: 1,
-        };
-        
         let sample = Sample {
-            id: "1".to_string(),
             prompt_section: vec![
                 SamplePromptEnum::Text("ty there, how are ty?".to_string()),
             ],
@@ -355,13 +295,12 @@ mod tests {
         
         let train_xml = create_test_train_xml();
         
-        let variants = sample_get_variants(&mut samples, &sample, &train_xml)
+        let variants = sample_get_variants( &sample, &train_xml)
             .expect("Should find variants");
         
         // Simple pattern only, but it appears twice in the text
         // 2 variants = 2 variants
         assert_eq!(variants.len(), 2);
-        assert_eq!(samples.total_sample_count, 3); // Started at 1, added 2 variants = 3
         
         // Collect all texts
         let texts: Vec<String> = variants
@@ -382,17 +321,10 @@ mod tests {
     
     #[test]
     fn test_with_mixed_prompt_elements() {
-        let mut samples = Samples {
-            train_samples: Vec::new(),
-            val_samples: Vec::new(),
-            total_sample_count: 1,
-        };
-        
         let sample = Sample {
-            id: "1".to_string(),
             prompt_section: vec![
                 SamplePromptEnum::Text("What is a computer? ".to_string()),
-                SamplePromptEnum::Code(SamplePromptCode {
+                SamplePromptEnum::Code(SampleCode {
                     lang: SampleLanguage::Rust,
                     inline: false,
                     indent: SampleIndent::One,
@@ -405,12 +337,11 @@ mod tests {
         
         let train_xml = create_test_train_xml();
         
-        let variants = sample_get_variants(&mut samples, &sample, &train_xml)
+        let variants = sample_get_variants( &sample, &train_xml)
             .expect("Should find variants");
         
         // 2 patterns × 2 variants each = 4 variants
         assert_eq!(variants.len(), 4);
-        assert_eq!(samples.total_sample_count, 5); // Started at 1, added 4 variants = 5
         
         // Verify code element is preserved in all variants
         for variant in &variants {
@@ -443,11 +374,5 @@ mod tests {
         assert!(prompts.contains(&"What is a computer? thank you".to_string()));
         assert!(prompts.contains(&"Define computer. ty".to_string()));
         assert!(prompts.contains(&"Define: computer. ty".to_string()));
-        
-        // Verify IDs are sequential and start from 2
-        let ids: Vec<&String> = variants.iter().map(|v| &v.id).collect();
-        for (i, id) in ids.iter().enumerate() {
-            assert_eq!(id.parse::<usize>().unwrap(), i + 2);
-        }
     }
 }

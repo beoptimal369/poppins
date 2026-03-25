@@ -1,7 +1,9 @@
 // src/train/mod.rs
 
 mod train;
-mod train_create_corpus;
+mod train_write_xmls;
+mod train_write_bins;
 
 pub use train::train;
-pub use train_create_corpus::train_create_corpus;
+pub use train_write_xmls::train_write_xmls;
+pub use train_write_bins::train_write_bins;

@@ -1,6 +1,6 @@
 // src/train_xml/train_xml_validate.rs
 
-pub use crate::train_xml::{TrainXML, TrainXMLIdMaps};
+use crate::train_xml::{TrainXML, TrainXMLIdMaps};
 use crate::train_xml::{
     TrainXMLConstantParsed,
     train_xml_validate_ids,
@@ -9,15 +9,18 @@ use crate::train_xml::{
 };
 
 
-pub fn train_xml_validate(train_xml: &TrainXML) -> (TrainXMLIdMaps<'_>, TrainXMLConstantParsed) {
-    let train_xml_id_maps_map = TrainXMLIdMaps::create(train_xml).expect("❌ Should have valid id's");
-    let train_xml_constants_parsed = train_xml_constants_parse(&train_xml.constants).expect("❌ Should have valid constants:");
+pub fn train_xml_validate(train_xml: &TrainXML) -> Result<(TrainXMLIdMaps<'_>, TrainXMLConstantParsed), Box<dyn std::error::Error>> {
+    let train_xml_id_maps_map = TrainXMLIdMaps::create(train_xml).map_err(|e| format!("❌ Failed building train xml ids map: {}", e))?;
+    let train_xml_constants_parsed = train_xml_constants_parse(&train_xml.constants).map_err(|e| format!("❌ Failed building train xml constants parsed: {}", e))?;
 
-    train_xml_validate_ids(train_xml, &train_xml_id_maps_map).expect("❌ Should have valid id's");
+    train_xml_validate_ids(train_xml, &train_xml_id_maps_map).map_err(|errors| {
+        let error_string = errors.join("\n  ");
+        format!("❌ Failed validating train xml ids:\n  {}", error_string)
+    })?;
     
-    validate_line_breaks(train_xml).expect("❌ Line break count must be 1 or 2");
+    validate_line_breaks(train_xml).map_err(|e| format!("❌ Failed building train xml line breaks: {}", e))?;
 
-    (train_xml_id_maps_map, train_xml_constants_parsed)
+    Ok((train_xml_id_maps_map, train_xml_constants_parsed))
 }
 
 
@@ -190,7 +193,7 @@ mod tests {
         
         // This should panic because of the invalid line break
         let result = std::panic::catch_unwind(|| {
-            train_xml_validate(&train_xml);
+            train_xml_validate(&train_xml).expect("Should validate");
         });
         
         assert!(result.is_err());
