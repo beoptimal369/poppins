@@ -137,6 +137,7 @@ pub struct Samples {
 #[derive(Debug, Clone)]
 pub struct SampleTokenStats {
     pub weight_decay: f32,
+    /// Bitnet papers say we don't need this
     pub dropout: f32,
     pub loss_scale: f32,
     pub gradient_scale: f32,
