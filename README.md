@@ -1,8 +1,10 @@
 # Poppins
 
 
+
 ## Our Mission
 - Be the `default` way `developers` create `custom LLMs`
+
 
 
 ## Why is Poppins written in Rust?
@@ -25,6 +27,7 @@
     - `.safetensors` files contain no executable code and only contain tensor data. Loading them is safe and does not introduce security risks.
 
 
+
 ## FAQ's about AI
 - https://github.com/beoptimal369/samples/tree/main/ai
 
@@ -36,10 +39,39 @@
     - ELSE install Rust: https://rust-lang.org/learn/get-started/
 1. Create a Project: `cargo new example`
 1. Install Poppins: `cargo install poppins`
-1. Create a `train.xml`: `poppins bootstrap`
-1. Update `train.xml` w/ the data you'd love your AI model to be an expert on
+1. Create a [train.xml](#what-is-a-trainxml): `poppins bootstrap`
+1. Update [train.xml](#what-is-a-trainxml) w/ the data you'd love your AI model to be an expert on
 1. **(not yet implemented)** Create an AI model: `poppins train`
 1. **(not yet implemented)** Ask AI model questions: `poppins infer`
+
+
+
+## What is a train.xml?
+- To create a custom AI model with Poppins we must define a `train.xml` file
+- The `train.xml` tells Poppins what to learn and what configuration settings to use
+- To generate an example `train.xml`: `poppins bootstrap`
+- A `train.xml` file contains a root `<train>` element with the following sections (only `<samples>` is required. All other sections are optional):
+    ```xml
+    <train>
+        <samples>...</samples>
+        <prompts>...</prompts>
+        <responses>...</responses>
+        <sources>...</sources>
+        <code-snippets>...</code-snippets>
+        <constants>...</constants>
+        <phrases>...</phrases>
+    </train>
+    ```
+    | Section | Description |
+    |---------|-------------|
+    | `<samples>` | **Required.** Defines the training examples. Each sample references `prompts` & `responses` and may reference `sources` & `code snippets`. |
+    | `<prompts>` | Optional. Reusable prompts (questions), identified by an `id`. |
+    | `<responses>` | Optional. Reusable ai responses (answers), identified by an `id`. |
+    | `<sources>` | Optional. References to external sources (URLs, titles) identified by an `id`. |
+    | `<code-snippets>` | Optional. Reusable code blocks in specific languages, identified by an `id`. |
+    | `<constants>` | Optional. Training hyperparameters (learning rate, batch size, etc.). |
+    | `<phrases>` | Optional. Patterns with variant values for data augmentation. |
+
 
 
 ## Plan to 1.0
@@ -88,8 +120,9 @@
 - RoPE
 - ReLU²
 - KV Cache
-- Memory
+- Save conversations to file
     - Multi Turn
-    - Turso
     - RLM
+- Add files to context
     - Abstract Syntax Tree
+- Add images to samples / context
