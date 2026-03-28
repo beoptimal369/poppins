@@ -13,25 +13,16 @@
     - Rust can compile to WebAssembly (`WASM`), allowing AI models to run directly in a web browser
     - Rust can compile to native libraries for `iOS` and `Android`, making it possible to integrate AI into mobile apps
     - B/c Rust does not need a heavy runtime or virtual machine, Rust can run on small devices like the `Raspberry Pi`, so it works optimally in resource constrained environments
-- **⚡ No Runtime Overhead from Dynamic Types:**
-    - Python is a `dynamically` typed language. Every time a Python program runs an operation, it must check and resolve the types of values at runtime. This adds overhead to every instruction.
-    - Rust uses `static` typing. All types are known at compile time, so there is no type checking overhead during execution. This makes Rust significantly faster for the compute heavy operations that are common w/ AI.
-- **🧠 Lower Resource Usage:**
-    - For the same workload, a Python program consumes more memory and `CPU` than a Rust program. Python has interpreter overhead, runtime type checking, and garbage collection, while Rust has none of these
-    - This is especially important for AI workloads on edge devices, mobile phones, or servers where reducing resource usage **lowers costs**
-- **📊 Consistent Performance:**
-    - Languages like Python, Java, and JavaScript use a Garbage Collector (`GC`) to manage memory. The GC can pause the program at random times to clean up memory, which can cause delays during AI model responses.
-    - Rust does not use a Garbage Collector. Memory is managed at compile time, so there are no unexpected pauses during inference. This keeps response times consistent.
-- **🚀 No Cold Start Delays:**
-    - In `serverless` or containerized environments, Python applications can have slow startup times because the interpreter must load and initialize dependencies.
-    - Rust binaries start instantly. There is no interpreter initialization. For AI applications that need to scale up quickly or run in `serverless` functions, Rust eliminates cold start latency.
+- **⚡ Lower Resource Usage:**
+    - For the same workload, a Python program consumes more memory and `CPU` than a Rust program b/c Python has interpreter overhead, runtime type checking, and garbage collection, while Rust has none of these
+    - Reducing resource usage **lowers costs**
 - **🔄 Concurrency:**
     - Python has a Global Interpreter Lock (`GIL`) that prevents multiple threads from running Python code in parallel. This limits CPU usage.
     - Rust allows true parallel execution across all `CPU` cores. This helps AI applications scale efficiently when processing multiple requests or performing compute heavy operations.
 - **🔒 File Safety:**
-    - Poppins AI models are often saved as `.safetensors` files. This format was created by Hugging Face to replace Python’s `pickle` format
-    - Python’s `pickle` can execute arbitrary code when loading a file. A malicious model file could compromise a system.
-    - `.safetensors` files contain only tensor data, no executable code. Loading them is safe and does not introduce security risks.
+    - Poppins AI models are saved as `.safetensors` files. This format was created by Hugging Face to replace Python’s `pickle` format
+    - Python’s `pickle` can execute arbitrary code when loading a file, so malicious model file can compromise a system
+    - `.safetensors` files contain no executable code and only contain tensor data. Loading them is safe and does not introduce security risks.
 
 
 ## FAQ's about AI
