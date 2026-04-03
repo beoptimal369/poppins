@@ -1,378 +1,457 @@
 // src/sample/sample_get_variants.rs
 
-use crate::train_xml::TrainXML;
+use rayon::prelude::*;
+use crate::train_xml::TrainXMLPhrasePattern;
 use crate::sample::sample_structs::{Sample, SamplePromptEnum};
 
 
-/// Generates variant samples by applying regex patterns to the prompt
+/// Generates variants for multiple samples in batch with parallel processing
+///
+/// This function uses pre-compiled replacement functions for fast path,
+/// and falls back to regex for complex patterns with multiple capture groups.
 ///
 /// # Arguments
-/// * `original` - The original Sample to check for patterns
-/// * `train_xml` - The parsed train XML containing phrases with regex patterns
+/// * `samples` - The samples to generate variants for
+/// * `patterns` - The pre-compiled phrase patterns
 ///
 /// # Returns
-/// * `Option<Vec<Sample>>` - Vector of variant samples, or None if no variants found
-///
-/// # Notes
-/// * Each variant gets a unique ID from samples.next_id()
-/// * The variants are NOT automatically added to train/val vectors - that's handled separately
-/// 
-/// # Examples
-/// ```xml
-/// <phrase pattern="What is (?:a |an |the )?(.*?)\?">
-///   <variant value="Define $1." />
-///   <variant value="Define: $1." />
-/// </phrase>
-/// <phrase pattern="ty">
-///   <variant value="thanks" />
-///   <variant value="thank you" />
-/// </phrase>
-/// ```
+/// * `Vec<Vec<Sample>>` - A vector where each inner vector contains the variants
+///   for the corresponding input sample, or empty vector if no variants for that sample
 pub fn sample_get_variants(
-    original: &Sample,
-    train_xml: &TrainXML,
-) -> Option<Vec<Sample>> {
-    // Early return if no phrases
-    let phrases = match &train_xml.phrases {
-        Some(p) if !p.phrase.is_empty() => {
-            &p.phrase
-        },
-        _ => {
-            return None;
-        },
-    };
+    samples: &[Sample],
+    patterns: &[TrainXMLPhrasePattern],
+) -> Vec<Vec<Sample>> {
+    if patterns.is_empty() || samples.is_empty() {
+        return vec![Vec::new(); samples.len()];
+    }
     
+    // Process samples in parallel using rayon
+    samples.par_iter()
+        .map(|original| sample_get_variants_single(original, patterns))
+        .collect()
+}
+
+
+/// Generate variants for a single sample (used by batch processing)
+fn sample_get_variants_single(
+    original: &Sample,
+    patterns: &[TrainXMLPhrasePattern],
+) -> Vec<Sample> {
     let mut all_variants = Vec::new();
     
-    // Process each phrase
-    for (_phrase_idx, phrase) in phrases.iter().enumerate() {
-        let pattern = &phrase.pattern;
-        let variants = &phrase.variant;
-        
-        // Compile the regex pattern
-        let regex = match phrase.compile_pattern() {
-            Ok(r) => r,
-            Err(e) => {
-                println!("  ✗ Failed to compile regex '{}': {}", pattern, e);
-                continue;
-            }
-        };
-        
-        // Check if this pattern matches ANYWHERE in the prompt
-        let mut matches_found = false;
+    for pattern in patterns {
+        // Find all text positions that match this pattern
         let mut text_positions = Vec::new();
+        let mut text_contents = Vec::new();
         
         for (item_idx, item) in original.prompt_section.iter().enumerate() {
             if let SamplePromptEnum::Text(text) = item {
-                if regex.is_match(text) {
-                    matches_found = true;
+                if pattern.regex.is_match(text) {
                     text_positions.push(item_idx);
+                    text_contents.push(text.as_str());
                 }
             }
         }
         
-        if !matches_found {
+        if text_positions.is_empty() {
             continue;
         }
         
         // Create variants for this pattern
-        for (_var_idx, variant) in variants.iter().enumerate() {
-            // Start with the original prompt section
+        for variant_idx in 0..pattern.variants.len() {
             let mut new_prompt = original.prompt_section.clone();
+            let mut all_replaced = true;
             
-            // Apply the replacement to ALL matching text elements using regex replacement
-            for &item_idx in &text_positions {
-                if let SamplePromptEnum::Text(text) = &new_prompt[item_idx] {
-                    // Perform regex replacement with capture groups
-                    let replaced = regex.replace_all(text, |caps: &regex::Captures| {
-                        let mut result = variant.value.clone();
-                        
-                        // Replace $1, $2, etc. with captured groups
-                        for i in 1..caps.len() {
-                            if let Some(capture) = caps.get(i) {
-                                let placeholder = format!("${}", i);
-                                result = result.replace(&placeholder, capture.as_str());
-                            }
-                        }
-                        result
-                    }).to_string();
-                    
-                    new_prompt[item_idx] = SamplePromptEnum::Text(replaced);
+            // Try fast path first
+            for (pos_idx, &item_idx) in text_positions.iter().enumerate() {
+                let text = text_contents[pos_idx];
+                
+                match pattern.replace(text, variant_idx) {
+                    Some(replaced) => {
+                        new_prompt[item_idx] = SamplePromptEnum::Text(replaced);
+                    }
+                    None => {
+                        // Fast path failed (multiple capture groups), fall back to slow path
+                        all_replaced = false;
+                        break;
+                    }
+                }
+            }
+            
+            // If fast path failed for any text, use slow path for all
+            if !all_replaced {
+                for (pos_idx, &item_idx) in text_positions.iter().enumerate() {
+                    let text = text_contents[pos_idx];
+                    if let Some(replaced) = pattern.replace(text, variant_idx) {
+                        new_prompt[item_idx] = SamplePromptEnum::Text(replaced);
+                    }
                 }
             }
             
             all_variants.push(Sample {
+                system: original.system.clone(),
                 prompt_section: new_prompt,
                 ai_section: original.ai_section.clone(),
             });
         }
     }
     
-    if all_variants.is_empty() {
-        None
-    } else {
-        Some(all_variants)
-    }
+    all_variants
 }
 
 
 
 #[cfg(test)]
 mod tests {
-    use crate::sample::{
-        sample_get_variants::sample_get_variants,
-        sample_structs:: {
-            Sample,
-            SampleCode,
-            SampleAiEnum,
-            SampleIndent,
-            SampleLanguage,
-            SamplePromptEnum,
-        }
-    };
-    use crate::train_xml::{
-        TrainXML,
-        TrainXMLPhrases,
-        TrainXMLPhrasesPhrase,
-        TrainXMLPhrasesVariant,
-    };
-    
-    fn create_test_train_xml() -> TrainXML {
-        TrainXML {
-            prompts: None,
-            responses: None,
-            sources: None,
-            code_snippets: None,
-            samples: None,
-            constants: None,
-            phrases: Some(TrainXMLPhrases {
-                phrase: vec![
-                    // Simple pattern - exact match
-                    TrainXMLPhrasesPhrase {
-                        pattern: "ty".to_string(),
-                        variant: vec![
-                            TrainXMLPhrasesVariant { value: "thanks".to_string() },
-                            TrainXMLPhrasesVariant { value: "thank you".to_string() },
-                        ],
-                    },
-                    // Complex pattern with capture group
-                    TrainXMLPhrasesPhrase {
-                        pattern: r"What is a (.*?)\?".to_string(),
-                        variant: vec![
-                            TrainXMLPhrasesVariant { value: "Define $1.".to_string() },
-                            TrainXMLPhrasesVariant { value: "Define: $1.".to_string() },
-                        ],
-                    },
-                ],
-            }),
-        }
+    use regex::Regex;
+    use std::sync::Arc;
+    use super::sample_get_variants;
+    use crate::train_xml::TrainXMLPhrasePattern;
+    use crate::sample::sample_structs::{Sample, SamplePromptEnum, SampleAiEnum, SampleLanguage, SampleIndent, SampleCode, SampleLineBreak};
+
+    fn create_test_patterns() -> Vec<TrainXMLPhrasePattern> {
+        let variants = vec![
+            "Define $1.".to_string(),
+            "Define: $1.".to_string(),
+            "Tell me about $1.".to_string(),
+        ];
+        
+        // Use the original pattern with optional articles
+        let pattern = r"What (?:is|are) (?:a |an |the )?(.*?)\?";
+        let regex = Regex::new(pattern).unwrap();
+        let has_captures = TrainXMLPhrasePattern::has_capture_groups(&regex);
+        let has_multiple_captures = TrainXMLPhrasePattern::has_multiple_capture_groups(&regex);
+        let variants_use_multiple_captures = TrainXMLPhrasePattern::variants_use_multiple_captures(&variants);
+        let replacements = TrainXMLPhrasePattern::compile_replacements(&variants);
+        
+        vec![
+            TrainXMLPhrasePattern {
+                regex: Arc::new(regex),
+                variants: Arc::new(variants),
+                replacements: Arc::new(replacements),
+                has_captures,
+                has_multiple_captures,
+                variants_use_multiple_captures,
+            },
+        ]
     }
-    
-    fn create_test_sample() -> Sample {
+
+    fn create_test_sample(text: &str) -> Sample {
         Sample {
+            system: "You are a helpful assistant.".to_string(),
             prompt_section: vec![
-                SamplePromptEnum::Text("What is a computer? ty Ai".to_string()),
+                SamplePromptEnum::Text(text.to_string()),
             ],
             ai_section: vec![
-                SampleAiEnum::Text("A computer is a computing device.".to_string()),
+                SampleAiEnum::Text("Test response.".to_string()),
             ],
         }
     }
-    
-    #[test]
-    fn test_success_case_example() {
-        let sample = create_test_sample();
-        let train_xml = create_test_train_xml();
 
-        let variants = sample_get_variants( &sample, &train_xml)
-            .expect("Should find variants");
-        
-        // Expected variants:
-        // - Simple "ty" pattern: 2 variants
-        // - Complex pattern with capture group: 2 variants
-        // Total: 4 variants
-        assert_eq!(variants.len(), 4);
-        
-        // Collect all variant prompts
-        let variant_prompts: Vec<String> = variants
-            .iter()
-            .map(|v| {
-                let mut full_text = String::new();
-                for item in &v.prompt_section {
-                    if let SamplePromptEnum::Text(t) = item {
-                        full_text.push_str(t);
-                    }
-                }
-                full_text
-            })
-            .collect();
-        
-        // Expected variants
-        assert!(variant_prompts.contains(&"What is a computer? thanks Ai".to_string()));
-        assert!(variant_prompts.contains(&"What is a computer? thank you Ai".to_string()));
-        assert!(variant_prompts.contains(&"Define computer. ty Ai".to_string()));
-        assert!(variant_prompts.contains(&"Define: computer. ty Ai".to_string()));
-    }
-    
-    #[test]
-    fn test_complex_pattern_with_capture() {
-        let sample = Sample {
+    fn create_test_sample_with_multiple_text() -> Sample {
+        Sample {
+            system: "You are a helpful assistant.".to_string(),
             prompt_section: vec![
-                SamplePromptEnum::Text("What is a modem?".to_string()),
+                SamplePromptEnum::Text("What is a computer?".to_string()),
+                SamplePromptEnum::Code(SampleCode {
+                    lang: SampleLanguage::Js,
+                    inline: false,
+                    indent: None,
+                    content: "console.log('test')".to_string(),
+                }),
+                SamplePromptEnum::Text("What is a programming language?".to_string()),
             ],
-            ai_section: vec![],
-        };
-        
-        let train_xml = create_test_train_xml();
-        
-        let variants = sample_get_variants( &sample, &train_xml)
-            .expect("Should find variants");
-        
-        // Only the complex pattern applies here
-        // 2 variants = 2 variants
-        assert_eq!(variants.len(), 2);
-        
-        // Collect all texts
-        let texts: Vec<String> = variants
-            .iter()
-            .map(|v| {
-                if let SamplePromptEnum::Text(t) = &v.prompt_section[0] {
-                    t.clone()
-                } else {
-                    String::new()
-                }
-            })
-            .collect();
-        
-        // Check that capture group was properly inserted
-        assert!(texts.contains(&"Define modem.".to_string()));
-        assert!(texts.contains(&"Define: modem.".to_string()));
-    }
-    
-    #[test]
-    fn test_simple_pattern() {
-        let sample = Sample {
-            prompt_section: vec![
-                SamplePromptEnum::Text("Hello ty world".to_string()),
+            ai_section: vec![
+                SampleAiEnum::Text("Test response.".to_string()),
             ],
-            ai_section: vec![],
-        };
-        
-        let train_xml = create_test_train_xml();
-        
-        let variants = sample_get_variants( &sample, &train_xml)
-            .expect("Should find variants");
-        
-        // Only the simple pattern applies here
-        // 2 variants = 2 variants
-        assert_eq!(variants.len(), 2);
-        
-        // Collect all texts
-        let texts: Vec<String> = variants
-            .iter()
-            .map(|v| {
-                if let SamplePromptEnum::Text(t) = &v.prompt_section[0] {
-                    t.clone()
-                } else {
-                    String::new()
-                }
-            })
-            .collect();
-        
-        // Check that simple replacement worked
-        assert!(texts.contains(&"Hello thanks world".to_string()));
-        assert!(texts.contains(&"Hello thank you world".to_string()));
+        }
     }
-    
-    #[test]
-    fn test_multiple_matches_same_pattern() {
-        let sample = Sample {
-            prompt_section: vec![
-                SamplePromptEnum::Text("ty there, how are ty?".to_string()),
-            ],
-            ai_section: vec![],
-        };
-        
-        let train_xml = create_test_train_xml();
-        
-        let variants = sample_get_variants( &sample, &train_xml)
-            .expect("Should find variants");
-        
-        // Simple pattern only, but it appears twice in the text
-        // 2 variants = 2 variants
-        assert_eq!(variants.len(), 2);
-        
-        // Collect all texts
-        let texts: Vec<String> = variants
-            .iter()
-            .map(|v| {
-                if let SamplePromptEnum::Text(t) = &v.prompt_section[0] {
-                    t.clone()
-                } else {
-                    String::new()
-                }
-            })
-            .collect();
-        
-        // Check that all occurrences were replaced
-        assert!(texts.contains(&"thanks there, how are thanks?".to_string()));
-        assert!(texts.contains(&"thank you there, how are thank you?".to_string()));
-    }
-    
-    #[test]
-    fn test_with_mixed_prompt_elements() {
-        let sample = Sample {
+
+    fn create_test_sample_with_code_and_line_break() -> Sample {
+        Sample {
+            system: "System".to_string(),
             prompt_section: vec![
                 SamplePromptEnum::Text("What is a computer? ".to_string()),
                 SamplePromptEnum::Code(SampleCode {
                     lang: SampleLanguage::Rust,
                     inline: false,
-                    indent: SampleIndent::One,
+                    indent: Some(SampleIndent::One),
                     content: "fn main() {}".to_string(),
                 }),
-                SamplePromptEnum::Text("ty".to_string()),
+                SamplePromptEnum::LineBreak(SampleLineBreak { count: 1 }),
+                SamplePromptEnum::Text("What is programming?".to_string()),  // Changed to match pattern
             ],
-            ai_section: vec![],
-        };
-        
-        let train_xml = create_test_train_xml();
-        
-        let variants = sample_get_variants( &sample, &train_xml)
-            .expect("Should find variants");
-        
-        // 2 patterns × 2 variants each = 4 variants
-        assert_eq!(variants.len(), 4);
-        
-        // Verify code element is preserved in all variants
-        for variant in &variants {
-            assert_eq!(variant.prompt_section.len(), 3);
-            
-            // Check that the code element is unchanged
-            if let SamplePromptEnum::Code(code) = &variant.prompt_section[1] {
-                assert_eq!(code.content, "fn main() {}");
-            } else {
-                panic!("Expected Code element at position 1");
-            }
+            ai_section: vec![
+                SampleAiEnum::Text("Test response.".to_string()),
+            ],
         }
+    }
+
+    #[test]
+    fn test_sample_get_variants_empty_patterns() {
+        let samples = vec![create_test_sample("What is a computer?")];
+        let patterns = vec![];
         
-        // Collect all prompts to verify the text transformations
-        let prompts: Vec<String> = variants
-            .iter()
-            .map(|v| {
-                let mut full = String::new();
-                if let SamplePromptEnum::Text(t) = &v.prompt_section[0] {
-                    full.push_str(t);
-                }
-                if let SamplePromptEnum::Text(t) = &v.prompt_section[2] {
-                    full.push_str(t);
-                }
-                full
+        let results = sample_get_variants(&samples, &patterns);
+        
+        assert_eq!(results.len(), 1);
+        assert!(results[0].is_empty());
+    }
+
+    #[test]
+    fn test_sample_get_variants_empty_samples() {
+        let samples: Vec<Sample> = vec![];
+        let patterns = create_test_patterns();
+        
+        let results = sample_get_variants(&samples, &patterns);
+        
+        assert!(results.is_empty());
+    }
+
+    #[test]
+    fn test_sample_get_variants_single_sample() {
+        let samples = vec![create_test_sample("What is a computer?")];
+        let patterns = create_test_patterns();
+        
+        let results = sample_get_variants(&samples, &patterns);
+        
+        assert_eq!(results.len(), 1);
+        let variants = &results[0];
+        assert_eq!(variants.len(), 3); // 3 variants from the pattern
+        
+        // Verify variant content
+        let texts: Vec<String> = variants.iter()
+            .map(|s| match &s.prompt_section[0] {
+                SamplePromptEnum::Text(t) => t.clone(),
+                _ => panic!("Expected text prompt"),
             })
             .collect();
         
-        assert!(prompts.contains(&"What is a computer? thanks".to_string()));
-        assert!(prompts.contains(&"What is a computer? thank you".to_string()));
-        assert!(prompts.contains(&"Define computer. ty".to_string()));
-        assert!(prompts.contains(&"Define: computer. ty".to_string()));
+        assert!(texts.contains(&"Define computer.".to_string()));
+        assert!(texts.contains(&"Define: computer.".to_string()));
+        assert!(texts.contains(&"Tell me about computer.".to_string()));
+        
+        // Verify system and AI sections are preserved
+        for variant in variants {
+            assert_eq!(variant.system, "You are a helpful assistant.");
+            assert_eq!(variant.ai_section.len(), 1);
+            match &variant.ai_section[0] {
+                SampleAiEnum::Text(text) => assert_eq!(text, "Test response."),
+                _ => panic!("Expected text response"),
+            }
+        }
+    }
+
+    #[test]
+    fn test_sample_get_variants_multiple_samples() {
+        let samples = vec![
+            create_test_sample("What is a computer?"),
+            create_test_sample("What is a programming language?"),
+            create_test_sample("What is artificial intelligence?"),
+        ];
+        let patterns = create_test_patterns();
+        
+        let results = sample_get_variants(&samples, &patterns);
+        
+        assert_eq!(results.len(), 3);
+        
+        for variants in &results {
+            assert_eq!(variants.len(), 3);
+        }
+        
+        // Check first sample variants
+        let first_variants: Vec<String> = results[0].iter()
+            .map(|s| match &s.prompt_section[0] {
+                SamplePromptEnum::Text(t) => t.clone(),
+                _ => panic!("Expected text prompt"),
+            })
+            .collect();
+        
+        assert!(first_variants.contains(&"Define computer.".to_string()));
+        
+        // Check second sample variants
+        let second_variants: Vec<String> = results[1].iter()
+            .map(|s| match &s.prompt_section[0] {
+                SamplePromptEnum::Text(t) => t.clone(),
+                _ => panic!("Expected text prompt"),
+            })
+            .collect();
+        
+        assert!(second_variants.contains(&"Define programming language.".to_string()));
+        
+        // Check third sample variants
+        let third_variants: Vec<String> = results[2].iter()
+            .map(|s| match &s.prompt_section[0] {
+                SamplePromptEnum::Text(t) => t.clone(),
+                _ => panic!("Expected text prompt"),
+            })
+            .collect();
+        
+        assert!(third_variants.contains(&"Define artificial intelligence.".to_string()));
+    }
+
+    #[test]
+    fn test_sample_get_variants_with_multiple_text_positions() {
+        let sample = create_test_sample_with_multiple_text();
+        let samples = vec![sample];
+        let patterns = create_test_patterns();
+        
+        let results = sample_get_variants(&samples, &patterns);
+        
+        assert_eq!(results.len(), 1);
+        let variants = &results[0];
+        assert_eq!(variants.len(), 3);
+        
+        // Each variant should have modified both text positions
+        for variant in variants {
+            // First text position (index 0) should be transformed
+            match &variant.prompt_section[0] {
+                SamplePromptEnum::Text(text) => {
+                    assert!(text.contains("Define") || text.contains("Tell me about"));
+                    assert!(!text.contains("What is a computer?"));
+                }
+                _ => panic!("Expected text at position 0"),
+            }
+            
+            // Code position (index 1) should remain unchanged
+            match &variant.prompt_section[1] {
+                SamplePromptEnum::Code(code) => {
+                    assert_eq!(code.content, "console.log('test')");
+                }
+                _ => panic!("Expected code at position 1"),
+            }
+            
+            // Third text position (index 2) should be transformed
+            match &variant.prompt_section[2] {
+                SamplePromptEnum::Text(text) => {
+                    assert!(text.contains("Define") || text.contains("Tell me about"));
+                    assert!(!text.contains("What is a programming language?"));
+                }
+                _ => panic!("Expected text at position 2"),
+            }
+        }
+    }
+
+    #[test]
+    fn test_sample_get_variants_no_match() {
+        let samples = vec![create_test_sample("Hello world")];
+        let patterns = create_test_patterns();
+        
+        let results = sample_get_variants(&samples, &patterns);
+        
+        assert_eq!(results.len(), 1);
+        assert!(results[0].is_empty());
+    }
+
+    #[test]
+    fn test_sample_get_variants_with_code_and_line_break() {
+        let sample = create_test_sample_with_code_and_line_break();
+        let samples = vec![sample];
+        let patterns = create_test_patterns();
+        
+        let results = sample_get_variants(&samples, &patterns);
+        
+        assert_eq!(results.len(), 1);
+        let variants = &results[0];
+        assert_eq!(variants.len(), 3);
+        
+        for variant in variants {
+            // Verify structure preserved
+            assert_eq!(variant.prompt_section.len(), 4);
+            
+            // Text at position 0: "What is a computer? " - should be transformed
+            match &variant.prompt_section[0] {
+                SamplePromptEnum::Text(text) => {
+                    assert!(text.contains("Define") || text.contains("Tell me about"));
+                    assert!(text.contains("computer"), "Should contain 'computer', got: {}", text);
+                }
+                _ => panic!("Expected text at position 0"),
+            }
+            
+            // Code at position 1 should remain unchanged
+            match &variant.prompt_section[1] {
+                SamplePromptEnum::Code(code) => {
+                    assert_eq!(code.content, "fn main() {}");
+                    assert_eq!(code.indent, Some(SampleIndent::One));
+                }
+                _ => panic!("Expected code at position 1"),
+            }
+            
+            // Line break at position 2 should remain unchanged
+            match &variant.prompt_section[2] {
+                SamplePromptEnum::LineBreak(lb) => {
+                    assert_eq!(lb.count, 1);
+                }
+                _ => panic!("Expected line break at position 2"),
+            }
+            
+            // Text at position 3: "What is programming?" - should be transformed
+            match &variant.prompt_section[3] {
+                SamplePromptEnum::Text(text) => {
+                    assert!(text.contains("Define") || text.contains("Tell me about"));
+                    assert!(text.contains("programming"), "Should contain 'programming', got: {}", text);
+                }
+                _ => panic!("Expected text at position 3"),
+            }
+        }
+    }
+
+    #[test]
+    fn test_sample_get_variants_preserves_system_and_ai() {
+        let samples = vec![create_test_sample("What is a computer?")];
+        let patterns = create_test_patterns();
+        
+        let results = sample_get_variants(&samples, &patterns);
+        let variants = &results[0];
+        
+        for variant in variants {
+            assert_eq!(variant.system, "You are a helpful assistant.");
+            assert_eq!(variant.ai_section.len(), 1);
+            match &variant.ai_section[0] {
+                SampleAiEnum::Text(text) => assert_eq!(text, "Test response."),
+                _ => panic!("Expected text response"),
+            }
+        }
+    }
+
+    #[test]
+    fn test_sample_get_variants_with_are_prefix() {
+        let samples = vec![create_test_sample("What are movies?")];
+        let patterns = create_test_patterns();
+        
+        let results = sample_get_variants(&samples, &patterns);
+        let variants = &results[0];
+        
+        let texts: Vec<String> = variants.iter()
+            .map(|s| match &s.prompt_section[0] {
+                SamplePromptEnum::Text(t) => t.clone(),
+                _ => panic!("Expected text prompt"),
+            })
+            .collect();
+        
+        assert!(texts.contains(&"Define movies.".to_string()));
+        assert!(texts.contains(&"Define: movies.".to_string()));
+        assert!(texts.contains(&"Tell me about movies.".to_string()));
+    }
+
+    #[test]
+    fn test_sample_get_variants_with_the_prefix() {
+        let samples = vec![create_test_sample("What is the olympics?")];
+        let patterns = create_test_patterns();
+        
+        let results = sample_get_variants(&samples, &patterns);
+        let variants = &results[0];
+        
+        let texts: Vec<String> = variants.iter()
+            .map(|s| match &s.prompt_section[0] {
+                SamplePromptEnum::Text(t) => t.clone(),
+                _ => panic!("Expected text prompt"),
+            })
+            .collect();
+        
+        // The pattern captures "olympics" without the article
+        assert!(texts.contains(&"Define olympics.".to_string()));
+        assert!(texts.contains(&"Define: olympics.".to_string()));
+        assert!(texts.contains(&"Tell me about olympics.".to_string()));
     }
 }

@@ -8,7 +8,6 @@ use crate::sample::{
     Sample,
     SampleCode,
     SampleAiEnum,
-    SampleIndent,
     SampleLanguage,
     SamplePromptEnum,
 };
@@ -17,24 +16,31 @@ use crate::sample::{
 /// Create a Sample based on xml id attributes
 ///
 /// # Arguments
-/// * `sample_ids` - The <sample-ids> element from train.xml containing attribute references
-/// * `id_map` - Validated ID maps containing all prompts, responses, sources, and code snippets
-/// * `token_stats_map` - Token stats map for different component types
+/// * `samples` - The <sample-ids> element from train.xml containing attribute references
+/// * `train_xml_ids` - Validated ID maps containing all prompts, responses, sources, code snippets, and system prompts
 ///
 /// # Returns
-/// * `Option<Sample>` - The constructed sample with a unique ID, or None if required references are missing
+/// * `Option<Sample>` - The constructed sample, or None if required references are missing
 ///
 /// # Notes
-/// * The sample ID is automatically assigned using samples.next_id()
 /// * The sample is NOT automatically added to train/val vectors - that's handled separately
 pub fn sample_create_via_ids(
-    sample_ids: &TrainXMLSamplesSampleIds,
-    id_map: &TrainXMLIdMaps,
+    samples: &TrainXMLSamplesSampleIds,
+    train_xml_ids: &TrainXMLIdMaps,
 ) -> Option<Sample> {
     // Get the prompt (required)
-    let prompt = id_map.prompts.get(&sample_ids.prompt)?;
+    let prompt = train_xml_ids.prompts.get(&samples.prompt)?;
     
-    // Build prompt section
+    // Get system prompt if present
+    let mut system = String::new();
+
+    if let Some(system_id) = &samples.system {
+        if let Some(system_prompt) = train_xml_ids.system_prompts.get(system_id) {
+            system = system_prompt.content.clone();
+        }
+    }
+    
+    // Build prompt section (user prompts only)
     let mut prompt_section = Vec::new();
     prompt_section.push(SamplePromptEnum::Text(prompt.content.clone()));
     
@@ -42,28 +48,28 @@ pub fn sample_create_via_ids(
     let mut ai_section = Vec::new();
     
     // Add response if present
-    if let Some(response_id) = &sample_ids.response {
-        if let Some(response) = id_map.responses.get(response_id) {
+    if let Some(response_id) = &samples.response {
+        if let Some(response) = train_xml_ids.responses.get(response_id) {
             ai_section.push(SampleAiEnum::Text(response.content.clone()));
         }
     }
     
     // Add source if present
-    if let Some(source_id) = &sample_ids.source {
-        if let Some(_source) = id_map.sources.get(source_id) {
+    if let Some(source_id) = &samples.source {
+        if let Some(_source) = train_xml_ids.sources.get(source_id) {
             ai_section.push(SampleAiEnum::Source(source_id.clone()));
         }
     }
     
     // Add code if present
-    if let Some(code_id) = &sample_ids.code {
-        if let Some(code) = id_map.code_snippets.get(code_id) {
+    if let Some(code_id) = &samples.code {
+        if let Some(code) = train_xml_ids.code_snippets.get(code_id) {
             let lang = SampleLanguage::from_str(&code.lang);
             
             ai_section.push(SampleAiEnum::Code(SampleCode {
                 lang,
                 inline: false, // in the future we may wanna add an attribute to <sample-ids /> to identify if code should be inline & how many indents
-                indent: SampleIndent::Zero,
+                indent: None,
                 content: code.content.clone(),
             }));
         }
@@ -74,6 +80,7 @@ pub fn sample_create_via_ids(
         None
     } else {
         Some(Sample {
+            system,
             prompt_section,
             ai_section,
         })
@@ -86,7 +93,7 @@ pub fn sample_create_via_ids(
 mod tests {
     use std::collections::HashMap;
     use crate::sample::{
-        SampleTokenStatsContainer,
+        SamplePromptEnum,
         sample_create_via_ids,
     };
     use crate::train_xml::{
@@ -96,12 +103,17 @@ mod tests {
         TrainXMLCodeSnippetsCode,
         TrainXMLResponsesResponse,
         TrainXMLSamplesSampleIds,
-        TrainXMLConstantParsed,
+        TrainXMLSystemPromptsSystem,
     };
     
     // Create static test data that lives for the entire program
-    fn create_test_id_map() -> TrainXMLIdMaps<'static> {
+    fn create_test_train_xml_ids() -> TrainXMLIdMaps<'static> {
         // Create owned data and leak it to get 'static references
+        let system_data = Box::new(TrainXMLSystemPromptsSystem {
+            id: "sys1".to_string(),
+            content: "You are a helpful computer programming assistant.".to_string(),
+        });
+        
         let prompts_data = Box::new(TrainXMLPromptsPrompt {
             id: "1".to_string(),
             content: "What is a computer?".to_string(),
@@ -125,6 +137,60 @@ mod tests {
         });
         
         // Leak the boxes to get 'static references
+        let system_ref: &'static TrainXMLSystemPromptsSystem = Box::leak(system_data);
+        let prompts_ref: &'static TrainXMLPromptsPrompt = Box::leak(prompts_data);
+        let responses_ref: &'static TrainXMLResponsesResponse = Box::leak(responses_data);
+        let sources_ref: &'static TrainXMLSourcesSource = Box::leak(sources_data);
+        let code_ref: &'static TrainXMLCodeSnippetsCode = Box::leak(code_data);
+        
+        let mut system_prompts = HashMap::new();
+        system_prompts.insert("sys1".to_string(), system_ref);
+        
+        let mut prompts = HashMap::new();
+        prompts.insert("1".to_string(), prompts_ref);
+        
+        let mut responses = HashMap::new();
+        responses.insert("1".to_string(), responses_ref);
+        
+        let mut sources = HashMap::new();
+        sources.insert("1".to_string(), sources_ref);
+        
+        let mut code_snippets = HashMap::new();
+        code_snippets.insert("1".to_string(), code_ref);
+        
+        TrainXMLIdMaps {
+            system_prompts,
+            prompts,
+            responses,
+            sources,
+            code_snippets,
+        }
+    }
+    
+    // Create test ID map without system prompts
+    fn create_test_train_xml_ids_without_system() -> TrainXMLIdMaps<'static> {
+        let prompts_data = Box::new(TrainXMLPromptsPrompt {
+            id: "1".to_string(),
+            content: "What is a computer?".to_string(),
+        });
+        
+        let responses_data = Box::new(TrainXMLResponsesResponse {
+            id: "1".to_string(),
+            content: "A computer is a computing device.".to_string(),
+        });
+        
+        let sources_data = Box::new(TrainXMLSourcesSource {
+            id: "1".to_string(),
+            url: "https://example.com".to_string(),
+            title: None,
+        });
+        
+        let code_data = Box::new(TrainXMLCodeSnippetsCode {
+            id: "1".to_string(),
+            lang: "rust".to_string(),
+            content: "fn main() {}".to_string(),
+        });
+        
         let prompts_ref: &'static TrainXMLPromptsPrompt = Box::leak(prompts_data);
         let responses_ref: &'static TrainXMLResponsesResponse = Box::leak(responses_data);
         let sources_ref: &'static TrainXMLSourcesSource = Box::leak(sources_data);
@@ -143,6 +209,7 @@ mod tests {
         code_snippets.insert("1".to_string(), code_ref);
         
         TrainXMLIdMaps {
+            system_prompts: HashMap::new(),
             prompts,
             responses,
             sources,
@@ -150,112 +217,226 @@ mod tests {
         }
     }
     
-    fn create_test_token_stats_map() -> SampleTokenStatsContainer {
-        let constants = TrainXMLConstantParsed::default();
-        SampleTokenStatsContainer::new(&constants)
-    }
-    
 
     #[test]
     fn test_sample_create_via_ids_basic() {
-        let id_map = create_test_id_map();
-        let sample_ids = TrainXMLSamplesSampleIds {
+        let train_xml_ids = create_test_train_xml_ids();
+        let samples = TrainXMLSamplesSampleIds {
+            system: None,
             prompt: "1".to_string(),
             response: Some("1".to_string()),
             source: Some("1".to_string()),
             code: Some("1".to_string()),
         };
         
-        let sample = sample_create_via_ids(&sample_ids, &id_map);
+        let sample = sample_create_via_ids(&samples, &train_xml_ids);
         assert!(sample.is_some());
         let sample = sample.unwrap();
         
+        assert_eq!(sample.system, "");
         assert_eq!(sample.prompt_section.len(), 1);
         assert_eq!(sample.ai_section.len(), 3);
+        
+        // Verify prompt section contains only text prompt
+        match &sample.prompt_section[0] {
+            SamplePromptEnum::Text(text) => assert_eq!(text, "What is a computer?"),
+            _ => panic!("Expected text prompt"),
+        }
+    }
+    
+    #[test]
+    fn test_sample_create_via_ids_with_system_prompt() {
+        let train_xml_ids = create_test_train_xml_ids();
+        let samples = TrainXMLSamplesSampleIds {
+            system: Some("sys1".to_string()),
+            prompt: "1".to_string(),
+            response: Some("1".to_string()),
+            source: Some("1".to_string()),
+            code: Some("1".to_string()),
+        };
+        
+        let sample = sample_create_via_ids(&samples, &train_xml_ids);
+        assert!(sample.is_some());
+        let sample = sample.unwrap();
+        
+        // Should have system string and prompt section
+        assert_eq!(sample.system, "You are a helpful computer programming assistant.");
+        assert_eq!(sample.prompt_section.len(), 1);
+        assert_eq!(sample.ai_section.len(), 3);
+        
+        // Verify prompt section contains only text prompt (no system)
+        match &sample.prompt_section[0] {
+            SamplePromptEnum::Text(text) => assert_eq!(text, "What is a computer?"),
+            _ => panic!("Expected text prompt"),
+        }
+    }
+    
+    #[test]
+    fn test_sample_create_via_ids_with_invalid_system_prompt() {
+        let train_xml_ids = create_test_train_xml_ids();
+        let samples = TrainXMLSamplesSampleIds {
+            system: Some("invalid_system".to_string()), // Non-existent system prompt
+            prompt: "1".to_string(),
+            response: Some("1".to_string()),
+            source: Some("1".to_string()),
+            code: Some("1".to_string()),
+        };
+        
+        let sample = sample_create_via_ids(&samples, &train_xml_ids);
+        assert!(sample.is_some());
+        let sample = sample.unwrap();
+        
+        // System prompt should be ignored since it doesn't exist in train_xml_ids
+        // So system string should be empty
+        assert_eq!(sample.system, "");
+        assert_eq!(sample.prompt_section.len(), 1);
+        assert_eq!(sample.ai_section.len(), 3);
+        
+        match &sample.prompt_section[0] {
+            SamplePromptEnum::Text(text) => assert_eq!(text, "What is a computer?"),
+            _ => panic!("Expected text prompt"),
+        }
     }
     
     #[test]
     fn test_sample_create_via_ids_multiple_samples() {
-        let id_map = create_test_id_map();
+        let train_xml_ids = create_test_train_xml_ids();
         
-        // Create first sample
-        let sample_ids1 = TrainXMLSamplesSampleIds {
+        // Create first sample without system
+        let samples1 = TrainXMLSamplesSampleIds {
+            system: None,
             prompt: "1".to_string(),
             response: Some("1".to_string()),
             source: None,
             code: None,
         };
         
-        let sample1 = sample_create_via_ids(&sample_ids1, &id_map);
+        let sample1 = sample_create_via_ids(&samples1, &train_xml_ids);
         assert!(sample1.is_some());
+        let sample1 = sample1.unwrap();
+        assert_eq!(sample1.system, "");
+        assert_eq!(sample1.prompt_section.len(), 1);
+        assert_eq!(sample1.ai_section.len(), 1);
         
-        // Create second sample
-        let sample_ids2 = TrainXMLSamplesSampleIds {
+        // Create second sample with system
+        let samples2 = TrainXMLSamplesSampleIds {
+            system: Some("sys1".to_string()),
             prompt: "1".to_string(),
             response: Some("1".to_string()),
             source: Some("1".to_string()),
             code: None,
         };
         
-        let sample2 = sample_create_via_ids(&sample_ids2, &id_map);
+        let sample2 = sample_create_via_ids(&samples2, &train_xml_ids);
         assert!(sample2.is_some());
+        let sample2 = sample2.unwrap();
+        assert_eq!(sample2.system, "You are a helpful computer programming assistant.");
+        assert_eq!(sample2.prompt_section.len(), 1);
+        assert_eq!(sample2.ai_section.len(), 2);
         
-        // Create third sample
-        let sample_ids3 = TrainXMLSamplesSampleIds {
+        // Create third sample with system and code
+        let samples3 = TrainXMLSamplesSampleIds {
+            system: Some("sys1".to_string()),
             prompt: "1".to_string(),
             response: Some("1".to_string()),
             source: Some("1".to_string()),
             code: Some("1".to_string()),
         };
         
-        let sample3 = sample_create_via_ids( &sample_ids3, &id_map);
+        let sample3 = sample_create_via_ids(&samples3, &train_xml_ids);
         assert!(sample3.is_some());
+        let sample3 = sample3.unwrap();
+        assert_eq!(sample3.system, "You are a helpful computer programming assistant.");
+        assert_eq!(sample3.prompt_section.len(), 1);
+        assert_eq!(sample3.ai_section.len(), 3);
     }
     
     #[test]
     fn test_sample_create_via_ids_missing_prompt() {
-        let id_map = create_test_id_map();
-        let sample_ids = TrainXMLSamplesSampleIds {
+        let train_xml_ids = create_test_train_xml_ids();
+        let samples = TrainXMLSamplesSampleIds {
+            system: None,
             prompt: "999".to_string(), // Non-existent
             response: Some("1".to_string()),
             source: Some("1".to_string()),
             code: Some("1".to_string()),
         };
         
-        let sample = sample_create_via_ids( &sample_ids, &id_map);
+        let sample = sample_create_via_ids(&samples, &train_xml_ids);
         assert!(sample.is_none());
     }
     
     #[test]
     fn test_sample_create_via_ids_response_only() {
-        let id_map = create_test_id_map();
-        let sample_ids = TrainXMLSamplesSampleIds {
+        let train_xml_ids = create_test_train_xml_ids();
+        let samples = TrainXMLSamplesSampleIds {
+            system: None,
             prompt: "1".to_string(),
             response: Some("1".to_string()),
             source: None,
             code: None,
         };
         
-        let sample = sample_create_via_ids( &sample_ids, &id_map);
+        let sample = sample_create_via_ids(&samples, &train_xml_ids);
         assert!(sample.is_some());
         let sample = sample.unwrap();
         
         assert_eq!(sample.ai_section.len(), 1);
     }
-
+    
     #[test]
-    fn test_sample_create_via_ids_line_break_uses_response_stats() {
-        // This test verifies that "line-break" component type maps to response stats
-        let token_stats_map = create_test_token_stats_map();
+    fn test_sample_create_via_ids_with_system_no_response() {
+        let train_xml_ids = create_test_train_xml_ids();
+        let samples = TrainXMLSamplesSampleIds {
+            system: Some("sys1".to_string()),
+            prompt: "1".to_string(),
+            response: None,
+            source: None,
+            code: None,
+        };
         
-        // Get stats for "line-break" - should be the same as "response"
-        let line_break_stats = token_stats_map.get("line-break").unwrap();
-        let response_stats = token_stats_map.get("response").unwrap();
+        let sample = sample_create_via_ids(&samples, &train_xml_ids);
+        assert!(sample.is_none(), "Sample should be None when no AI section content");
+    }
+    
+    #[test]
+    fn test_sample_create_via_ids_with_system_and_missing_response() {
+        let train_xml_ids = create_test_train_xml_ids();
+        let samples = TrainXMLSamplesSampleIds {
+            system: Some("sys1".to_string()),
+            prompt: "1".to_string(),
+            response: Some("999".to_string()), // Non-existent response
+            source: None,
+            code: None,
+        };
         
-        assert_eq!(line_break_stats.weight_decay, response_stats.weight_decay);
-        assert_eq!(line_break_stats.dropout, response_stats.dropout);
-        assert_eq!(line_break_stats.loss_scale, response_stats.loss_scale);
-        assert_eq!(line_break_stats.gradient_scale, response_stats.gradient_scale);
-        assert_eq!(line_break_stats.gradient_clip, response_stats.gradient_clip);
+        let sample = sample_create_via_ids(&samples, &train_xml_ids);
+        assert!(sample.is_none(), "Sample should be None when response doesn't exist");
+    }
+    
+    #[test]
+    fn test_sample_create_via_ids_without_system_prompts_in_train_xml_ids() {
+        let train_xml_ids = create_test_train_xml_ids_without_system();
+        let samples = TrainXMLSamplesSampleIds {
+            system: Some("sys1".to_string()), // System ID exists in sample but not in train_xml_ids
+            prompt: "1".to_string(),
+            response: Some("1".to_string()),
+            source: None,
+            code: None,
+        };
+        
+        let sample = sample_create_via_ids(&samples, &train_xml_ids);
+        assert!(sample.is_some());
+        let sample = sample.unwrap();
+        
+        // System prompt should be ignored since it's not in train_xml_ids
+        assert_eq!(sample.system, "");
+        assert_eq!(sample.prompt_section.len(), 1);
+        assert_eq!(sample.ai_section.len(), 1);
+        
+        match &sample.prompt_section[0] {
+            SamplePromptEnum::Text(text) => assert_eq!(text, "What is a computer?"),
+            _ => panic!("Expected text prompt"),
+        }
     }
 }

@@ -4,6 +4,7 @@ mod bpe;
 mod tag;
 mod sample;
 mod train_xml;
+mod beyond_scope;
 
 pub mod train;
 pub mod infer;

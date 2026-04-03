@@ -1,6 +1,6 @@
 // src/bpe/bpe_train.rs
 
-use std::collections::HashMap;
+use std::collections::{HashMap, BinaryHeap};
 use crate::sample::Sample;
 use crate::bpe::{
     BPETokenizer,
@@ -22,9 +22,7 @@ use crate::bpe::{
 /// * `samples` - Slice of samples to train on
 /// * `special_tokens` - List of special tokens to protect from merging
 /// * `requested_tokens` - List of tokens to force-add to vocabulary
-/// * `min_merge_frequency` - Minimum frequency for a token pair to be merged.
-///   Higher values result in smaller vocabularies. Typical range: 2-100.
-///   Training stops automatically when the most frequent pair falls below this threshold.
+/// * `min_merge_frequency` - Minimum frequency for a token pair to be merged. Higher values result in smaller vocabularies. Typical range: 2-100. Training stops automatically when the most frequent pair falls below this threshold.
 ///
 /// # Returns
 /// * `BPETokenizer` - The trained tokenizer
@@ -33,7 +31,7 @@ pub fn bpe_train(
     special_tokens: &[String],
     requested_tokens: &[String],
     min_merge_frequency: usize,
-) -> Result<BPETokenizer, std::io::Error> {
+) -> Result<BPETokenizer, Box<dyn std::error::Error>> {
     // Create tokenizer
     let mut tokenizer = BPETokenizer {
         vocab: Vec::new(),
@@ -47,25 +45,27 @@ pub fn bpe_train(
     bpe_init_vocab(&mut tokenizer, samples, special_tokens, requested_tokens);
     
     // Convert samples to initial token sequence
-    let mut token_sequence = bpe_train_tokenize(&tokenizer, samples);
+    let mut token_sequence = bpe_train_tokenize(&tokenizer, samples)?;
     
-    loop {
-        // Count pair frequencies
-        let pair_counts = bpe_create_pair_counts_map(&tokenizer, &token_sequence);
-        
-        if pair_counts.is_empty() {
+    // Build initial pair counts and priority queue
+    let mut pair_counts = bpe_create_pair_counts_map(&tokenizer, &token_sequence);
+    let mut heap = BinaryHeap::new();
+    
+    for (&(a, b), &count) in &pair_counts {
+        heap.push((count, a, b));
+    }
+    
+    while let Some((count, a, b)) = heap.pop() {
+        // Check if this pair is still valid and not outdated
+        if count < min_merge_frequency {
             break;
         }
         
-        // Find the most frequent pair
-        let (&(a, b), &count) = pair_counts
-            .iter()
-            .max_by_key(|&(_, &count)| count)
-            .unwrap();
-        
-        // Stop if the most frequent pair falls below threshold
-        if count < min_merge_frequency {
-            break;
+        // Verify the pair still exists in the current sequence
+        // We need to check if this pair is still present with the same count
+        let current_count = pair_counts.get(&(a, b)).copied().unwrap_or(0);
+        if current_count != count {
+            continue; // Outdated entry, skip
         }
         
         // Get token strings before modifying vocab
@@ -79,16 +79,58 @@ pub fn bpe_train(
         tokenizer.token_to_id.insert(new_token, new_id);
         tokenizer.merges.push((token_a, token_b));
         
-        // Update the token sequence
+        // Update the token sequence and pair counts
         let mut i = 0;
-
         while i < token_sequence.len() - 1 {
             if token_sequence[i] == a && token_sequence[i + 1] == b {
+                // Replace the pair with new token
                 token_sequence[i] = new_id;
                 token_sequence.remove(i + 1);
+                
+                // Update pair counts for affected positions
+                // Check left neighbor
+                if i > 0 {
+                    let left_pair = (token_sequence[i - 1], a);
+                    if let Some(old_count) = pair_counts.get_mut(&left_pair) {
+                        *old_count -= 1;
+                        if *old_count == 0 {
+                            pair_counts.remove(&left_pair);
+                        }
+                    }
+                    let new_left_pair = (token_sequence[i - 1], new_id);
+                    *pair_counts.entry(new_left_pair).or_insert(0) += 1;
+                }
+                
+                // Check right neighbor
+                if i + 1 < token_sequence.len() {
+                    let right_pair = (b, token_sequence[i + 1]);
+                    if let Some(old_count) = pair_counts.get_mut(&right_pair) {
+                        *old_count -= 1;
+                        if *old_count == 0 {
+                            pair_counts.remove(&right_pair);
+                        }
+                    }
+                    let new_right_pair = (new_id, token_sequence[i + 1]);
+                    *pair_counts.entry(new_right_pair).or_insert(0) += 1;
+                }
+                
+                // Remove the old pair from counts
+                let old_pair = (a, b);
+                if let Some(old_count) = pair_counts.get_mut(&old_pair) {
+                    *old_count -= 1;
+                    if *old_count == 0 {
+                        pair_counts.remove(&old_pair);
+                    }
+                }
             } else {
                 i += 1;
             }
+        }
+        
+        // Rebuild heap with current pair counts
+        heap.clear();
+        for (&(a, b), &count) in &pair_counts {
+            heap.push((count, a, b));
         }
     }
 
@@ -103,7 +145,6 @@ mod tests {
     use crate::sample::{
         Sample,
         SampleCode,
-        SampleIndent,
         SampleAiEnum,
         SampleLanguage,
         SamplePromptEnum,
@@ -112,6 +153,7 @@ mod tests {
     fn create_test_samples() -> Vec<Sample> {
         vec![
             Sample {
+                system: String::new(),
                 prompt_section: vec![
                     SamplePromptEnum::Text("Define computer.".to_string()),
                 ],
@@ -121,6 +163,7 @@ mod tests {
                 ],
             },
             Sample {
+                system: String::new(),
                 prompt_section: vec![
                     SamplePromptEnum::Text("What is JavaScript?".to_string()),
                 ],
@@ -129,7 +172,37 @@ mod tests {
                     SampleAiEnum::Code(SampleCode {
                         lang: SampleLanguage::Js,
                         inline: false,
-                        indent: SampleIndent::Zero,
+                        indent: None,
+                        content: "console.log('hello')".to_string(),
+                    }),
+                ],
+            },
+        ]
+    }
+
+    fn create_test_samples_with_system() -> Vec<Sample> {
+        vec![
+            Sample {
+                system: "You are a helpful assistant.".to_string(),
+                prompt_section: vec![
+                    SamplePromptEnum::Text("Define computer.".to_string()),
+                ],
+                ai_section: vec![
+                    SampleAiEnum::Text("A computer is a computing device.".to_string()),
+                    SampleAiEnum::Source("1".to_string()),
+                ],
+            },
+            Sample {
+                system: "You are a programming expert.".to_string(),
+                prompt_section: vec![
+                    SamplePromptEnum::Text("What is JavaScript?".to_string()),
+                ],
+                ai_section: vec![
+                    SampleAiEnum::Text("JavaScript is a programming language.".to_string()),
+                    SampleAiEnum::Code(SampleCode {
+                        lang: SampleLanguage::Js,
+                        inline: false,
+                        indent: None,
                         content: "console.log('hello')".to_string(),
                     }),
                 ],
@@ -156,6 +229,35 @@ mod tests {
         
         // Verify requested token was added
         assert!(tokenizer.vocab.contains(&"console.log".to_string()));
+    }
+
+    #[test]
+    fn test_bpe_train_with_system_prompts() {
+        let samples = create_test_samples_with_system();
+        let special_tokens = bpe_get_special_tokens();
+        let requested_tokens = vec!["console.log".to_string()];
+        let min_merge_frequency = 3;
+        
+        let result = bpe_train(&samples, &special_tokens, &requested_tokens, min_merge_frequency);
+        
+        assert!(result.is_ok());
+        let tokenizer = result.unwrap();
+        
+        // Verify tokenizer was trained
+        assert!(tokenizer.vocab.len() > special_tokens.len());
+        assert!(tokenizer.merges.len() > 0);
+        assert_eq!(tokenizer.special_token_count, special_tokens.len() as u32);
+        
+        // Verify requested token was added
+        assert!(tokenizer.vocab.contains(&"console.log".to_string()));
+        
+        // System prompts should contribute to vocabulary
+        // Check if characters from system prompts appear in vocab
+        let system_chars = ['Y', 'o', 'u', 'a', 'r', 'e', 'h', 'l', 'p', 'f', 'u', 'l', 'p', 'r', 'g', 'm', 'x', 't'];
+        let has_system_chars = system_chars.iter().any(|&c| {
+            tokenizer.vocab.contains(&c.to_string())
+        });
+        assert!(has_system_chars, "System prompt characters should be in vocabulary");
     }
 
     #[test]

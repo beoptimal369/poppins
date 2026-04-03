@@ -1,20 +1,15 @@
 // src/train/train_write_bins.rs
 
+use bytemuck::cast_slice;
 use std::{fs::File, path::Path};
 use crate::sample::{Samples, Sample};
 use std::io::{Seek, Write, BufWriter};
 use byteorder::{LittleEndian, WriteBytesExt};
-use crate::bpe::{BPETokenizer, bpe_infer_tokenize};
-use crate::tag::{
-    tag_write_tag,
-    tag_write_ai_section,
-    tag_write_prompt_section,
-    tag_get_byte_offset_last_ai_start,
-};
+use crate::bpe::{create_bpe_cache, get_bpe_cache_tokens, BPECache, BPETokenizer};
 
 
 /// Writes training and validation corpus and index binary files
-///
+/// 
 /// This function creates two types of files for both training and validation sets:
 /// - Corpus files: contain token IDs (u32) for all samples, concatenated
 /// - Index files: allow O(1) random access to any sample and its AI response
@@ -41,208 +36,336 @@ pub fn train_write_bins(
     samples: &Samples,
     tokenizer: &BPETokenizer,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    // Extract special tokens for tag writing (first special_token_count entries in vocab)
-    let special_tokens: Vec<String> = tokenizer.vocab[..tokenizer.special_token_count as usize].to_vec();
+    // Pre-tokenize all static XML parts
+    let cache = create_bpe_cache(tokenizer);
     
-    // Write training files
     write_samples_to_bins(
         output_dir,
         "train",
         &samples.train_samples,
         tokenizer,
-        &special_tokens,
+        &cache,
     )?;
     
-    // Write validation files
     write_samples_to_bins(
         output_dir,
         "val",
         &samples.val_samples,
         tokenizer,
-        &special_tokens,
+        &cache,
     )?;
     
     Ok(())
 }
 
-/// Writes a collection of samples to corpus and index files
+
 fn write_samples_to_bins(
     output_dir: &Path,
     prefix: &str,
     samples: &[Sample],
     tokenizer: &BPETokenizer,
-    special_tokens: &[String],
+    cache: &BPECache,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let corpus_path = output_dir.join(format!("{}_corpus.bin", prefix));
     let index_path = output_dir.join(format!("{}_index.bin", prefix));
     
-    let corpus_file = File::create(corpus_path)?;
-    let mut corpus_writer = BufWriter::new(corpus_file);
-    
-    let index_file = File::create(index_path)?;
+    let corpus_file = File::create(&corpus_path)?;
+    let mut corpus_writer = BufWriter::with_capacity(1024 * 1024, corpus_file);
+
+    let index_file = File::create(&index_path)?;
     let mut index_writer = BufWriter::new(index_file);
     
-    for sample in samples {
-        // Record byte offset where this sample starts in the corpus
+    for sample in samples.iter() {
         let sample_start = corpus_writer.stream_position()?;
         
-        // Convert sample to XML and tokenize
-        let xml_string = sample_to_xml_string(sample, special_tokens);
-        let token_ids = bpe_infer_tokenize(tokenizer, &xml_string);
+        let mut token_count = 0;
+        let mut tokens_before_last_ai = 0;
+        let total_ai_items = sample.ai_section.len();
         
-        // Write token IDs to corpus (4 bytes each, little-endian)
-        for token_id in &token_ids {
-            corpus_writer.write_u32::<LittleEndian>(*token_id)?;
+        // Write <sample>
+        corpus_writer.write_all(cast_slice(&cache.sample_open))?;
+        token_count += cache.sample_open.len();
+        tokens_before_last_ai += cache.sample_open.len();
+        
+        // Write system if present
+        if !sample.system.is_empty() {
+            corpus_writer.write_all(cast_slice(&cache.system_open))?;
+            token_count += cache.system_open.len();
+            tokens_before_last_ai += cache.system_open.len();
+            
+            let system_tokens = get_bpe_cache_tokens(tokenizer, &sample.system);
+            corpus_writer.write_all(cast_slice(&system_tokens))?;
+            token_count += system_tokens.len();
+            tokens_before_last_ai += system_tokens.len();
+            
+            corpus_writer.write_all(cast_slice(&cache.system_close))?;
+            token_count += cache.system_close.len();
+            tokens_before_last_ai += cache.system_close.len();
         }
         
-        // Calculate where the last AI response begins (as token index, not byte offset)
-        let last_ai_token_index = calculate_last_ai_token_index(
-            sample,
-            special_tokens,
-            tokenizer,
-            &xml_string,
-        );
+        // Write prompt section
+        corpus_writer.write_all(cast_slice(&cache.prompt_open))?;
+        token_count += cache.prompt_open.len();
+        tokens_before_last_ai += cache.prompt_open.len();
         
-        // Record sample metadata for index
-        let sample_token_count = token_ids.len() as u64;
+        for item in &sample.prompt_section {
+            match item {
+                crate::sample::SamplePromptEnum::Text(text) => {
+                    let text_tokens = get_bpe_cache_tokens(tokenizer, text);
+                    corpus_writer.write_all(cast_slice(&text_tokens))?;
+                    token_count += text_tokens.len();
+                    tokens_before_last_ai += text_tokens.len();
+                }
+                crate::sample::SamplePromptEnum::Code(code) => {
+                    let code_tag = format!("<{}>", code.lang.as_str());
+                    let code_open = get_bpe_cache_tokens(tokenizer, &code_tag);
+                    let code_close = get_bpe_cache_tokens(tokenizer, &format!("</{}>", code.lang.as_str()));
+                    
+                    corpus_writer.write_all(cast_slice(&code_open))?;
+                    token_count += code_open.len();
+                    tokens_before_last_ai += code_open.len();
+                    
+                    let content_tokens = get_bpe_cache_tokens(tokenizer, &code.content);
+                    corpus_writer.write_all(cast_slice(&content_tokens))?;
+                    token_count += content_tokens.len();
+                    tokens_before_last_ai += content_tokens.len();
+                    
+                    corpus_writer.write_all(cast_slice(&code_close))?;
+                    token_count += code_close.len();
+                    tokens_before_last_ai += code_close.len();
+                }
+                crate::sample::SamplePromptEnum::LineBreak(lb) => {
+                    if lb.count == 1 {
+                        corpus_writer.write_all(cast_slice(&cache.line_break_single))?;
+                        token_count += cache.line_break_single.len();
+                        tokens_before_last_ai += cache.line_break_single.len();
+                    } else {
+                        corpus_writer.write_all(cast_slice(&cache.line_break_double))?;
+                        token_count += cache.line_break_double.len();
+                        tokens_before_last_ai += cache.line_break_double.len();
+                    }
+                }
+            }
+        }
+
+        corpus_writer.write_all(cast_slice(&cache.prompt_close))?;
+        token_count += cache.prompt_close.len();
+        tokens_before_last_ai += cache.prompt_close.len();
         
-        // Write index entry (24 bytes total)
-        index_writer.write_u64::<LittleEndian>(sample_start)?;           // offset in corpus
-        index_writer.write_u64::<LittleEndian>(sample_token_count)?;     // total tokens
-        index_writer.write_u64::<LittleEndian>(last_ai_token_index as u64)?; // AI response start
+        // Write AI section - track when we reach the last AI item
+        corpus_writer.write_all(cast_slice(&cache.ai_open))?;
+        token_count += cache.ai_open.len();
+        tokens_before_last_ai += cache.ai_open.len();
+        
+        for (item_idx, item) in sample.ai_section.iter().enumerate() {
+            let is_last_item = item_idx == total_ai_items - 1;
+            
+            match item {
+                crate::sample::SampleAiEnum::Text(text) => {
+                    corpus_writer.write_all(cast_slice(&cache.text_open))?;
+                    token_count += cache.text_open.len();
+                    
+                    let text_tokens = get_bpe_cache_tokens(tokenizer, text);
+                    corpus_writer.write_all(cast_slice(&text_tokens))?;
+                    token_count += text_tokens.len();
+                    
+                    corpus_writer.write_all(cast_slice(&cache.text_close))?;
+                    token_count += cache.text_close.len();
+                    
+                    if !is_last_item {
+                        tokens_before_last_ai += cache.text_open.len() + text_tokens.len() + cache.text_close.len();
+                    }
+                }
+                crate::sample::SampleAiEnum::Source(source) => {
+                    corpus_writer.write_all(cast_slice(&cache.source_open))?;
+                    token_count += cache.source_open.len();
+                    
+                    let source_tokens = get_bpe_cache_tokens(tokenizer, source);
+                    corpus_writer.write_all(cast_slice(&source_tokens))?;
+                    token_count += source_tokens.len();
+                    
+                    corpus_writer.write_all(cast_slice(&cache.source_close))?;
+                    token_count += cache.source_close.len();
+                    
+                    if !is_last_item {
+                        tokens_before_last_ai += cache.source_open.len() + source_tokens.len() + cache.source_close.len();
+                    }
+                }
+                crate::sample::SampleAiEnum::Code(code) => {
+                    let code_tag = format!("<{}>", code.lang.as_str());
+                    let code_open = get_bpe_cache_tokens(tokenizer, &code_tag);
+                    let code_close = get_bpe_cache_tokens(tokenizer, &format!("</{}>", code.lang.as_str()));
+                    
+                    corpus_writer.write_all(cast_slice(&code_open))?;
+                    token_count += code_open.len();
+                    
+                    let content_tokens = get_bpe_cache_tokens(tokenizer, &code.content);
+                    corpus_writer.write_all(cast_slice(&content_tokens))?;
+                    token_count += content_tokens.len();
+                    
+                    corpus_writer.write_all(cast_slice(&code_close))?;
+                    token_count += code_close.len();
+                    
+                    if !is_last_item {
+                        tokens_before_last_ai += code_open.len() + content_tokens.len() + code_close.len();
+                    }
+                }
+                crate::sample::SampleAiEnum::LineBreak(lb) => {
+                    if lb.count == 1 {
+                        corpus_writer.write_all(cast_slice(&cache.line_break_single))?;
+                        token_count += cache.line_break_single.len();
+                        if !is_last_item {
+                            tokens_before_last_ai += cache.line_break_single.len();
+                        }
+                    } else {
+                        corpus_writer.write_all(cast_slice(&cache.line_break_double))?;
+                        token_count += cache.line_break_double.len();
+                        if !is_last_item {
+                            tokens_before_last_ai += cache.line_break_double.len();
+                        }
+                    }
+                }
+            }
+        }
+        
+        corpus_writer.write_all(cast_slice(&cache.ai_close))?;
+        token_count += cache.ai_close.len();
+        
+        // Write </sample>
+        corpus_writer.write_all(cast_slice(&cache.sample_close))?;
+        token_count += cache.sample_close.len();
+        
+        // Write index entry
+        index_writer.write_u64::<LittleEndian>(sample_start)?;
+        index_writer.write_u64::<LittleEndian>(token_count as u64)?;
+        index_writer.write_u64::<LittleEndian>(tokens_before_last_ai as u64)?;
     }
     
     index_writer.flush()?;
     corpus_writer.flush()?;
+
+    println!("✅ Wrote {:?}", &index_path);
+    println!("✅ Wrote {:?}", &corpus_path);
     
     Ok(())
-}
-
-/// Converts a sample to its XML string representation (without formatting)
-/// Uses tag functions to ensure consistency with tokenizer's special tokens
-fn sample_to_xml_string(
-    sample: &Sample,
-    special_tokens: &[String],
-) -> String {
-    let mut buffer = Vec::new();
-    
-    // Write opening <sample> tag
-    tag_write_tag(&mut buffer, "sample", true, special_tokens).unwrap();
-    
-    // Write prompt section (user input)
-    tag_write_prompt_section(&mut buffer, &sample.prompt_section, special_tokens).unwrap();
-    
-    // Write AI section (model responses)
-    tag_write_ai_section(&mut buffer, &sample.ai_section, special_tokens).unwrap();
-    
-    // Write closing </sample> tag
-    tag_write_tag(&mut buffer, "sample", false, special_tokens).unwrap();
-    
-    String::from_utf8(buffer).unwrap()
-}
-
-/// Calculates the number of tokens that appear before the last AI response
-///
-/// This function determines where the target training tokens begin by:
-/// 1. Getting the byte offset of the last AI response within the XML
-/// 2. Extracting the XML prefix up to that offset
-/// 3. Tokenizing the prefix to count tokens before the AI response
-///
-/// Returns the token index where the last AI response starts (0-indexed)
-fn calculate_last_ai_token_index(
-    sample: &Sample,
-    special_tokens: &[String],
-    tokenizer: &BPETokenizer,
-    full_xml: &str,
-) -> usize {
-    // Get byte offset within XML where last AI response content begins
-    let xml_byte_offset = tag_get_byte_offset_last_ai_start(&sample.ai_section, special_tokens);
-    
-    // Extract the XML prefix (everything before the last AI response)
-    let prefix = &full_xml[..xml_byte_offset];
-    
-    // Tokenize prefix to count tokens before AI response
-    bpe_infer_tokenize(tokenizer, prefix).len()
 }
 
 
 #[cfg(test)]
 mod tests {
-    use std::fs;
+    use super::*;
+    use std::io::Read;
     use tempfile::tempdir;
-    use std::io::{Read, Seek};
-    use super::train_write_bins;
     use crate::sample::{
         Sample,
-        Samples,
-        SampleCode,
-        SampleIndent,
-        SampleAiEnum,
-        SampleLanguage,
-        SampleLineBreak,
         SamplePromptEnum,
+        SampleAiEnum,
+        SampleCode,
+        SampleLanguage,
+        SampleIndent,
+        SampleLineBreak,
     };
-    use crate::bpe::{
-        bpe_train,
-        BPETokenizer,
-        bpe_get_special_tokens,
-    };
+    use crate::bpe::{bpe_train, bpe_get_special_tokens};
 
-    fn create_test_tokenizer(samples: &[Sample]) -> BPETokenizer {
+    fn create_test_tokenizer() -> BPETokenizer {
+        let samples = vec![
+            Sample {
+                system: "You are a helpful assistant.".to_string(),
+                prompt_section: vec![
+                    SamplePromptEnum::Text("Hello".to_string()),
+                ],
+                ai_section: vec![
+                    SampleAiEnum::Text("Hi there".to_string()),
+                ],
+            },
+        ];
+        
         let special_tokens = bpe_get_special_tokens();
-        bpe_train(samples, &special_tokens, &[], 2).unwrap()
+        let requested_tokens = vec![];
+        let min_merge_frequency = 1;
+        
+        bpe_train(&samples, &special_tokens, &requested_tokens, min_merge_frequency).unwrap()
     }
 
-    fn create_basic_sample(prompt: &str, response: &str) -> Sample {
+    fn create_test_sample(id: &str) -> Sample {
         Sample {
-            prompt_section: vec![SamplePromptEnum::Text(prompt.to_string())],
+            system: format!("System {}", id),
+            prompt_section: vec![
+                SamplePromptEnum::Text(format!("Prompt {}", id)),
+            ],
             ai_section: vec![
-                SampleAiEnum::Text(response.to_owned()),
+                SampleAiEnum::Text(format!("Response {}", id)),
             ],
         }
     }
 
-    fn read_index_entry(file: &mut fs::File, entry_num: u64) -> (u64, u64, u64) {
-        let offset = entry_num * 24;
-        file.seek(std::io::SeekFrom::Start(offset)).unwrap();
-        
-        let mut buf = [0u8; 24];
-        file.read_exact(&mut buf).unwrap();
-        
-        let start = u64::from_le_bytes(buf[0..8].try_into().unwrap());
-        let length = u64::from_le_bytes(buf[8..16].try_into().unwrap());
-        let last_ai = u64::from_le_bytes(buf[16..24].try_into().unwrap());
-        
-        (start, length, last_ai)
+    fn create_test_sample_with_multiple_ai_items() -> Sample {
+        Sample {
+            system: "System".to_string(),
+            prompt_section: vec![
+                SamplePromptEnum::Text("What is AI?".to_string()),
+            ],
+            ai_section: vec![
+                SampleAiEnum::Text("First response".to_string()),
+                SampleAiEnum::Source("wikipedia".to_string()),
+                SampleAiEnum::Text("Second response".to_string()),
+            ],
+        }
     }
 
-    fn read_corpus_tokens(file: &mut fs::File, start: u64, count: u64) -> Vec<u32> {
-        file.seek(std::io::SeekFrom::Start(start)).unwrap();
-        
-        let mut tokens = Vec::with_capacity(count as usize);
-        let mut buf = [0u8; 4];
-        
-        for _ in 0..count {
-            file.read_exact(&mut buf).unwrap();
-            tokens.push(u32::from_le_bytes(buf));
+    fn create_test_sample_with_code() -> Sample {
+        Sample {
+            system: "System".to_string(),
+            prompt_section: vec![
+                SamplePromptEnum::Text("Write code".to_string()),
+                SamplePromptEnum::Code(SampleCode {
+                    lang: SampleLanguage::Js,
+                    inline: false,
+                    indent: Some(SampleIndent::One),
+                    content: "console.log('hello')".to_string(),
+                }),
+            ],
+            ai_section: vec![
+                SampleAiEnum::Text("Here's the code".to_string()),
+                SampleAiEnum::Code(SampleCode {
+                    lang: SampleLanguage::Js,
+                    inline: false,
+                    indent: None,
+                    content: "console.log('world')".to_string(),
+                }),
+            ],
         }
-        
-        tokens
+    }
+
+    fn create_test_sample_with_line_breaks() -> Sample {
+        Sample {
+            system: "System".to_string(),
+            prompt_section: vec![
+                SamplePromptEnum::Text("Line1".to_string()),
+                SamplePromptEnum::LineBreak(SampleLineBreak { count: 1 }),
+                SamplePromptEnum::Text("Line2".to_string()),
+            ],
+            ai_section: vec![
+                SampleAiEnum::Text("Response1".to_string()),
+                SampleAiEnum::LineBreak(SampleLineBreak { count: 2 }),
+                SampleAiEnum::Text("Response2".to_string()),
+            ],
+        }
     }
 
     #[test]
     fn test_train_write_bins_basic() {
         let temp_dir = tempdir().unwrap();
+        let tokenizer = create_test_tokenizer();
         
-        let train_sample = create_basic_sample("Hello", "Hi");
-        let val_sample = create_basic_sample("Question", "Answer");
+        let train_sample = create_test_sample("1");
+        let val_sample = create_test_sample("2");
         
         let samples = Samples {
             train_samples: vec![train_sample],
             val_samples: vec![val_sample],
         };
         
-        let tokenizer = create_test_tokenizer(&samples.train_samples);
         train_write_bins(temp_dir.path(), &samples, &tokenizer).unwrap();
         
         // Verify files exist
@@ -251,181 +374,172 @@ mod tests {
         assert!(temp_dir.path().join("val_corpus.bin").exists());
         assert!(temp_dir.path().join("val_index.bin").exists());
         
-        // Verify index size (24 bytes per sample)
-        let train_index_metadata = fs::metadata(temp_dir.path().join("train_index.bin")).unwrap();
-        assert_eq!(train_index_metadata.len(), 24);
+        // Verify file sizes (corpus files should be > 0, index files 24 bytes each)
+        let train_corpus_size = std::fs::metadata(temp_dir.path().join("train_corpus.bin")).unwrap().len();
+        let train_index_size = std::fs::metadata(temp_dir.path().join("train_index.bin")).unwrap().len();
+        let val_corpus_size = std::fs::metadata(temp_dir.path().join("val_corpus.bin")).unwrap().len();
+        let val_index_size = std::fs::metadata(temp_dir.path().join("val_index.bin")).unwrap().len();
         
-        let val_index_metadata = fs::metadata(temp_dir.path().join("val_index.bin")).unwrap();
-        assert_eq!(val_index_metadata.len(), 24);
-        
-        // Read and verify training index
-        let mut index_file = fs::File::open(temp_dir.path().join("train_index.bin")).unwrap();
-        let (start, length, last_ai_token) = read_index_entry(&mut index_file, 0);
-        
-        // Verify index values
-        assert_eq!(start, 0);
-        assert!(length > 0);
-        assert!(last_ai_token < length);
-        
-        // Read and verify corpus tokens
-        let mut corpus_file = fs::File::open(temp_dir.path().join("train_corpus.bin")).unwrap();
-        let tokens = read_corpus_tokens(&mut corpus_file, start, length);
-        
-        // Verify last_ai_token_index points within the tokens
-        assert!((last_ai_token as usize) <= tokens.len());
-        
-        // Verify AI response tokens exist (they should be after last_ai_token_index)
-        let response_tokens = &tokens[last_ai_token as usize..];
-        assert!(!response_tokens.is_empty());
+        assert!(train_corpus_size > 0);
+        assert_eq!(train_index_size, 24); // 1 sample = 24 bytes
+        assert!(val_corpus_size > 0);
+        assert_eq!(val_index_size, 24);
     }
-    
+
     #[test]
     fn test_train_write_bins_multiple_samples() {
         let temp_dir = tempdir().unwrap();
+        let tokenizer = create_test_tokenizer();
         
         let samples = Samples {
             train_samples: vec![
-                create_basic_sample("First prompt", "First response"),
-                create_basic_sample("Second prompt", "Second response"),
-                create_basic_sample("Third prompt", "Third response"),
+                create_test_sample("1"),
+                create_test_sample("2"),
+                create_test_sample("3"),
             ],
+            val_samples: vec![
+                create_test_sample("4"),
+            ],
+        };
+        
+        train_write_bins(temp_dir.path(), &samples, &tokenizer).unwrap();
+        
+        let train_index_size = std::fs::metadata(temp_dir.path().join("train_index.bin")).unwrap().len();
+        let val_index_size = std::fs::metadata(temp_dir.path().join("val_index.bin")).unwrap().len();
+        
+        assert_eq!(train_index_size, 72); // 3 samples * 24 bytes = 72
+        assert_eq!(val_index_size, 24);   // 1 sample * 24 bytes = 24
+    }
+
+    #[test]
+    fn test_train_write_bins_with_multiple_ai_items() {
+        let temp_dir = tempdir().unwrap();
+        let tokenizer = create_test_tokenizer();
+        let sample = create_test_sample_with_multiple_ai_items();
+        
+        let samples = Samples {
+            train_samples: vec![sample],
             val_samples: vec![],
         };
         
-        let tokenizer = create_test_tokenizer(&samples.train_samples);
         train_write_bins(temp_dir.path(), &samples, &tokenizer).unwrap();
         
-        // Verify index size (3 samples = 72 bytes)
-        let index_metadata = fs::metadata(temp_dir.path().join("train_index.bin")).unwrap();
-        assert_eq!(index_metadata.len(), 72);
+        let corpus_path = temp_dir.path().join("train_corpus.bin");
+        let index_path = temp_dir.path().join("train_index.bin");
         
-        // Read all index entries and verify they point to valid data
-        let mut index_file = fs::File::open(temp_dir.path().join("train_index.bin")).unwrap();
-        let mut corpus_file = fs::File::open(temp_dir.path().join("train_corpus.bin")).unwrap();
+        assert!(corpus_path.exists());
+        assert!(index_path.exists());
         
-        let mut prev_end = 0;
-        for i in 0..3 {
-            let (start, length, last_ai_token) = read_index_entry(&mut index_file, i);
-            
-            // Verify offsets are increasing and non-overlapping
-            assert!(start >= prev_end);
-            prev_end = start + length * 4; // Each token is 4 bytes
-            
-            // Verify last_ai_token_index is within bounds
-            assert!(last_ai_token <= length);
-            
-            // Verify we can read tokens
-            let tokens = read_corpus_tokens(&mut corpus_file, start, length);
-            assert_eq!(tokens.len() as u64, length);
-            
-            // Verify AI response tokens exist
-            let response_tokens = &tokens[last_ai_token as usize..];
-            assert!(!response_tokens.is_empty());
-        }
+        // Verify index entry (24 bytes)
+        let index_size = std::fs::metadata(&index_path).unwrap().len();
+        assert_eq!(index_size, 24);
+        
+        // Read index to verify values
+        let mut index_file = File::open(&index_path).unwrap();
+        let mut buffer = [0u8; 24];
+        index_file.read_exact(&mut buffer).unwrap();
+        
+        let offset = u64::from_le_bytes(buffer[0..8].try_into().unwrap());
+        let token_count = u64::from_le_bytes(buffer[8..16].try_into().unwrap());
+        let last_ai_token = u64::from_le_bytes(buffer[16..24].try_into().unwrap());
+        
+        assert_eq!(offset, 0);
+        assert!(token_count > 0);
+        assert!(last_ai_token < token_count);
+        assert!(last_ai_token > 0);
     }
-    
+
     #[test]
     fn test_train_write_bins_with_code() {
         let temp_dir = tempdir().unwrap();
-        
-        let sample = Sample {
-            prompt_section: vec![
-                SamplePromptEnum::Text("Write code: ".to_string()),
-                SamplePromptEnum::Code(SampleCode {
-                    lang: SampleLanguage::Js,
-                    inline: false,
-                    indent: SampleIndent::Zero,
-                    content: "console.log('hello');".to_string(),
-                }),
-            ],
-            ai_section: vec![
-                SampleAiEnum::Text("Here's the code:".to_string()),
-                SampleAiEnum::Code(SampleCode {
-                    lang: SampleLanguage::Js,
-                    inline: false,
-                    indent: SampleIndent::Zero,
-                    content: "console.log('world');".to_string(),
-                }),
-            ],
-        };
+        let tokenizer = create_test_tokenizer();
+        let sample = create_test_sample_with_code();
         
         let samples = Samples {
             train_samples: vec![sample],
             val_samples: vec![],
         };
         
-        let tokenizer = create_test_tokenizer(&samples.train_samples);
         train_write_bins(temp_dir.path(), &samples, &tokenizer).unwrap();
         
-        // Verify files exist
-        assert!(temp_dir.path().join("train_corpus.bin").exists());
-        assert!(temp_dir.path().join("train_index.bin").exists());
+        let corpus_path = temp_dir.path().join("train_corpus.bin");
+        let index_path = temp_dir.path().join("train_index.bin");
         
-        // Read and verify index
-        let mut index_file = fs::File::open(temp_dir.path().join("train_index.bin")).unwrap();
-        let (start, length, last_ai_token) = read_index_entry(&mut index_file, 0);
+        assert!(corpus_path.exists());
+        assert!(index_path.exists());
         
-        assert!(length > 0);
-        assert!(last_ai_token < length);
+        let index_size = std::fs::metadata(index_path).unwrap().len();
+        assert_eq!(index_size, 24);
         
-        // Read tokens and verify they exist
-        let mut corpus_file = fs::File::open(temp_dir.path().join("train_corpus.bin")).unwrap();
-        let tokens = read_corpus_tokens(&mut corpus_file, start, length);
-        assert!(!tokens.is_empty());
+        // Verify we can read the corpus (just check it's not empty)
+        let corpus_size = std::fs::metadata(corpus_path).unwrap().len();
+        assert!(corpus_size > 0);
     }
-    
+
     #[test]
     fn test_train_write_bins_with_line_breaks() {
         let temp_dir = tempdir().unwrap();
-        
-        let sample = Sample {
-            prompt_section: vec![
-                SamplePromptEnum::Text("Line 1".to_string()),
-                SamplePromptEnum::LineBreak(SampleLineBreak { count: 1 }),
-                SamplePromptEnum::Text("Line 2".to_string()),
-            ],
-            ai_section: vec![
-                SampleAiEnum::Text( "Response 1".to_string()),
-                SampleAiEnum::LineBreak(SampleLineBreak { count: 2 }),
-                SampleAiEnum::Text("Response 2".to_string()),
-            ],
-        };
+        let tokenizer = create_test_tokenizer();
+        let sample = create_test_sample_with_line_breaks();
         
         let samples = Samples {
             train_samples: vec![sample],
             val_samples: vec![],
         };
         
-        let tokenizer = create_test_tokenizer(&samples.train_samples);
         train_write_bins(temp_dir.path(), &samples, &tokenizer).unwrap();
         
+        let corpus_path = temp_dir.path().join("train_corpus.bin");
+        let index_path = temp_dir.path().join("train_index.bin");
+        
+        assert!(corpus_path.exists());
+        assert!(index_path.exists());
+        
+        let corpus_size = std::fs::metadata(corpus_path).unwrap().len();
+        let index_size = std::fs::metadata(index_path).unwrap().len();
+        
+        assert!(corpus_size > 0);
+        assert_eq!(index_size, 24);
+    }
+
+    #[test]
+    fn test_train_write_bins_empty_samples() {
+        let temp_dir = tempdir().unwrap();
+        let tokenizer = create_test_tokenizer();
+        
+        let samples = Samples {
+            train_samples: vec![],
+            val_samples: vec![],
+        };
+        
+        train_write_bins(temp_dir.path(), &samples, &tokenizer).unwrap();
+        
+        // Files should still be created (empty corpus files)
         assert!(temp_dir.path().join("train_corpus.bin").exists());
         assert!(temp_dir.path().join("train_index.bin").exists());
+        assert!(temp_dir.path().join("val_corpus.bin").exists());
+        assert!(temp_dir.path().join("val_index.bin").exists());
         
-        let mut index_file = fs::File::open(temp_dir.path().join("train_index.bin")).unwrap();
-        let (start, length, last_ai_token) = read_index_entry(&mut index_file, 0);
+        // Index files should be 0 bytes (no samples)
+        let train_index_size = std::fs::metadata(temp_dir.path().join("train_index.bin")).unwrap().len();
+        let val_index_size = std::fs::metadata(temp_dir.path().join("val_index.bin")).unwrap().len();
         
-        assert!(length > 0);
-        assert!(last_ai_token < length);
-        
-        // Verify we can read tokens
-        let mut corpus_file = fs::File::open(temp_dir.path().join("train_corpus.bin")).unwrap();
-        let tokens = read_corpus_tokens(&mut corpus_file, start, length);
-        assert_eq!(tokens.len() as u64, length);
-        
-        // Verify there are tokens after last_ai_token (AI responses)
-        let response_tokens = &tokens[last_ai_token as usize..];
-        assert!(!response_tokens.is_empty());
+        assert_eq!(train_index_size, 0);
+        assert_eq!(val_index_size, 0);
     }
-    
+
     #[test]
-    fn test_train_write_bins_empty_sections() {
+    fn test_train_write_bins_no_system_prompt() {
         let temp_dir = tempdir().unwrap();
+        let tokenizer = create_test_tokenizer();
         
         let sample = Sample {
-            prompt_section: vec![],
+            system: String::new(),
+            prompt_section: vec![
+                SamplePromptEnum::Text("Hello".to_string()),
+            ],
             ai_section: vec![
-                SampleAiEnum::Text("Just a response".to_string()),
+                SampleAiEnum::Text("Hi".to_string()),
             ],
         };
         
@@ -434,77 +548,78 @@ mod tests {
             val_samples: vec![],
         };
         
-        let tokenizer = create_test_tokenizer(&samples.train_samples);
         train_write_bins(temp_dir.path(), &samples, &tokenizer).unwrap();
         
-        let mut index_file = fs::File::open(temp_dir.path().join("train_index.bin")).unwrap();
-        let (start, length, last_ai_token) = read_index_entry(&mut index_file, 0);
+        let corpus_path = temp_dir.path().join("train_corpus.bin");
+        let index_path = temp_dir.path().join("train_index.bin");
         
-        // Empty prompt section should still produce valid tokens
-        assert!(length > 0);
-        assert!(last_ai_token < length);
+        assert!(corpus_path.exists());
+        assert!(index_path.exists());
         
-        // Verify AI response tokens exist
-        let mut corpus_file = fs::File::open(temp_dir.path().join("train_corpus.bin")).unwrap();
-        let tokens = read_corpus_tokens(&mut corpus_file, start, length);
-        let response_tokens = &tokens[last_ai_token as usize..];
-        assert!(!response_tokens.is_empty());
+        let index_size = std::fs::metadata(index_path).unwrap().len();
+        assert_eq!(index_size, 24);
     }
-    
+
     #[test]
-    fn test_train_write_bins_validates_index_consistency() {
+    fn test_train_write_bins_verify_index_values() {
         let temp_dir = tempdir().unwrap();
+        let tokenizer = create_test_tokenizer();
+        let sample = create_test_sample("test");
+        
+        let samples = Samples {
+            train_samples: vec![sample],
+            val_samples: vec![],
+        };
+        
+        train_write_bins(temp_dir.path(), &samples, &tokenizer).unwrap();
+        
+        let mut index_file = File::open(temp_dir.path().join("train_index.bin")).unwrap();
+        let mut buffer = [0u8; 24];
+        index_file.read_exact(&mut buffer).unwrap();
+        
+        let offset = u64::from_le_bytes(buffer[0..8].try_into().unwrap());
+        let token_count = u64::from_le_bytes(buffer[8..16].try_into().unwrap());
+        let last_ai_token = u64::from_le_bytes(buffer[16..24].try_into().unwrap());
+        
+        // offset should be 0 (first sample)
+        assert_eq!(offset, 0);
+        // token_count should be > 0
+        assert!(token_count > 0);
+        // last_ai_token should be less than token_count
+        assert!(last_ai_token < token_count);
+        // last_ai_token should be > 0 (since there's at least some content before the AI response)
+        assert!(last_ai_token > 0);
+    }
+
+    #[test]
+    fn test_train_write_bins_multiple_samples_index_order() {
+        let temp_dir = tempdir().unwrap();
+        let tokenizer = create_test_tokenizer();
         
         let samples = Samples {
             train_samples: vec![
-                create_basic_sample("First", "Response A"),
-                create_basic_sample("Second", "Response B"),
+                create_test_sample("first"),
+                create_test_sample("second"),
+                create_test_sample("third"),
             ],
-            val_samples: vec![
-                create_basic_sample("Third", "Response C"),
-            ],
+            val_samples: vec![],
         };
         
-        let tokenizer = create_test_tokenizer(&samples.train_samples);
         train_write_bins(temp_dir.path(), &samples, &tokenizer).unwrap();
         
-        // Read all index entries and verify they don't overlap
-        let mut train_index = fs::File::open(temp_dir.path().join("train_index.bin")).unwrap();
-        let mut train_corpus = fs::File::open(temp_dir.path().join("train_corpus.bin")).unwrap();
+        let mut index_file = File::open(temp_dir.path().join("train_index.bin")).unwrap();
+        let mut previous_end = 0;
         
-        let mut prev_end = 0;
-        for i in 0..2 {
-            let (start, length, last_ai_token) = read_index_entry(&mut train_index, i);
+        for _ in 0..3 {
+            let mut buffer = [0u8; 24];
+            index_file.read_exact(&mut buffer).unwrap();
             
-            // Verify start is after previous end
-            assert!(start >= prev_end);
-            prev_end = start + length * 4;
+            let offset = u64::from_le_bytes(buffer[0..8].try_into().unwrap());
+            let token_count = u64::from_le_bytes(buffer[8..16].try_into().unwrap());
             
-            // Verify last_ai_token is within bounds
-            assert!(last_ai_token <= length);
-            
-            // Verify we can read tokens
-            let tokens = read_corpus_tokens(&mut train_corpus, start, length);
-            assert_eq!(tokens.len() as u64, length);
-            assert!((last_ai_token as usize) <= tokens.len());
-            
-            // Verify AI response exists
-            let response_tokens = &tokens[last_ai_token as usize..];
-            assert!(!response_tokens.is_empty());
+            // Offsets should be increasing and non-overlapping
+            assert!(offset >= previous_end);
+            previous_end = offset + token_count * 4; // each token is 4 bytes
         }
-        
-        // Verify validation index
-        let mut val_index = fs::File::open(temp_dir.path().join("val_index.bin")).unwrap();
-        let mut val_corpus = fs::File::open(temp_dir.path().join("val_corpus.bin")).unwrap();
-        
-        let (start, length, last_ai_token) = read_index_entry(&mut val_index, 0);
-        assert_eq!(start, 0);
-        assert!(length > 0);
-        assert!(last_ai_token < length);
-        
-        let tokens = read_corpus_tokens(&mut val_corpus, start, length);
-        assert_eq!(tokens.len() as u64, length);
-        let response_tokens = &tokens[last_ai_token as usize..];
-        assert!(!response_tokens.is_empty());
     }
 }

@@ -7,10 +7,13 @@
 
 
 
+## How much programming is required?
+- None! 🥳
+- To create an AI w/ Poppins, the only prerequisite is a [train.xml](#what-is-a-trainxml) file & `poppins bootstrap` creates an example one for us!
+
+
+
 ## Why is Poppins written in Rust?
-- **📦 Single Binary Deployment:**
-    - Python applications require a Python interpreter and installed dependencies to run. Deploying to production often involves virtual environments, `Docker` containers and managing system packages.
-    - Rust compiles to a `single executable binary`. This binary contains all the code and dependencies. To deploy we just copy the binary to the target machine and run it. There is no need to install a runtime or manage dependencies. This simplifies deployment and reduces configuration errors.
 - **🌍 Deploy Everywhere:**
     - Rust can compile to WebAssembly (`WASM`), allowing AI models to run directly in a web browser
     - Rust can compile to native libraries for `iOS` and `Android`, making it possible to integrate AI into mobile apps
@@ -37,6 +40,10 @@
 1. Get or Update Rust
     - IF Rust is installed THEN update Rust `rustup update`
     - ELSE install Rust: https://rust-lang.org/learn/get-started/
+1. Suggested [VSCode](https://code.visualstudio.com/) / [VSCodium](https://vscodium.com/) extensions:
+    - `XML` by Red Hat
+    - `rust-analyzer` by rust-lang
+    - `Even Better TOML` by tamasfe
 1. Create a Project: `cargo new example`
 1. Install Poppins: `cargo install poppins`
 1. Create a [train.xml](#what-is-a-trainxml): `poppins bootstrap`
@@ -53,6 +60,7 @@
 - A `train.xml` file contains a root `<train>` element with the following sections (only `<samples>` is required. All other sections are optional):
     ```xml
     <train>
+        <system-prompts>...</system-prompts>
         <samples>...</samples>
         <prompts>...</prompts>
         <responses>...</responses>
@@ -60,17 +68,20 @@
         <code-snippets>...</code-snippets>
         <constants>...</constants>
         <phrases>...</phrases>
+        <beyond-scope>...</beyond-scope>
     </train>
     ```
     | Section | Description |
     |---------|-------------|
-    | `<samples>` | **Required.** Defines the training examples. Each sample references `prompts` & `responses` and may reference `sources` & `code snippets`. |
-    | `<prompts>` | Optional. Reusable prompts (questions), identified by an `id`. |
-    | `<responses>` | Optional. Reusable ai responses (answers), identified by an `id`. |
-    | `<sources>` | Optional. References to external sources (URLs, titles) identified by an `id`. |
-    | `<code-snippets>` | Optional. Reusable code blocks in specific languages, identified by an `id`. |
-    | `<constants>` | Optional. Training hyperparameters (learning rate, batch size, etc.). |
-    | `<phrases>` | Optional. Patterns with variant values for data augmentation. |
+    | `<samples>` | **Required.** Defines the training examples. Each sample references `prompts` & `responses` and may reference `sources` & `code snippets` |
+    | `<system-prompts>` | Optional. Define AI system prompts, identified by an `id` |
+    | `<prompts>` | Optional. Reusable prompts (questions), identified by an `id` |
+    | `<responses>` | Optional. Reusable ai responses (answers), identified by an `id` |
+    | `<sources>` | Optional. References to external sources (URLs, titles) identified by an `id` |
+    | `<code-snippets>` | Optional. Reusable code blocks in specific languages, identified by an `id` |
+    | `<constants>` | Optional. Training hyperparameters (`val_interval`, `aim_loss`, `aim_train_gb` etc.) |
+    | `<phrases>` | Optional. Patterns with variant values for data augmentation |
+    | `<beyond-scope>` | Optional. Defines topics that are beyond the scope of the AI's knowledge to auto-generate samples teaching the AI how to respond w/ a custom "I don't know" response |
 
 
 
@@ -105,8 +116,8 @@
     - ✅ Create `TrainXML`
     - ✅ Write output directory (default to `.poppins`)
     - ✅ Create `Samples` (holds `training` & `validation` `samples`)
-    - ✅ Write `output_dir/train_corpus.xml`
-    - ✅ Write `output_dir/val_corpus.xml`
+    - ✅ Write `output_dir/train_corpus.txt`
+    - ✅ Write `output_dir/val_corpus.txt`
     - ✅ Write `output_dir/tokenizer.json`
     - ✅ Write `output_dir/train_corpus.bin`
     - ✅ Write `output_dir/val_corpus.bin`

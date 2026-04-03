@@ -1,54 +1,131 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <train xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://xsd.beoptimal369.workers.dev/?version=0.1.0">
+  <system-prompts>
+    <system id="sy::be::default">You are a computer programming assistant. If the prompt is not about computer programming, then please respond: "I'm sorry, I don't know, I'm a computer programming assistant"</system>
+  </system-prompts>
+
+
   <prompts>
-    <prompt id="1">What is a computer?</prompt>
-    <prompt id="2">What is JavaScript?</prompt>
+    <prompt id="pr::be::computer">What is a computer?</prompt>
+    <prompt id="pr::be::computer_programming">What is a computer programming?</prompt>
+    <prompt id="pr::be::html">What is HTML?</prompt>
+    <prompt id="pr::be::js">What is JavaScript?</prompt>
   </prompts>
 
 
   <responses>
-    <response id="1">A computer is a computing / information processing device.</response>
-    <response id="2">JavaScript (JS) is a lightweight interpreted (or just-in-time compiled) programming language.</response>
-    <response id="3">JavaScript contains a standard library of objects, such as Array, Map, and Math, and a core set of language elements such as operators, control structures, and statements. Example Code:</response>
+    <response id="re::be::computer">A computer is a computing / information processing device.</response>
+    <response id="re::be::computer_programming">- Computer programming is the process of giving instructions to a computer to perform a specific task
+- Computer programming is the art of telling a computer what to do, how to do it, and when
+- Computer programming is the foundation of our digital world &amp; it's how we create websites, mobile apps, operating systems and artificial intelligence</response>
+    <response id="re::be::html_intro">- HTML stands for HyperText Markup Language
+- HTML is the standard language used to create and structure content on the web
+- HTML is the skeleton of every website we visit
+- HTML uses a system of elements (often called "tags") to tell the web browser how to display content
+- Basic Example:</response>
+    <response id="re::be::html_tags"><![CDATA[- `<!DOCTYPE html>`: Declares this is an HTML5 document.
+- `<html>`: The root element that wraps all content.
+- `<head>`: Contains meta-information (like the title) that isn't displayed on the page itself.
+- `<title>`: Sets the text that appears in the browser tab.
+- `<body>`: Contains all the visible content (text, images, buttons, etc.).
+- `<h1>`: A large heading.
+- `<p>`: A paragraph.
+- `<a>`: An "anchor" tag used to create a hyperlink.]]></response>
+    <response id="re::be::js_intro">JavaScript (JS) is a lightweight interpreted (or just-in-timecompiled) programming language.</response>
+    <response id="re::be::js_standard">JavaScript contains a standard library of objects, such as Array, Map, and Math, and a core set of language elements such as operators, control structures, and statements. Example Code:</response>
+    <response id="re::be::sy">I'm sorry, I don't know, I'm a computer programming assistant</response>
   </responses>
 
 
   <sources>
-    <source id="1" url="https://en-word.net/lemma/computer" />
-    <source id="2" url="https://developer.mozilla.org/en-US/docs/Web/JavaScript" />
-    <source id="3" url="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Introduction" />
+    <source id="so::be::computer" url="https://en-word.net/lemma/computer" />
+    <source id="so::be::js" url="https://developer.mozilla.org/en-US/docs/Web/JavaScript" />
+    <source id="so::be::js_intro"
+      url="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Introduction" />
   </sources>
 
 
   <code-snippets>
-    <code id="1" lang="ts">function example() {
-  console.log('hi world')
-}</code>
+    <code id="co::be::js" lang="ts">function example() { console.log('hi world') }</code>
+    <code id="co::be::html" lang="html"><![CDATA[<!DOCTYPE html>
+<html>
+  <head>
+    <title>My First Page</title>
+  </head>
+  <body>
+    <h1>Welcome!</h1>
+    <p>This is a paragraph of text.</p>
+    <a href="https://www.example.com">Click here to visit a website</a>
+  </body>
+</html>]]></code>
   </code-snippets>
 
+
   <samples>
-    <sample-ids prompt="1" response="1" source="1" />
+    <sample-ids system="sy::be::default" prompt="pr::be::computer" response="re::be::computer"
+      source="so::be::computer" />
+    <sample-ids system="sy::be::default" prompt="pr::be::computer_programming"
+      response="re::be::computer_programming" />
     <sample>
-      <prompt id="2" />
-      <response id="2" />
-      <source id="2" />
+      <system id="sy::be::default" />
+      <prompt id="pr::be::html" />
+      <response id="re::be::html_intro" />
+      <code id="co::be::html" indent="1" />
+      <response id="re::be::html_tags" />
+    </sample>
+    <sample>
+      <system id="sy::be::default" />
+      <prompt id="pr::be::js" />
+      <response id="re::be::js_intro" />
+      <source id="so::be::js" />
       <line-break count="1" />
-      <response id="3" />
-      <source id="3" />
-      <code id="1" />
+      <response id="re::be::js_standard" />
+      <source id="so::be::js_intro" />
+      <code id="co::be::js" />
     </sample>
   </samples>
 
 
   <constants>
-    <constant key="bpe_requested_tokens" value="function|console.log|hi world" />
+    <constant key="bpe_requested_tokens"
+      value="function|console.log|&lt;!DOCTYPE html&gt; " />
   </constants>
 
 
   <phrases>
-    <phrase pattern="What is (?:a |an |the )?(.*?)\?">
+    <phrase pattern="What (?:is|are) (?:a |an |the )?(.*?)\?">
       <variant value="Define $1." />
+      <variant value="Please define $1." />
       <variant value="Define: $1." />
+      <variant value="Please define: $1." />
+      <variant value="Tell me about $1." />
+      <variant value="Please tell me about $1." />
+      <variant value="Explain $1 as simply as possible." />
+      <variant value="Please explain $1 as simply as possible." />
+      <variant value="Explain $1 in simple terms." />
     </phrase>
   </phrases>
+
+
+  <beyond-scope
+    system="sy::be::default"
+    response="re::be::sy"
+    sports="true"
+    food="true"
+    movies="true"
+    history="true"
+    geography="true"
+    politics="true"
+    science="true"
+    health="true"
+    art="true"
+    music="true"
+    fashion="true"
+    travel="true"
+    pets="true"
+    cars="true"
+  >
+    <topic value="blockchain" prefix="is" />
+    <topic value="quantum computing" prefix="is" />
+  </beyond-scope>
 </train>

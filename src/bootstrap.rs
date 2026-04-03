@@ -16,8 +16,8 @@ pub fn bootstrap(output_dir_path: Option<&Path>) {
     let xml_content = include_str!("train/train.xml");
 
     match fs::write(&dest_path, xml_content) {
-        Ok(_) => println!("Successfully wrote {}", dest_path.display()),
-        Err(e) => eprintln!("Failed to write train.xml: {}", e),
+        Ok(_) => println!("✅ Wrote {}", dest_path.display()),
+        Err(e) => eprintln!("❌ Failed writing train.xml: {}", e),
     }
 }
 

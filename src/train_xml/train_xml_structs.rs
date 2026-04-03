@@ -1,12 +1,13 @@
 // src/train_xml/train_xml_structs.rs
 
-use regex::Regex;
 use crate::sample::SampleIndent;
 use serde::{Serialize, Deserialize};
 
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct TrainXML {
+    #[serde(rename = "system-prompts")]
+    pub system_prompts: Option<TrainXMLSystemPrompts>,
     pub prompts: Option<TrainXMLPrompts>,
     pub responses: Option<TrainXMLResponses>,
     pub sources: Option<TrainXMLSources>,
@@ -15,6 +16,29 @@ pub struct TrainXML {
     pub samples: Option<TrainXMLSamples>,
     pub constants: Option<TrainXMLConstants>,
     pub phrases: Option<TrainXMLPhrases>,
+    #[serde(rename = "beyond-scope")]
+    pub beyond_scope: Option<TrainXMLBeyondScope>,
+}
+
+
+
+// System Prompts:
+#[derive(Debug, Serialize, Deserialize)]
+pub struct TrainXMLSystemPrompts {
+    /// The sequence of system elements
+    pub system: Vec<TrainXMLSystemPromptsSystem>,
+}
+
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct TrainXMLSystemPromptsSystem {
+    /// Unique identifier for this system prompt
+    #[serde(rename = "@id")]
+    pub id: String,
+
+    /// The system prompt markdown content
+    #[serde(rename = "$text")]
+    pub content: String,
 }
 
 
@@ -129,6 +153,10 @@ pub struct TrainXMLSamplesSampleIds {
     #[serde(rename = "@prompt")]
     pub prompt: String,
 
+    /// System pompt unique identifier
+    #[serde(rename = "@system")]
+    pub system: Option<String>,
+
     /// Response unique identifier
     #[serde(rename = "@response")]
     pub response: Option<String>,
@@ -145,10 +173,7 @@ pub struct TrainXMLSamplesSampleIds {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct TrainXMLSamplesSample {
-    /// The sequence of prompt elements
-    pub prompt: TrainXMLSamplesPrompt,
-
-    /// All other elements, preserves element order
+    /// All children elements, preserves element order
     #[serde(rename = "$value", default)]
     pub children: Vec<TrainXMLSamplesSampleChildren>,
 }
@@ -156,6 +181,10 @@ pub struct TrainXMLSamplesSample {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum TrainXMLSamplesSampleChildren {
+    #[serde(rename = "prompt")]
+    Prompt(TrainXMLSamplesPrompt),
+    #[serde(rename = "system")]
+    System(TrainXMLSamplesSystem),
     #[serde(rename = "response")]
     Response(TrainXMLSamplesResponse),
     #[serde(rename = "source")]
@@ -206,6 +235,14 @@ pub struct TrainXMLSamplesResponse {
 
 
 #[derive(Debug, Serialize, Deserialize)]
+pub struct TrainXMLSamplesSystem {
+    /// Unique identifier for this system prompt
+    #[serde(rename = "@id")]
+    pub id: String,
+}
+
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct TrainXMLSamplesSource {
     /// Unique identifier for this response
     #[serde(rename = "@id")]
@@ -244,13 +281,6 @@ pub struct TrainXMLPhrasesPhrase {
     
     /// The sequence of variant elements
     pub variant: Vec<TrainXMLPhrasesVariant>,
-}
-
-impl TrainXMLPhrasesPhrase {
-    /// Compiles the pattern into a Regex
-    pub fn compile_pattern(&self) -> Result<Regex, regex::Error> {
-        Regex::new(&self.pattern)
-    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -389,4 +419,61 @@ impl Default for TrainXMLConstantParsed {
             gradient_clip_code: 0.7,
         }
     }
+}
+
+
+// Beyond Scope:
+#[derive(Debug, Serialize, Deserialize)]
+pub struct TrainXMLBeyondScope {
+    /// The system ID this beyond-scope configuration applies to
+    #[serde(rename = "@system")]
+    pub system: String,
+
+    /// Response to provide
+    #[serde(rename = "@response")]
+    pub response: String,
+
+    /// Additional topics as elements
+    #[serde(rename = "topic", default)]
+    pub topics: Vec<TrainXMLBeyondScopeTopic>,
+
+    /// Boolean attributes for common topic categories
+    #[serde(rename = "@sports", default)]
+    pub sports: Option<bool>,
+    #[serde(rename = "@food", default)]
+    pub food: Option<bool>,
+    #[serde(rename = "@movies", default)]
+    pub movies: Option<bool>,
+    #[serde(rename = "@history", default)]
+    pub history: Option<bool>,
+    #[serde(rename = "@geography", default)]
+    pub geography: Option<bool>,
+    #[serde(rename = "@politics", default)]
+    pub politics: Option<bool>,
+    #[serde(rename = "@science", default)]
+    pub science: Option<bool>,
+    #[serde(rename = "@health", default)]
+    pub health: Option<bool>,
+    #[serde(rename = "@art", default)]
+    pub art: Option<bool>,
+    #[serde(rename = "@music", default)]
+    pub music: Option<bool>,
+    #[serde(rename = "@fashion", default)]
+    pub fashion: Option<bool>,
+    #[serde(rename = "@travel", default)]
+    pub travel: Option<bool>,
+    #[serde(rename = "@pets", default)]
+    pub pets: Option<bool>,
+    #[serde(rename = "@cars", default)]
+    pub cars: Option<bool>,
+}
+
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct TrainXMLBeyondScopeTopic {
+    #[serde(rename = "@value")]
+    pub value: String,
+
+    #[serde(rename = "@prefix")]
+    pub prefix: String,
 }

@@ -159,7 +159,7 @@ impl<W: Write> TagWriter<W> {
         &mut self,
         lang: &str,
         inline: bool,
-        indent: SampleIndent,
+        indent: Option<SampleIndent>,
         special_tokens: &[String],
     ) -> Result<()> {
         if self.pretty {
@@ -345,7 +345,7 @@ mod tests {
         let mut buffer = Cursor::new(Vec::<u8>::new());
         let mut writer = TagWriter::new(&mut buffer, false, 2);
         
-        writer.write_code_open("js", false, SampleIndent::Zero, &special_tokens).unwrap();
+        writer.write_code_open("js", false, None, &special_tokens).unwrap();
         writer.write_text("console.log('test');").unwrap();
         writer.write_code_close("js", &special_tokens, false).unwrap();
         
@@ -359,7 +359,7 @@ mod tests {
         let mut writer = TagWriter::new(&mut buffer, true, 2);
         
         writer.indent();
-        writer.write_code_open("js", false, SampleIndent::Zero, &special_tokens).unwrap();
+        writer.write_code_open("js", false, None, &special_tokens).unwrap();
         writer.write_text("console.log('test');").unwrap();
         writer.write_code_close("js", &special_tokens, true).unwrap();
         
@@ -374,7 +374,7 @@ mod tests {
         let mut writer = TagWriter::new(&mut buffer, true, 2);
         
         writer.indent();
-        writer.write_code_open("rust", false, SampleIndent::Two, &special_tokens).unwrap();
+        writer.write_code_open("rust", false, Some(SampleIndent::Two), &special_tokens).unwrap();
         writer.write_text("fn main() {}").unwrap();
         writer.write_code_close("rust", &special_tokens, true).unwrap();
         
@@ -388,7 +388,7 @@ mod tests {
         let mut buffer = Cursor::new(Vec::<u8>::new());
         let mut writer = TagWriter::new(&mut buffer, true, 2);
         
-        writer.write_code_open("css", true, SampleIndent::Zero, &special_tokens).unwrap();
+        writer.write_code_open("css", true, None, &special_tokens).unwrap();
         writer.write_text("color: red;").unwrap();
         writer.write_code_close("css", &special_tokens, false).unwrap();
         
@@ -475,7 +475,7 @@ mod tests {
         
         writer.write_simple_tag_open("prompt", &special_tokens, false).unwrap();
         writer.write_text("Here is ").unwrap();
-        writer.write_code_open("js", true, SampleIndent::Zero, &special_tokens).unwrap();
+        writer.write_code_open("js", true, None, &special_tokens).unwrap();
         writer.write_text("code").unwrap();
         writer.write_code_close("js", &special_tokens, false).unwrap();
         writer.write_text(" in a sentence.").unwrap();

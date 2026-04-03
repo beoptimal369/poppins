@@ -171,81 +171,17 @@ impl BPETokenizerJSON {
                     .unwrap_or(0),
             },
         };
+
+        let path_buf = output_dir.join("tokenizer.json");
         
         // Write to file
         let json_string = serde_json::to_string_pretty(&tokenizer_json)?;
-        let mut file = File::create(output_dir.join("tokenizer.json"))?;
+        let mut file = File::create(&path_buf)?;
         file.write_all(json_string.as_bytes())?;
-        
+
+        println!("✅ Wrote {:?}", &path_buf);
+
         Ok(())
-    }
-    
-    /// Load the tokenizer from a JSON file
-    ///
-    /// # Arguments
-    /// * `input_dir` - Path to the tokenizer.json file
-    ///
-    /// # Returns
-    /// * `Result<Self, Box<dyn std::error::Error>>` - The loaded tokenizer JSON
-    pub fn load(input_dir: &Path) -> Result<Self, Box<dyn std::error::Error>> {
-        let content = std::fs::read_to_string(input_dir.join("tokenizer.json"))?;
-        let tokenizer_json: BPETokenizerJSON = serde_json::from_str(&content)?;
-        Ok(tokenizer_json)
-    }
-    
-    /// Convert the JSON representation back to a BPETokenizer
-    ///
-    /// This reconstructs the full tokenizer state including:
-    /// - Vocabulary
-    /// - Token-to-ID mapping
-    /// - Merge operations (reconstructed from merged strings)
-    /// - Special token count
-    /// - Initial token count
-    ///
-    /// # Returns
-    /// * `BPETokenizer` - The reconstructed tokenizer
-    pub fn to_tokenizer(&self) -> BPETokenizer {
-        let mut token_to_id = HashMap::new();
-        
-        // Build token-to-id mapping
-        for (id, token) in self.vocab.iter().enumerate() {
-            token_to_id.insert(token.clone(), id as u32);
-        }
-        
-        // Reconstruct merges from merged strings
-        // We need to find the original pair that produced each merge
-        // This is a simplified reconstruction - in practice, we'd store the pairs directly
-        let mut merges = Vec::new();
-        for merged in &self.merges {
-            // Find the split that produced this merge
-            // For now, we'll use a simple approach: find the longest prefix that exists in vocab
-            // This is a placeholder - in production, you'd store the actual pairs
-            if let Some((a, b)) = self.find_merge_pair(merged) {
-                merges.push((a, b));
-            }
-        }
-        
-        BPETokenizer {
-            vocab: self.vocab.clone(),
-            token_to_id,
-            merges,
-            special_token_count: self.special_tokens.count,
-            initial_token_count: self.special_tokens.count + self.requested_tokens.count,
-        }
-    }
-    
-    /// Helper to find the original pair that produced a merged token
-    fn find_merge_pair(&self, merged: &str) -> Option<(String, String)> {
-        // Try all possible splits to find one where both parts are in vocabulary
-        for split_pos in 1..merged.len() {
-            let a = &merged[..split_pos];
-            let b = &merged[split_pos..];
-            
-            if self.vocab.contains(&a.to_string()) && self.vocab.contains(&b.to_string()) {
-                return Some((a.to_string(), b.to_string()));
-            }
-        }
-        None
     }
 }
 
@@ -253,8 +189,8 @@ impl BPETokenizerJSON {
 #[cfg(test)]
 mod tests {
     use tempfile::tempdir;
-    use std::{collections::HashMap, path::Path};
-    use super::{PACKAGE_VERSION, BPETokenizer, BPETokenizerJSON};
+    use std::{collections::HashMap};
+    use super::{BPETokenizer, BPETokenizerJSON};
 
     const TEST_MODEL_VERSION: &str = "1.0.0";
 
@@ -370,139 +306,5 @@ mod tests {
         let config = json.get("config").unwrap();
         assert_eq!(config.get("vocab_size").unwrap().as_u64().unwrap(), 10);
         assert_eq!(config.get("merge_count").unwrap().as_u64().unwrap(), 3);
-    }
-
-    #[test]
-    fn test_load_tokenizer_json() {
-        let temp_dir = tempdir().unwrap();
-        let output_dir = temp_dir.path();
-        
-        let original_tokenizer = create_test_tokenizer();
-        BPETokenizerJSON::save(&original_tokenizer, output_dir, TEST_MODEL_VERSION).unwrap();
-        
-        // Load from the same directory
-        let loaded = BPETokenizerJSON::load(output_dir).unwrap();
-        
-        // Verify loaded data matches original
-        assert_eq!(loaded.version, TEST_MODEL_VERSION);
-        assert_eq!(loaded.model_type, "bpe");
-        assert_eq!(loaded.vocab.len(), 10);
-        assert_eq!(loaded.special_tokens.count, 3);
-        assert_eq!(loaded.requested_tokens.count, 2);
-        assert_eq!(loaded.config.vocab_size, 10);
-        assert_eq!(loaded.config.merge_count, 3);
-        
-        // Verify special tokens
-        assert_eq!(loaded.special_tokens.tokens[0], "<unknown>");
-        assert_eq!(loaded.special_tokens.tokens[1], "<sample>");
-        assert_eq!(loaded.special_tokens.tokens[2], "</sample>");
-        
-        // Verify requested tokens
-        assert_eq!(loaded.requested_tokens.tokens[0], "console.log");
-        assert_eq!(loaded.requested_tokens.tokens[1], "HelloWorld");
-        
-        // Verify token_to_id mappings
-        assert_eq!(*loaded.special_tokens.token_to_id.get("<unknown>").unwrap(), 0);
-        assert_eq!(*loaded.special_tokens.token_to_id.get("<sample>").unwrap(), 1);
-        assert_eq!(*loaded.requested_tokens.token_to_id.get("console.log").unwrap(), 3);
-        assert_eq!(*loaded.requested_tokens.token_to_id.get("HelloWorld").unwrap(), 4);
-    }
-
-    #[test]
-    fn test_to_tokenizer() {
-        let temp_dir = tempdir().unwrap();
-        let output_dir = temp_dir.path();
-        
-        let original_tokenizer = create_test_tokenizer();
-        BPETokenizerJSON::save(&original_tokenizer, output_dir, TEST_MODEL_VERSION).unwrap();
-        
-        let loaded_json = BPETokenizerJSON::load(output_dir).unwrap();
-        let reconstructed_tokenizer = loaded_json.to_tokenizer();
-        
-        // Verify reconstructed tokenizer matches original
-        assert_eq!(reconstructed_tokenizer.vocab, original_tokenizer.vocab);
-        assert_eq!(reconstructed_tokenizer.special_token_count, original_tokenizer.special_token_count);
-        assert_eq!(reconstructed_tokenizer.initial_token_count, original_tokenizer.initial_token_count);
-        assert_eq!(reconstructed_tokenizer.merges.len(), original_tokenizer.merges.len());
-        
-        // Verify token_to_id mappings
-        for (token, id) in &original_tokenizer.token_to_id {
-            assert_eq!(reconstructed_tokenizer.token_to_id.get(token), Some(id));
-        }
-    }
-
-    #[test]
-    fn test_save_tokenizer_json_empty_tokenizer() {
-        let temp_dir = tempdir().unwrap();
-        let output_dir = temp_dir.path();
-        
-        let tokenizer = BPETokenizer {
-            vocab: vec![],
-            token_to_id: HashMap::new(),
-            merges: vec![],
-            special_token_count: 0,
-            initial_token_count: 0,
-        };
-        
-        let result = BPETokenizerJSON::save(&tokenizer, output_dir, TEST_MODEL_VERSION);
-        assert!(result.is_ok());
-        
-        // Load from the directory, not from the file path
-        let loaded = BPETokenizerJSON::load(output_dir).unwrap();
-        assert!(loaded.vocab.is_empty());
-        assert_eq!(loaded.special_tokens.count, 0);
-        assert_eq!(loaded.requested_tokens.count, 0);
-        assert_eq!(loaded.config.vocab_size, 0);
-        assert_eq!(loaded.config.merge_count, 0);
-    }
-
-    #[test]
-    fn test_save_tokenizer_json_no_requested_tokens() {
-        let temp_dir = tempdir().unwrap();
-        let output_dir = temp_dir.path();
-        
-        let mut tokenizer = create_test_tokenizer();
-        tokenizer.initial_token_count = tokenizer.special_token_count;
-        
-        let result = BPETokenizerJSON::save(&tokenizer, output_dir, TEST_MODEL_VERSION);
-        assert!(result.is_ok());
-        
-        // Load from the directory, not from the file path
-        let loaded = BPETokenizerJSON::load(output_dir).unwrap();
-        assert_eq!(loaded.requested_tokens.count, 0);
-        assert!(loaded.requested_tokens.tokens.is_empty());
-        assert!(loaded.requested_tokens.ids.is_empty());
-        assert!(loaded.requested_tokens.token_to_id.is_empty());
-    }
-
-    #[test]
-    fn test_save_tokenizer_json_invalid_directory() {
-        let tokenizer = create_test_tokenizer();
-        let invalid_path = Path::new("/nonexistent/directory/that/should/not/exist");
-        
-        let result = BPETokenizerJSON::save(&tokenizer, invalid_path, TEST_MODEL_VERSION);
-        assert!(result.is_err());
-    }
-
-    #[test]
-    fn test_load_nonexistent_directory() {
-        let path = Path::new("/nonexistent/directory");
-        let result = BPETokenizerJSON::load(path);
-        assert!(result.is_err());
-    }
-
-    #[test]
-    fn test_version_consistency() {
-        let temp_dir = tempdir().unwrap();
-        let output_dir = temp_dir.path();
-        
-        let tokenizer = create_test_tokenizer();
-        BPETokenizerJSON::save(&tokenizer, output_dir, TEST_MODEL_VERSION).unwrap();
-        
-        let loaded = BPETokenizerJSON::load(output_dir).unwrap();
-        
-        assert_eq!(loaded.version, TEST_MODEL_VERSION);
-        assert_eq!(loaded.config.model_version, TEST_MODEL_VERSION);
-        assert_eq!(loaded.config.poppins_version, PACKAGE_VERSION);
     }
 }

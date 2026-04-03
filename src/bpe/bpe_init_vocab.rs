@@ -59,6 +59,11 @@ pub fn bpe_init_vocab(
         let mut all_chars = HashSet::new();
         
         for sample in samples {
+            // Scan system prompt
+            for c in sample.system.chars() {
+                all_chars.insert(c);
+            }
+            
             // Scan prompt section
             for item in &sample.prompt_section {
                 match item {
@@ -153,7 +158,6 @@ mod tests {
     use crate::sample::{
         Sample,
         SampleAiEnum,
-        SampleIndent,
         SampleLanguage,
         SamplePromptEnum,
     };
@@ -161,6 +165,21 @@ mod tests {
     fn create_test_samples() -> Vec<Sample> {
         vec![
             Sample {
+                system: String::new(),
+                prompt_section: vec![
+                    SamplePromptEnum::Text("Hi".to_string()),
+                ],
+                ai_section: vec![
+                    SampleAiEnum::Text("World".to_string()),
+                ],
+            },
+        ]
+    }
+
+    fn create_test_samples_with_system() -> Vec<Sample> {
+        vec![
+            Sample {
+                system: "You are a helpful assistant.\n".to_string(),
                 prompt_section: vec![
                     SamplePromptEnum::Text("Hi".to_string()),
                 ],
@@ -211,6 +230,51 @@ mod tests {
         // Verify character tokens exist
         assert!(tokenizer.vocab.contains(&"H".to_string()));
         assert!(tokenizer.vocab.contains(&"i".to_string()));
+        assert!(tokenizer.vocab.contains(&"W".to_string()));
+        assert!(tokenizer.vocab.contains(&"o".to_string()));
+        assert!(tokenizer.vocab.contains(&"r".to_string()));
+        assert!(tokenizer.vocab.contains(&"l".to_string()));
+        assert!(tokenizer.vocab.contains(&"d".to_string()));
+    }
+
+    #[test]
+    fn test_init_vocab_with_system_prompts() {
+        let mut tokenizer = BPETokenizer {
+            vocab: Vec::new(),
+            token_to_id: HashMap::new(),
+            merges: Vec::new(),
+            special_token_count: 0,
+            initial_token_count: 0,
+        };
+        
+        let samples = create_test_samples_with_system();
+        let special_tokens = bpe_get_special_tokens();
+        let requested_tokens: Vec<String> = vec![];
+        
+        bpe_init_vocab(&mut tokenizer, &samples, &special_tokens, &requested_tokens);
+        
+        // Verify <unknown> is first
+        assert_eq!(tokenizer.vocab[0], "<unknown>");
+        
+        // Verify special tokens are present
+        for token in &special_tokens {
+            assert!(tokenizer.vocab.contains(token));
+        }
+        
+        // Verify characters from system prompt are added
+        let system_chars = [
+            'Y', 'o', 'u', ' ', 'a', 'r', 'e', ' ', 'a', ' ', 'h', 'e', 'l', 'p', 'f', 'u', 'l', ' ',
+            'a', 's', 's', 'i', 's', 't', 'a', 'n', 't', '.', '\n'
+        ];
+        for c in system_chars {
+            assert!(tokenizer.vocab.contains(&c.to_string()), "Character '{}' not found in vocab", c);
+        }
+        
+        // Verify characters from regular prompt are added
+        assert!(tokenizer.vocab.contains(&"H".to_string()));
+        assert!(tokenizer.vocab.contains(&"i".to_string()));
+        
+        // Verify characters from AI section are added
         assert!(tokenizer.vocab.contains(&"W".to_string()));
         assert!(tokenizer.vocab.contains(&"o".to_string()));
         assert!(tokenizer.vocab.contains(&"r".to_string()));
@@ -334,11 +398,12 @@ mod tests {
         
         let samples = vec![
             Sample {
+                system: String::new(),
                 prompt_section: vec![
                     SamplePromptEnum::Code(crate::sample::SampleCode {
                         lang: SampleLanguage::Js,
                         inline: false,
-                        indent: SampleIndent::Zero,
+                        indent: None,
                         content: "console.log()".to_string(),
                     }),
                 ],

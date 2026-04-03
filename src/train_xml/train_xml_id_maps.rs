@@ -7,12 +7,16 @@ use crate::train_xml::{
     TrainXMLPromptsPrompt,
     TrainXMLCodeSnippetsCode,
     TrainXMLResponsesResponse,
+    TrainXMLSystemPromptsSystem,
 };
 
 
 /// Validates and collects all IDs from a TrainXML document with references to original data
 #[derive(Debug)]
 pub struct TrainXMLIdMaps<'a> {
+    /// Map of system prompt IDs to their corresponding system prompt data
+    pub system_prompts: HashMap<String, &'a TrainXMLSystemPromptsSystem>,
+    
     /// Map of prompt IDs to their corresponding prompt data
     pub prompts: HashMap<String, &'a TrainXMLPromptsPrompt>,
     
@@ -38,12 +42,22 @@ impl<'a> TrainXMLIdMaps<'a> {
     ///
     /// # Errors
     /// Returns an error if any duplicate IDs are found within the same category
-    /// (prompts, responses, sources, or code-snippets)
+    /// (system-prompts, prompts, responses, sources, or code-snippets)
     pub fn create(train_xml: &'a TrainXML) -> Result<Self, String> {
+        let mut system_prompts = HashMap::new();
         let mut prompts = HashMap::new();
         let mut responses = HashMap::new();
         let mut sources = HashMap::new();
         let mut code_snippets = HashMap::new();
+        
+        // Validate system prompts
+        if let Some(system_prompts_section) = &train_xml.system_prompts {
+            for system_prompt in &system_prompts_section.system {
+                if system_prompts.insert(system_prompt.id.clone(), system_prompt).is_some() {
+                    return Err(format!("Duplicate system prompt ID: '{}'", system_prompt.id));
+                }
+            }
+        }
         
         // Validate prompts
         if let Some(prompts_section) = &train_xml.prompts {
@@ -82,6 +96,7 @@ impl<'a> TrainXMLIdMaps<'a> {
         }
         
         Ok(Self {
+            system_prompts,
             prompts,
             responses,
             sources,
@@ -101,17 +116,31 @@ mod tests {
         TrainXMLPromptsPrompt,
         TrainXMLCodeSnippetsCode,
         TrainXMLResponsesResponse,
+        TrainXMLSystemPromptsSystem,
         train_xml_structs::{
             TrainXMLPrompts,
             TrainXMLSources,
             TrainXMLResponses,
             TrainXMLCodeSnippets,
+            TrainXMLSystemPrompts,
         },
     };
 
     #[test]
     fn test_create_with_valid_ids() {
         let train_xml = TrainXML {
+            system_prompts: Some(TrainXMLSystemPrompts {
+                system: vec![
+                    TrainXMLSystemPromptsSystem {
+                        id: "system1".to_string(),
+                        content: "You are a helpful assistant".to_string(),
+                    },
+                    TrainXMLSystemPromptsSystem {
+                        id: "system2".to_string(),
+                        content: "You are a coding expert".to_string(),
+                    },
+                ],
+            }),
             prompts: Some(TrainXMLPrompts {
                 prompt: vec![
                     TrainXMLPromptsPrompt {
@@ -153,24 +182,36 @@ mod tests {
             samples: None,
             constants: None,
             phrases: None,
+            beyond_scope: None,
         };
 
         let ids = TrainXMLIdMaps::create(&train_xml).unwrap();
         
+        // Test system prompts
+        assert_eq!(ids.system_prompts.len(), 2);
+        assert!(ids.system_prompts.contains_key("system1"));
+        assert!(ids.system_prompts.contains_key("system2"));
+        assert_eq!(ids.system_prompts.get("system1").unwrap().content, "You are a helpful assistant");
+        assert_eq!(ids.system_prompts.get("system2").unwrap().content, "You are a coding expert");
+        
+        // Test prompts
         assert_eq!(ids.prompts.len(), 2);
         assert!(ids.prompts.contains_key("prompt1"));
         assert!(ids.prompts.contains_key("prompt2"));
         assert_eq!(ids.prompts.get("prompt1").unwrap().content, "Content 1");
         assert_eq!(ids.prompts.get("prompt2").unwrap().content, "Content 2");
         
+        // Test responses
         assert_eq!(ids.responses.len(), 1);
         assert!(ids.responses.contains_key("response1"));
         assert_eq!(ids.responses.get("response1").unwrap().content, "Response 1");
         
+        // Test sources
         assert_eq!(ids.sources.len(), 1);
         assert!(ids.sources.contains_key("source1"));
         assert_eq!(ids.sources.get("source1").unwrap().url, "https://example.com");
         
+        // Test code snippets
         assert_eq!(ids.code_snippets.len(), 1);
         assert!(ids.code_snippets.contains_key("code1"));
         assert_eq!(ids.code_snippets.get("code1").unwrap().lang, "rust");
@@ -179,6 +220,14 @@ mod tests {
     #[test]
     fn test_create_with_mixed_duplicates() {
         let train_xml = TrainXML {
+            system_prompts: Some(TrainXMLSystemPrompts {
+                system: vec![
+                    TrainXMLSystemPromptsSystem {
+                        id: "id123".to_string(),
+                        content: "System Prompt".to_string(),
+                    },
+                ],
+            }),
             prompts: Some(TrainXMLPrompts {
                 prompt: vec![
                     TrainXMLPromptsPrompt {
@@ -216,23 +265,25 @@ mod tests {
             samples: None,
             constants: None,
             phrases: None,
+            beyond_scope: None,
         };
 
         let ids = TrainXMLIdMaps::create(&train_xml).unwrap();
         
+        // All categories can have the same ID - that's allowed
+        assert_eq!(ids.system_prompts.len(), 1);
+        assert!(ids.system_prompts.contains_key("id123"));
         assert_eq!(ids.prompts.len(), 1);
         assert!(ids.prompts.contains_key("id123"));
-        
         assert_eq!(ids.responses.len(), 1);
         assert!(ids.responses.contains_key("id123"));
-        
         assert_eq!(ids.sources.len(), 1);
         assert!(ids.sources.contains_key("id123"));
-        
         assert_eq!(ids.code_snippets.len(), 1);
         assert!(ids.code_snippets.contains_key("id123"));
         
         // Verify we can access the actual data
+        assert_eq!(ids.system_prompts.get("id123").unwrap().content, "System Prompt");
         assert_eq!(ids.prompts.get("id123").unwrap().content, "Prompt");
         assert_eq!(ids.responses.get("id123").unwrap().content, "Response");
         assert_eq!(ids.sources.get("id123").unwrap().url, "https://example.com");
@@ -240,8 +291,20 @@ mod tests {
     }
 
     #[test]
-    fn test_create_with_optional_sections_none() {
+    fn test_create_with_duplicate_system_prompts() {
         let train_xml = TrainXML {
+            system_prompts: Some(TrainXMLSystemPrompts {
+                system: vec![
+                    TrainXMLSystemPromptsSystem {
+                        id: "system1".to_string(),
+                        content: "First".to_string(),
+                    },
+                    TrainXMLSystemPromptsSystem {
+                        id: "system1".to_string(),
+                        content: "Duplicate".to_string(),
+                    },
+                ],
+            }),
             prompts: None,
             responses: None,
             sources: None,
@@ -249,10 +312,61 @@ mod tests {
             samples: None,
             constants: None,
             phrases: None,
+            beyond_scope: None,
+        };
+
+        let result = TrainXMLIdMaps::create(&train_xml);
+        assert!(result.is_err());
+        assert!(result.unwrap_err().contains("Duplicate system prompt ID: 'system1'"));
+    }
+
+    #[test]
+    fn test_create_with_duplicate_prompts() {
+        let train_xml = TrainXML {
+            system_prompts: None,
+            prompts: Some(TrainXMLPrompts {
+                prompt: vec![
+                    TrainXMLPromptsPrompt {
+                        id: "prompt1".to_string(),
+                        content: "First".to_string(),
+                    },
+                    TrainXMLPromptsPrompt {
+                        id: "prompt1".to_string(),
+                        content: "Duplicate".to_string(),
+                    },
+                ],
+            }),
+            responses: None,
+            sources: None,
+            code_snippets: None,
+            samples: None,
+            constants: None,
+            phrases: None,
+            beyond_scope: None,
+        };
+
+        let result = TrainXMLIdMaps::create(&train_xml);
+        assert!(result.is_err());
+        assert!(result.unwrap_err().contains("Duplicate prompt ID: 'prompt1'"));
+    }
+
+    #[test]
+    fn test_create_with_optional_sections_none() {
+        let train_xml = TrainXML {
+            system_prompts: None,
+            prompts: None,
+            responses: None,
+            sources: None,
+            code_snippets: None,
+            samples: None,
+            constants: None,
+            phrases: None,
+            beyond_scope: None,
         };
 
         let ids = TrainXMLIdMaps::create(&train_xml).unwrap();
         
+        assert_eq!(ids.system_prompts.len(), 0);
         assert_eq!(ids.prompts.len(), 0);
         assert_eq!(ids.responses.len(), 0);
         assert_eq!(ids.sources.len(), 0);

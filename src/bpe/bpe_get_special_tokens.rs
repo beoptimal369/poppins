@@ -20,7 +20,7 @@ pub fn bpe_get_special_tokens() -> Vec<String> {
     tokens.push("<unknown>".to_string());
 
     // Structural Tags
-    let structural = ["sample", "prompt", "ai", "text", "source"];
+    let structural = ["sample", "system", "prompt", "ai", "text", "source"];
 
     for tag in structural {
         tokens.push(format!("<{tag}>"));
@@ -75,6 +75,8 @@ mod tests {
         let expected_structs = [
             "<sample>",
             "</sample>",
+            "<system>",
+            "</system>",
             "<prompt>",
             "</prompt>",
             "<ai>",
@@ -170,7 +172,7 @@ mod tests {
         let tokens = bpe_get_special_tokens();
 
         // Calculate expected count
-        let structural_count = 10; // 5 tags × 2 (open/close)
+        let structural_count = 12; // 6 tags × 2 (open/close)
         let line_break_count = 2;
         let languages_count = SampleLanguage::ALL.len();
         let tags_per_language = 2 + 1 + 6; // opening/closing (2), inline (1), indents 1-6 (6)

@@ -4,9 +4,7 @@ use crate::train_xml::TrainXML;
 
 
 pub fn train_xml_parse(train_xml_content: &str) -> Result<TrainXML, Box<dyn std::error::Error>> {
-    let train_xml: TrainXML = quick_xml::de::from_str(train_xml_content)
-        .map_err(|e| format!("Failed to parse Training XML: {}", e))?;
-
+    let train_xml: TrainXML = quick_xml::de::from_str(train_xml_content)?;
     Ok(train_xml)
 }
 
@@ -76,8 +74,6 @@ mod tests {
 
         let result = train_xml_parse(malformed_xml);
         
-        assert!(result.is_err());
-        let err_msg = result.err().unwrap().to_string();
-        assert!(err_msg.contains("Failed to parse Training XML"));
+        assert!(result.is_err(), "Expected parsing to fail for malformed XML");
     }
 }

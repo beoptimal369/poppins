@@ -23,13 +23,13 @@ pub fn tag_write_code_open<W: Write>(
     writer: &mut W,
     lang: &str,
     inline: bool,
-    indent: SampleIndent,
+    indent: Option<SampleIndent>,
     special_tokens: &[String],
 ) -> Result<()> {
     let tag = if inline {
         format!("<{} inline=\"true\">", lang)
-    } else if indent.as_u8() > 0 {
-        format!("<{} indent=\"{}\">", lang, indent.as_u8())
+    } else if let Some(indent_val) = indent {
+        format!("<{} indent=\"{}\">", lang, indent_val.as_u8())
     } else {
         format!("<{}>", lang)
     };
@@ -57,15 +57,15 @@ mod tests {
         
         let mut buffer = Cursor::new(Vec::<u8>::new());
         
-        tag_write_code_open(&mut buffer, "js", false, SampleIndent::Zero, &special_tokens).unwrap();
+        tag_write_code_open(&mut buffer, "js", false, None, &special_tokens).unwrap();
         assert_eq!(buffer.get_ref(), b"<js>");
         
         let mut buffer = Cursor::new(Vec::<u8>::new());
-        tag_write_code_open(&mut buffer, "ts", false, SampleIndent::Zero, &special_tokens).unwrap();
+        tag_write_code_open(&mut buffer, "ts", false, None, &special_tokens).unwrap();
         assert_eq!(buffer.get_ref(), b"<ts>");
         
         let mut buffer = Cursor::new(Vec::<u8>::new());
-        tag_write_code_open(&mut buffer, "rust", false, SampleIndent::Zero, &special_tokens).unwrap();
+        tag_write_code_open(&mut buffer, "rust", false, None, &special_tokens).unwrap();
         assert_eq!(buffer.get_ref(), b"<rust>");
     }
     
@@ -79,15 +79,15 @@ mod tests {
         
         let mut buffer = Cursor::new(Vec::<u8>::new());
         
-        tag_write_code_open(&mut buffer, "js", false, SampleIndent::Two, &special_tokens).unwrap();
+        tag_write_code_open(&mut buffer, "js", false, Some(SampleIndent::Two), &special_tokens).unwrap();
         assert_eq!(buffer.get_ref(), b"<js indent=\"2\">");
         
         let mut buffer = Cursor::new(Vec::<u8>::new());
-        tag_write_code_open(&mut buffer, "ts", false, SampleIndent::Four, &special_tokens).unwrap();
+        tag_write_code_open(&mut buffer, "ts", false, Some(SampleIndent::Four), &special_tokens).unwrap();
         assert_eq!(buffer.get_ref(), b"<ts indent=\"4\">");
         
         let mut buffer = Cursor::new(Vec::<u8>::new());
-        tag_write_code_open(&mut buffer, "rust", false, SampleIndent::Six, &special_tokens).unwrap();
+        tag_write_code_open(&mut buffer, "rust", false, Some(SampleIndent::Six), &special_tokens).unwrap();
         assert_eq!(buffer.get_ref(), b"<rust indent=\"6\">");
     }
     
@@ -101,15 +101,15 @@ mod tests {
         
         let mut buffer = Cursor::new(Vec::<u8>::new());
         
-        tag_write_code_open(&mut buffer, "js", true, SampleIndent::Zero, &special_tokens).unwrap();
+        tag_write_code_open(&mut buffer, "js", true, None, &special_tokens).unwrap();
         assert_eq!(buffer.get_ref(), b"<js inline=\"true\">");
         
         let mut buffer = Cursor::new(Vec::<u8>::new());
-        tag_write_code_open(&mut buffer, "ts", true, SampleIndent::Zero, &special_tokens).unwrap();
+        tag_write_code_open(&mut buffer, "ts", true, None, &special_tokens).unwrap();
         assert_eq!(buffer.get_ref(), b"<ts inline=\"true\">");
         
         let mut buffer = Cursor::new(Vec::<u8>::new());
-        tag_write_code_open(&mut buffer, "rust", true, SampleIndent::Zero, &special_tokens).unwrap();
+        tag_write_code_open(&mut buffer, "rust", true, None, &special_tokens).unwrap();
         assert_eq!(buffer.get_ref(), b"<rust inline=\"true\">");
     }
     
@@ -122,7 +122,7 @@ mod tests {
         let mut buffer = Cursor::new(Vec::<u8>::new());
         
         // Even though indent is Two, inline should take precedence and ignore indent
-        tag_write_code_open(&mut buffer, "js", true, SampleIndent::Two, &special_tokens).unwrap();
+        tag_write_code_open(&mut buffer, "js", true, Some(SampleIndent::Two), &special_tokens).unwrap();
         assert_eq!(buffer.get_ref(), b"<js inline=\"true\">");
     }
     
@@ -132,13 +132,13 @@ mod tests {
 
         // Test all indent levels
         let indent_levels = [
-            (SampleIndent::Zero, "<html>"),
-            (SampleIndent::One, "<html indent=\"1\">"),
-            (SampleIndent::Two, "<html indent=\"2\">"),
-            (SampleIndent::Three, "<html indent=\"3\">"),
-            (SampleIndent::Four, "<html indent=\"4\">"),
-            (SampleIndent::Five, "<html indent=\"5\">"),
-            (SampleIndent::Six, "<html indent=\"6\">"),
+            (None, "<html>"),
+            (Some(SampleIndent::One), "<html indent=\"1\">"),
+            (Some(SampleIndent::Two), "<html indent=\"2\">"),
+            (Some(SampleIndent::Three), "<html indent=\"3\">"),
+            (Some(SampleIndent::Four), "<html indent=\"4\">"),
+            (Some(SampleIndent::Five), "<html indent=\"5\">"),
+            (Some(SampleIndent::Six), "<html indent=\"6\">"),
         ];
         
         for (indent, expected) in indent_levels {
@@ -154,11 +154,11 @@ mod tests {
         let mut buffer = Cursor::new(Vec::<u8>::new());
         
         // Should fall back to generated tag since <js indent=\"2\"> isn't in special_tokens
-        tag_write_code_open(&mut buffer, "js", false, SampleIndent::Two, &special_tokens).unwrap();
+        tag_write_code_open(&mut buffer, "js", false, Some(SampleIndent::Two), &special_tokens).unwrap();
         assert_eq!(buffer.get_ref(), b"<js indent=\"2\">");
         
         let mut buffer = Cursor::new(Vec::<u8>::new());
-        tag_write_code_open(&mut buffer, "rust", true, SampleIndent::Zero, &special_tokens).unwrap();
+        tag_write_code_open(&mut buffer, "rust", true, None, &special_tokens).unwrap();
         assert_eq!(buffer.get_ref(), b"<rust inline=\"true\">");
     }
     
@@ -167,15 +167,15 @@ mod tests {
         let special_tokens: Vec<String> = vec![];
         let mut buffer = Cursor::new(Vec::<u8>::new());
         
-        tag_write_code_open(&mut buffer, "xml", false, SampleIndent::Zero, &special_tokens).unwrap();
+        tag_write_code_open(&mut buffer, "xml", false, None, &special_tokens).unwrap();
         assert_eq!(buffer.get_ref(), b"<xml>");
         
         let mut buffer = Cursor::new(Vec::<u8>::new());
-        tag_write_code_open(&mut buffer, "json", false, SampleIndent::Three, &special_tokens).unwrap();
+        tag_write_code_open(&mut buffer, "json", false, Some(SampleIndent::Three), &special_tokens).unwrap();
         assert_eq!(buffer.get_ref(), b"<json indent=\"3\">");
         
         let mut buffer = Cursor::new(Vec::<u8>::new());
-        tag_write_code_open(&mut buffer, "css", true, SampleIndent::Zero, &special_tokens).unwrap();
+        tag_write_code_open(&mut buffer, "css", true, None, &special_tokens).unwrap();
         assert_eq!(buffer.get_ref(), b"<css inline=\"true\">");
     }
     
@@ -185,15 +185,15 @@ mod tests {
         let mut buffer = Cursor::new(Vec::<u8>::new());
         
         // Test priority: inline > indent > standard
-        tag_write_code_open(&mut buffer, "test", true, SampleIndent::Four, &special_tokens).unwrap();
+        tag_write_code_open(&mut buffer, "test", true, Some(SampleIndent::Four), &special_tokens).unwrap();
         assert_eq!(buffer.get_ref(), b"<test inline=\"true\">");
         
         let mut buffer = Cursor::new(Vec::<u8>::new());
-        tag_write_code_open(&mut buffer, "test", false, SampleIndent::Four, &special_tokens).unwrap();
+        tag_write_code_open(&mut buffer, "test", false, Some(SampleIndent::Four), &special_tokens).unwrap();
         assert_eq!(buffer.get_ref(), b"<test indent=\"4\">");
         
         let mut buffer = Cursor::new(Vec::<u8>::new());
-        tag_write_code_open(&mut buffer, "test", false, SampleIndent::Zero, &special_tokens).unwrap();
+        tag_write_code_open(&mut buffer, "test", false, None, &special_tokens).unwrap();
         assert_eq!(buffer.get_ref(), b"<test>");
     }
     
@@ -204,7 +204,7 @@ mod tests {
         
         for lang in languages {
             let mut buffer = Cursor::new(Vec::<u8>::new());
-            tag_write_code_open(&mut buffer, lang, false, SampleIndent::Zero, &special_tokens).unwrap();
+            tag_write_code_open(&mut buffer, lang, false, None, &special_tokens).unwrap();
             let expected = format!("<{}>", lang);
             assert_eq!(buffer.get_ref(), expected.as_bytes());
         }
@@ -216,7 +216,7 @@ mod tests {
         let special_tokens: Vec<String> = vec!["<custom>".to_string()];
         let mut buffer: Vec<u8> = Vec::new();
         
-        tag_write_code_open(&mut buffer, "custom", false, SampleIndent::Zero, &special_tokens).unwrap();
+        tag_write_code_open(&mut buffer, "custom", false, None, &special_tokens).unwrap();
         assert_eq!(buffer, b"<custom>");
     }
     
@@ -227,7 +227,7 @@ mod tests {
         
         // The function should never generate a tag with both inline and indent
         // (inline takes precedence and indent is ignored)
-        tag_write_code_open(&mut buffer, "test", true, SampleIndent::Three, &special_tokens).unwrap();
+        tag_write_code_open(&mut buffer, "test", true, Some(SampleIndent::Three), &special_tokens).unwrap();
         let result = String::from_utf8(buffer.get_ref().to_vec()).unwrap();
         
         assert!(!result.contains("indent"));
