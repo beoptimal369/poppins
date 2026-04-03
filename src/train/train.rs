@@ -8,12 +8,9 @@ use crate::bpe::{bpe_get_special_tokens, bpe_train, BPETokenizerJSON};
 use crate::train_xml::{TrainXMLConstantParsed, train_xml_parse, train_xml_validate};
 
 
-pub fn train(train_xml_path: Option<&Path>, output_dir_path: Option<&Path>, model_version: Option<&str>) -> Result<(), Box<dyn Error>> {
-    let input_path = train_xml_path.unwrap_or(Path::new("./train.xml"));
-
-    let output_dir = output_dir_path.unwrap_or(Path::new("./.poppins"));
-    
-    let (samples, train_xml_constant_parsed) = get_samples(&input_path, &output_dir)?;
+pub fn train(output_dir: &Path, model_name: String) -> Result<(), Box<dyn Error>> {
+    println!("output_dir: {:?}", output_dir);
+    let (samples, train_xml_constant_parsed) = get_samples(&output_dir)?;
 
     train_write_txts(&output_dir, &samples)?;
 
@@ -24,7 +21,7 @@ pub fn train(train_xml_path: Option<&Path>, output_dir_path: Option<&Path>, mode
         train_xml_constant_parsed.bpe_min_merge_frequency,
     )?;
 
-    BPETokenizerJSON::save(&tokenizer, &output_dir, &model_version.unwrap_or("0.1.0"))?;
+    BPETokenizerJSON::save(&tokenizer, &output_dir, &model_name)?;
 
     train_write_bins(&output_dir, &samples, &tokenizer)?;
 
@@ -32,8 +29,10 @@ pub fn train(train_xml_path: Option<&Path>, output_dir_path: Option<&Path>, mode
 }
 
 
-fn get_samples(input_path: &Path, output_dir: &Path) -> Result<(Samples, TrainXMLConstantParsed), Box<dyn std::error::Error>> {
-    let train_content = fs::read_to_string(input_path)?;
+fn get_samples(output_dir: &Path) -> Result<(Samples, TrainXMLConstantParsed), Box<dyn std::error::Error>> {
+    let train_xml_path = output_dir.join("train.xml");
+
+    let train_content = fs::read_to_string(&train_xml_path)?;
 
     let train_xml = train_xml_parse(&train_content)?;
 

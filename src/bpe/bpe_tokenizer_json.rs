@@ -20,8 +20,8 @@ const PACKAGE_VERSION: &str = env!("CARGO_PKG_VERSION");
 /// - Configuration metadata
 #[derive(Debug, Serialize, Deserialize)]
 pub struct BPETokenizerJSON {
-    /// Model version (semver)
-    pub version: String,
+    /// Model name (ex: optimus, optimus-4.5)
+    pub model_name: String,
     
     /// Model type identifier (always "bpe")
     pub model_type: String,
@@ -77,7 +77,7 @@ pub struct TokenizerConfig {
     pub add_prefix_space: bool,
     
     /// Model version (same as top-level)
-    pub model_version: String,
+    pub model_name: String,
     
     /// Poppins framework version
     pub poppins_version: String,
@@ -92,14 +92,14 @@ impl BPETokenizerJSON {
     /// # Arguments
     /// * `tokenizer` - Reference to the trained tokenizer
     /// * `output_dir` - Path where tokenizer.json will be written
-    /// * `model_version` - Version of the model being created (semver)
+    /// * `model_name` - Name of model (ex: optimus, optimus-4.5)
     ///
     /// # Returns
     /// * `std::io::Result<()>` - Ok on success, Err on file write failure
     pub fn save(
         tokenizer: &BPETokenizer,
         output_dir: &Path,
-        model_version: &str,
+        model_name: &str,
     ) -> std::io::Result<()> {
         // Collect special tokens (first special_token_count entries in vocab)
         let special_tokens: Vec<String> = tokenizer.vocab
@@ -139,7 +139,7 @@ impl BPETokenizerJSON {
             .collect();
         
         let tokenizer_json = BPETokenizerJSON {
-            version: model_version.to_string(),
+            model_name: model_name.to_string(),
             model_type: "bpe".to_string(),
             vocab: tokenizer.vocab.clone(),
             merges: merges_strings,
@@ -163,7 +163,7 @@ impl BPETokenizerJSON {
                 normalizer: "none".to_string(),
                 pre_tokenizer: "whitespace".to_string(),
                 add_prefix_space: false,
-                model_version: model_version.to_string(),
+                model_name: model_name.to_string(),
                 poppins_version: PACKAGE_VERSION.to_string(),
                 created_at: std::time::SystemTime::now()
                     .duration_since(std::time::UNIX_EPOCH)
@@ -192,7 +192,7 @@ mod tests {
     use std::{collections::HashMap};
     use super::{BPETokenizer, BPETokenizerJSON};
 
-    const TEST_MODEL_VERSION: &str = "1.0.0";
+    const MODEL_NAME: &str = "optimus";
 
     fn create_test_tokenizer() -> BPETokenizer {
         let mut token_to_id = HashMap::new();
@@ -237,7 +237,7 @@ mod tests {
         
         let tokenizer = create_test_tokenizer();
         
-        let result = BPETokenizerJSON::save(&tokenizer, output_dir, TEST_MODEL_VERSION);
+        let result = BPETokenizerJSON::save(&tokenizer, output_dir, MODEL_NAME);
         assert!(result.is_ok());
         
         // Verify file was created in the output directory
@@ -250,8 +250,8 @@ mod tests {
         
         // Verify structure
         assert_eq!(
-            json.get("version"), 
-            Some(&serde_json::Value::String(TEST_MODEL_VERSION.to_string()))
+            json.get("model_name"), 
+            Some(&serde_json::Value::String(MODEL_NAME.to_string()))
         );
         assert_eq!(
             json.get("model_type"), 

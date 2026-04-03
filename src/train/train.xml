@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<train xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://xsd.beoptimal369.workers.dev/?version=0.1.0">
+<train xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="./train.xsd">
   <system-prompts>
     <system id="sy::be::default">You are a computer programming assistant. If the prompt is not about computer programming, then please respond: "I'm sorry, I don't know, I'm a computer programming assistant"</system>
   </system-prompts>
