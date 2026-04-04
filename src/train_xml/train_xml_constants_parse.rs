@@ -1,6 +1,7 @@
 // src/train_xml/train_xml_constants_parse.rs
 
 use std::error::Error;
+use crate::device::Device;
 use crate::train_xml::{
     TrainXMLConstants,
     TrainXMLConstantsKey,
@@ -8,8 +9,8 @@ use crate::train_xml::{
 };
 
 
-pub fn train_xml_constants_parse(train_xml_constants: &Option<TrainXMLConstants>) -> Result<TrainXMLConstantParsed, Box<dyn Error>> {
-    let mut parsed = TrainXMLConstantParsed::default();
+pub fn train_xml_constants_parse(train_xml_constants: &Option<TrainXMLConstants>, device: &Device) -> Result<TrainXMLConstantParsed, Box<dyn Error>> {
+    let mut parsed = TrainXMLConstantParsed::create(device);
 
     if let Some(inner) = train_xml_constants {
         for c in &inner.constant {
@@ -27,9 +28,9 @@ pub fn train_xml_constants_parse(train_xml_constants: &Option<TrainXMLConstants>
                     parsed.aim_train_gb = c.value.parse()
                         .map_err(|_| format!("❌ aim_train_gb must be a number, got '{}'", c.value))?;
                 }
-                TrainXMLConstantsKey::AimInferF16Gb => {
-                    parsed.aim_infer_f16_gb = c.value.parse()
-                        .map_err(|_| format!("❌ aim_infer_f16_gb must be a number, got '{}'", c.value))?;
+                TrainXMLConstantsKey::AimInferGb => {
+                    parsed.aim_infer_gb = c.value.parse()
+                        .map_err(|_| format!("❌ aim_infer_gb must be a number, got '{}'", c.value))?;
                 }
                 TrainXMLConstantsKey::LearningRate => {
                     parsed.learning_rate = c.value.parse()
@@ -38,6 +39,42 @@ pub fn train_xml_constants_parse(train_xml_constants: &Option<TrainXMLConstants>
                 TrainXMLConstantsKey::AimLoss => {
                     parsed.aim_loss = c.value.parse()
                         .map_err(|_| format!("❌ aim_loss must be a number, got '{}'", c.value))?;
+                }
+                TrainXMLConstantsKey::BatchSize => {
+                    parsed.batch_size = c.value.parse()
+                        .map_err(|_| format!("❌ batch_size must be a number, got '{}'", c.value))?;
+                }
+                TrainXMLConstantsKey::MixedPrecision => {
+                    parsed.mixed_precision = c.value.parse()
+                        .map_err(|_| format!("❌ mixed_precision must be a number, got '{}'", c.value))?;
+                }
+                TrainXMLConstantsKey::GradientAccumulationSteps => {
+                    parsed.gradient_accumulation_steps = c.value.parse()
+                        .map_err(|_| format!("❌ gradient_accumulation_steps must be a number, got '{}'", c.value))?;
+                }
+                TrainXMLConstantsKey::ActivationPrecision => {
+                    parsed.activation_precision = c.value.parse()
+                        .map_err(|_| format!("❌ activation_precision must be a string, got '{}'", c.value))?;
+                }
+                TrainXMLConstantsKey::KvCachePrecision => {
+                    parsed.kv_cache_precision = c.value.parse()
+                        .map_err(|_| format!("❌ kv_cache_precision must be a string, got '{}'", c.value))?;
+                }
+                TrainXMLConstantsKey::RopePrecision => {
+                    parsed.rope_precision = c.value.parse()
+                        .map_err(|_| format!("❌ rope_precision must be a string, got '{}'", c.value))?;
+                }
+                TrainXMLConstantsKey::NumWorkers => {
+                    parsed.num_workers = c.value.parse()
+                        .map_err(|_| format!("❌ num_workers must be a number, got '{}'", c.value))?;
+                }
+                TrainXMLConstantsKey::UseFlashAttention => {
+                    parsed.use_flash_attention = c.value.parse()
+                        .map_err(|_| format!("❌ use_flash_attention must be a bool, got '{}'", c.value))?;
+                }
+                TrainXMLConstantsKey::UseTensorCores => {
+                    parsed.use_tensor_cores = c.value.parse()
+                        .map_err(|_| format!("❌ use_tensor_cores must be a bool, got '{}'", c.value))?;
                 }
 
                 TrainXMLConstantsKey::BpeMinMergeFrequency => {
@@ -70,20 +107,6 @@ pub fn train_xml_constants_parse(train_xml_constants: &Option<TrainXMLConstants>
                 TrainXMLConstantsKey::WeightDecayCode => {
                     parsed.weight_decay_code = c.value.parse()
                         .map_err(|_| format!("❌ weight_decay_code must be a number, got '{}'", c.value))?;
-                }
-
-                // DropoutRate
-                TrainXMLConstantsKey::DropoutRateResponse => {
-                    parsed.dropout_rate_response = c.value.parse()
-                        .map_err(|_| format!("❌ dropout_rate_response must be a number, got '{}'", c.value))?;
-                }
-                TrainXMLConstantsKey::DropoutRateSource => {
-                    parsed.dropout_rate_source = c.value.parse()
-                        .map_err(|_| format!("❌ dropout_rate_source must be a number, got '{}'", c.value))?;
-                }
-                TrainXMLConstantsKey::DropoutRateCode => {
-                    parsed.dropout_rate_code = c.value.parse()
-                        .map_err(|_| format!("❌ dropout_rate_code must be a number, got '{}'", c.value))?;
                 }
 
                 // LossScale
@@ -138,6 +161,7 @@ pub fn train_xml_constants_parse(train_xml_constants: &Option<TrainXMLConstants>
 
 #[cfg(test)]
 mod tests {
+    use crate::device::Device;
     use crate::train_xml::{
         TrainXMLConstants,
         TrainXMLConstantsKey,
@@ -145,17 +169,32 @@ mod tests {
         train_xml_structs::TrainXMLConstantsConstant,
     };
 
+    fn test_device() -> Device {
+        Device::Cpu
+    }
+
     #[test]
     fn test_create_success() {
+        let device = test_device();
+        
         // Create test constants with all valid values
         let constants = TrainXMLConstants {
             constant: vec![
                 TrainXMLConstantsConstant { key: TrainXMLConstantsKey::WarmupSteps, value: "500".to_string(), delimiter: None },
                 TrainXMLConstantsConstant { key: TrainXMLConstantsKey::ValInterval, value: "25".to_string(), delimiter: None },
                 TrainXMLConstantsConstant { key: TrainXMLConstantsKey::AimTrainGb, value: "8.5".to_string(), delimiter: None },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::AimInferF16Gb, value: "2.1".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::AimInferGb, value: "2.1".to_string(), delimiter: None },
                 TrainXMLConstantsConstant { key: TrainXMLConstantsKey::LearningRate, value: "5e-4".to_string(), delimiter: None },
                 TrainXMLConstantsConstant { key: TrainXMLConstantsKey::AimLoss, value: "0.35".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::BatchSize, value: "16".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::MixedPrecision, value: "true".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::GradientAccumulationSteps, value: "4".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::ActivationPrecision, value: "int8".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::KvCachePrecision, value: "int8".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::RopePrecision, value: "fp16".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::NumWorkers, value: "8".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::UseFlashAttention, value: "true".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::UseTensorCores, value: "true".to_string(), delimiter: None },
 
                 TrainXMLConstantsConstant { key: TrainXMLConstantsKey::BpeMinMergeFrequency, value: "6".to_string(), delimiter: None },
                 TrainXMLConstantsConstant { key: TrainXMLConstantsKey::BpeRequestedTokens, value: "function|console.log|hi world".to_string(), delimiter: Some("|".to_owned()) },
@@ -163,10 +202,6 @@ mod tests {
                 TrainXMLConstantsConstant { key: TrainXMLConstantsKey::WeightDecayResponse, value: "0.2".to_string(), delimiter: None },
                 TrainXMLConstantsConstant { key: TrainXMLConstantsKey::WeightDecaySource, value: "0.02".to_string(), delimiter: None },
                 TrainXMLConstantsConstant { key: TrainXMLConstantsKey::WeightDecayCode, value: "0.08".to_string(), delimiter: None },
-
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::DropoutRateResponse, value: "0.1".to_string(), delimiter: None },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::DropoutRateSource, value: "0.05".to_string(), delimiter: None },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::DropoutRateCode, value: "0.15".to_string(), delimiter: None },
 
                 TrainXMLConstantsConstant { key: TrainXMLConstantsKey::LossScaleResponse, value: "1.5".to_string(), delimiter: None },
                 TrainXMLConstantsConstant { key: TrainXMLConstantsKey::LossScaleSource, value: "0.5".to_string(), delimiter: None },
@@ -182,25 +217,30 @@ mod tests {
             ],
         };
 
-        let result = train_xml_constants_parse(&Some(constants));
+        let result = train_xml_constants_parse(&Some(constants), &device);
         assert!(result.is_ok());
 
         let parsed = result.unwrap();
         assert_eq!(parsed.warmup_steps, 500);
         assert_eq!(parsed.val_interval, 25);
         assert_eq!(parsed.aim_train_gb, 8.5);
-        assert_eq!(parsed.aim_infer_f16_gb, 2.1);
+        assert_eq!(parsed.aim_infer_gb, 2.1);
         assert_eq!(parsed.learning_rate, 0.0005);
         assert_eq!(parsed.aim_loss, 0.35);
+        assert_eq!(parsed.batch_size, 16);
+        assert_eq!(parsed.mixed_precision, true);
+        assert_eq!(parsed.gradient_accumulation_steps, 4);
+        assert_eq!(parsed.activation_precision, "int8");
+        assert_eq!(parsed.kv_cache_precision, "int8");
+        assert_eq!(parsed.rope_precision, "fp16");
+        assert_eq!(parsed.num_workers, 8);
+        assert_eq!(parsed.use_flash_attention, true);
+        assert_eq!(parsed.use_tensor_cores, true);
         assert_eq!(parsed.bpe_min_merge_frequency, 6);
         
         assert_eq!(parsed.weight_decay_response, 0.2);
         assert_eq!(parsed.weight_decay_source, 0.02);
         assert_eq!(parsed.weight_decay_code, 0.08);
-        
-        assert_eq!(parsed.dropout_rate_response, 0.1);
-        assert_eq!(parsed.dropout_rate_source, 0.05);
-        assert_eq!(parsed.dropout_rate_code, 0.15);
         
         assert_eq!(parsed.loss_scale_response, 1.5);
         assert_eq!(parsed.loss_scale_source, 0.5);
@@ -217,15 +257,26 @@ mod tests {
 
     #[test]
     fn test_create_error() {
+        let device = test_device();
+        
         // Create constants with an invalid value that will fail to parse
         let constants = TrainXMLConstants {
             constant: vec![
                 TrainXMLConstantsConstant { key: TrainXMLConstantsKey::WarmupSteps, value: "500".to_string(), delimiter: None },
                 TrainXMLConstantsConstant { key: TrainXMLConstantsKey::ValInterval, value: "25".to_string(), delimiter: None },
                 TrainXMLConstantsConstant { key: TrainXMLConstantsKey::AimTrainGb, value: "8.5".to_string(), delimiter: None },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::AimInferF16Gb, value: "2.1".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::AimInferGb, value: "2.1".to_string(), delimiter: None },
                 TrainXMLConstantsConstant { key: TrainXMLConstantsKey::LearningRate, value: "not-a-float".to_string(), delimiter: None },
                 TrainXMLConstantsConstant { key: TrainXMLConstantsKey::AimLoss, value: "0.35".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::BatchSize, value: "16".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::MixedPrecision, value: "true".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::GradientAccumulationSteps, value: "4".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::ActivationPrecision, value: "int8".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::KvCachePrecision, value: "int8".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::RopePrecision, value: "fp16".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::NumWorkers, value: "8".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::UseFlashAttention, value: "true".to_string(), delimiter: None },
+                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::UseTensorCores, value: "true".to_string(), delimiter: None },
 
                 TrainXMLConstantsConstant { key: TrainXMLConstantsKey::BpeMinMergeFrequency, value: "9".to_string(), delimiter: None },
                 TrainXMLConstantsConstant { key: TrainXMLConstantsKey::BpeRequestedTokens, value: "function|console.log|hi world".to_string(), delimiter: Some("|".to_owned()) },
@@ -233,10 +284,6 @@ mod tests {
                 TrainXMLConstantsConstant { key: TrainXMLConstantsKey::WeightDecayResponse, value: "0.2".to_string(), delimiter: None },
                 TrainXMLConstantsConstant { key: TrainXMLConstantsKey::WeightDecaySource, value: "0.02".to_string(), delimiter: None },
                 TrainXMLConstantsConstant { key: TrainXMLConstantsKey::WeightDecayCode, value: "0.08".to_string(), delimiter: None },
-
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::DropoutRateResponse, value: "0.1".to_string(), delimiter: None },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::DropoutRateSource, value: "0.05".to_string(), delimiter: None },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::DropoutRateCode, value: "0.15".to_string(), delimiter: None },
 
                 TrainXMLConstantsConstant { key: TrainXMLConstantsKey::LossScaleResponse, value: "1.5".to_string(), delimiter: None },
                 TrainXMLConstantsConstant { key: TrainXMLConstantsKey::LossScaleSource, value: "0.5".to_string(), delimiter: None },
@@ -252,7 +299,7 @@ mod tests {
             ],
         };
 
-        let result = train_xml_constants_parse(&Some(constants));
+        let result = train_xml_constants_parse(&Some(constants), &device);
         assert!(result.is_err());
         
         let error = result.unwrap_err();
@@ -263,14 +310,26 @@ mod tests {
 
     #[test]
     fn test_empty_constants() {
-        let result = train_xml_constants_parse(&None);
+        let device = test_device();
+        let result = train_xml_constants_parse(&None, &device);
         assert!(result.is_ok());
         
         let parsed = result.unwrap();
-        // Should return defaults
-        assert_eq!(parsed.warmup_steps, 100);
+        // Should return defaults from TrainXMLConstantParsed::create()
+        assert_eq!(parsed.warmup_steps, 11520);
         assert_eq!(parsed.val_interval, 10);
-        assert_eq!(parsed.aim_train_gb, 3.0);
+        assert_eq!(parsed.aim_train_gb, 7.0);
+        assert_eq!(parsed.aim_infer_gb, 0.9);
+        assert_eq!(parsed.aim_loss, 0.45);
         assert_eq!(parsed.bpe_min_merge_frequency, 3);
+        assert_eq!(parsed.batch_size, 1); // CPU default
+        assert_eq!(parsed.mixed_precision, false); // CPU default
+        assert_eq!(parsed.gradient_accumulation_steps, 1); // CPU default
+        assert_eq!(parsed.activation_precision, "fp32"); // CPU default
+        assert_eq!(parsed.kv_cache_precision, "int8");
+        assert_eq!(parsed.rope_precision, "fp32"); // CPU default
+        assert_eq!(parsed.num_workers, num_cpus::get());
+        assert_eq!(parsed.use_flash_attention, false); // CPU default
+        assert_eq!(parsed.use_tensor_cores, false); // CPU default
     }
 }

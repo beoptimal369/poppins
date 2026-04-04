@@ -1,5 +1,6 @@
 // src/train_xml/train_xml_structs.rs
 
+use crate::device::Device;
 use crate::sample::SampleIndent;
 use serde::{Serialize, Deserialize};
 
@@ -320,11 +321,20 @@ pub struct TrainXMLConstantsConstant {
 #[serde(rename_all = "snake_case")]
 pub enum TrainXMLConstantsKey {
     AimTrainGb,
-    AimInferF16Gb,
+    AimInferGb,
     LearningRate,
     WarmupSteps,
     AimLoss,
     ValInterval,
+    BatchSize,
+    MixedPrecision,
+    GradientAccumulationSteps,
+    ActivationPrecision,
+    KvCachePrecision,
+    RopePrecision,
+    NumWorkers,
+    UseFlashAttention,
+    UseTensorCores,
 
     BpeRequestedTokens,
     BpeMinMergeFrequency,
@@ -332,10 +342,6 @@ pub enum TrainXMLConstantsKey {
     WeightDecayResponse,
     WeightDecaySource,
     WeightDecayCode,
-
-    DropoutRateResponse,
-    DropoutRateSource,
-    DropoutRateCode,
 
     LossScaleResponse,
     LossScaleSource,
@@ -353,12 +359,21 @@ pub enum TrainXMLConstantsKey {
 
 #[derive(Debug)]
 pub struct TrainXMLConstantParsed {
+    pub aim_train_gb: f32,
+    pub aim_infer_gb: f32,
+    pub aim_loss: f32,
+    pub learning_rate: f32,
     pub warmup_steps: usize,
     pub val_interval: usize,
-    pub aim_train_gb: f32,
-    pub aim_infer_f16_gb: f32,
-    pub learning_rate: f32,
-    pub aim_loss: f32,
+    pub batch_size: usize,
+    pub mixed_precision: bool,
+    pub gradient_accumulation_steps: usize,
+    pub activation_precision: String,
+    pub kv_cache_precision: String,
+    pub rope_precision: String,
+    pub num_workers: usize,
+    pub use_flash_attention: bool,
+    pub use_tensor_cores: bool,
 
     pub bpe_min_merge_frequency: usize,
     pub bpe_requested_tokens: Vec<String>,
@@ -366,10 +381,6 @@ pub struct TrainXMLConstantParsed {
     pub weight_decay_response: f32,
     pub weight_decay_source: f32,
     pub weight_decay_code: f32,
-
-    pub dropout_rate_response: f32,
-    pub dropout_rate_source: f32,
-    pub dropout_rate_code: f32,
 
     pub loss_scale_response: f32,
     pub loss_scale_source: f32,
@@ -385,26 +396,42 @@ pub struct TrainXMLConstantParsed {
 }
 
 
-impl Default for TrainXMLConstantParsed {
-    fn default() -> Self {
+impl TrainXMLConstantParsed {
+    pub fn create(device: &Device) -> Self {
+        const REFERENCE_WARMUP_STEPS: f32 = 360.0;
+        const REFERENCE_EFFECTIVE_BATCH_SIZE: f32 = 32.0;
+
+        let aim_train_gb = 7.0;
+        let aim_infer_gb = 0.9;
+        let batch_size = device.batch_size(aim_train_gb);
+        let gradient_accumulation_steps = device.gradient_accumulation_steps();
+        let current_effective_batch_size = batch_size * gradient_accumulation_steps;
+        let learning_rate = 1e-3 * (current_effective_batch_size as f32 / REFERENCE_EFFECTIVE_BATCH_SIZE as f32);
+        let warmup_steps = (REFERENCE_WARMUP_STEPS * (REFERENCE_EFFECTIVE_BATCH_SIZE / current_effective_batch_size as f32)) as usize;
+
         Self {
-            warmup_steps: 100,
-            val_interval: 10,
-            aim_train_gb: 3.0,
-            aim_infer_f16_gb: 0.9,
-            learning_rate: 1e-3,
+            batch_size,
+            aim_train_gb,
+            aim_infer_gb,
+            warmup_steps,
+            learning_rate,
             aim_loss: 0.45,
+            val_interval: 10,
+            num_workers: device.num_workers(),
+            kv_cache_precision: "int8".to_string(),
+            rope_precision: device.rope_precision(),
+            mixed_precision: device.mixed_precision(),
+            use_tensor_cores: device.use_tensor_cores(),
+            use_flash_attention: device.use_flash_attention(),
+            activation_precision: device.activation_precision(),
+            gradient_accumulation_steps: device.gradient_accumulation_steps(),
 
             bpe_min_merge_frequency: 3,
             bpe_requested_tokens: Vec::new(),
 
-            weight_decay_response: 0.1,
-            weight_decay_source: 0.01,
-            weight_decay_code: 0.05,
-
-            dropout_rate_response: 0.05,
-            dropout_rate_source: 0.0,
-            dropout_rate_code: 0.1,
+            weight_decay_response: 0.01,
+            weight_decay_source: 0.05,
+            weight_decay_code: 0.02,
 
             loss_scale_response: 1.0,
             loss_scale_source: 0.2,

@@ -41,7 +41,7 @@ impl TernaryWeights {
         let num_bytes = (size + 3) / 4; // Ceiling division for packing
         
         Self {
-            raw: vec![0.0; size],
+            raw: vec![0.0; size], // All weights start at 0.0 (ConfigHuggingFace > initializer_range > 0.0)
             quantized: vec![0; num_bytes],
             size,
             avg_abs: 0.0,

@@ -251,6 +251,7 @@ fn write_samples_to_bins(
 }
 
 
+
 #[cfg(test)]
 mod tests {
     use super::*;

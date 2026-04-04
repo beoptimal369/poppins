@@ -186,6 +186,7 @@ impl BPETokenizerJSON {
 }
 
 
+
 #[cfg(test)]
 mod tests {
     use tempfile::tempdir;

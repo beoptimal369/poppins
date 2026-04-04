@@ -314,11 +314,20 @@
             <xs:simpleType>
               <xs:restriction base="xs:string">
                 <xs:enumeration value="aim_train_gb" />
-                <xs:enumeration value="aim_infer_f16_gb" />
+                <xs:enumeration value="aim_infer_gb" />
+                <xs:enumeration value="aim_loss" />
                 <xs:enumeration value="learning_rate" />
                 <xs:enumeration value="warmup_steps" />
-                <xs:enumeration value="aim_loss" />
                 <xs:enumeration value="val_interval" />
+                <xs:enumeration value="batch_size" />
+                <xs:enumeration value="mixed_precision" />
+                <xs:enumeration value="gradient_accumulation_steps" />
+                <xs:enumeration value="activation_precision" />
+                <xs:enumeration value="kv_cache_precision" />
+                <xs:enumeration value="rope_precision" />
+                <xs:enumeration value="num_workers" />
+                <xs:enumeration value="use_flash_attention" />
+                <xs:enumeration value="use_tensor_cores" />
 
                 <xs:enumeration value="bpe_requested_tokens" />
                 <xs:enumeration value="bpe_min_merge_frequency" />
@@ -356,6 +365,9 @@
                 </xs:simpleType>
                 <xs:simpleType>
                   <xs:restriction base="xs:string" />
+                </xs:simpleType>
+                <xs:simpleType>
+                  <xs:restriction base="xs:boolean" />
                 </xs:simpleType>
               </xs:union>
             </xs:simpleType>

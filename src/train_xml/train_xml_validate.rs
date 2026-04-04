@@ -1,5 +1,6 @@
 // src/train_xml/train_xml_validate.rs
 
+use crate::device::Device;
 use crate::train_xml::{
     TrainXML,
     TrainXMLIdMaps,
@@ -12,7 +13,10 @@ use crate::train_xml::{
 };
 
 
-pub fn train_xml_validate(train_xml: &TrainXML) -> Result<(TrainXMLIdMaps<'_>, TrainXMLConstantParsed, Vec<TrainXMLPhrasePattern>), Box<dyn std::error::Error>> {
+pub fn train_xml_validate<'a>(
+    train_xml: &'a TrainXML, 
+    device: &Device
+) -> Result<(TrainXMLIdMaps<'a>, TrainXMLConstantParsed, Vec<TrainXMLPhrasePattern>), Box<dyn std::error::Error>> {
     let train_xml_id_maps_map = TrainXMLIdMaps::create(train_xml)?;
 
     train_xml_validate_ids(train_xml, &train_xml_id_maps_map).map_err(|errors| {
@@ -24,7 +28,7 @@ pub fn train_xml_validate(train_xml: &TrainXML) -> Result<(TrainXMLIdMaps<'_>, T
     
     validate_prompt_presence(train_xml)?;
 
-    let train_xml_constants_parsed = train_xml_constants_parse(&train_xml.constants)?;
+    let train_xml_constants_parsed = train_xml_constants_parse(&train_xml.constants, device)?;
 
     let train_xml_patterns = train_xml_phrase_patterns(train_xml);
 
@@ -87,6 +91,7 @@ fn validate_prompt_presence(train_xml: &TrainXML) -> Result<(), String> {
 
 #[cfg(test)]
 mod tests {
+    use crate::device::Device;
     use super::validate_line_breaks;
     use crate::train_xml::{
         TrainXML,
@@ -224,7 +229,7 @@ mod tests {
             samples: Some(TrainXMLSamples {
                 sample_ids: None,
                 sample: Some(vec![TrainXMLSamplesSample {
-                    children: vec![TrainXMLSamplesSampleChildren::Prompt(TrainXMLSamplesPrompt { id: "1".to_string() })], // Only prompt, no line breaks
+                    children: vec![TrainXMLSamplesSampleChildren::Prompt(TrainXMLSamplesPrompt { id: "1".to_string() })],
                 }]),
             }),
             constants: None,
@@ -347,13 +352,14 @@ mod tests {
         let result = super::validate_prompt_presence(&train_xml);
         assert!(result.is_err());
         let err = result.unwrap_err();
-        assert!(err.contains("Sample 1"), "Error should mention Sample 1, got: {}", err);
-        assert!(err.contains("Sample 3"), "Error should mention Sample 3, got: {}", err);
-        assert!(!err.contains("Sample 2"), "Error should not mention Sample 2, got: {}", err);
+        assert!(err.contains("Sample 1"));
+        assert!(err.contains("Sample 3"));
+        assert!(!err.contains("Sample 2"));
     }
 
     #[test]
     fn test_train_xml_validate_success() {
+        let device = Device::Cpu;
         let train_xml = TrainXML {
             prompts: Some(TrainXMLPrompts {
                 prompt: vec![TrainXMLPromptsPrompt {
@@ -384,7 +390,7 @@ mod tests {
             phrases: None,
         };
         
-        let result = train_xml_validate(&train_xml);
+        let result = train_xml_validate(&train_xml, &device);
         assert!(result.is_ok());
         
         let (id_maps, constants, patterns) = result.unwrap();
@@ -394,8 +400,8 @@ mod tests {
         assert_eq!(id_maps.responses.len(), 1);
         
         // Verify constants (default values)
-        assert_eq!(constants.warmup_steps, 100);
-        assert_eq!(constants.learning_rate, 1e-3);
+        assert_eq!(constants.warmup_steps, 11520);
+        assert_eq!(constants.learning_rate, 3.125e-5);
         
         // Verify patterns (empty since no phrases)
         assert!(patterns.is_empty());
@@ -403,6 +409,7 @@ mod tests {
 
     #[test]
     fn test_train_xml_validate_with_phrases() {
+        let device = Device::Cpu;
         let train_xml = TrainXML {
             prompts: Some(TrainXMLPrompts {
                 prompt: vec![TrainXMLPromptsPrompt {
@@ -442,7 +449,7 @@ mod tests {
             }),
         };
         
-        let result = train_xml_validate(&train_xml);
+        let result = train_xml_validate(&train_xml, &device);
         assert!(result.is_ok());
         
         let (id_maps, _constants, patterns) = result.unwrap();
@@ -459,6 +466,7 @@ mod tests {
 
     #[test]
     fn test_train_xml_validate_with_line_breaks_invalid() {
+        let device = Device::Cpu;
         // Create a train XML with an invalid line break
         let children = vec![
             TrainXMLSamplesSampleChildren::Prompt(TrainXMLSamplesPrompt { id: "1".to_string() }),
@@ -489,7 +497,7 @@ mod tests {
             phrases: None,
         };
         
-        let result = train_xml_validate(&train_xml);
+        let result = train_xml_validate(&train_xml, &device);
         assert!(result.is_err());
         let err = result.unwrap_err().to_string();
         assert!(err.contains("line break"));
@@ -498,6 +506,7 @@ mod tests {
 
     #[test]
     fn test_train_xml_validate_with_missing_prompt() {
+        let device = Device::Cpu;
         let train_xml = TrainXML {
             prompts: Some(TrainXMLPrompts {
                 prompt: vec![TrainXMLPromptsPrompt {
@@ -514,7 +523,6 @@ mod tests {
                 sample_ids: None,
                 sample: Some(vec![TrainXMLSamplesSample {
                     children: vec![
-                        // No prompt element!
                         TrainXMLSamplesSampleChildren::Response(crate::train_xml::train_xml_structs::TrainXMLSamplesResponse { id: "1".to_string() }),
                     ],
                 }]),
@@ -523,7 +531,7 @@ mod tests {
             phrases: None,
         };
         
-        let result = train_xml_validate(&train_xml);
+        let result = train_xml_validate(&train_xml, &device);
         assert!(result.is_err());
         let err = result.unwrap_err().to_string();
         assert!(err.contains("missing a required <prompt> element"));
