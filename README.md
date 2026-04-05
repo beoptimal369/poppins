@@ -9,25 +9,24 @@
 
 ## How much programming is required?
 - None! 🥳
-- To create an AI w/ Poppins, the only prerequisite is a [train.xml](#what-is-a-trainxml) file & `poppins bootstrap` creates an example one for us!
+- To create an AI w/ the Poppins CLI, the only prerequisite is a [train.xml](#what-is-a-trainxml) file
+- Poppins may also can be called from w/in Rust code @ `bootstrap()`, `train()` & `infer()`
 
 
 
 ## Why is Poppins written in Rust?
 - **🌍 Deploy Everywhere:**
-    - Rust can compile to WebAssembly (`WASM`), allowing AI models to run directly in a web browser
-    - Rust can compile to native libraries for `iOS` and `Android`, making it possible to integrate AI into mobile apps
-    - B/c Rust does not need a heavy runtime or virtual machine, Rust can run on small devices like the `Raspberry Pi`, so it works optimally in resource constrained environments
+    - Rust compiles to WebAssembly (`WASM`), allowing AI models to run directly in web browsers
+    - Rust compiles to native libraries for `iOS` and `Android`, making it possible to integrate AI into mobile apps
+    - B/c Rust does not need a heavy runtime or virtual machine, Rust can run on small devices like the `Raspberry Pi`, making it ideal in resource constrained environments
 - **⚡ Lower Resource Usage:**
-    - For the same workload, a Python program consumes more memory and `CPU` than a Rust program b/c Python has interpreter overhead, runtime type checking, and garbage collection, while Rust has none of these
-    - Reducing resource usage **lowers costs**
+    - For the same workload, a Python program consumes more memory and `CPU` than a Rust program b/c Python has interpreter overhead, runtime type checking, and garbage collection, while Rust has none of these & reducing resource usage **lowers costs**
 - **🔄 Concurrency:**
-    - Python has a Global Interpreter Lock (`GIL`) that prevents multiple threads from running Python code in parallel. This limits CPU usage.
-    - Rust allows true parallel execution across all `CPU` cores. This helps AI applications scale efficiently when processing multiple requests or performing compute heavy operations.
+    - Rust allows parallel execution across `CPU` cores & `GPU` devices which helps us scale efficiently
 - **🔒 File Safety:**
     - Poppins AI models are saved as `.safetensors` files. This format was created by Hugging Face to replace Python’s `pickle` format
-    - Python’s `pickle` can execute arbitrary code when loading a file, so malicious model file can compromise a system
-    - `.safetensors` files contain no executable code and only contain tensor data. Loading them is safe and does not introduce security risks.
+    - Python’s `pickle` can execute arbitrary code when loading a file, so malicious model file could compromise a system
+    - `.safetensors` files contain no executable code and only contain tensor data. Loading them is safe and introduces no security risks.
 
 
 
@@ -44,9 +43,12 @@
     - `XML` by Red Hat
     - `rust-analyzer` by rust-lang
     - `Even Better TOML` by tamasfe
-1. Create a Project: `cargo new example`
-1. Install Poppins: `cargo install poppins`
-1. Create a [train.xml](#what-is-a-trainxml): `poppins bootstrap`
+1. Create a Project
+    - bash: `cargo new example`
+1. Install Poppins
+    - bash: `cargo install poppins`
+1. Create a [train.xml](#what-is-a-trainxml)
+    - bash: `poppins bootstrap <model_name>`
 1. Update [train.xml](#what-is-a-trainxml) w/ the data you'd love your AI model to be an expert on
 1. **(not yet implemented)** Create an AI model: `poppins train`
 1. **(not yet implemented)** Ask AI model questions: `poppins infer`
@@ -85,7 +87,7 @@
 
 
 
-## Plan to 1.0
+## 1.0 Plan
 - ✅ Create **fundamentals** for `Ternary Quantization` based on `BitNet` research:
     - ✅ https://arxiv.org/pdf/2310.11453v1
     - ✅ https://arxiv.org/pdf/2402.17764v1
@@ -102,20 +104,14 @@
 - ✅ Push to [crates.io](https://crates.io/crates/poppins)
 - ✅ Deploy [`train.xsd` to a Cloudflare Worker](https://xsd.beoptimal369.workers.dev/?version=0.1.0)
 - ✅ `bootstrap()`
-    - ✅ Accept an `output_dir_path` default to `cwd` & write example `train.xml`
-    - ✅ May also be called via cli @ `poppins bootstrap`
-    - ✅ CLI accepts `-o` or `--output` params for `output_dir_path`
-- ✅ `BPETokenizer`
-    - ✅ Write `tokenizer.json` based on `train.xml` samples
-    - ✅ Add `bpe_requested_tokens` to `train.xml` constants
-    - ✅ Add `bpe_min_merge_frequency` to `train.xml` constants
+    - ✅ Write `train.xml`
+        - hyperparams autocomplete
+        - import w/in `train.xml `files
+    - ✅ Write `train.xsd`
 - `train()`:
-    - ✅ Read training file (default to `train.xml`)
     - ✅ Parse `train.xml`
     - ✅ Validate `train.xml`
     - ✅ Create `TrainXML`
-    - ✅ Write output directory (default to `.poppins`)
-    - ✅ Create `Samples` (holds `training` & `validation` `samples`)
     - ✅ Write `output_dir/train_corpus.txt`
     - ✅ Write `output_dir/val_corpus.txt`
     - ✅ Write `output_dir/tokenizer.json`
@@ -123,15 +119,30 @@
     - ✅ Write `output_dir/val_corpus.bin`
     - ✅ Write `output_dir/train_index.bin`
     - ✅ Write `output_dir/val_index.bin`
-    - Write `output_dir/manifest.json`
-- ...
-- MLA
-    - https://arxiv.org/pdf/2602.10718
-- RMSNorm
-- RoPE
-- ReLU²
-- KV Cache
-- Save conversations to file
+    - ✅ Write `output_dir/config_poppins.json`
+    - ✅ Write `output_dir/config.json`
+    - ✅ Device (`cuda` / `metal` / `cpu`) detection / selection
+    - Per Token Quantization
+    - Forward Pass
+        - KV Cache
+        - RoPE
+        - ReLU²
+        - RMSNorm
+        - SnapMLA
+            - https://arxiv.org/pdf/2602.10718
+    - Backwards Pass
+    - Checkpoint Saves
+- `infer()`:
+    - Temperature
+    - Quality Responses
+- Provide Free AI that knows `English`, `Math`, `Rust`, `XML`, `JSON` & `Poppins`
+- Provide comprehensive Poppins Documentation
+
+
+
+## 2.0 Plan
+- UI
+- Save conversations to local db
     - Multi Turn
     - RLM
 - Add files to context

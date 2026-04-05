@@ -19,7 +19,7 @@ impl Device {
         Self::inject_new(requested_device, || Self::is_cuda_available(), || Self::is_metal_available(), || Self::detect())
     }
 
-    /// Pass detection logic as arguments. Seperates "detect response" from "hardware detection". Makes code highly testable.
+    /// Pass detection logic as arguments. Seperates "detect responses" from "hardware detection". Makes code highly testable.
     fn inject_new<F: FnOnce() -> bool, G: FnOnce() -> bool, H: FnOnce() -> Self>(
         requested_device: Option<Device>,
         is_cuda_available: F,

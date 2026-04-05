@@ -1,31 +1,8 @@
 // src/cli/cli_command.rs
 
-use regex::Regex;
 use clap::Subcommand;
-
-
-/// Validates that a model name contains only characters safe for folder names
-/// Allowed: alphanumeric, dots, hyphens, underscores
-/// Disallowed: path separators, spaces, special chars that could cause issues
-pub fn validate_model_name(model_name: &str) -> Result<String, String> {
-    let re = Regex::new(r"^[a-zA-Z0-9][a-zA-Z0-9._-]*$").unwrap();
-    
-    if model_name.is_empty() {
-        return Err("Model name cannot be empty".to_string());
-    }
-    
-    if !re.is_match(model_name) {
-        return Err(format!(
-            "Invalid model name '{}'. Model names must:\n\
-             - Start with a letter or number\n\
-             - Contain only letters, numbers, dots (.), hyphens (-), or underscores (_)\n\
-             - Not contain spaces, slashes, or special characters",
-            model_name
-        ));
-    }
-    
-    Ok(model_name.to_string())
-}
+use poppins::Device;
+use crate::cli::{cli_validate_device, cli_validate_model_name};
 
 
 /// Poppins CLI Commands
@@ -47,7 +24,7 @@ pub enum CliCommand {
         /// 
         /// This will be used as the folder name inside .poppins/
         /// Allowed characters: letters, numbers, dots (.), hyphens (-), underscores (_)
-        #[clap(value_parser = validate_model_name)]
+        #[clap(value_parser = cli_validate_model_name)]
         model_name: String,
     },
     
@@ -65,8 +42,15 @@ pub enum CliCommand {
         /// 
         /// The model must have been bootstrapped first (ex: .poppins/{MODEL_NAME}/train.xml must exist)
         /// Allowed characters: letters, numbers, dots (.), hyphens (-), underscores (_)
-        #[clap(value_parser = validate_model_name)]
+        #[clap(value_parser = cli_validate_model_name)]
         model_name: String,
+
+        /// Current device (hardware) to use for computations (auto-detects if not specified)
+        /// 
+        /// Options: cuda, metal, cpu
+        /// If not specified, automatically detects best available device (CUDA > Metal > CPU)
+        #[clap(short = 'd', long = "device", value_parser = cli_validate_device, global = true)]
+        device: Option<Device>,
     },
     
     /// Send a prompt to a trained AI model and get back a response
@@ -84,16 +68,23 @@ pub enum CliCommand {
         /// 
         /// The model must have been trained first (ex: .poppins/{MODEL_NAME}/artifacts/ must exist)
         /// Allowed characters: letters, numbers, dots (.), hyphens (-), underscores (_)
-        #[clap(value_parser = validate_model_name)]
+        #[clap(value_parser = cli_validate_model_name)]
         model_name: String,
-        
+
+        /// Current device (hardware) to use for computations (auto-detects if not specified)
+        /// 
+        /// Options: cuda, metal, cpu
+        /// If not specified, automatically detects best available device (CUDA > Metal > CPU)
+        #[clap(short = 'd', long = "device", value_parser = cli_validate_device, global = true)]
+        device: Option<Device>,
+
         /// Temperature for response randomness (0.0 = deterministic, 1.0 = creative)
         /// 
         /// Higher values make output more random/creative, lower values make it more focused/deterministic.
         /// Defaults to 0.7 if not specified.
         #[clap(short = 't', long = "temperature", value_name = "FLOAT")]
         temperature: Option<f32>,
-        
+
         /// The prompt to send to the model
         /// 
         /// Everything after the model name and any flags is treated as the prompt.
@@ -109,41 +100,40 @@ pub enum CliCommand {
 #[cfg(test)]
 mod tests {
     use clap::Parser;
-    use poppins::device::Device;
-    use super::{validate_model_name};
-    use crate::{Cli, CliCommand, cli::cli::parse_device};
+    use poppins::Device;
+    use crate::cli::{Cli, CliCommand, cli_validate_device, cli_validate_model_name};
 
     #[test]
     fn test_validate_model_name() {
         // Valid names
-        assert!(validate_model_name("optimus").is_ok());
-        assert!(validate_model_name("gpt-4.5").is_ok());
-        assert!(validate_model_name("my_model-v2").is_ok());
-        assert!(validate_model_name("model123").is_ok());
-        assert!(validate_model_name("test.model").is_ok());
-        assert!(validate_model_name("v1.2.3").is_ok());
+        assert!(cli_validate_model_name("optimus").is_ok());
+        assert!(cli_validate_model_name("gpt-4.5").is_ok());
+        assert!(cli_validate_model_name("my_model-v2").is_ok());
+        assert!(cli_validate_model_name("model123").is_ok());
+        assert!(cli_validate_model_name("test.model").is_ok());
+        assert!(cli_validate_model_name("v1.2.3").is_ok());
         
         // Invalid names
-        assert!(validate_model_name("").is_err());
-        assert!(validate_model_name("my model").is_err());  // space
-        assert!(validate_model_name("model/name").is_err()); // slash
-        assert!(validate_model_name("model\\name").is_err()); // backslash
-        assert!(validate_model_name("model:name").is_err()); // colon
-        assert!(validate_model_name("-invalid").is_err()); // starts with hyphen
-        assert!(validate_model_name(".invalid").is_err()); // starts with dot
-        assert!(validate_model_name("invalid!").is_err()); // exclamation
-        assert!(validate_model_name("model?name").is_err()); // question mark
+        assert!(cli_validate_model_name("").is_err());
+        assert!(cli_validate_model_name("my model").is_err());  // space
+        assert!(cli_validate_model_name("model/name").is_err()); // slash
+        assert!(cli_validate_model_name("model\\name").is_err()); // backslash
+        assert!(cli_validate_model_name("model:name").is_err()); // colon
+        assert!(cli_validate_model_name("-invalid").is_err()); // starts with hyphen
+        assert!(cli_validate_model_name(".invalid").is_err()); // starts with dot
+        assert!(cli_validate_model_name("invalid!").is_err()); // exclamation
+        assert!(cli_validate_model_name("model?name").is_err()); // question mark
     }
 
     #[test]
-    fn test_parse_device() {
-        assert!(matches!(parse_device("cuda"), Ok(Device::Cuda)));
-        assert!(matches!(parse_device("CUDA"), Ok(Device::Cuda)));
-        assert!(matches!(parse_device("metal"), Ok(Device::Metal)));
-        assert!(matches!(parse_device("METAL"), Ok(Device::Metal)));
-        assert!(matches!(parse_device("cpu"), Ok(Device::Cpu)));
-        assert!(matches!(parse_device("CPU"), Ok(Device::Cpu)));
-        assert!(parse_device("invalid").is_err());
+    fn test_validate_device() {
+        assert!(matches!(cli_validate_device("cuda"), Ok(Device::Cuda)));
+        assert!(matches!(cli_validate_device("CUDA"), Ok(Device::Cuda)));
+        assert!(matches!(cli_validate_device("metal"), Ok(Device::Metal)));
+        assert!(matches!(cli_validate_device("METAL"), Ok(Device::Metal)));
+        assert!(matches!(cli_validate_device("cpu"), Ok(Device::Cpu)));
+        assert!(matches!(cli_validate_device("CPU"), Ok(Device::Cpu)));
+        assert!(cli_validate_device("invalid").is_err());
     }
 
     #[test]
@@ -160,10 +150,9 @@ mod tests {
 
     #[test]
     fn test_bootstrap_command_with_device() {
-        let args = vec!["poppins", "-d", "cuda", "bootstrap", "optimus"];
+        let args = vec!["poppins", "bootstrap", "optimus"];
         let cli = Cli::try_parse_from(args).expect("Should parse");
         
-        assert!(matches!(cli.device, Some(Device::Cuda)));
         match cli.command {
             CliCommand::Bootstrap { model_name } => {
                 assert_eq!(model_name, "optimus");
@@ -177,8 +166,9 @@ mod tests {
         let args = vec!["poppins", "train", "optimus"];
         
         match Cli::try_parse_from(args).expect("Should parse").command {
-            CliCommand::Train { model_name } => {
+            CliCommand::Train { model_name, device } => {
                 assert_eq!(model_name, "optimus");
+                assert!(matches!(device, None));
             }
             _ => panic!("Expected Train variant"),
         }
@@ -186,13 +176,13 @@ mod tests {
 
     #[test]
     fn test_train_command_with_device() {
-        let args = vec!["poppins", "--device", "metal", "train", "optimus"];
+        let args = vec!["poppins", "train", "optimus", "--device", "metal"];
         let cli = Cli::try_parse_from(args).expect("Should parse");
         
-        assert!(matches!(cli.device, Some(Device::Metal)));
         match cli.command {
-            CliCommand::Train { model_name } => {
+            CliCommand::Train { model_name, device } => {
                 assert_eq!(model_name, "optimus");
+                assert!(matches!(device, Some(Device::Metal)));
             }
             _ => panic!("Expected Train variant"),
         }
@@ -200,13 +190,14 @@ mod tests {
 
     #[test]
     fn test_infer_command_default_temperature() {
-        let args = vec!["poppins", "infer", "optimus", "Hello"];
+        let args = vec!["poppins", "infer", "optimus", "Hi"];
         
         match Cli::try_parse_from(args).expect("Should parse").command {
-            CliCommand::Infer { model_name, temperature, prompt } => {
+            CliCommand::Infer { model_name, temperature, prompt, device } => {
                 assert_eq!(model_name, "optimus");
                 assert_eq!(temperature, None);
-                assert_eq!(prompt, vec!["Hello"]);
+                assert_eq!(prompt, vec!["Hi"]);
+                assert!(matches!(device, None));
             }
             _ => panic!("Expected Infer variant"),
         }
@@ -214,15 +205,15 @@ mod tests {
 
     #[test]
     fn test_infer_command_with_device_and_temperature() {
-        let args = vec!["poppins", "-d", "cuda", "infer", "-t", "0.5", "optimus", "Hello"];
+        let args = vec!["poppins", "infer", "-d", "cuda", "-t", "0.5", "optimus", "Hi"];
         let cli = Cli::try_parse_from(args).expect("Should parse");
         
-        assert!(matches!(cli.device, Some(Device::Cuda)));
         match cli.command {
-            CliCommand::Infer { model_name, temperature, prompt } => {
+            CliCommand::Infer { model_name, temperature, prompt, device } => {
                 assert_eq!(model_name, "optimus");
                 assert_eq!(temperature, Some(0.5));
-                assert_eq!(prompt, vec!["Hello"]);
+                assert_eq!(prompt, vec!["Hi"]);
+                assert!(matches!(device, Some(Device::Cuda)));
             }
             _ => panic!("Expected Infer variant"),
         }
@@ -230,29 +221,33 @@ mod tests {
 
     #[test]
     fn test_infer_command_with_temperature_long() {
-        let args = vec!["poppins", "infer", "--temperature", "1.2", "optimus", "Hello", "world"];
+        let args = vec!["poppins", "infer", "--temperature", "1.2", "optimus", "Hi", "world"];
         
         match Cli::try_parse_from(args).expect("Should parse").command {
-            CliCommand::Infer { model_name, temperature, prompt } => {
+            CliCommand::Infer { model_name, temperature, prompt, device } => {
                 assert_eq!(model_name, "optimus");
                 assert_eq!(temperature, Some(1.2));
-                assert_eq!(prompt, vec!["Hello", "world"]);
+                assert_eq!(prompt, vec!["Hi", "world"]);
+                assert!(matches!(device, None));
             }
             _ => panic!("Expected Infer variant"),
         }
     }
 
     #[test]
-    fn test_device_flag_global() {
-        // Device flag should work before any subcommand
-        let args = vec!["poppins", "-d", "cpu", "train", "optimus"];
+    fn test_infer_command_with_device() {
+        let args = vec!["poppins", "infer", "optimus", "--device", "metal", "Hi", "world"];
         let cli = Cli::try_parse_from(args).expect("Should parse");
-        assert!(matches!(cli.device, Some(Device::Cpu)));
         
-        // Device flag with long form
-        let args = vec!["poppins", "--device", "metal", "bootstrap", "test"];
-        let cli = Cli::try_parse_from(args).expect("Should parse");
-        assert!(matches!(cli.device, Some(Device::Metal)));
+        match cli.command {
+            CliCommand::Infer { model_name, temperature, prompt, device } => {
+                assert_eq!(model_name, "optimus");
+                assert!(matches!(device, Some(Device::Metal)));
+                assert_eq!(temperature, None);
+                assert_eq!(prompt, vec!["Hi", "world"]);
+            }
+            _ => panic!("Expected Train variant"),
+        }
     }
 
     #[test]
