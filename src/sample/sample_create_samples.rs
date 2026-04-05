@@ -113,12 +113,13 @@ mod tests {
         TrainXMLSources,
         TrainXMLResponses,
         TrainXMLLineBreak,
-        TrainXMLConstants, 
+        TrainXMLConstants,
         TrainXMLSamplesCode,
+        TrainXMLBeyondScope,
         TrainXMLCodeSnippets,
         TrainXMLSystemPrompts,
-        TrainXMLConstantsKey,
         TrainXMLSourcesSource,
+        TrainXMLSamplesSystem,
         TrainXMLSamplesSample,
         TrainXMLPromptsPrompt,
         TrainXMLSamplesSource,
@@ -126,17 +127,15 @@ mod tests {
         TrainXMLPhrasesPhrase,
         TrainXMLPhrasesVariant,
         TrainXMLSamplesResponse,
+        TrainXMLBeyondScopeTopic,
         TrainXMLSamplesSampleIds,
         TrainXMLCodeSnippetsCode,
-        TrainXMLConstantsConstant,
+        train_xml_phrase_patterns,
         TrainXMLResponsesResponse,
+        TrainXMLBpeRequestedTokens,
         TrainXMLSamplesResponseIds,
         TrainXMLSystemPromptsSystem,
         TrainXMLSamplesSampleChildren,
-        TrainXMLSamplesSystem,
-        TrainXMLBeyondScope,
-        TrainXMLBeyondScopeTopic,
-        train_xml_phrase_patterns,
     };
         
     /// Comprehensive test that covers:
@@ -595,33 +594,51 @@ mod tests {
             ],
         };
         
-        // Constants
+        // Constants - UPDATED to new element-based structure
         let constants = TrainXMLConstants {
-            constant: vec![
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::WeightDecayResponse, value: "0.1".to_string(), delimiter: None },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::WeightDecaySource, value: "0.01".to_string(), delimiter: None },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::WeightDecayCode, value: "0.05".to_string(), delimiter: None },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::LossScaleResponse, value: "1.0".to_string(), delimiter: None },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::LossScaleSource, value: "0.2".to_string(), delimiter: None },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::LossScaleCode, value: "1.0".to_string(), delimiter: None },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::GradientScaleResponse, value: "1.0".to_string(), delimiter: None },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::GradientScaleSource, value: "2.0".to_string(), delimiter: None },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::GradientScaleCode, value: "1.2".to_string(), delimiter: None },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::GradientClipResponse, value: "1.0".to_string(), delimiter: None },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::GradientClipSource, value: "0.1".to_string(), delimiter: None },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::GradientClipCode, value: "0.7".to_string(), delimiter: None },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::AimTrainGb, value: "3.0".to_string(), delimiter: None },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::AimInferGb, value: "0.9".to_string(), delimiter: None },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::LearningRate, value: "1e-3".to_string(), delimiter: None },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::WarmupSteps, value: "100".to_string(), delimiter: None },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::AimLoss, value: "0.45".to_string(), delimiter: None },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::ValInterval, value: "10".to_string(), delimiter: None },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::BpeMinMergeFrequency, value: "3".to_string(), delimiter: None },
-                TrainXMLConstantsConstant { key: TrainXMLConstantsKey::BpeRequestedTokens, value: "a,b".to_string(), delimiter: Some(",".to_owned()) },
-            ],
+            aim_train_gb: Some(3.0),
+            aim_infer_gb: Some(0.9),
+            learning_rate: Some(0.001),
+            warmup_steps: Some(100),
+            aim_loss: Some(0.45),
+            val_interval: Some(10),
+            batch_size: None,  // Will use device default
+            mixed_precision: None,  // Will use device default
+            gradient_accumulation_steps: None,  // Will use device default
+            activation_precision: None,  // Will use device default
+            kv_cache_precision: Some("int8".to_string()),
+            rope_precision: None,  // Will use device default
+            num_workers: None,  // Will use device default
+            use_flash_attention: None,  // Will use device default
+            use_tensor_cores: None,  // Will use device default
+            
+            bpe_min_merge_frequency: Some(3),
+            bpe_requested_tokens: Some(TrainXMLBpeRequestedTokens {
+                values: vec!["a".to_string(), "b".to_string()],
+            }),
+            
+            weight_decay_response: Some(0.1),
+            weight_decay_source: Some(0.01),
+            weight_decay_code: Some(0.05),
+            
+            dropout_rate_response: None,  // Will use default
+            dropout_rate_source: None,  // Will use default
+            dropout_rate_code: None,  // Will use default
+            
+            loss_scale_response: Some(1.0),
+            loss_scale_source: Some(0.2),
+            loss_scale_code: Some(1.0),
+            
+            gradient_scale_response: Some(1.0),
+            gradient_scale_source: Some(2.0),
+            gradient_scale_code: Some(1.2),
+            
+            gradient_clip_response: Some(1.0),
+            gradient_clip_source: Some(0.1),
+            gradient_clip_code: Some(0.7),
         };
         
-        // Beyond-scope configuration with updated structure
+        // Beyond-scope configuration
         let beyond_scope = TrainXMLBeyondScope {
             system: "sy_default".to_string(),
             response: "beyond_scope_response".to_string(),

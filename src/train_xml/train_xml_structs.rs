@@ -5,7 +5,7 @@ use crate::sample::SampleIndent;
 use serde::{Serialize, Deserialize};
 
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct TrainXML {
     #[serde(rename = "system-prompts")]
     pub system_prompts: Option<TrainXMLSystemPrompts>,
@@ -294,69 +294,158 @@ pub struct TrainXMLPhrasesVariant {
 
 
 // Constants:
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct TrainXMLConstants {
-    /// The sequence of constant elements
-    pub constant: Vec<TrainXMLConstantsConstant>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub aim_train_gb: Option<f32>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub aim_infer_gb: Option<f32>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub aim_loss: Option<f32>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub learning_rate: Option<f32>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub warmup_steps: Option<usize>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub val_interval: Option<usize>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub batch_size: Option<usize>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub mixed_precision: Option<bool>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub gradient_accumulation_steps: Option<usize>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub activation_precision: Option<String>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub kv_cache_precision: Option<String>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub rope_precision: Option<String>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub num_workers: Option<usize>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub use_flash_attention: Option<bool>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub use_tensor_cores: Option<bool>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub bpe_min_merge_frequency: Option<usize>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub bpe_requested_tokens: Option<TrainXMLBpeRequestedTokens>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub weight_decay_response: Option<f32>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub weight_decay_source: Option<f32>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub weight_decay_code: Option<f32>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub dropout_rate_response: Option<f32>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub dropout_rate_source: Option<f32>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub dropout_rate_code: Option<f32>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub loss_scale_response: Option<f32>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub loss_scale_source: Option<f32>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub loss_scale_code: Option<f32>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub gradient_scale_response: Option<f32>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub gradient_scale_source: Option<f32>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub gradient_scale_code: Option<f32>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub gradient_clip_response: Option<f32>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub gradient_clip_source: Option<f32>,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub gradient_clip_code: Option<f32>,
 }
 
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct TrainXMLConstantsConstant {
-    /// The key for this constant
-    #[serde(rename = "@key")]
-    pub key: TrainXMLConstantsKey,
-
-    /// The value for this constant
-    #[serde(rename = "@value")]
-    pub value: String,
-
-    /// The optional delimeter for this constant
-    #[serde(rename = "@delimiter")]
-    pub delimiter: Option<String>,
+// BPE requested tokens container
+#[derive(Debug, Serialize, Deserialize, Default)]
+pub struct TrainXMLBpeRequestedTokens {
+    #[serde(rename = "value", default)]
+    pub values: Vec<String>,
 }
 
 
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub enum TrainXMLConstantsKey {
-    AimTrainGb,
-    AimInferGb,
-    LearningRate,
-    WarmupSteps,
-    AimLoss,
-    ValInterval,
-    BatchSize,
-    MixedPrecision,
-    GradientAccumulationSteps,
-    ActivationPrecision,
-    KvCachePrecision,
-    RopePrecision,
-    NumWorkers,
-    UseFlashAttention,
-    UseTensorCores,
-
-    BpeRequestedTokens,
-    BpeMinMergeFrequency,
-
-    WeightDecayResponse,
-    WeightDecaySource,
-    WeightDecayCode,
-
-    LossScaleResponse,
-    LossScaleSource,
-    LossScaleCode,
-
-    GradientScaleResponse,
-    GradientScaleSource,
-    GradientScaleCode,
-
-    GradientClipResponse,
-    GradientClipSource,
-    GradientClipCode,
+// Helper methods for TrainXMLConstants
+impl TrainXMLConstants {
+    /// Merge XML constants with device defaults
+    pub fn merge_with_defaults(&self, device: &Device) -> TrainXMLConstantParsed {
+        let defaults = TrainXMLConstantParsed::create(device);
+        
+        TrainXMLConstantParsed {
+            aim_train_gb: self.aim_train_gb.unwrap_or(defaults.aim_train_gb),
+            aim_infer_gb: self.aim_infer_gb.unwrap_or(defaults.aim_infer_gb),
+            aim_loss: self.aim_loss.unwrap_or(defaults.aim_loss),
+            learning_rate: self.learning_rate.unwrap_or(defaults.learning_rate),
+            warmup_steps: self.warmup_steps.unwrap_or(defaults.warmup_steps),
+            val_interval: self.val_interval.unwrap_or(defaults.val_interval),
+            batch_size: self.batch_size.unwrap_or(defaults.batch_size),
+            mixed_precision: self.mixed_precision.unwrap_or(defaults.mixed_precision),
+            gradient_accumulation_steps: self.gradient_accumulation_steps.unwrap_or(defaults.gradient_accumulation_steps),
+            activation_precision: self.activation_precision.clone().unwrap_or(defaults.activation_precision),
+            kv_cache_precision: self.kv_cache_precision.clone().unwrap_or(defaults.kv_cache_precision),
+            rope_precision: self.rope_precision.clone().unwrap_or(defaults.rope_precision),
+            num_workers: self.num_workers.unwrap_or(defaults.num_workers),
+            use_flash_attention: self.use_flash_attention.unwrap_or(defaults.use_flash_attention),
+            use_tensor_cores: self.use_tensor_cores.unwrap_or(defaults.use_tensor_cores),
+            bpe_min_merge_frequency: self.bpe_min_merge_frequency.unwrap_or(defaults.bpe_min_merge_frequency),
+            bpe_requested_tokens: self.bpe_requested_tokens.as_ref()
+                .map(|t| t.values.clone())
+                .unwrap_or(defaults.bpe_requested_tokens),
+            weight_decay_response: self.weight_decay_response.unwrap_or(defaults.weight_decay_response),
+            weight_decay_source: self.weight_decay_source.unwrap_or(defaults.weight_decay_source),
+            weight_decay_code: self.weight_decay_code.unwrap_or(defaults.weight_decay_code),
+            loss_scale_response: self.loss_scale_response.unwrap_or(defaults.loss_scale_response),
+            loss_scale_source: self.loss_scale_source.unwrap_or(defaults.loss_scale_source),
+            loss_scale_code: self.loss_scale_code.unwrap_or(defaults.loss_scale_code),
+            gradient_scale_response: self.gradient_scale_response.unwrap_or(defaults.gradient_scale_response),
+            gradient_scale_source: self.gradient_scale_source.unwrap_or(defaults.gradient_scale_source),
+            gradient_scale_code: self.gradient_scale_code.unwrap_or(defaults.gradient_scale_code),
+            gradient_clip_response: self.gradient_clip_response.unwrap_or(defaults.gradient_clip_response),
+            gradient_clip_source: self.gradient_clip_source.unwrap_or(defaults.gradient_clip_source),
+            gradient_clip_code: self.gradient_clip_code.unwrap_or(defaults.gradient_clip_code),
+        }
+    }
 }
 
 
+// Parsed constants with actual values (after merging defaults)
 #[derive(Debug)]
 pub struct TrainXMLConstantParsed {
     pub aim_train_gb: f32,
@@ -447,6 +536,7 @@ impl TrainXMLConstantParsed {
         }
     }
 }
+
 
 
 // Beyond Scope:

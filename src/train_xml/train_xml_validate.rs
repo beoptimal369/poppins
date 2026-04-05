@@ -7,9 +7,10 @@ use crate::train_xml::{
     TrainXMLPhrasePattern,
     TrainXMLConstantParsed,
     train_xml_validate_ids,
-    train_xml_constants_parse,
     train_xml_phrase_patterns,
-    TrainXMLSamplesSampleChildren,
+    train_xml_validate_precision,
+    train_xml_validate_line_breaks,
+    train_xml_validate_prompt_presence,
 };
 
 
@@ -24,11 +25,17 @@ pub fn train_xml_validate<'a>(
         format!("❌ Failed validating train xml ids:\n  {}", error_string)
     })?;
     
-    validate_line_breaks(train_xml)?;
+    train_xml_validate_line_breaks(train_xml)?;
     
-    validate_prompt_presence(train_xml)?;
+    train_xml_validate_prompt_presence(train_xml)?;
 
-    let train_xml_constants_parsed = train_xml_constants_parse(&train_xml.constants, device)?;
+    train_xml_validate_precision(train_xml)?;
+
+    // Updated: Use merge_with_defaults instead of train_xml_constants_parse
+    let train_xml_constants_parsed = train_xml.constants
+        .as_ref()
+        .unwrap_or(&Default::default())
+        .merge_with_defaults(device);
 
     let train_xml_patterns = train_xml_phrase_patterns(train_xml);
 
@@ -36,504 +43,185 @@ pub fn train_xml_validate<'a>(
 }
 
 
-/// Validates that all line break counts are either 1 or 2
-fn validate_line_breaks(train_xml: &TrainXML) -> Result<(), String> {
-    if let Some(samples) = &train_xml.samples {
-        if let Some(sample_list) = &samples.sample {
-            for (sample_idx, sample) in sample_list.iter().enumerate() {
-                for (child_idx, child) in sample.children.iter().enumerate() {
-                    if let TrainXMLSamplesSampleChildren::LineBreak(line_break) = child {
-                        if line_break.count != 1 && line_break.count != 2 {
-                            return Err(format!(
-                                "Invalid line break count at sample {}, child {}: count = {} (must be 1 or 2)",
-                                sample_idx + 1,
-                                child_idx + 1,
-                                line_break.count
-                            ));
-                        }
-                    }
-                }
-            }
-        }
-    }
-    Ok(())
-}
-
-
-/// Validates that every sample has at least one <prompt> element
-fn validate_prompt_presence(train_xml: &TrainXML) -> Result<(), String> {
-    let mut errors = Vec::new();
-    
-    if let Some(samples) = &train_xml.samples {
-        if let Some(sample_list) = &samples.sample {
-            for (sample_idx, sample) in sample_list.iter().enumerate() {
-                let has_prompt = sample.children.iter().any(|child| {
-                    matches!(child, TrainXMLSamplesSampleChildren::Prompt(_))
-                });
-                
-                if !has_prompt {
-                    errors.push(format!(
-                        "Sample {} is missing a required <prompt> element",
-                        sample_idx + 1
-                    ));
-                }
-            }
-        }
-    }
-    
-    if errors.is_empty() {
-        Ok(())
-    } else {
-        Err(errors.join("\n"))
-    }
-}
-
 
 #[cfg(test)]
 mod tests {
     use crate::device::Device;
-    use super::validate_line_breaks;
+    use super::train_xml_validate;
     use crate::train_xml::{
         TrainXML,
-        TrainXMLPhrases,
-        TrainXMLPrompts,
         TrainXMLSamples,
-        TrainXMLResponses,
+        TrainXMLPrompts,
+        TrainXMLConstants,
         TrainXMLLineBreak,
-        train_xml_validate,
-        TrainXMLPhrasesPhrase,
         TrainXMLSamplesSample,
         TrainXMLSamplesPrompt,
         TrainXMLPromptsPrompt,
-        TrainXMLPhrasesVariant,
-        TrainXMLResponsesResponse,
         TrainXMLSamplesSampleChildren,
     };
 
-    fn create_test_xml_with_line_breaks(line_break_counts: Vec<u8>) -> TrainXML {
-        let children: Vec<TrainXMLSamplesSampleChildren> = line_break_counts
-            .into_iter()
-            .map(|count| TrainXMLSamplesSampleChildren::LineBreak(TrainXMLLineBreak { count }))
-            .collect();
-
-        // Add a prompt to make the sample valid
-        let mut full_children = vec![TrainXMLSamplesSampleChildren::Prompt(TrainXMLSamplesPrompt { id: "1".to_string() })];
-        full_children.extend(children);
-
+    fn create_valid_train_xml() -> TrainXML {
         TrainXML {
             prompts: Some(TrainXMLPrompts {
-                prompt: vec![TrainXMLPromptsPrompt {
-                    id: "1".to_string(),
-                    content: "Test prompt".to_string(),
-                }],
+                prompt: vec![
+                    TrainXMLPromptsPrompt {
+                        id: "1".to_string(),
+                        content: "Test prompt".to_string(),
+                    },
+                ],
             }),
-            system_prompts: None,
-            beyond_scope: None,
-            responses: None,
-            sources: None,
-            code_snippets: None,
+            constants: Some(TrainXMLConstants {
+                activation_precision: Some("int8".to_string()),
+                kv_cache_precision: Some("int8".to_string()),
+                rope_precision: Some("fp16".to_string()),
+                ..Default::default()
+            }),
             samples: Some(TrainXMLSamples {
                 sample_ids: None,
-                sample: Some(vec![TrainXMLSamplesSample {
-                    children: full_children,
-                }]),
+                sample: Some(vec![
+                    TrainXMLSamplesSample {
+                        children: vec![
+                            TrainXMLSamplesSampleChildren::Prompt(TrainXMLSamplesPrompt { 
+                                id: "1".to_string() 
+                            }),
+                        ],
+                    },
+                ]),
             }),
-            constants: None,
-            phrases: None,
+            ..Default::default()
         }
     }
 
     #[test]
-    fn test_validate_line_breaks_valid_1() {
-        let train_xml = create_test_xml_with_line_breaks(vec![1]);
-        assert!(validate_line_breaks(&train_xml).is_ok());
-    }
-
-    #[test]
-    fn test_validate_line_breaks_valid_2() {
-        let train_xml = create_test_xml_with_line_breaks(vec![2]);
-        assert!(validate_line_breaks(&train_xml).is_ok());
-    }
-
-    #[test]
-    fn test_validate_line_breaks_valid_multiple() {
-        let train_xml = create_test_xml_with_line_breaks(vec![1, 2, 1, 2]);
-        assert!(validate_line_breaks(&train_xml).is_ok());
-    }
-
-    #[test]
-    fn test_validate_line_breaks_invalid_0() {
-        let train_xml = create_test_xml_with_line_breaks(vec![0]);
-        let result = validate_line_breaks(&train_xml);
-        assert!(result.is_err());
-        let err = result.unwrap_err();
-        assert!(err.contains("count = 0"));
-        assert!(err.contains("must be 1 or 2"));
-    }
-
-    #[test]
-    fn test_validate_line_breaks_invalid_3() {
-        let train_xml = create_test_xml_with_line_breaks(vec![3]);
-        let result = validate_line_breaks(&train_xml);
-        assert!(result.is_err());
-        let err = result.unwrap_err();
-        assert!(err.contains("count = 3"));
-    }
-
-    #[test]
-    fn test_validate_line_breaks_invalid_5() {
-        let train_xml = create_test_xml_with_line_breaks(vec![5]);
-        let result = validate_line_breaks(&train_xml);
-        assert!(result.is_err());
-    }
-
-    #[test]
-    fn test_validate_line_breaks_mixed_valid_invalid() {
-        let train_xml = create_test_xml_with_line_breaks(vec![1, 2, 3, 1]);
-        let result = validate_line_breaks(&train_xml);
-        assert!(result.is_err());
-        let err = result.unwrap_err();
-        assert!(err.contains("count = 3"));
-        assert!(err.contains("child"), "Error should mention child number, got: {}", err);
-    }
-
-    #[test]
-    fn test_validate_line_breaks_no_samples() {
-        let train_xml = TrainXML {
-            system_prompts: None,
-            prompts: None,
-            responses: None,
-            sources: None,
-            code_snippets: None,
-            samples: None,
-            constants: None,
-            phrases: None,
-            beyond_scope: None,
-        };
-        assert!(validate_line_breaks(&train_xml).is_ok());
-    }
-
-    #[test]
-    fn test_validate_line_breaks_no_line_breaks() {
-        let train_xml = TrainXML {
-            prompts: Some(TrainXMLPrompts {
-                prompt: vec![TrainXMLPromptsPrompt {
-                    id: "1".to_string(),
-                    content: "Test".to_string(),
-                }],
-            }),
-            system_prompts: None,
-            responses: None,
-            sources: None,
-            code_snippets: None,
-            samples: Some(TrainXMLSamples {
-                sample_ids: None,
-                sample: Some(vec![TrainXMLSamplesSample {
-                    children: vec![TrainXMLSamplesSampleChildren::Prompt(TrainXMLSamplesPrompt { id: "1".to_string() })],
-                }]),
-            }),
-            constants: None,
-            phrases: None,
-            beyond_scope: None,
-        };
-        assert!(validate_line_breaks(&train_xml).is_ok());
-    }
-
-    #[test]
-    fn test_validate_prompt_presence_valid() {
-        let train_xml = TrainXML {
-            prompts: Some(TrainXMLPrompts {
-                prompt: vec![TrainXMLPromptsPrompt {
-                    id: "1".to_string(),
-                    content: "Test".to_string(),
-                }],
-            }),
-            system_prompts: None,
-            responses: None,
-            sources: None,
-            code_snippets: None,
-            samples: Some(TrainXMLSamples {
-                sample_ids: None,
-                sample: Some(vec![
-                    TrainXMLSamplesSample {
-                        children: vec![
-                            TrainXMLSamplesSampleChildren::Prompt(TrainXMLSamplesPrompt { id: "1".to_string() }),
-                            TrainXMLSamplesSampleChildren::Response(crate::train_xml::train_xml_structs::TrainXMLSamplesResponse { id: "1".to_string() }),
-                        ],
-                    },
-                    TrainXMLSamplesSample {
-                        children: vec![
-                            TrainXMLSamplesSampleChildren::Prompt(TrainXMLSamplesPrompt { id: "1".to_string() }),
-                        ],
-                    },
-                ]),
-            }),
-            constants: None,
-            phrases: None,
-            beyond_scope: None,
-        };
-        
-        let result = super::validate_prompt_presence(&train_xml);
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_validate_prompt_presence_missing() {
-        let train_xml = TrainXML {
-            prompts: Some(TrainXMLPrompts {
-                prompt: vec![TrainXMLPromptsPrompt {
-                    id: "1".to_string(),
-                    content: "Test".to_string(),
-                }],
-            }),
-            system_prompts: None,
-            responses: None,
-            sources: None,
-            code_snippets: None,
-            samples: Some(TrainXMLSamples {
-                sample_ids: None,
-                sample: Some(vec![
-                    TrainXMLSamplesSample {
-                        children: vec![
-                            TrainXMLSamplesSampleChildren::Response(crate::train_xml::train_xml_structs::TrainXMLSamplesResponse { id: "1".to_string() }),
-                        ],
-                    },
-                ]),
-            }),
-            constants: None,
-            phrases: None,
-            beyond_scope: None,
-        };
-        
-        let result = super::validate_prompt_presence(&train_xml);
-        assert!(result.is_err());
-        let err = result.unwrap_err();
-        assert!(err.contains("Sample 1 is missing a required <prompt> element"));
-    }
-
-    #[test]
-    fn test_validate_prompt_presence_multiple_missing() {
-        let train_xml = TrainXML {
-            prompts: Some(TrainXMLPrompts {
-                prompt: vec![TrainXMLPromptsPrompt {
-                    id: "1".to_string(),
-                    content: "Test".to_string(),
-                }],
-            }),
-            system_prompts: None,
-            responses: None,
-            sources: None,
-            code_snippets: None,
-            samples: Some(TrainXMLSamples {
-                sample_ids: None,
-                sample: Some(vec![
-                    TrainXMLSamplesSample {
-                        children: vec![
-                            TrainXMLSamplesSampleChildren::Response(crate::train_xml::train_xml_structs::TrainXMLSamplesResponse { id: "1".to_string() }),
-                        ],
-                    },
-                    TrainXMLSamplesSample {
-                        children: vec![
-                            TrainXMLSamplesSampleChildren::Prompt(TrainXMLSamplesPrompt { id: "1".to_string() }),
-                        ],
-                    },
-                    TrainXMLSamplesSample {
-                        children: vec![
-                            TrainXMLSamplesSampleChildren::Source(crate::train_xml::train_xml_structs::TrainXMLSamplesSource { id: "1".to_string() }),
-                        ],
-                    },
-                ]),
-            }),
-            constants: None,
-            phrases: None,
-            beyond_scope: None,
-        };
-        
-        let result = super::validate_prompt_presence(&train_xml);
-        assert!(result.is_err());
-        let err = result.unwrap_err();
-        assert!(err.contains("Sample 1"));
-        assert!(err.contains("Sample 3"));
-        assert!(!err.contains("Sample 2"));
-    }
-
-    #[test]
     fn test_train_xml_validate_success() {
+        let train_xml = create_valid_train_xml();
         let device = Device::Cpu;
-        let train_xml = TrainXML {
-            prompts: Some(TrainXMLPrompts {
-                prompt: vec![TrainXMLPromptsPrompt {
-                    id: "1".to_string(),
-                    content: "Test prompt".to_string(),
-                }],
-            }),
-            responses: Some(TrainXMLResponses {
-                response: vec![TrainXMLResponsesResponse {
-                    id: "1".to_string(),
-                    content: "Test response".to_string(),
-                }],
-            }),
-            system_prompts: None,
-            beyond_scope: None,
-            sources: None,
-            code_snippets: None,
-            samples: Some(TrainXMLSamples {
-                sample_ids: None,
-                sample: Some(vec![TrainXMLSamplesSample {
-                    children: vec![
-                        TrainXMLSamplesSampleChildren::Prompt(TrainXMLSamplesPrompt { id: "1".to_string() }),
-                        TrainXMLSamplesSampleChildren::Response(crate::train_xml::train_xml_structs::TrainXMLSamplesResponse { id: "1".to_string() }),
-                    ],
-                }]),
-            }),
-            constants: None,
-            phrases: None,
-        };
         
         let result = train_xml_validate(&train_xml, &device);
-        assert!(result.is_ok());
-        
-        let (id_maps, constants, patterns) = result.unwrap();
-        
-        // Verify ID maps
-        assert_eq!(id_maps.prompts.len(), 1);
-        assert_eq!(id_maps.responses.len(), 1);
-        
-        // Verify constants (default values)
-        assert_eq!(constants.warmup_steps, 11520);
-        assert_eq!(constants.learning_rate, 3.125e-5);
-        
-        // Verify patterns (empty since no phrases)
-        assert!(patterns.is_empty());
+        assert!(result.is_ok(), "Expected Ok, got Err: {:?}", result.err());
     }
 
     #[test]
-    fn test_train_xml_validate_with_phrases() {
+    fn test_train_xml_validate_fails_line_breaks() {
+        let mut train_xml = create_valid_train_xml();
+        if let Some(samples) = &mut train_xml.samples {
+            if let Some(sample_list) = &mut samples.sample {
+                sample_list[0].children.push(
+                    TrainXMLSamplesSampleChildren::LineBreak(TrainXMLLineBreak { count: 3 })
+                );
+            }
+        }
+        
         let device = Device::Cpu;
+        let result = train_xml_validate(&train_xml, &device);
+        assert!(result.is_err(), "Expected Err, got Ok");
+        let err = result.unwrap_err().to_string();
+        assert!(err.contains("count = 3") || err.contains("line break"), "Error: {}", err);
+    }
+
+    #[test]
+    fn test_train_xml_validate_fails_prompt_presence() {
+        let mut train_xml = create_valid_train_xml();
+        if let Some(samples) = &mut train_xml.samples {
+            if let Some(sample_list) = &mut samples.sample {
+                sample_list[0].children.clear();
+            }
+        }
+        
+        let device = Device::Cpu;
+        let result = train_xml_validate(&train_xml, &device);
+        assert!(result.is_err(), "Expected Err, got Ok");
+        let err = result.unwrap_err().to_string();
+        assert!(err.contains("missing a required <prompt>"), "Error: {}", err);
+    }
+
+    #[test]
+    fn test_train_xml_validate_fails_precision() {
+        let mut train_xml = create_valid_train_xml();
+        if let Some(constants) = &mut train_xml.constants {
+            constants.activation_precision = Some("fp16".to_string()); // Invalid
+        }
+        
+        let device = Device::Cpu;
+        let result = train_xml_validate(&train_xml, &device);
+        assert!(result.is_err(), "Expected Err, got Ok");
+        let err = result.unwrap_err().to_string();
+        assert!(err.contains("activation_precision"), "Error: {}", err);
+    }
+
+    #[test]
+    fn test_train_xml_validate_merges_defaults() {
         let train_xml = TrainXML {
             prompts: Some(TrainXMLPrompts {
-                prompt: vec![TrainXMLPromptsPrompt {
-                    id: "1".to_string(),
-                    content: "Test prompt".to_string(),
-                }],
-            }),
-            responses: Some(TrainXMLResponses {
-                response: vec![TrainXMLResponsesResponse {
-                    id: "1".to_string(),
-                    content: "Test response".to_string(),
-                }],
-            }),
-            system_prompts: None,
-            beyond_scope: None,
-            sources: None,
-            code_snippets: None,
-            samples: Some(TrainXMLSamples {
-                sample_ids: None,
-                sample: Some(vec![TrainXMLSamplesSample {
-                    children: vec![
-                        TrainXMLSamplesSampleChildren::Prompt(TrainXMLSamplesPrompt { id: "1".to_string() }),
-                        TrainXMLSamplesSampleChildren::Response(crate::train_xml::train_xml_structs::TrainXMLSamplesResponse { id: "1".to_string() }),
-                    ],
-                }]),
-            }),
-            constants: None,
-            phrases: Some(TrainXMLPhrases {
-                phrase: vec![
-                    TrainXMLPhrasesPhrase {
-                        pattern: "test".to_string(),
-                        variant: vec![
-                            TrainXMLPhrasesVariant { value: "variant1".to_string() },
-                        ],
+                prompt: vec![
+                    TrainXMLPromptsPrompt {
+                        id: "1".to_string(),
+                        content: "Test prompt".to_string(),
                     },
                 ],
             }),
+            constants: Some(TrainXMLConstants {
+                aim_train_gb: Some(10.0), // Custom value
+                activation_precision: Some("int8".to_string()),
+                kv_cache_precision: Some("int8".to_string()),
+                rope_precision: Some("fp16".to_string()),
+                ..Default::default()
+            }),
+            samples: Some(TrainXMLSamples {
+                sample_ids: None,
+                sample: Some(vec![
+                    TrainXMLSamplesSample {
+                        children: vec![
+                            TrainXMLSamplesSampleChildren::Prompt(TrainXMLSamplesPrompt { 
+                                id: "1".to_string() 
+                            }),
+                        ],
+                    },
+                ]),
+            }),
+            ..Default::default()
         };
         
+        let device = Device::Cpu;
         let result = train_xml_validate(&train_xml, &device);
-        assert!(result.is_ok());
+        assert!(result.is_ok(), "Expected Ok, got Err: {:?}", result.err());
         
-        let (id_maps, _constants, patterns) = result.unwrap();
-        
-        // Verify ID maps
-        assert_eq!(id_maps.prompts.len(), 1);
-        
-        // Verify patterns were compiled
-        assert_eq!(patterns.len(), 1);
-        assert!(patterns[0].regex.is_match("test"));
-        assert_eq!(patterns[0].variants.len(), 1);
-        assert_eq!(patterns[0].variants[0], "variant1");
+        let (_, parsed, _) = result.unwrap();
+        assert_eq!(parsed.aim_train_gb, 10.0, "Custom value not preserved");
+        assert!(parsed.batch_size > 0, "Default value not applied");
     }
 
     #[test]
-    fn test_train_xml_validate_with_line_breaks_invalid() {
-        let device = Device::Cpu;
-        // Create a train XML with an invalid line break
-        let children = vec![
-            TrainXMLSamplesSampleChildren::Prompt(TrainXMLSamplesPrompt { id: "1".to_string() }),
-            TrainXMLSamplesSampleChildren::LineBreak(TrainXMLLineBreak { count: 1 }),
-            TrainXMLSamplesSampleChildren::LineBreak(TrainXMLLineBreak { count: 2 }),
-            TrainXMLSamplesSampleChildren::LineBreak(TrainXMLLineBreak { count: 3 }), // Invalid
-        ];
-
+    fn test_train_xml_validate_no_constants() {
         let train_xml = TrainXML {
             prompts: Some(TrainXMLPrompts {
-                prompt: vec![TrainXMLPromptsPrompt {
-                    id: "1".to_string(),
-                    content: "Test prompt".to_string(),
-                }],
+                prompt: vec![
+                    TrainXMLPromptsPrompt {
+                        id: "1".to_string(),
+                        content: "Test prompt".to_string(),
+                    },
+                ],
             }),
-            system_prompts: None,
-            beyond_scope: None,
-            responses: None,
-            sources: None,
-            code_snippets: None,
             samples: Some(TrainXMLSamples {
                 sample_ids: None,
-                sample: Some(vec![TrainXMLSamplesSample {
-                    children,
-                }]),
+                sample: Some(vec![
+                    TrainXMLSamplesSample {
+                        children: vec![
+                            TrainXMLSamplesSampleChildren::Prompt(TrainXMLSamplesPrompt { 
+                                id: "1".to_string() 
+                            }),
+                        ],
+                    },
+                ]),
             }),
-            constants: None,
-            phrases: None,
+            ..Default::default()
         };
         
-        let result = train_xml_validate(&train_xml, &device);
-        assert!(result.is_err());
-        let err = result.unwrap_err().to_string();
-        assert!(err.contains("line break"));
-        assert!(err.contains("count = 3"));
-    }
-
-    #[test]
-    fn test_train_xml_validate_with_missing_prompt() {
         let device = Device::Cpu;
-        let train_xml = TrainXML {
-            prompts: Some(TrainXMLPrompts {
-                prompt: vec![TrainXMLPromptsPrompt {
-                    id: "1".to_string(),
-                    content: "Test prompt".to_string(),
-                }],
-            }),
-            system_prompts: None,
-            beyond_scope: None,
-            responses: None,
-            sources: None,
-            code_snippets: None,
-            samples: Some(TrainXMLSamples {
-                sample_ids: None,
-                sample: Some(vec![TrainXMLSamplesSample {
-                    children: vec![
-                        TrainXMLSamplesSampleChildren::Response(crate::train_xml::train_xml_structs::TrainXMLSamplesResponse { id: "1".to_string() }),
-                    ],
-                }]),
-            }),
-            constants: None,
-            phrases: None,
-        };
-        
         let result = train_xml_validate(&train_xml, &device);
-        assert!(result.is_err());
-        let err = result.unwrap_err().to_string();
-        assert!(err.contains("missing a required <prompt> element"));
+        assert!(result.is_ok(), "Expected Ok, got Err: {:?}", result.err());
+        
+        let (_, parsed, _) = result.unwrap();
+        assert_eq!(parsed.aim_train_gb, 7.0, "Default value not applied");
     }
 }

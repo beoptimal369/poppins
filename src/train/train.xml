@@ -87,8 +87,11 @@
 
 
   <constants>
-    <constant key="bpe_requested_tokens"
-      value="function|console.log|&lt;!DOCTYPE html&gt; " />
+    <bpe_requested_tokens>
+      <value>function</value>
+      <value>console.log</value>
+      <value><![CDATA[<!DOCTYPE html>]]></value>
+    </bpe_requested_tokens>
   </constants>
 
 

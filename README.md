@@ -105,7 +105,7 @@
 - ✅ Deploy [`train.xsd` to a Cloudflare Worker](https://xsd.beoptimal369.workers.dev/?version=0.1.0)
 - ✅ `bootstrap()`
     - ✅ Write `train.xml`
-        - hyperparams autocomplete
+        - `<thought/>`
         - import w/in `train.xml `files
     - ✅ Write `train.xsd`
 - `train()`:

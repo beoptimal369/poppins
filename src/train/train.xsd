@@ -305,77 +305,238 @@
     </xs:sequence>
   </xs:complexType>
 
-  <!-- Constants type definition with updated key names -->
+  <!-- Constants -->
   <xs:complexType name="ConstantsType">
-    <xs:sequence>
-      <xs:element name="constant" maxOccurs="unbounded">
+    <xs:all>
+      <!-- Memory and Performance Targets -->
+      <xs:element name="aim_train_gb" type="xs:float" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Goal max memory used at any moment during training in GB. Used to calculate optimal model parameters like the context window size, number of layers and embedding dimensions. Default: 7.0</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <xs:element name="aim_infer_gb" type="xs:float" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Goal max memory used at any moment during inference in GB. Used to calculate optimal model parameters like the context window size, number of layers and embedding dimensions. Default: 0.9</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <xs:element name="aim_loss" type="xs:float" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Goal loss value during training. Training stops when loss reaches aim_loss. Default: 0.45</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <xs:element name="learning_rate" type="xs:float" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Learning rate for optimizer. Auto-scaled based on effective batch size. Default: 0.001 * (batch_size * grad_acc / 32)</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <xs:element name="warmup_steps" type="xs:integer" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Number of warmup steps for learning rate scheduler. Auto-scaled based on batch size. Default: 360 * (32 / effective_batch_size)</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <xs:element name="val_interval" type="xs:integer" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Run validation every N steps. Default: 10</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <xs:element name="batch_size" type="xs:integer" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Number of samples per batch. Auto-selected based on device and aim_train_gb. CPU: 1, Metal: 2-8, CUDA: 8-64</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <xs:element name="mixed_precision" type="xs:boolean" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Enable mixed precision training (FP16/BF16). Default: false for CPU, true for Metal/CUDA</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <xs:element name="gradient_accumulation_steps" type="xs:integer" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Number of steps to accumulate gradients before update. CPU: 1, Metal: 4, CUDA: 8</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <!-- Quantization Precision Settings -->
+      <xs:element name="activation_precision" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Precision for activations: "fp32", "int8". Default: fp32 for CPU, int8 for Metal/CUDA</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="fp32" />
+            <xs:enumeration value="int8" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+
+      <xs:element name="kv_cache_precision" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Precision for KV cache: "int8", "int4", "fp8". Default: "int8"</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="int8" />
+            <xs:enumeration value="int4" />
+            <xs:enumeration value="fp8" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+
+      <xs:element name="rope_precision" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Precision for RoPE embeddings: "fp32", "fp16". Default: fp32 for CPU, fp16 for Metal/CUDA</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="fp32" />
+            <xs:enumeration value="fp16" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      
+      <!-- System Configuration -->
+      <xs:element name="num_workers" type="xs:integer" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Number of data loading workers. CPU: CPU cores, Metal: 4, CUDA: 8</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <xs:element name="use_flash_attention" type="xs:boolean" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Enable Flash Attention optimization. Default: false for CPU, true for Metal/CUDA</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <xs:element name="use_tensor_cores" type="xs:boolean" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Enable NVIDIA Tensor Cores (CUDA only). Default: true for CUDA, false otherwise</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <!-- BPE Tokenizer Configuration -->
+      <xs:element name="bpe_min_merge_frequency" type="xs:integer" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Minimum frequency for BPE merges. Lower = more merges, larger vocabulary. Default: 3</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <xs:element name="bpe_requested_tokens" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Specific tokens to force-include in BPE vocabulary. Use multiple value elements for each token.</xs:documentation>
+        </xs:annotation>
         <xs:complexType>
-          <xs:attribute name="key" use="required">
-            <xs:simpleType>
-              <xs:restriction base="xs:string">
-                <xs:enumeration value="aim_train_gb" />
-                <xs:enumeration value="aim_infer_gb" />
-                <xs:enumeration value="aim_loss" />
-                <xs:enumeration value="learning_rate" />
-                <xs:enumeration value="warmup_steps" />
-                <xs:enumeration value="val_interval" />
-                <xs:enumeration value="batch_size" />
-                <xs:enumeration value="mixed_precision" />
-                <xs:enumeration value="gradient_accumulation_steps" />
-                <xs:enumeration value="activation_precision" />
-                <xs:enumeration value="kv_cache_precision" />
-                <xs:enumeration value="rope_precision" />
-                <xs:enumeration value="num_workers" />
-                <xs:enumeration value="use_flash_attention" />
-                <xs:enumeration value="use_tensor_cores" />
-
-                <xs:enumeration value="bpe_requested_tokens" />
-                <xs:enumeration value="bpe_min_merge_frequency" />
-
-                <xs:enumeration value="weight_decay_response" />
-                <xs:enumeration value="weight_decay_source" />
-                <xs:enumeration value="weight_decay_code" />
-
-                <xs:enumeration value="dropout_rate_response" />
-                <xs:enumeration value="dropout_rate_source" />
-                <xs:enumeration value="dropout_rate_code" />
-
-                <xs:enumeration value="loss_scale_response" />
-                <xs:enumeration value="loss_scale_source" />
-                <xs:enumeration value="loss_scale_code" />
-
-                <xs:enumeration value="gradient_scale_response" />
-                <xs:enumeration value="gradient_scale_source" />
-                <xs:enumeration value="gradient_scale_code" />
-
-                <xs:enumeration value="gradient_clip_response" />
-                <xs:enumeration value="gradient_clip_source" />
-                <xs:enumeration value="gradient_clip_code" />
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="value" use="required">
-            <xs:simpleType>
-              <xs:union>
-                <xs:simpleType>
-                  <xs:restriction base="xs:float" />
-                </xs:simpleType>
-                <xs:simpleType>
-                  <xs:restriction base="xs:integer" />
-                </xs:simpleType>
-                <xs:simpleType>
-                  <xs:restriction base="xs:string" />
-                </xs:simpleType>
-                <xs:simpleType>
-                  <xs:restriction base="xs:boolean" />
-                </xs:simpleType>
-              </xs:union>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="delimiter" use="optional" type="xs:string" />
+          <xs:sequence>
+            <xs:element name="value" type="xs:string" maxOccurs="unbounded">
+              <xs:annotation>
+                <xs:documentation>A single token to include in BPE vocabulary (e.g., "function", "console.log")</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:sequence>
         </xs:complexType>
       </xs:element>
-    </xs:sequence>
+      
+      <!-- Weight Decay Regularization -->
+      <xs:element name="weight_decay_response" type="xs:float" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Weight decay for response tokens. Higher = stronger regularization. Default: 0.01</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <xs:element name="weight_decay_source" type="xs:float" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Weight decay for source tokens. Higher = stronger regularization. Default: 0.05</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <xs:element name="weight_decay_code" type="xs:float" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Weight decay for code tokens. Higher = stronger regularization. Default: 0.02</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <!-- Dropout Rates -->
+      <xs:element name="dropout_rate_response" type="xs:float" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Dropout rate for response tokens. 0 = no dropout, 1 = all dropped. Default: 0.1</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <xs:element name="dropout_rate_source" type="xs:float" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Dropout rate for source tokens. 0 = no dropout, 1 = all dropped. Default: 0.05</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <xs:element name="dropout_rate_code" type="xs:float" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Dropout rate for code tokens. 0 = no dropout, 1 = all dropped. Default: 0.15</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <!-- Loss Scaling -->
+      <xs:element name="loss_scale_response" type="xs:float" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Loss scaling factor for response tokens. Adjusts contribution to total loss. Default: 1.0</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <xs:element name="loss_scale_source" type="xs:float" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Loss scaling factor for source tokens. Adjusts contribution to total loss. Default: 0.2</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <xs:element name="loss_scale_code" type="xs:float" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Loss scaling factor for code tokens. Adjusts contribution to total loss. Default: 1.0</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <!-- Gradient Scaling -->
+      <xs:element name="gradient_scale_response" type="xs:float" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Gradient scaling factor for response tokens. Default: 1.0</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <xs:element name="gradient_scale_source" type="xs:float" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Gradient scaling factor for source tokens. Default: 2.0</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <xs:element name="gradient_scale_code" type="xs:float" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Gradient scaling factor for code tokens. Default: 1.2</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <!-- Gradient Clipping -->
+      <xs:element name="gradient_clip_response" type="xs:float" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Maximum gradient norm for response tokens. Default: 1.0</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <xs:element name="gradient_clip_source" type="xs:float" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Maximum gradient norm for source tokens. Default: 0.0 (no clipping)</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      
+      <xs:element name="gradient_clip_code" type="xs:float" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Maximum gradient norm for code tokens. Default: 0.7</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:all>
   </xs:complexType>
 
   <!-- Phrases type definition -->

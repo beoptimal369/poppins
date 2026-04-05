@@ -8,18 +8,21 @@ mod train_xml_validate_ids;
 mod train_xml_phrase_pattern;
 mod train_xml_constants_parse;
 mod train_xml_phrase_patterns;
+mod train_xml_validate_line_breaks;
+mod train_xml_validate_precision;
+mod train_xml_validate_prompt_presence;
 
 pub use train_xml_parse::train_xml_parse;
 pub use train_xml_id_maps::TrainXMLIdMaps;
 pub use train_xml_validate::train_xml_validate;
 pub use train_xml_validate_ids::train_xml_validate_ids;
 pub use train_xml_phrase_pattern::TrainXMLPhrasePattern;
-pub use train_xml_constants_parse::train_xml_constants_parse;
 pub use train_xml_phrase_patterns::train_xml_phrase_patterns;
+pub use train_xml_validate_precision::train_xml_validate_precision;
+pub use train_xml_validate_line_breaks::train_xml_validate_line_breaks;
+pub use train_xml_validate_prompt_presence::train_xml_validate_prompt_presence;
 pub use train_xml_structs::{
     TrainXML,
-    TrainXMLConstants,
-    TrainXMLConstantsKey,
     TrainXMLSamplesSample,
     TrainXMLSourcesSource,
     TrainXMLPromptsPrompt,
@@ -37,6 +40,7 @@ pub use train_xml_structs::{
     TrainXMLPrompts,
     TrainXMLSamples,
     TrainXMLSources,
+    TrainXMLConstants,
     TrainXMLLineBreak,
     TrainXMLResponses,
     TrainXMLSamplesCode,
@@ -48,8 +52,8 @@ pub use train_xml_structs::{
     TrainXMLSamplesPrompt,
     TrainXMLSamplesSource,
     TrainXMLPhrasesVariant,
-    TrainXMLBeyondScopeTopic,
     TrainXMLSamplesResponse,
-    TrainXMLConstantsConstant,
+    TrainXMLBeyondScopeTopic,
     TrainXMLSamplesResponseIds,
+    TrainXMLBpeRequestedTokens,
 };
