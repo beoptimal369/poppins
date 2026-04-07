@@ -35,8 +35,9 @@ pub fn tag_write_code_close<W: Write>(
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use std::io::Write;
     use std::io::Cursor;
+    use crate::tag::tag_write_code_close;
 
     #[test]
     fn test_tag_write_code_close_standard() {

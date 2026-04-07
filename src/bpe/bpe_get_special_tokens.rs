@@ -7,7 +7,7 @@ use crate::sample::{SampleIndent, SampleLanguage};
 ///
 /// This includes:
 /// - `<unknown>` token (always first)
-/// - Structural tags (sample, prompt, ai, text, source)
+/// - Structural tags (sample, system, prompt, thought, ai, text, source)
 /// - Line break tags
 /// - Code language tags with all variants (standard, inline, indent)
 ///
@@ -20,7 +20,7 @@ pub fn bpe_get_special_tokens() -> Vec<String> {
     tokens.push("<unknown>".to_string());
 
     // Structural Tags
-    let structural = ["sample", "system", "prompt", "ai", "text", "source"];
+    let structural = ["sample", "system", "prompt", "thought", "ai", "text", "source"];
 
     for tag in structural {
         tokens.push(format!("<{tag}>"));
@@ -57,7 +57,6 @@ pub fn bpe_get_special_tokens() -> Vec<String> {
 }
 
 
-
 #[cfg(test)]
 mod tests {
     use super::bpe_get_special_tokens;
@@ -79,6 +78,8 @@ mod tests {
             "</system>",
             "<prompt>",
             "</prompt>",
+            "<thought>",
+            "</thought>",
             "<ai>",
             "</ai>",
             "<text>",
@@ -172,7 +173,7 @@ mod tests {
         let tokens = bpe_get_special_tokens();
 
         // Calculate expected count
-        let structural_count = 12; // 6 tags × 2 (open/close)
+        let structural_count = 14; // 7 tags × 2 (open/close)
         let line_break_count = 2;
         let languages_count = SampleLanguage::ALL.len();
         let tags_per_language = 2 + 1 + 6; // opening/closing (2), inline (1), indents 1-6 (6)
@@ -214,6 +215,39 @@ mod tests {
         assert!(
             sample_pos < line_break_pos,
             "Structural tags should appear before line break tags"
+        );
+    }
+
+    #[test]
+    fn test_thought_tag_present() {
+        let tokens = bpe_get_special_tokens();
+        
+        assert!(
+            tokens.contains(&"<thought>".to_string()),
+            "Missing <thought> opening tag"
+        );
+        assert!(
+            tokens.contains(&"</thought>".to_string()),
+            "Missing </thought> closing tag"
+        );
+    }
+
+    #[test]
+    fn test_thought_tag_order() {
+        let tokens = bpe_get_special_tokens();
+        
+        let prompt_pos = tokens.iter().position(|t| t == "<prompt>").unwrap();
+        let thought_pos = tokens.iter().position(|t| t == "<thought>").unwrap();
+        let ai_pos = tokens.iter().position(|t| t == "<ai>").unwrap();
+        
+        // thought should come after prompt and before ai
+        assert!(
+            prompt_pos < thought_pos,
+            "<thought> should appear after <prompt>"
+        );
+        assert!(
+            thought_pos < ai_pos,
+            "<thought> should appear before <ai>"
         );
     }
 }

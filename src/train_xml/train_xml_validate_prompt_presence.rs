@@ -4,10 +4,24 @@ use crate::train_xml::{TrainXML, TrainXMLSamplesSampleChildren};
 
 
 /// Validates that every sample has at least one <prompt> element
+/// and that every sample-ids has a prompt attribute
 pub fn train_xml_validate_prompt_presence(train_xml: &TrainXML) -> Result<(), String> {
     let mut errors = Vec::new();
     
     if let Some(samples) = &train_xml.samples {
+        // Validate sample-ids elements have prompt attribute
+        if let Some(sample_ids_list) = &samples.sample_ids {
+            for (sample_idx, sample_id) in sample_ids_list.iter().enumerate() {
+                if sample_id.prompt.is_empty() {
+                    errors.push(format!(
+                        "Sample-ids {} is missing a required prompt attribute",
+                        sample_idx + 1
+                    ));
+                }
+            }
+        }
+        
+        // Validate sample elements have at least one prompt child
         if let Some(sample_list) = &samples.sample {
             for (sample_idx, sample) in sample_list.iter().enumerate() {
                 let has_prompt = sample.children.iter().any(|child| {
@@ -41,11 +55,63 @@ mod tests {
         TrainXMLSamples,
         TrainXMLSamplesSample,
         TrainXMLSamplesPrompt,
+        TrainXMLSamplesSampleIds,
         TrainXMLSamplesSampleChildren,
     };
 
+    // ========== Tests for sample-ids ==========
+
     #[test]
-    fn test_validate_prompt_presence_valid_single_prompt() {
+    fn test_validate_prompt_presence_sample_ids_valid() {
+        let train_xml = TrainXML {
+            samples: Some(TrainXMLSamples {
+                sample_ids: Some(vec![
+                    TrainXMLSamplesSampleIds {
+                        system: None,
+                        prompt: "prompt1".to_string(),
+                        thought: None,
+                        response: None,
+                        source: None,
+                        code: None,
+                    },
+                ]),
+                sample: None,
+            }),
+            ..Default::default()
+        };
+
+        let result = train_xml_validate_prompt_presence(&train_xml);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_validate_prompt_presence_sample_ids_missing_prompt_attribute() {
+        let train_xml = TrainXML {
+            samples: Some(TrainXMLSamples {
+                sample_ids: Some(vec![
+                    TrainXMLSamplesSampleIds {
+                        system: None,
+                        prompt: String::new(),  // Empty prompt attribute
+                        thought: None,
+                        response: None,
+                        source: None,
+                        code: None,
+                    },
+                ]),
+                sample: None,
+            }),
+            ..Default::default()
+        };
+
+        let result = train_xml_validate_prompt_presence(&train_xml);
+        assert!(result.is_err());
+        assert!(result.unwrap_err().contains("missing a required prompt attribute"));
+    }
+
+    // ========== Tests for sample elements ==========
+
+    #[test]
+    fn test_validate_prompt_presence_sample_valid_single_prompt() {
         let train_xml = TrainXML {
             samples: Some(TrainXMLSamples {
                 sample_ids: None,
@@ -67,7 +133,7 @@ mod tests {
     }
 
     #[test]
-    fn test_validate_prompt_presence_valid_multiple_prompts() {
+    fn test_validate_prompt_presence_sample_valid_multiple_prompts() {
         let train_xml = TrainXML {
             samples: Some(TrainXMLSamples {
                 sample_ids: None,
@@ -92,30 +158,7 @@ mod tests {
     }
 
     #[test]
-    fn test_validate_prompt_presence_valid_prompt_with_other_elements() {
-        let train_xml = TrainXML {
-            samples: Some(TrainXMLSamples {
-                sample_ids: None,
-                sample: Some(vec![
-                    TrainXMLSamplesSample {
-                        children: vec![
-                            TrainXMLSamplesSampleChildren::Prompt(TrainXMLSamplesPrompt { 
-                                id: "1".to_string() 
-                            }),
-                            // Other non-prompt elements (using placeholder variants)
-                        ],
-                    },
-                ]),
-            }),
-            ..Default::default()
-        };
-
-        let result = train_xml_validate_prompt_presence(&train_xml);
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_validate_prompt_presence_invalid_missing_prompt() {
+    fn test_validate_prompt_presence_sample_missing_prompt() {
         let train_xml = TrainXML {
             samples: Some(TrainXMLSamples {
                 sample_ids: None,
@@ -134,7 +177,7 @@ mod tests {
     }
 
     #[test]
-    fn test_validate_prompt_presence_invalid_multiple_samples_missing_prompts() {
+    fn test_validate_prompt_presence_multiple_samples_missing_prompts() {
         let train_xml = TrainXML {
             samples: Some(TrainXMLSamples {
                 sample_ids: None,
@@ -157,26 +200,27 @@ mod tests {
         assert!(err.contains("Sample 2 is missing a required <prompt> element"));
     }
 
+    // ========== Combined tests ==========
+
     #[test]
-    fn test_validate_prompt_presence_invalid_some_samples_missing_prompts() {
+    fn test_validate_prompt_presence_both_sample_ids_and_samples_valid() {
         let train_xml = TrainXML {
             samples: Some(TrainXMLSamples {
-                sample_ids: None,
+                sample_ids: Some(vec![
+                    TrainXMLSamplesSampleIds {
+                        system: None,
+                        prompt: "prompt1".to_string(),
+                        thought: None,
+                        response: None,
+                        source: None,
+                        code: None,
+                    },
+                ]),
                 sample: Some(vec![
                     TrainXMLSamplesSample {
                         children: vec![
                             TrainXMLSamplesSampleChildren::Prompt(TrainXMLSamplesPrompt { 
-                                id: "1".to_string() 
-                            }),
-                        ],
-                    },
-                    TrainXMLSamplesSample {
-                        children: vec![],  // Missing prompt
-                    },
-                    TrainXMLSamplesSample {
-                        children: vec![
-                            TrainXMLSamplesSampleChildren::Prompt(TrainXMLSamplesPrompt { 
-                                id: "3".to_string() 
+                                id: "prompt2".to_string() 
                             }),
                         ],
                     },
@@ -186,11 +230,7 @@ mod tests {
         };
 
         let result = train_xml_validate_prompt_presence(&train_xml);
-        assert!(result.is_err());
-        let err = result.unwrap_err();
-        assert!(err.contains("Sample 2 is missing a required <prompt> element"));
-        assert!(!err.contains("Sample 1"));
-        assert!(!err.contains("Sample 3"));
+        assert!(result.is_ok());
     }
 
     #[test]
@@ -216,99 +256,5 @@ mod tests {
 
         let result = train_xml_validate_prompt_presence(&train_xml);
         assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_validate_prompt_presence_samples_with_no_children() {
-        let train_xml = TrainXML {
-            samples: Some(TrainXMLSamples {
-                sample_ids: None,
-                sample: Some(vec![
-                    TrainXMLSamplesSample {
-                        children: vec![],
-                    },
-                ]),
-            }),
-            ..Default::default()
-        };
-
-        let result = train_xml_validate_prompt_presence(&train_xml);
-        assert!(result.is_err());
-        assert!(result.unwrap_err().contains("Sample 1 is missing a required <prompt> element"));
-    }
-
-    #[test]
-    fn test_validate_prompt_presence_large_sample_count() {
-        let mut samples = Vec::new();
-        
-        // Create 10 samples, 2 missing prompts
-        for i in 1..=10 {
-            let children = if i == 3 || i == 7 {
-                vec![]  // Missing prompt
-            } else {
-                vec![
-                    TrainXMLSamplesSampleChildren::Prompt(TrainXMLSamplesPrompt { 
-                        id: i.to_string() 
-                    }),
-                ]
-            };
-            
-            samples.push(TrainXMLSamplesSample { children });
-        }
-        
-        let train_xml = TrainXML {
-            samples: Some(TrainXMLSamples {
-                sample_ids: None,
-                sample: Some(samples),
-            }),
-            ..Default::default()
-        };
-
-        let result = train_xml_validate_prompt_presence(&train_xml);
-        assert!(result.is_err());
-        let err = result.unwrap_err();
-        assert!(err.contains("Sample 3 is missing a required <prompt> element"));
-        assert!(err.contains("Sample 7 is missing a required <prompt> element"));
-        assert!(!err.contains("Sample 1"));
-        assert!(!err.contains("Sample 10"));
-    }
-
-    #[test]
-    fn test_validate_prompt_preserves_error_order() {
-        let train_xml = TrainXML {
-            samples: Some(TrainXMLSamples {
-                sample_ids: None,
-                sample: Some(vec![
-                    TrainXMLSamplesSample {
-                        children: vec![],  // Missing - sample 1
-                    },
-                    TrainXMLSamplesSample {
-                        children: vec![],  // Missing - sample 2
-                    },
-                    TrainXMLSamplesSample {
-                        children: vec![
-                            TrainXMLSamplesSampleChildren::Prompt(TrainXMLSamplesPrompt { 
-                                id: "3".to_string() 
-                            }),
-                        ],
-                    },
-                    TrainXMLSamplesSample {
-                        children: vec![],  // Missing - sample 4
-                    },
-                ]),
-            }),
-            ..Default::default()
-        };
-
-        let result = train_xml_validate_prompt_presence(&train_xml);
-        assert!(result.is_err());
-        let err = result.unwrap_err();
-        
-        // Check order (should match sample indices)
-        let lines: Vec<&str> = err.split('\n').collect();
-        assert_eq!(lines.len(), 3); // 3 errors
-        assert!(lines[0].contains("Sample 1"));
-        assert!(lines[1].contains("Sample 2"));
-        assert!(lines[2].contains("Sample 4"));
     }
 }

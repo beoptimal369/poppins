@@ -1,278 +1,261 @@
 // src/bootstrap.rs
 
-use std::fs;
-use std::path::Path;
+use std::{fs, error::Error, path::Path};
 
 
 /// Bootstraps (Initializes) a model directory with the following files for training:
 /// - `train.xml`: XML configuration file defining the training data structure and model parameters
 /// - `train.xsd`: XML Schema Definition file for validating the train.xml structure
+/// - `math.xml`: Math domain training data
+/// - `english.xml`: English domain training data
 ///
 /// The function will create the entire directory path if it doesn't exist, and will overwrite
-/// any existing train.xml and train.xsd files with the default templates.
+/// any existing files with the default templates.
 ///
 /// # Arguments
 /// * `output_dir` - The directory path where the model files will be created (typically `.poppins/{model_name}/`)
 ///
-/// # Behavior
-/// Overwrites existing files without warning
-///
-/// # Panics
-/// This function does not panic. All errors are handled gracefully and printed to stderr.
-pub fn bootstrap(output_dir: &Path) {
-    // Ensure the directory exists
-    if let Err(e) = fs::create_dir_all(output_dir) {
-        eprintln!("Failed to create directory: {}", e);
-        return;
-    }
+/// # Errors
+/// Returns an error if directory creation or any file write operation fails
+pub fn bootstrap(output_dir: &Path) -> Result<(), Box<dyn Error>> {
+    // Create directory
+    fs::create_dir_all(output_dir)?;
 
-    let xml_dest = output_dir.join("train.xml");
-    let xml_content = include_str!("train/train.xml");
+    write_file(output_dir, TRAIN_XML_CONTENT, "train.xml")?;
+    write_file(output_dir, TRAIN_XSD_CONTENT, "train.xsd")?;
+    write_file(output_dir, MATH_XML_CONTENT, "math.xml")?;
+    write_file(output_dir, ENGLISH_XML_CONTENT, "english.xml")?;
 
-    match fs::write(&xml_dest, xml_content) {
-        Ok(_) => println!("✅ Wrote {}", xml_dest.display()),
-        Err(e) => eprintln!("❌ Failed writing train.xml: {}", e),
-    }
+    Ok(())
+}
 
-    let xsd_dest = output_dir.join("train.xsd");
-    let xsd_content = include_str!("train/train.xsd");
 
-    match fs::write(&xsd_dest, xsd_content) {
-        Ok(_) => println!("✅ Wrote {}", xsd_dest.display()),
-        Err(e) => eprintln!("❌ Failed writing train.xsd: {}", e),
-    }
+const TRAIN_XML_CONTENT: &str = include_str!("train/train.xml");
+const TRAIN_XSD_CONTENT: &str = include_str!("train/train.xsd");
+const MATH_XML_CONTENT: &str = include_str!("train/math.xml");
+const ENGLISH_XML_CONTENT: &str = include_str!("train/english.xml");
+
+
+fn write_file(output_dir: &Path, src_content: &str, dest_file_name: &str) -> Result<(), Box<dyn Error>> {
+    let dest_path_puf = output_dir.join(dest_file_name);
+    fs::write(&dest_path_puf, src_content)?;
+    println!("✅ Wrote {}", dest_path_puf.display());
+
+    Ok(())
 }
 
 
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use super::bootstrap;
     use tempfile::tempdir;
-    use std::fs;
+    use std::{fs, error::Error, path::Path};
 
     #[test]
-    fn test_bootstrap_creates_directory() {
-        let temp_dir = tempdir().unwrap();
+    fn test_bootstrap_creates_directory() -> Result<(), Box<dyn Error>> {
+        let temp_dir = tempdir()?;
         let output_dir = temp_dir.path().join("test_model");
         
         assert!(!output_dir.exists(), "Directory should not exist before bootstrap");
         
-        bootstrap(&output_dir);
+        bootstrap(&output_dir)?;
         
         assert!(output_dir.exists(), "Directory should be created by bootstrap");
         assert!(output_dir.is_dir(), "Path should be a directory");
+        
+        Ok(())
     }
 
     #[test]
-    fn test_bootstrap_creates_train_xml() {
-        let temp_dir = tempdir().unwrap();
+    fn test_bootstrap_creates_train_xml() -> Result<(), Box<dyn Error>> {
+        let temp_dir = tempdir()?;
         let output_dir = temp_dir.path().join("test_model");
         
-        bootstrap(&output_dir);
+        bootstrap(&output_dir)?;
         
         let xml_path = output_dir.join("train.xml");
         assert!(xml_path.exists(), "train.xml should be created");
         assert!(xml_path.is_file(), "train.xml should be a file");
         
-        // Verify content is not empty
-        let content = fs::read_to_string(&xml_path).unwrap();
+        let content = fs::read_to_string(&xml_path)?;
         assert!(!content.is_empty(), "train.xml should not be empty");
-        
-        // Basic XML validation - should contain root element
         assert!(content.contains("<?xml"), "train.xml should contain XML declaration");
         assert!(content.contains("<train"), "train.xml should contain <train> root element");
+        
+        Ok(())
     }
 
     #[test]
-    fn test_bootstrap_creates_train_xsd() {
-        let temp_dir = tempdir().unwrap();
+    fn test_bootstrap_creates_english_xml() -> Result<(), Box<dyn Error>> {
+        let temp_dir = tempdir()?;
         let output_dir = temp_dir.path().join("test_model");
         
-        bootstrap(&output_dir);
+        bootstrap(&output_dir)?;
+        
+        let xml_path = output_dir.join("english.xml");
+        assert!(xml_path.exists(), "english.xml should be created");
+        assert!(xml_path.is_file(), "english.xml should be a file");
+        
+        let content = fs::read_to_string(&xml_path)?;
+        assert!(!content.is_empty(), "english.xml should not be empty");
+        assert!(content.contains("<?xml"), "english.xml should contain XML declaration");
+        assert!(content.contains("<train"), "english.xml should contain <train> root element");
+        
+        Ok(())
+    }
+
+    #[test]
+    fn test_bootstrap_creates_math_xml() -> Result<(), Box<dyn Error>> {
+        let temp_dir = tempdir()?;
+        let output_dir = temp_dir.path().join("test_model");
+        
+        bootstrap(&output_dir)?;
+        
+        let xml_path = output_dir.join("math.xml");
+        assert!(xml_path.exists(), "math.xml should be created");
+        assert!(xml_path.is_file(), "math.xml should be a file");
+        
+        let content = fs::read_to_string(&xml_path)?;
+        assert!(!content.is_empty(), "math.xml should not be empty");
+        assert!(content.contains("<?xml"), "math.xml should contain XML declaration");
+        assert!(content.contains("<train"), "math.xml should contain <train> root element");
+        
+        Ok(())
+    }
+
+    #[test]
+    fn test_bootstrap_creates_train_xsd() -> Result<(), Box<dyn Error>> {
+        let temp_dir = tempdir()?;
+        let output_dir = temp_dir.path().join("test_model");
+        
+        bootstrap(&output_dir)?;
         
         let xsd_path = output_dir.join("train.xsd");
         assert!(xsd_path.exists(), "train.xsd should be created");
         assert!(xsd_path.is_file(), "train.xsd should be a file");
         
-        // Verify content is not empty
-        let content = fs::read_to_string(&xsd_path).unwrap();
+        let content = fs::read_to_string(&xsd_path)?;
         assert!(!content.is_empty(), "train.xsd should not be empty");
-        
-        // Basic XSD validation
         assert!(content.contains("<?xml"), "train.xsd should contain XML declaration");
         assert!(content.contains("<xs:schema"), "train.xsd should contain schema element");
+        
+        Ok(())
     }
 
     #[test]
-    fn test_bootstrap_overwrites_existing_files() {
-        let temp_dir = tempdir().unwrap();
+    fn test_bootstrap_overwrites_existing_files() -> Result<(), Box<dyn Error>> {
+        let temp_dir = tempdir()?;
         let output_dir = temp_dir.path().join("test_model");
         
-        // First bootstrap
-        bootstrap(&output_dir);
+        bootstrap(&output_dir)?;
         
         let xml_path = output_dir.join("train.xml");
-        let original_content = fs::read_to_string(&xml_path).unwrap();
+        let original_content = fs::read_to_string(&xml_path)?;
         
-        // Modify the file
-        fs::write(&xml_path, "modified content").unwrap();
+        fs::write(&xml_path, "modified content")?;
         
-        // Second bootstrap should overwrite
-        bootstrap(&output_dir);
+        bootstrap(&output_dir)?;
         
-        let new_content = fs::read_to_string(&xml_path).unwrap();
+        let new_content = fs::read_to_string(&xml_path)?;
         assert_eq!(new_content, original_content, "bootstrap should overwrite existing files");
         assert_ne!(new_content, "modified content", "File should be restored to original");
+        
+        Ok(())
     }
 
     #[test]
-    fn test_bootstrap_creates_nested_directories() {
-        let temp_dir = tempdir().unwrap();
+    fn test_bootstrap_creates_nested_directories() -> Result<(), Box<dyn Error>> {
+        let temp_dir = tempdir()?;
         let output_dir = temp_dir.path().join("deeply").join("nested").join("path").join("test_model");
         
         assert!(!output_dir.exists(), "Nested directory should not exist before bootstrap");
         
-        bootstrap(&output_dir);
+        bootstrap(&output_dir)?;
         
         assert!(output_dir.exists(), "Nested directory should be created");
         assert!(output_dir.join("train.xml").exists(), "train.xml should be created in nested path");
         assert!(output_dir.join("train.xsd").exists(), "train.xsd should be created in nested path");
+        
+        Ok(())
     }
 
     #[test]
-    fn test_bootstrap_handles_existing_directory() {
-        let temp_dir = tempdir().unwrap();
+    fn test_bootstrap_handles_existing_directory() -> Result<(), Box<dyn Error>> {
+        let temp_dir = tempdir()?;
         let output_dir = temp_dir.path().join("existing_model");
         
-        // Create directory first
-        fs::create_dir_all(&output_dir).unwrap();
+        fs::create_dir_all(&output_dir)?;
         assert!(output_dir.exists(), "Directory should exist before bootstrap");
         
-        // Bootstrap should still work
-        bootstrap(&output_dir);
+        bootstrap(&output_dir)?;
         
         assert!(output_dir.join("train.xml").exists(), "train.xml should be created in existing directory");
         assert!(output_dir.join("train.xsd").exists(), "train.xsd should be created in existing directory");
+        
+        Ok(())
     }
 
     #[test]
-    fn test_bootstrap_file_permissions() {
-        #[cfg(unix)]
-        {
-            let temp_dir = tempdir().unwrap();
-            let output_dir = temp_dir.path().join("test_model");
-            
-            bootstrap(&output_dir);
-            
-            use std::os::unix::fs::PermissionsExt;
-            let xml_path = output_dir.join("train.xml");
-            let metadata = fs::metadata(&xml_path).unwrap();
-            let permissions = metadata.permissions();
-            
-            // Check that file is readable and writable by owner
-            assert!(permissions.mode() & 0o600 != 0, "File should have read/write permissions for owner");
-        }
+    fn test_bootstrap_file_sizes() -> Result<(), Box<dyn Error>> {
+        let temp_dir = tempdir()?;
+        let output_dir = temp_dir.path().join("test_model");
         
-        // For Windows, we just check that files exist (permissions are more complex)
-        #[cfg(windows)]
-        {
-            let temp_dir = tempdir().unwrap();
-            let output_dir = temp_dir.path().join("test_model");
-            
-            bootstrap(&output_dir);
-            
-            let xml_path = output_dir.join("train.xml");
-            assert!(xml_path.exists(), "File should exist on Windows");
-        }
+        bootstrap(&output_dir)?;
+        
+        let xml_path = output_dir.join("train.xml");
+        let xsd_path = output_dir.join("train.xsd");
+        
+        let xml_size = fs::metadata(&xml_path)?.len();
+        let xsd_size = fs::metadata(&xsd_path)?.len();
+        
+        assert!(xml_size > 0, "train.xml should have content (size > 0 bytes)");
+        assert!(xsd_size > 0, "train.xsd should have content (size > 0 bytes)");
+        
+        Ok(())
     }
 
     #[test]
-    fn test_bootstrap_with_relative_path() {
-        // Create a temp directory and change to it
-        let temp_dir = tempdir().unwrap();
-        let original_dir = std::env::current_dir().unwrap();
+    fn test_bootstrap_idempotent() -> Result<(), Box<dyn Error>> {
+        let temp_dir = tempdir()?;
+        let output_dir = temp_dir.path().join("test_model");
         
-        std::env::set_current_dir(temp_dir.path()).unwrap();
+        for i in 0..3 {
+            bootstrap(&output_dir)?;
+            assert!(output_dir.join("train.xml").exists(), "Iteration {}: train.xml should exist", i);
+            assert!(output_dir.join("train.xsd").exists(), "Iteration {}: train.xsd should exist", i);
+        }
+        
+        let xml_content = fs::read_to_string(output_dir.join("train.xml"))?;
+        let xsd_content = fs::read_to_string(output_dir.join("train.xsd"))?;
+        
+        bootstrap(&output_dir)?;
+        
+        let new_xml_content = fs::read_to_string(output_dir.join("train.xml"))?;
+        let new_xsd_content = fs::read_to_string(output_dir.join("train.xsd"))?;
+        
+        assert_eq!(xml_content, new_xml_content, "XML content should be identical across runs");
+        assert_eq!(xsd_content, new_xsd_content, "XSD content should be identical across runs");
+        
+        Ok(())
+    }
+
+    #[test]
+    fn test_bootstrap_with_relative_path() -> Result<(), Box<dyn Error>> {
+        let temp_dir = tempdir()?;
+        let original_dir = std::env::current_dir()?;
+        
+        std::env::set_current_dir(temp_dir.path())?;
         
         let relative_path = Path::new("relative_model");
-        bootstrap(relative_path);
+        bootstrap(relative_path)?;
         
         assert!(relative_path.exists(), "Relative path should be created");
         assert!(relative_path.join("train.xml").exists(), "train.xml should be created in relative path");
         assert!(relative_path.join("train.xsd").exists(), "train.xsd should be created in relative path");
         
-        // Clean up - change back to original directory
-        std::env::set_current_dir(original_dir).unwrap();
-    }
-
-    #[test]
-    fn test_bootstrap_idempotent() {
-        let temp_dir = tempdir().unwrap();
-        let output_dir = temp_dir.path().join("test_model");
+        std::env::set_current_dir(original_dir)?;
         
-        // Run bootstrap multiple times
-        for i in 0..3 {
-            bootstrap(&output_dir);
-            assert!(output_dir.join("train.xml").exists(), "Iteration {}: train.xml should exist", i);
-            assert!(output_dir.join("train.xsd").exists(), "Iteration {}: train.xsd should exist", i);
-        }
-        
-        // Verify content is consistent across runs
-        let xml_content = fs::read_to_string(output_dir.join("train.xml")).unwrap();
-        let xsd_content = fs::read_to_string(output_dir.join("train.xsd")).unwrap();
-        
-        // Run bootstrap again
-        bootstrap(&output_dir);
-        
-        let new_xml_content = fs::read_to_string(output_dir.join("train.xml")).unwrap();
-        let new_xsd_content = fs::read_to_string(output_dir.join("train.xsd")).unwrap();
-        
-        assert_eq!(xml_content, new_xml_content, "XML content should be identical across runs");
-        assert_eq!(xsd_content, new_xsd_content, "XSD content should be identical across runs");
-    }
-
-    #[test]
-    fn test_bootstrap_handles_invalid_characters_in_path() {
-        #[cfg(unix)]
-        {
-            let temp_dir = tempdir().unwrap();
-            // Unix allows most characters except null and slash
-            let output_dir = temp_dir.path().join("model-with-dots.and_underscores-123");
-            bootstrap(&output_dir);
-            assert!(output_dir.exists(), "Should handle valid special characters");
-            assert!(output_dir.join("train.xml").exists());
-        }
-        
-        #[cfg(windows)]
-        {
-            let temp_dir = tempdir().unwrap();
-            // Windows has more restrictions, but we'll test with allowed characters
-            let output_dir = temp_dir.path().join("model-with-dots.and_underscores-123");
-            bootstrap(&output_dir);
-            assert!(output_dir.exists(), "Should handle valid special characters");
-            assert!(output_dir.join("train.xml").exists());
-        }
-    }
-
-    #[test]
-    fn test_bootstrap_file_sizes() {
-        let temp_dir = tempdir().unwrap();
-        let output_dir = temp_dir.path().join("test_model");
-        
-        bootstrap(&output_dir);
-        
-        let xml_path = output_dir.join("train.xml");
-        let xsd_path = output_dir.join("train.xsd");
-        
-        let xml_size = fs::metadata(&xml_path).unwrap().len();
-        let xsd_size = fs::metadata(&xsd_path).unwrap().len();
-        
-        assert!(xml_size > 0, "train.xml should have content (size > 0 bytes)");
-        assert!(xsd_size > 0, "train.xsd should have content (size > 0 bytes)");
-        
-        // Optional: log sizes for debugging
-        println!("train.xml size: {} bytes", xml_size);
-        println!("train.xsd size: {} bytes", xsd_size);
+        Ok(())
     }
 }

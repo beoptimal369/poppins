@@ -51,6 +51,13 @@ pub fn beyond_scope_create_samples(
         None => return Vec::new(),
     };
     
+    // Get the thought content if present
+    let thought_content = if let Some(thought_id) = &beyond_scope_config.thought {
+        train_xml_ids.thoughts.get(thought_id).map(|thought| thought.content.clone())
+    } else {
+        None
+    };
+    
     // Pre-allocate with estimated capacity to avoid reallocation
     let mut topics_to_generate = Vec::new();
     
@@ -102,7 +109,8 @@ pub fn beyond_scope_create_samples(
         let ai_section = vec![SampleAiEnum::Text(response_content.clone())];
         
         samples.push(Sample {
-            system: system_content.clone(),
+            system: Some(system_content.clone()),
+            thought: thought_content.clone(),
             prompt_section,
             ai_section,
         });
@@ -124,6 +132,8 @@ mod tests {
         TrainXMLBeyondScopeTopic,
         TrainXMLSystemPrompts,
         TrainXMLSystemPromptsSystem,
+        TrainXMLThoughts,
+        TrainXMLThoughtsThought,
         TrainXMLResponses,
         TrainXMLResponsesResponse,
     };
@@ -134,16 +144,25 @@ mod tests {
             content: "You are a computer programming assistant. If the prompt is not about computer programming, then please respond: \"I'm sorry, I don't know, I'm a computer programming assistant\"".to_string(),
         });
         
+        let thought_data = Box::new(TrainXMLThoughtsThought {
+            id: "th_beyond_scope".to_string(),
+            content: "I will respond with I'm sorry, I don't know, I'm a computer programming assistant because this prompt is not about computer programming.".to_string(),
+        });
+        
         let response_data = Box::new(TrainXMLResponsesResponse {
             id: "re_beyond_scope".to_string(),
             content: "I'm sorry, I don't know, I'm a computer programming assistant".to_string(),
         });
         
         let system_ref: &'static TrainXMLSystemPromptsSystem = Box::leak(system_data);
+        let thought_ref: &'static TrainXMLThoughtsThought = Box::leak(thought_data);
         let response_ref: &'static TrainXMLResponsesResponse = Box::leak(response_data);
         
         let mut system_prompts = HashMap::new();
         system_prompts.insert("sy_default".to_string(), system_ref);
+        
+        let mut thoughts = HashMap::new();
+        thoughts.insert("th_beyond_scope".to_string(), thought_ref);
         
         let mut responses = HashMap::new();
         responses.insert("re_beyond_scope".to_string(), response_ref);
@@ -151,6 +170,7 @@ mod tests {
         TrainXMLIdMaps {
             system_prompts,
             prompts: HashMap::new(),
+            thoughts,
             responses,
             sources: HashMap::new(),
             code_snippets: HashMap::new(),
@@ -160,8 +180,10 @@ mod tests {
     #[test]
     fn test_beyond_scope_create_samples_with_no_config() {
         let train_xml = TrainXML {
+            imports: None,
             system_prompts: None,
             prompts: None,
+            thoughts: None,
             responses: None,
             sources: None,
             code_snippets: None,
@@ -178,9 +200,10 @@ mod tests {
     }
     
     #[test]
-    fn test_beyond_scope_create_samples_with_custom_topics() {
+    fn test_beyond_scope_create_samples_with_thought() {
         let beyond_scope = TrainXMLBeyondScope {
             system: "sy_default".to_string(),
+            thought: Some("th_beyond_scope".to_string()),
             response: "re_beyond_scope".to_string(),
             topics: vec![
                 TrainXMLBeyondScopeTopic { 
@@ -209,10 +232,17 @@ mod tests {
         };
         
         let train_xml = TrainXML {
+            imports: None,
             system_prompts: Some(TrainXMLSystemPrompts {
                 system: vec![TrainXMLSystemPromptsSystem {
                     id: "sy_default".to_string(),
                     content: "You are a computer programming assistant. If the prompt is not about computer programming, then please respond: \"I'm sorry, I don't know, I'm a computer programming assistant\"".to_string(),
+                }],
+            }),
+            thoughts: Some(TrainXMLThoughts {
+                thought: vec![TrainXMLThoughtsThought {
+                    id: "th_beyond_scope".to_string(),
+                    content: "I will respond with I'm sorry, I don't know, I'm a computer programming assistant because this prompt is not about computer programming.".to_string(),
                 }],
             }),
             responses: Some(TrainXMLResponses {
@@ -235,8 +265,164 @@ mod tests {
         
         assert_eq!(samples.len(), 2);
         
+        // Verify thought is present for beyond-scope samples
+        for sample in &samples {
+            assert_eq!(sample.thought, Some("I will respond with I'm sorry, I don't know, I'm a computer programming assistant because this prompt is not about computer programming.".to_string()));
+        }
+        
         // Check first sample
-        assert_eq!(samples[0].system, "You are a computer programming assistant. If the prompt is not about computer programming, then please respond: \"I'm sorry, I don't know, I'm a computer programming assistant\"");
+        assert_eq!(samples[0].system, Some("You are a computer programming assistant. If the prompt is not about computer programming, then please respond: \"I'm sorry, I don't know, I'm a computer programming assistant\"".to_owned()));
+        match &samples[0].prompt_section[0] {
+            crate::sample::SamplePromptEnum::Text(text) => {
+                assert_eq!(text, "What is quantum computing?");
+            }
+            _ => panic!("Expected text prompt"),
+        }
+        match &samples[0].ai_section[0] {
+            crate::sample::SampleAiEnum::Text(text) => {
+                assert_eq!(text, "I'm sorry, I don't know, I'm a computer programming assistant");
+            }
+            _ => panic!("Expected text response"),
+        }
+        
+        // Check second sample
+        match &samples[1].prompt_section[0] {
+            crate::sample::SamplePromptEnum::Text(text) => {
+                assert_eq!(text, "What is blockchain?");
+            }
+            _ => panic!("Expected text prompt"),
+        }
+    }
+    
+    #[test]
+    fn test_beyond_scope_create_samples_without_thought() {
+        let beyond_scope = TrainXMLBeyondScope {
+            system: "sy_default".to_string(),
+            thought: None,
+            response: "re_beyond_scope".to_string(),
+            topics: vec![
+                TrainXMLBeyondScopeTopic { 
+                    value: "quantum computing".to_string(),
+                    prefix: "is".to_string(),
+                },
+            ],
+            sports: Some(false),
+            food: Some(false),
+            movies: Some(false),
+            history: Some(false),
+            geography: Some(false),
+            politics: Some(false),
+            science: Some(false),
+            health: Some(false),
+            art: Some(false),
+            music: Some(false),
+            fashion: Some(false),
+            travel: Some(false),
+            pets: Some(false),
+            cars: Some(false),
+        };
+        
+        let train_xml = TrainXML {
+            imports: None,
+            system_prompts: Some(TrainXMLSystemPrompts {
+                system: vec![TrainXMLSystemPromptsSystem {
+                    id: "sy_default".to_string(),
+                    content: "You are a computer programming assistant.".to_string(),
+                }],
+            }),
+            responses: Some(TrainXMLResponses {
+                response: vec![TrainXMLResponsesResponse {
+                    id: "re_beyond_scope".to_string(),
+                    content: "I'm sorry, I don't know, I'm a computer programming assistant".to_string(),
+                }],
+            }),
+            prompts: None,
+            thoughts: None,
+            sources: None,
+            code_snippets: None,
+            samples: None,
+            constants: None,
+            phrases: None,
+            beyond_scope: Some(beyond_scope),
+        };
+        
+        let train_xml_ids = create_test_train_xml_ids_with_system_and_response();
+        let samples = beyond_scope_create_samples(&train_xml, &train_xml_ids);
+        
+        assert_eq!(samples.len(), 1);
+        
+        // Verify thought is None when not configured
+        assert_eq!(samples[0].thought, None);
+    }
+    
+    #[test]
+    fn test_beyond_scope_create_samples_with_custom_topics() {
+        let beyond_scope = TrainXMLBeyondScope {
+            system: "sy_default".to_string(),
+            thought: None,
+            response: "re_beyond_scope".to_string(),
+            topics: vec![
+                TrainXMLBeyondScopeTopic { 
+                    value: "quantum computing".to_string(),
+                    prefix: "is".to_string(),
+                },
+                TrainXMLBeyondScopeTopic { 
+                    value: "blockchain".to_string(),
+                    prefix: "is".to_string(),
+                },
+            ],
+            sports: Some(false),
+            food: Some(false),
+            movies: Some(false),
+            history: Some(false),
+            geography: Some(false),
+            politics: Some(false),
+            science: Some(false),
+            health: Some(false),
+            art: Some(false),
+            music: Some(false),
+            fashion: Some(false),
+            travel: Some(false),
+            pets: Some(false),
+            cars: Some(false),
+        };
+        
+        let train_xml = TrainXML {
+            imports: None,
+            system_prompts: Some(TrainXMLSystemPrompts {
+                system: vec![TrainXMLSystemPromptsSystem {
+                    id: "sy_default".to_string(),
+                    content: "You are a computer programming assistant. If the prompt is not about computer programming, then please respond: \"I'm sorry, I don't know, I'm a computer programming assistant\"".to_string(),
+                }],
+            }),
+            responses: Some(TrainXMLResponses {
+                response: vec![TrainXMLResponsesResponse {
+                    id: "re_beyond_scope".to_string(),
+                    content: "I'm sorry, I don't know, I'm a computer programming assistant".to_string(),
+                }],
+            }),
+            prompts: None,
+            thoughts: None,
+            sources: None,
+            code_snippets: None,
+            samples: None,
+            constants: None,
+            phrases: None,
+            beyond_scope: Some(beyond_scope),
+        };
+        
+        let train_xml_ids = create_test_train_xml_ids_with_system_and_response();
+        let samples = beyond_scope_create_samples(&train_xml, &train_xml_ids);
+        
+        assert_eq!(samples.len(), 2);
+        
+        // Verify thought is None for beyond-scope samples
+        for sample in &samples {
+            assert_eq!(sample.thought, None);
+        }
+        
+        // Check first sample
+        assert_eq!(samples[0].system, Some("You are a computer programming assistant. If the prompt is not about computer programming, then please respond: \"I'm sorry, I don't know, I'm a computer programming assistant\"".to_owned()));
         match &samples[0].prompt_section[0] {
             crate::sample::SamplePromptEnum::Text(text) => {
                 assert_eq!(text, "What is quantum computing?");
@@ -263,6 +449,7 @@ mod tests {
     fn test_beyond_scope_create_samples_with_category() {
         let beyond_scope = TrainXMLBeyondScope {
             system: "sy_default".to_string(),
+            thought: None,
             response: "re_beyond_scope".to_string(),
             topics: vec![],
             sports: Some(true),
@@ -282,6 +469,7 @@ mod tests {
         };
         
         let train_xml = TrainXML {
+            imports: None,
             system_prompts: Some(TrainXMLSystemPrompts {
                 system: vec![TrainXMLSystemPromptsSystem {
                     id: "sy_default".to_string(),
@@ -295,6 +483,7 @@ mod tests {
                 }],
             }),
             prompts: None,
+            thoughts: None,
             sources: None,
             code_snippets: None,
             samples: None,
@@ -308,6 +497,11 @@ mod tests {
         
         // Sports category has 12 topics
         assert_eq!(samples.len(), 12);
+        
+        // Verify thought is None for all beyond-scope samples
+        for sample in &samples {
+            assert_eq!(sample.thought, None);
+        }
         
         // Check a few specific topics
         let questions: Vec<String> = samples.iter()
@@ -326,6 +520,7 @@ mod tests {
     fn test_beyond_scope_create_samples_with_are_prefix() {
         let beyond_scope = TrainXMLBeyondScope {
             system: "sy_default".to_string(),
+            thought: None,
             response: "re_beyond_scope".to_string(),
             topics: vec![],
             sports: Some(false),
@@ -345,6 +540,7 @@ mod tests {
         };
         
         let train_xml = TrainXML {
+            imports: None,
             system_prompts: Some(TrainXMLSystemPrompts {
                 system: vec![TrainXMLSystemPromptsSystem {
                     id: "sy_default".to_string(),
@@ -358,6 +554,7 @@ mod tests {
                 }],
             }),
             prompts: None,
+            thoughts: None,
             sources: None,
             code_snippets: None,
             samples: None,
@@ -392,6 +589,7 @@ mod tests {
     fn test_beyond_scope_create_samples_with_custom_prefix() {
         let beyond_scope = TrainXMLBeyondScope {
             system: "sy_default".to_string(),
+            thought: None,
             response: "re_beyond_scope".to_string(),
             topics: vec![
                 TrainXMLBeyondScopeTopic { 
@@ -420,6 +618,7 @@ mod tests {
         };
         
         let train_xml = TrainXML {
+            imports: None,
             system_prompts: Some(TrainXMLSystemPrompts {
                 system: vec![TrainXMLSystemPromptsSystem {
                     id: "sy_default".to_string(),
@@ -433,6 +632,7 @@ mod tests {
                 }],
             }),
             prompts: None,
+            thoughts: None,
             sources: None,
             code_snippets: None,
             samples: None,
@@ -459,6 +659,7 @@ mod tests {
     fn test_beyond_scope_create_samples_with_missing_system() {
         let beyond_scope = TrainXMLBeyondScope {
             system: "missing_system".to_string(),
+            thought: None,
             response: "re_beyond_scope".to_string(),
             topics: vec![TrainXMLBeyondScopeTopic { 
                 value: "test".to_string(),
@@ -481,6 +682,7 @@ mod tests {
         };
         
         let train_xml = TrainXML {
+            imports: None,
             system_prompts: Some(TrainXMLSystemPrompts {
                 system: vec![TrainXMLSystemPromptsSystem {
                     id: "sy_default".to_string(),
@@ -494,6 +696,7 @@ mod tests {
                 }],
             }),
             prompts: None,
+            thoughts: None,
             sources: None,
             code_snippets: None,
             samples: None,
@@ -513,6 +716,7 @@ mod tests {
     fn test_beyond_scope_create_samples_with_missing_response() {
         let beyond_scope = TrainXMLBeyondScope {
             system: "sy_default".to_string(),
+            thought: None,
             response: "missing_response".to_string(),
             topics: vec![TrainXMLBeyondScopeTopic { 
                 value: "test".to_string(),
@@ -535,6 +739,7 @@ mod tests {
         };
         
         let train_xml = TrainXML {
+            imports: None,
             system_prompts: Some(TrainXMLSystemPrompts {
                 system: vec![TrainXMLSystemPromptsSystem {
                     id: "sy_default".to_string(),
@@ -548,6 +753,7 @@ mod tests {
                 }],
             }),
             prompts: None,
+            thoughts: None,
             sources: None,
             code_snippets: None,
             samples: None,

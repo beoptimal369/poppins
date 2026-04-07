@@ -10,7 +10,7 @@ use crate::sample::{Sample, SamplePromptEnum, SampleAiEnum};
 /// This function:
 /// 1. Adds all special tokens (including <unknown> as first)
 /// 2. Adds all requested tokens
-/// 3. Collects all characters from samples (text and code content)
+/// 3. Collects all characters from samples (thought, text and code content)
 /// 4. Adds common programming characters and digits
 /// 5. Builds token to ID mapping
 ///
@@ -60,8 +60,15 @@ pub fn bpe_init_vocab(
         
         for sample in samples {
             // Scan system prompt
-            for c in sample.system.chars() {
-                all_chars.insert(c);
+            if let Some(system) = &sample.system {
+                all_chars.extend(system.chars());
+            }
+            
+            // Scan thought (if present)
+            if let Some(thought) = &sample.thought {
+                for c in thought.chars() {
+                    all_chars.insert(c);
+                }
             }
             
             // Scan prompt section
@@ -165,7 +172,8 @@ mod tests {
     fn create_test_samples() -> Vec<Sample> {
         vec![
             Sample {
-                system: String::new(),
+                system: Some(String::new()),
+                thought: None,
                 prompt_section: vec![
                     SamplePromptEnum::Text("Hi".to_string()),
                 ],
@@ -179,12 +187,28 @@ mod tests {
     fn create_test_samples_with_system() -> Vec<Sample> {
         vec![
             Sample {
-                system: "You are a helpful assistant.\n".to_string(),
+                system: Some("You are a helpful assistant.\n".to_string()),
+                thought: None,
                 prompt_section: vec![
                     SamplePromptEnum::Text("Hi".to_string()),
                 ],
                 ai_section: vec![
                     SampleAiEnum::Text("World".to_string()),
+                ],
+            },
+        ]
+    }
+
+    fn create_test_samples_with_thought() -> Vec<Sample> {
+        vec![
+            Sample {
+                system: Some("You are a helpful assistant.".to_string()),
+                thought: Some("1. Understand the question\n2. Provide a clear answer\n3. Be concise".to_string()),
+                prompt_section: vec![
+                    SamplePromptEnum::Text("Explain programming".to_string()),
+                ],
+                ai_section: vec![
+                    SampleAiEnum::Text("Programming is giving instructions to a computer.".to_string()),
                 ],
             },
         ]
@@ -280,6 +304,52 @@ mod tests {
         assert!(tokenizer.vocab.contains(&"r".to_string()));
         assert!(tokenizer.vocab.contains(&"l".to_string()));
         assert!(tokenizer.vocab.contains(&"d".to_string()));
+    }
+
+    #[test]
+    fn test_init_vocab_with_thought() {
+        let mut tokenizer = BPETokenizer {
+            vocab: Vec::new(),
+            token_to_id: HashMap::new(),
+            merges: Vec::new(),
+            special_token_count: 0,
+            initial_token_count: 0,
+        };
+        
+        let samples = create_test_samples_with_thought();
+        let special_tokens = bpe_get_special_tokens();
+        let requested_tokens: Vec<String> = vec![];
+        
+        bpe_init_vocab(&mut tokenizer, &samples, &special_tokens, &requested_tokens);
+        
+        // Verify <unknown> is first
+        assert_eq!(tokenizer.vocab[0], "<unknown>");
+        
+        // Verify characters from thought are added
+        let thought_chars = [
+            '1', '.', ' ', 'U', 'n', 'd', 'e', 'r', 's', 't', 'a', 'n', 'd', ' ', 't', 'h', 'e', ' ', 'q', 'u', 'e', 's', 't', 'i', 'o', 'n', '\n',
+            '2', '.', ' ', 'P', 'r', 'o', 'v', 'i', 'd', 'e', ' ', 'a', ' ', 'c', 'l', 'e', 'a', 'r', ' ', 'a', 'n', 's', 'w', 'e', 'r', '\n',
+            '3', '.', ' ', 'B', 'e', ' ', 'c', 'o', 'n', 'c', 'i', 's', 'e'
+        ];
+        for c in thought_chars {
+            assert!(tokenizer.vocab.contains(&c.to_string()), "Character '{}' from thought not found in vocab", c);
+        }
+        
+        // Verify regular prompt characters are added
+        assert!(tokenizer.vocab.contains(&"E".to_string()));
+        assert!(tokenizer.vocab.contains(&"x".to_string()));
+        assert!(tokenizer.vocab.contains(&"p".to_string()));
+        assert!(tokenizer.vocab.contains(&"l".to_string()));
+        assert!(tokenizer.vocab.contains(&"a".to_string()));
+        assert!(tokenizer.vocab.contains(&"i".to_string()));
+        assert!(tokenizer.vocab.contains(&"n".to_string()));
+        
+        // Verify AI section characters are added
+        assert!(tokenizer.vocab.contains(&"P".to_string()));
+        assert!(tokenizer.vocab.contains(&"r".to_string()));
+        assert!(tokenizer.vocab.contains(&"o".to_string()));
+        assert!(tokenizer.vocab.contains(&"g".to_string()));
+        assert!(tokenizer.vocab.contains(&"m".to_string()));
     }
 
     #[test]
@@ -398,7 +468,8 @@ mod tests {
         
         let samples = vec![
             Sample {
-                system: String::new(),
+                system: Some(String::new()),
+                thought: None,
                 prompt_section: vec![
                     SamplePromptEnum::Code(crate::sample::SampleCode {
                         lang: SampleLanguage::Js,

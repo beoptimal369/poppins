@@ -7,9 +7,11 @@ use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct TrainXML {
+    pub imports: Option<TrainXMLImports>,
     #[serde(rename = "system-prompts")]
     pub system_prompts: Option<TrainXMLSystemPrompts>,
     pub prompts: Option<TrainXMLPrompts>,
+    pub thoughts: Option<TrainXMLThoughts>,
     pub responses: Option<TrainXMLResponses>,
     pub sources: Option<TrainXMLSources>,
     #[serde(rename = "code-snippets")]
@@ -19,6 +21,27 @@ pub struct TrainXML {
     pub phrases: Option<TrainXMLPhrases>,
     #[serde(rename = "beyond-scope")]
     pub beyond_scope: Option<TrainXMLBeyondScope>,
+}
+
+
+
+// Imports:
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TrainXMLImports {
+    /// The sequence of system elements
+    pub import: Vec<TrainXMLImportsImport>,
+}
+
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct TrainXMLImportsImport {
+    /// Path to imported file
+    #[serde(rename = "@path")]
+    pub path: String,
+
+    /// The unique system id
+    #[serde(rename = "@system")]
+    pub system: Option<String>,
 }
 
 
@@ -59,6 +82,27 @@ pub struct TrainXMLPromptsPrompt {
     pub id: String,
 
     /// The prompt markdown content
+    #[serde(rename = "$text")]
+    pub content: String,
+}
+
+
+
+// Thoughts:
+#[derive(Debug, Serialize, Deserialize)]
+pub struct TrainXMLThoughts {
+    /// The sequence of thought elements
+    pub thought: Vec<TrainXMLThoughtsThought>,
+}
+
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct TrainXMLThoughtsThought {
+    /// Unique identifier for this thought
+    #[serde(rename = "@id")]
+    pub id: String,
+
+    /// The thought markdown content
     #[serde(rename = "$text")]
     pub content: String,
 }
@@ -148,15 +192,19 @@ pub struct TrainXMLSamples {
 }
 
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TrainXMLSamplesSampleIds {
+    /// System pompt unique identifier
+    #[serde(rename = "@system")]
+    pub system: Option<String>,
+
     /// Prompt unique identifier
     #[serde(rename = "@prompt")]
     pub prompt: String,
 
-    /// System pompt unique identifier
-    #[serde(rename = "@system")]
-    pub system: Option<String>,
+    /// Thought unique identifier
+    #[serde(rename = "@thought")]
+    pub thought: Option<String>,
 
     /// Response unique identifier
     #[serde(rename = "@response")]
@@ -172,7 +220,7 @@ pub struct TrainXMLSamplesSampleIds {
 }
 
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TrainXMLSamplesSample {
     /// All children elements, preserves element order
     #[serde(rename = "$value", default)]
@@ -180,12 +228,14 @@ pub struct TrainXMLSamplesSample {
 }
 
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum TrainXMLSamplesSampleChildren {
-    #[serde(rename = "prompt")]
-    Prompt(TrainXMLSamplesPrompt),
     #[serde(rename = "system")]
     System(TrainXMLSamplesSystem),
+    #[serde(rename = "prompt")]
+    Prompt(TrainXMLSamplesPrompt),
+    #[serde(rename = "thought")]
+    Thought(TrainXMLSamplesThought),
     #[serde(rename = "response")]
     Response(TrainXMLSamplesResponse),
     #[serde(rename = "source")]
@@ -199,7 +249,7 @@ pub enum TrainXMLSamplesSampleChildren {
 }
 
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TrainXMLLineBreak {
     /// 1 or 2
     #[serde(rename = "@count")]
@@ -207,7 +257,7 @@ pub struct TrainXMLLineBreak {
 }
 
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TrainXMLSamplesResponseIds {
     /// Response unique identifier
     #[serde(rename = "@response")]
@@ -219,7 +269,7 @@ pub struct TrainXMLSamplesResponseIds {
 }
 
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TrainXMLSamplesPrompt {
     /// Unique identifier for this prompt
     #[serde(rename = "@id")]
@@ -227,7 +277,15 @@ pub struct TrainXMLSamplesPrompt {
 }
 
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TrainXMLSamplesThought {
+    /// Unique identifier for this prompt
+    #[serde(rename = "@id")]
+    pub id: String,
+}
+
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TrainXMLSamplesResponse {
     /// Unique identifier for this response
     #[serde(rename = "@id")]
@@ -235,7 +293,7 @@ pub struct TrainXMLSamplesResponse {
 }
 
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TrainXMLSamplesSystem {
     /// Unique identifier for this system prompt
     #[serde(rename = "@id")]
@@ -243,7 +301,7 @@ pub struct TrainXMLSamplesSystem {
 }
 
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TrainXMLSamplesSource {
     /// Unique identifier for this response
     #[serde(rename = "@id")]
@@ -251,7 +309,7 @@ pub struct TrainXMLSamplesSource {
 }
 
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TrainXMLSamplesCode {
     /// Unique identifier for this code
     #[serde(rename = "@id")]
@@ -268,13 +326,13 @@ pub struct TrainXMLSamplesCode {
 
 
 // Phrases:
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TrainXMLPhrases {
     /// The sequence of phrase elements
     pub phrase: Vec<TrainXMLPhrasesPhrase>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TrainXMLPhrasesPhrase {
     /// The pattern to search for in the prompt (can include regex capture groups $1, $2, etc.)
     #[serde(rename = "@pattern")]
@@ -284,7 +342,7 @@ pub struct TrainXMLPhrasesPhrase {
     pub variant: Vec<TrainXMLPhrasesVariant>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TrainXMLPhrasesVariant {
     /// The replacement value (can reference capture groups like $1, $2, etc.)
     #[serde(rename = "@value")]
@@ -294,108 +352,108 @@ pub struct TrainXMLPhrasesVariant {
 
 
 // Constants:
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct TrainXMLConstants {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "aim-train-gb", default, skip_serializing_if = "Option::is_none")]
     pub aim_train_gb: Option<f32>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "aim-infer-gb", default, skip_serializing_if = "Option::is_none")]
     pub aim_infer_gb: Option<f32>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "aim-loss", default, skip_serializing_if = "Option::is_none")]
     pub aim_loss: Option<f32>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "learning-rate", default, skip_serializing_if = "Option::is_none")]
     pub learning_rate: Option<f32>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "warmup-steps", default, skip_serializing_if = "Option::is_none")]
     pub warmup_steps: Option<usize>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "val-interval", default, skip_serializing_if = "Option::is_none")]
     pub val_interval: Option<usize>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "batch-size", default, skip_serializing_if = "Option::is_none")]
     pub batch_size: Option<usize>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "mixed-precision", default, skip_serializing_if = "Option::is_none")]
     pub mixed_precision: Option<bool>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "gradient-accumulation-steps", default, skip_serializing_if = "Option::is_none")]
     pub gradient_accumulation_steps: Option<usize>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "activation-precision", default, skip_serializing_if = "Option::is_none")]
     pub activation_precision: Option<String>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "kv-cache-precision", default, skip_serializing_if = "Option::is_none")]
     pub kv_cache_precision: Option<String>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "rope-precision", default, skip_serializing_if = "Option::is_none")]
     pub rope_precision: Option<String>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "num-workers", default, skip_serializing_if = "Option::is_none")]
     pub num_workers: Option<usize>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "use-flash-attention", default, skip_serializing_if = "Option::is_none")]
     pub use_flash_attention: Option<bool>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "use-tensor-cores", default, skip_serializing_if = "Option::is_none")]
     pub use_tensor_cores: Option<bool>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "bpe-min-merge-frequency", default, skip_serializing_if = "Option::is_none")]
     pub bpe_min_merge_frequency: Option<usize>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "bpe-requested-tokens", default, skip_serializing_if = "Option::is_none")]
     pub bpe_requested_tokens: Option<TrainXMLBpeRequestedTokens>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "weight-decay-response", default, skip_serializing_if = "Option::is_none")]
     pub weight_decay_response: Option<f32>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "weight-decay-source", default, skip_serializing_if = "Option::is_none")]
     pub weight_decay_source: Option<f32>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "weight-decay-code", default, skip_serializing_if = "Option::is_none")]
     pub weight_decay_code: Option<f32>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "dropout-rate-response", default, skip_serializing_if = "Option::is_none")]
     pub dropout_rate_response: Option<f32>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "dropout-rate-source", default, skip_serializing_if = "Option::is_none")]
     pub dropout_rate_source: Option<f32>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "dropout-rate-code", default, skip_serializing_if = "Option::is_none")]
     pub dropout_rate_code: Option<f32>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "loss-scale-response", default, skip_serializing_if = "Option::is_none")]
     pub loss_scale_response: Option<f32>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "loss-scale-source", default, skip_serializing_if = "Option::is_none")]
     pub loss_scale_source: Option<f32>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "loss-scale-code", default, skip_serializing_if = "Option::is_none")]
     pub loss_scale_code: Option<f32>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "gradient-scale-response", default, skip_serializing_if = "Option::is_none")]
     pub gradient_scale_response: Option<f32>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "gradient-scale-source", default, skip_serializing_if = "Option::is_none")]
     pub gradient_scale_source: Option<f32>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "gradient-scale-code", default, skip_serializing_if = "Option::is_none")]
     pub gradient_scale_code: Option<f32>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "gradient-clip-response", default, skip_serializing_if = "Option::is_none")]
     pub gradient_clip_response: Option<f32>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "gradient-clip-source", default, skip_serializing_if = "Option::is_none")]
     pub gradient_clip_source: Option<f32>,
 
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "gradient-clip-code", default, skip_serializing_if = "Option::is_none")]
     pub gradient_clip_code: Option<f32>,
 }
 
 
 // BPE requested tokens container
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct TrainXMLBpeRequestedTokens {
     #[serde(rename = "value", default)]
     pub values: Vec<String>,
@@ -540,7 +598,7 @@ impl TrainXMLConstantParsed {
 
 
 // Beyond Scope:
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TrainXMLBeyondScope {
     /// The system ID this beyond-scope configuration applies to
     #[serde(rename = "@system")]
@@ -549,6 +607,10 @@ pub struct TrainXMLBeyondScope {
     /// Response to provide
     #[serde(rename = "@response")]
     pub response: String,
+
+    /// Response to provide
+    #[serde(rename = "@thought")]
+    pub thought: Option<String>,
 
     /// Additional topics as elements
     #[serde(rename = "topic", default)]

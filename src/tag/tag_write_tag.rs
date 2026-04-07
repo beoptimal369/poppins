@@ -39,8 +39,8 @@ pub fn tag_write_tag<W: Write>(
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::io::Cursor;
+    use crate::tag::tag_write_tag;
 
     #[test]
     fn test_tag_write_tag_opening() {

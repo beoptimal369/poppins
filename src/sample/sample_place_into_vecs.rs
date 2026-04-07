@@ -67,7 +67,8 @@ mod tests {
     
     fn create_test_sample(id: &str) -> Sample {
         Sample {
-            system: String::new(),
+            system: Some(String::new()),
+            thought: None,
             prompt_section: vec![
                 SamplePromptEnum::Text(format!("Prompt {}", id)),
             ],
@@ -79,7 +80,21 @@ mod tests {
     
     fn create_test_sample_with_system(id: &str, system: &str) -> Sample {
         Sample {
-            system: system.to_string(),
+            system: Some(system.to_string()),
+            thought: None,
+            prompt_section: vec![
+                SamplePromptEnum::Text(format!("Prompt {}", id)),
+            ],
+            ai_section: vec![
+                SampleAiEnum::Text(format!("Response {}", id)),
+            ],
+        }
+    }
+    
+    fn create_test_sample_with_thought(id: &str, thought: &str) -> Sample {
+        Sample {
+            system: Some(String::new()),
+            thought: Some(thought.to_string()),
             prompt_section: vec![
                 SamplePromptEnum::Text(format!("Prompt {}", id)),
             ],
@@ -135,6 +150,44 @@ mod tests {
     }
     
     #[test]
+    fn test_place_with_thought() {
+        let mut samples = Samples {
+            train_samples: Vec::new(),
+            val_samples: Vec::new(),
+        };
+        
+        let original = create_test_sample_with_thought("1", "I will think about this.");
+        let variants = vec![
+            create_test_sample_with_thought("2", "Another thought."),
+            create_test_sample_with_thought("3", "Third thought."),
+        ];
+        
+        sample_place_into_vecs(&mut samples, original, Some(variants));
+        
+        // Total samples should be 3 (original + 2 variants)
+        assert_eq!(samples.train_samples.len() + samples.val_samples.len(), 3);
+        
+        // Exactly one sample should be in validation
+        assert_eq!(samples.val_samples.len(), 1);
+        
+        // Verify thought content is preserved
+        for sample in &samples.train_samples {
+            if let Some(thought) = &sample.thought {
+                assert!(!thought.is_empty());
+            } else {
+                panic!("Expected thought content");
+            }
+        }
+        for sample in &samples.val_samples {
+            if let Some(thought) = &sample.thought {
+                assert!(!thought.is_empty());
+            } else {
+                panic!("Expected thought content");
+            }
+        }
+    }
+    
+    #[test]
     fn test_place_with_system_prompts() {
         let mut samples = Samples {
             train_samples: Vec::new(),
@@ -157,10 +210,12 @@ mod tests {
         
         // Verify system prompts are preserved
         for sample in &samples.train_samples {
-            assert_eq!(sample.system, "You are a helpful assistant.");
+            assert_eq!(sample.system, Some("You are a helpful assistant.".to_owned()));
+            assert_eq!(sample.thought, None);
         }
         for sample in &samples.val_samples {
-            assert_eq!(sample.system, "You are a helpful assistant.");
+            assert_eq!(sample.system, Some("You are a helpful assistant.".to_owned()));
+            assert_eq!(sample.thought, None);
         }
     }
     
@@ -209,18 +264,59 @@ mod tests {
         for sample in &samples.train_samples {
             let prompt_text = get_prompt_text(sample);
             if prompt_text.contains("Prompt 1") || prompt_text.contains("Prompt 2") {
-                assert_eq!(sample.system, "System A", "Sample with prompt {} should have System A", prompt_text);
+                assert_eq!(sample.system, Some("System A".to_owned()), "Sample with prompt {} should have System A", prompt_text);
+                assert_eq!(sample.thought, None);
             } else if prompt_text.contains("Prompt 3") || prompt_text.contains("Prompt 4") {
-                assert_eq!(sample.system, "System B", "Sample with prompt {} should have System B", prompt_text);
+                assert_eq!(sample.system, Some("System B".to_owned()), "Sample with prompt {} should have System B", prompt_text);
+                assert_eq!(sample.thought, None);
             }
         }
         
         for sample in &samples.val_samples {
             let prompt_text = get_prompt_text(sample);
             if prompt_text.contains("Prompt 1") || prompt_text.contains("Prompt 2") {
-                assert_eq!(sample.system, "System A", "Sample with prompt {} should have System A", prompt_text);
+                assert_eq!(sample.system, Some("System A".to_owned()), "Sample with prompt {} should have System A", prompt_text);
+                assert_eq!(sample.thought, None);
             } else if prompt_text.contains("Prompt 3") || prompt_text.contains("Prompt 4") {
-                assert_eq!(sample.system, "System B", "Sample with prompt {} should have System B", prompt_text);
+                assert_eq!(sample.system, Some("System B".to_owned()), "Sample with prompt {} should have System B", prompt_text);
+                assert_eq!(sample.thought, None);
+            }
+        }
+    }
+    
+    #[test]
+    fn test_preserves_thought_across_groups() {
+        let mut samples = Samples {
+            train_samples: Vec::new(),
+            val_samples: Vec::new(),
+        };
+        
+        // First group with thought A
+        let original1 = create_test_sample_with_thought("1", "Thought A");
+        let variants1 = vec![create_test_sample_with_thought("2", "Thought A")];
+        sample_place_into_vecs(&mut samples, original1, Some(variants1));
+        
+        // Second group with thought B
+        let original2 = create_test_sample_with_thought("3", "Thought B");
+        let variants2 = vec![create_test_sample_with_thought("4", "Thought B")];
+        sample_place_into_vecs(&mut samples, original2, Some(variants2));
+        
+        // Verify thought content is preserved per sample
+        for sample in &samples.train_samples {
+            let prompt_text = get_prompt_text(sample);
+            if prompt_text.contains("Prompt 1") || prompt_text.contains("Prompt 2") {
+                assert_eq!(sample.thought, Some("Thought A".to_string()));
+            } else if prompt_text.contains("Prompt 3") || prompt_text.contains("Prompt 4") {
+                assert_eq!(sample.thought, Some("Thought B".to_string()));
+            }
+        }
+        
+        for sample in &samples.val_samples {
+            let prompt_text = get_prompt_text(sample);
+            if prompt_text.contains("Prompt 1") || prompt_text.contains("Prompt 2") {
+                assert_eq!(sample.thought, Some("Thought A".to_string()));
+            } else if prompt_text.contains("Prompt 3") || prompt_text.contains("Prompt 4") {
+                assert_eq!(sample.thought, Some("Thought B".to_string()));
             }
         }
     }

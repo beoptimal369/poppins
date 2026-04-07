@@ -263,10 +263,12 @@ impl<W: Write> TagWriter<W> {
 }
 
 
+
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::io::Cursor;
+    use crate::tag::TagWriter;
+    use crate::sample::{SampleIndent, SampleLineBreak};
 
     #[test]
     fn test_binary_mode_no_formatting() {

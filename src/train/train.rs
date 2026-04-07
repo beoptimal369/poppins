@@ -7,7 +7,7 @@ use std::{path::Path, error::Error};
 use crate::sample::{Samples, sample_create_samples};
 use crate::train::{train_write_txts, train_write_bins};
 use crate::bpe::{bpe_get_special_tokens, bpe_train, BPETokenizerJSON};
-use crate::train_xml::{TrainXMLConstantParsed, train_xml_parse, train_xml_validate};
+use crate::train_xml::{TrainXMLConstantParsed, train_xml_merge, train_xml_parse, train_xml_validate};
 
 
 pub fn train(output_dir: &Path, model_name: String, device: &Device) -> Result<(), Box<dyn Error>> {
@@ -33,11 +33,9 @@ pub fn train(output_dir: &Path, model_name: String, device: &Device) -> Result<(
 
 
 fn get_samples(output_dir: &Path, device: &Device) -> Result<(Samples, TrainXMLConstantParsed), Box<dyn std::error::Error>> {
-    let train_xml_path = output_dir.join("train.xml");
+    let train_xmls = train_xml_parse(&output_dir)?;
 
-    let train_content = fs::read_to_string(&train_xml_path)?;
-
-    let train_xml = train_xml_parse(&train_content)?;
+    let train_xml = train_xml_merge(train_xmls)?;
 
     let (train_xml_id_maps, train_xml_constant_parsed, train_xml_patterns) = train_xml_validate(&train_xml, &device)?;
 

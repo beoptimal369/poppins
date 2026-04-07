@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema
-  xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
-  vc:minVersion="1.1">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1">
 
   <!-- Root element -->
   <xs:element name="train">
     <xs:complexType>
       <xs:all>
         <xs:element name="system-prompts" type="SystemPromptsType" minOccurs="0" />
-        <xs:element name="samples" type="SamplesType" />
+        <xs:element name="samples" type="SamplesType" minOccurs="0" />
         <xs:element name="prompts" type="PromptsType" minOccurs="0" />
+        <xs:element name="thoughts" type="ThoughtsType" minOccurs="0" />
         <xs:element name="responses" type="ResponsesType" minOccurs="0" />
         <xs:element name="sources" type="SourcesType" minOccurs="0" />
         <xs:element name="code-snippets" type="CodeSnippetsType" minOccurs="0" />
         <xs:element name="constants" type="ConstantsType" minOccurs="0" />
         <xs:element name="phrases" type="PhrasesType" minOccurs="0" />
         <xs:element name="beyond-scope" type="BeyondScopeType" minOccurs="0" />
+        <xs:element name="imports" type="ImportsType" minOccurs="0" />
       </xs:all>
     </xs:complexType>
 
@@ -31,7 +30,12 @@
       <xs:field xpath="@id" />
     </xs:key>
 
-    <xs:key name="responseIdKey"> <!-- Renamed from paragraphIdKey -->
+    <xs:key name="thoughtIdKey">
+      <xs:selector xpath="thoughts/thought" />
+      <xs:field xpath="@id" />
+    </xs:key>
+
+    <xs:key name="responseIdKey">
       <xs:selector xpath="responses/response" />
       <xs:field xpath="@id" />
     </xs:key>
@@ -46,6 +50,12 @@
       <xs:field xpath="@id" />
     </xs:key>
 
+    <!-- Reference for import system attribute -->
+    <xs:keyref name="importSystemRef" refer="systemIdKey">
+      <xs:selector xpath="imports/import" />
+      <xs:field xpath="@system" />
+    </xs:keyref>
+
     <!-- References for sample-ids attributes -->
     <xs:keyref name="sampleIdsSystemRef" refer="systemIdKey">
       <xs:selector xpath="samples/sample-ids" />
@@ -57,7 +67,12 @@
       <xs:field xpath="@prompt" />
     </xs:keyref>
 
-    <xs:keyref name="sampleIdsResponseRef" refer="responseIdKey"> <!-- Renamed from paragraph -->
+    <xs:keyref name="sampleIdsThoughtRef" refer="thoughtIdKey">
+      <xs:selector xpath="samples/sample-ids" />
+      <xs:field xpath="@thought" />
+    </xs:keyref>
+
+    <xs:keyref name="sampleIdsResponseRef" refer="responseIdKey">
       <xs:selector xpath="samples/sample-ids" />
       <xs:field xpath="@response" />
     </xs:keyref>
@@ -72,41 +87,14 @@
       <xs:field xpath="@code" />
     </xs:keyref>
 
-    <!-- References for response-ids attributes -->
-    <xs:keyref name="responseIdsResponseRef" refer="responseIdKey">
-      <xs:selector xpath=".//response-ids" />
-      <xs:field xpath="@response" />
-    </xs:keyref>
-
-    <!-- References for beyond-scope system -->
-    <xs:keyref name="beyondScopeSystemRef" refer="systemIdKey">
-      <xs:selector xpath="beyond-scope" />
-      <xs:field xpath="@system" />
-    </xs:keyref>
-
-    <!-- References for beyond-scope response -->
-    <xs:keyref name="beyondScopeResponseRef" refer="responseIdKey">
-      <xs:selector xpath="beyond-scope" />
-      <xs:field xpath="@response" />
-    </xs:keyref>
-
-    <xs:keyref name="responseIdsSourceRef" refer="sourceIdKey">
-      <xs:selector xpath=".//response-ids" />
-      <xs:field xpath="@source" />
-    </xs:keyref>
-
-    <xs:keyref name="sourceIdElementRef" refer="sourceIdKey">
-      <xs:selector xpath=".//source-id" />
-      <xs:field xpath="." />
-    </xs:keyref>
-
-    <xs:keyref name="codeIdElementRef" refer="codeIdKey">
-      <xs:selector xpath=".//code-id" />
-      <xs:field xpath="." />
-    </xs:keyref>
-
+    <!-- References for samples > sample -->
     <xs:keyref name="promptIdRef" refer="promptIdKey">
       <xs:selector xpath="samples/sample/prompt" />
+      <xs:field xpath="@id" />
+    </xs:keyref>
+
+    <xs:keyref name="thoughtIdRef" refer="thoughtIdKey">
+      <xs:selector xpath="samples/sample/thought" />
       <xs:field xpath="@id" />
     </xs:keyref>
 
@@ -129,75 +117,237 @@
       <xs:selector xpath="samples/sample/code" />
       <xs:field xpath="@id" />
     </xs:keyref>
+
+    <!-- References for beyond-scope system -->
+    <xs:keyref name="beyondScopeSystemRef" refer="systemIdKey">
+      <xs:selector xpath="beyond-scope" />
+      <xs:field xpath="@system" />
+    </xs:keyref>
+
+    <xs:keyref name="beyondScopeResponseRef" refer="responseIdKey">
+      <xs:selector xpath="beyond-scope" />
+      <xs:field xpath="@response" />
+    </xs:keyref>
+
+    <xs:keyref name="beyondScopeThoughtRef" refer="thoughtIdKey">
+      <xs:selector xpath="beyond-scope" />
+      <xs:field xpath="@thought" />
+    </xs:keyref>
+
+    <!-- References for response-ids attributes -->
+    <xs:keyref name="responseIdsResponseRef" refer="responseIdKey">
+      <xs:selector xpath=".//response-ids" />
+      <xs:field xpath="@response" />
+    </xs:keyref>
+
+    <xs:keyref name="responseIdsSourceRef" refer="sourceIdKey">
+      <xs:selector xpath=".//response-ids" />
+      <xs:field xpath="@source" />
+    </xs:keyref>
+
+    <!-- References for source-id attributes -->
+    <xs:keyref name="sourceIdElementRef" refer="sourceIdKey">
+      <xs:selector xpath=".//source-id" />
+      <xs:field xpath="." />
+    </xs:keyref>
+
+    <xs:keyref name="codeIdElementRef" refer="codeIdKey">
+      <xs:selector xpath=".//code-id" />
+      <xs:field xpath="." />
+    </xs:keyref>
   </xs:element>
 
-  <!-- System prompts type definition -->
-  <xs:complexType name="SystemPromptsType">
+  <!-- ImportsType -->
+  <xs:complexType name="ImportsType">
+    <xs:annotation>
+      <xs:documentation>Import training files.</xs:documentation>
+    </xs:annotation>
     <xs:sequence>
-      <xs:element name="system" maxOccurs="unbounded">
-        <xs:complexType mixed="true">
-          <xs:attribute name="id" type="xs:string" use="required" />
+      <xs:element name="import" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attribute name="path" use="required">
+            <xs:annotation>
+              <xs:documentation>The required path attribute is the relative path to the XML training file to import (ex: "english.xml").</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:pattern value=".+\.xml" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="system" type="xs:string" use="optional">
+            <xs:annotation>
+              <xs:documentation>The optional system attribute must align w/ a system prompt ID and when defined will let us add your requested system prompt to all of the imported samples.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
   </xs:complexType>
 
-  <!-- Samples type definition - now flat list of mixed elements -->
+  <!-- SystemPromptsType -->
+  <xs:complexType name="SystemPromptsType">
+    <xs:annotation>
+      <xs:documentation>System prompts instruct the AI on its role, capabilities, and response style.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="system" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>A system prompt instructs the AI on its role, capabilities, and response style. Example: You are a math, english and computer programming assistant. If the prompt is not about math, english or computer programming, then please respond: "I'm sorry, I don't know b/c I'm a math, english and computer programming assistant."</xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+          <xs:attribute name="id" type="xs:string" use="required">
+          <xs:annotation>
+            <xs:documentation>The required ID attribute is the unique identifier for this system prompt. The convention is to start system prompt IDs w/ sy:: then add your namespace and finally add an ID in snake case (sy::aum::example_system_prompt).</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- SamplesType -->
   <xs:complexType name="SamplesType">
+    <xs:annotation>
+      <xs:documentation>Samples are conversation examples that teach our AI how to optimally respond. Define samples w/ the compact sample-ids tag or the verbose sample tag.</xs:documentation>
+    </xs:annotation>
+
     <xs:sequence>
       <xs:choice maxOccurs="unbounded">
 
         <!-- Sample w/ id attributes & no children -->
         <xs:element name="sample-ids">
+          <xs:annotation>
+            <xs:documentation>The sample-ids tag provides a swift way to define a sample. Optimal when the sample does NOT have multiple of any paticular ID (ex: just one prompt, one thought and one response). The order the components are placed is system &gt; thought &gt; prompt &gt; response &gt; source &gt; code. For flexibility please use the sample tag.</xs:documentation>
+          </xs:annotation>
           <xs:complexType>
-            <xs:attribute name="system" type="xs:string" use="optional" />
-            <xs:attribute name="prompt" type="xs:string" use="required" />
-            <xs:attribute name="response" type="xs:string" use="optional" /> <!-- Renamed from
-            paragraph -->
-            <xs:attribute name="code" type="xs:string" use="optional" />
-            <xs:attribute name="source" type="xs:string" use="optional" />
+            <xs:attribute name="system" type="xs:string" use="optional">
+              <xs:annotation>
+                <xs:documentation>The optional system attribute must align w/ a system prompt ID. The order the components are placed is system &gt; thought &gt; prompt &gt; response &gt; source &gt; code. For flexibility please use the sample tag.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="prompt" type="xs:string" use="required">
+              <xs:annotation>
+                <xs:documentation>The required prompt attribute must align w/ a prompt ID. The order the components are placed is system &gt; thought &gt; prompt &gt; response &gt; source &gt; code. For flexibility please use the sample tag.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="thought" type="xs:string" use="optional">
+              <xs:annotation>
+                <xs:documentation>The optional thought attribute must align w/ a thought ID. The order the components are placed is system &gt; thought &gt; prompt &gt; response &gt; source &gt; code. For flexibility please use the sample tag.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="response" type="xs:string" use="optional">
+              <xs:annotation>
+                <xs:documentation>The optional response attribute must align w/ a response ID. The order the components are placed is system &gt; thought &gt; prompt &gt; response &gt; source &gt; code. For flexibility please use the sample tag.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="code" type="xs:string" use="optional">
+              <xs:annotation>
+                <xs:documentation>The optional code attribute must align w/ a code ID. The order the components are placed is system &gt; thought &gt; prompt &gt; response &gt; source &gt; code. For flexibility please use the sample tag.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="source" type="xs:string" use="optional">
+              <xs:annotation>
+                <xs:documentation>The optional source attribute must align w/ a source ID. The order the components are placed is system &gt; thought &gt; prompt &gt; response &gt; source &gt; code. For flexibility please use the sample tag.</xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
           </xs:complexType>
         </xs:element>
 
         <!-- Sample w/ children xml tags -->
         <xs:element name="sample">
+          <xs:annotation>
+            <xs:documentation>The sample tag provides a verbose way to define a sample. Optimal when the sample HAS multiple of any paticular ID (ex: just one prompt, one thought, one response AND two code snippets).</xs:documentation>
+          </xs:annotation>
           <xs:complexType>
             <xs:choice minOccurs="1" maxOccurs="unbounded">
               <!-- System reference -->
               <xs:element name="system">
+                <xs:annotation>
+                  <xs:documentation>The optional system tag lets us add a system prompt to a sample.</xs:documentation>
+                </xs:annotation>
                 <xs:complexType>
-                  <xs:attribute name="id" type="xs:string" use="required" />
+                  <xs:attribute name="id" type="xs:string" use="required">
+                    <xs:annotation>
+                      <xs:documentation>The required ID attribute must align w/ a system prompt ID.</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
                 </xs:complexType>
               </xs:element>
 
               <!-- Prompt reference (required at least once) -->
               <xs:element name="prompt">
+                <xs:annotation>
+                  <xs:documentation>The required prompt tag lets us add a prompt to a sample.</xs:documentation>
+                </xs:annotation>
                 <xs:complexType>
-                  <xs:attribute name="id" type="xs:string" use="required" />
+                  <xs:attribute name="id" type="xs:string" use="required">
+                    <xs:annotation>
+                      <xs:documentation>The required ID attribute must align w/ a prompt ID.</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                </xs:complexType>
+              </xs:element>
+
+              <!-- Thought reference -->
+              <xs:element name="thought">
+                <xs:annotation>
+                  <xs:documentation>The optional thought tag lets us add a thought to a sample.</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:attribute name="id" type="xs:string" use="required">
+                    <xs:annotation>
+                      <xs:documentation>The required ID attribute must align w/ a thought ID.</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
                 </xs:complexType>
               </xs:element>
 
               <!-- Response reference (can appear multiple times) -->
               <xs:element name="response">
+                <xs:annotation>
+                  <xs:documentation>The optional response tag lets us add a response to a sample.</xs:documentation>
+                </xs:annotation>
                 <xs:complexType>
-                  <xs:attribute name="id" type="xs:string" use="required" />
+                  <xs:attribute name="id" type="xs:string" use="required">
+                    <xs:annotation>
+                      <xs:documentation>The required ID attribute is must align w/ a response ID.</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
                 </xs:complexType>
               </xs:element>
 
               <!-- Source reference -->
               <xs:element name="source">
+                <xs:annotation>
+                  <xs:documentation>The optional source tag lets us add a source to a sample.</xs:documentation>
+                </xs:annotation>
                 <xs:complexType>
-                  <xs:attribute name="id" type="xs:string" use="required" />
+                  <xs:attribute name="id" type="xs:string" use="required">
+                    <xs:annotation>
+                      <xs:documentation>The required ID attribute must align w/ a source ID.</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
                 </xs:complexType>
               </xs:element>
 
               <!-- Code reference -->
               <xs:element name="code">
+                <xs:annotation>
+                  <xs:documentation>The code tag is optional and lets us add code snippet to a sample.</xs:documentation>
+                </xs:annotation>
                 <xs:complexType>
                   <xs:simpleContent>
                     <xs:extension base="xs:string">
-                      <xs:attribute name="id" type="xs:string" use="required" />
+                      <xs:attribute name="id" type="xs:string" use="required">
+                    <xs:annotation>
+                      <xs:documentation>The required ID attribute must align w/ a code snippet ID.</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
                       <xs:attribute name="indent" use="optional">
+                        <xs:annotation>
+                          <xs:documentation>The optional indent attribute may be 1-6 and lets us know how far to indent the code snippet. Each indent is 4 spaces.</xs:documentation>
+                        </xs:annotation>
                         <xs:simpleType>
                           <xs:restriction base="xs:string">
                             <xs:enumeration value="1" />
@@ -215,20 +365,37 @@
                 </xs:complexType>
               </xs:element>
 
-              <!-- Response-ids element (renamed from paragraph-ids) -->
+              <!-- Response-ids element -->
               <xs:element name="response-ids">
+                <xs:annotation>
+                  <xs:documentation>The optional response-ids tag lets us add a response and source combo to a sample.</xs:documentation>
+                </xs:annotation>
                 <xs:complexType>
-                  <xs:attribute name="response" type="xs:string" use="required" />
-                  <xs:attribute name="source" type="xs:string" use="required" />
+                  <xs:attribute name="response" type="xs:string" use="required">
+                    <xs:annotation>
+                      <xs:documentation>The required response attribute must align w/ a response ID.</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute name="source" type="xs:string" use="required">
+                    <xs:annotation>
+                      <xs:documentation>The required source attribute must align w/ a source ID.</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
                 </xs:complexType>
               </xs:element>
 
               <!-- Line break element -->
               <xs:element name="line-break">
+                <xs:annotation>
+                  <xs:documentation>The line-break tag is optional and lets us add a line-break to a sample. Typically helpful when a response and source tag are used and then we want some to place a new response on a new line.</xs:documentation>
+                </xs:annotation>
                 <xs:complexType>
                   <xs:simpleContent>
                     <xs:extension base="xs:string">
                       <xs:attribute name="count" use="required">
+                        <xs:annotation>
+                          <xs:documentation>The count attribute is required, must be 1 or 2 and lets us know if there should be space between the 2 text blocks.</xs:documentation>
+                        </xs:annotation>
                         <xs:simpleType>
                           <xs:restriction base="xs:integer">
                             <xs:enumeration value="1" />
@@ -247,48 +414,126 @@
     </xs:sequence>
   </xs:complexType>
 
-  <!-- Responses type definition (renamed from ParagraphsType) -->
+  <!-- ResponsesType -->
   <xs:complexType name="ResponsesType">
+    <xs:annotation>
+      <xs:documentation>AI responses are text snippets, written in markdown and placed w/in samples.</xs:documentation>
+    </xs:annotation>
     <xs:sequence>
       <xs:element name="response" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>
+            The response tag lets us define an AI response (written in markdown) to be placed w/in samples.
+            If elements in this code tag could be interpreted as XML, then wrap the entire value w/ CDATA please (the CDATA wrapper will NOT be included w/in the response): https://stackoverflow.com/questions/2784183/what-does-cdata-in-xml-mean
+          </xs:documentation>
+        </xs:annotation>
         <xs:complexType mixed="true">
-          <xs:attribute name="id" type="xs:string" use="required" />
+          <xs:attribute name="id" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>The required ID attribute is the unique identifier for this response. The convention is to start response IDs w/ re:: then add your namespace and finally add an ID in snake case (re::aum::example_response).</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
   </xs:complexType>
 
-  <!-- Prompts type definition -->
+  <!-- ThoughtsType -->
+  <xs:complexType name="ThoughtsType">
+    <xs:annotation>
+      <xs:documentation>Thoughts are text snippets, written in markdown that are placed w/in samples and teach the AI how to plan an optimal response.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="thought" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>The thought tag lets us define an AI thought (written in markdown) to be placed w/in samples to teach the AI how to plan an optimal response.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+          <xs:attribute name="id" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>The required ID attribute is the unique identifier for this thought. The convention is to start thought IDs w/ th:: then add your namespace and finally add an ID in snake case (th::aum::example_thought).</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- PromptsType -->
   <xs:complexType name="PromptsType">
+    <xs:annotation>
+      <xs:documentation>Prompts are text snippets, written in markdown that are placed w/in samples and teach the AI model what prompts to expect.</xs:documentation>
+    </xs:annotation>
     <xs:sequence>
       <xs:element name="prompt" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>The prompt tag lets us define an sample prompt (written in markdown) to be placed w/in samples to teach the AI model what prompts to expect.</xs:documentation>
+        </xs:annotation>
         <xs:complexType mixed="true">
-          <xs:attribute name="id" type="xs:string" use="required" />
+          <xs:attribute name="id" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>The required ID attribute is the unique identifier for this prompt. The convention is to start prompt IDs w/ pr:: then add your namespace and finally add an ID in snake case (pr::aum::example_prompt).</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
   </xs:complexType>
 
-  <!-- Sources type definition -->
+  <!-- SourcesType -->
   <xs:complexType name="SourcesType">
+    <xs:annotation>
+      <xs:documentation>Sources are URLs w/ optional Title references that are placed w/in samples to credit responses. The AI model does not see/learn the URLs they just learn the source ID (which is easier to remember). Whenever an AI model gives us w/in its response a source ID we can convert it.</xs:documentation>
+    </xs:annotation>
     <xs:sequence>
       <xs:element name="source" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>The source tag lets us define a sample source (url + optional title) to be placed w/in an ai response to provide references to information. The AI model will not see/learn the source url or title b/c it will only see the source ID. Whenever an AI model gives us w/in its response a source ID we can convert it.</xs:documentation>
+        </xs:annotation>
         <xs:complexType>
-          <xs:attribute name="id" type="xs:string" use="required" />
-          <xs:attribute name="url" type="xs:string" use="required" />
-          <xs:attribute name="title" type="xs:string" use="optional" />
+          <xs:attribute name="id" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>The required ID attribute is the unique identifier for this source. The convention is to start source IDs w/ so:: then add your namespace and finally add an ID in snake case (so::aum::example_source).</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="url" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>The requried url attribute is the link to this source.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="title" type="xs:string" use="optional">
+            <xs:annotation>
+              <xs:documentation>This optional title attribute lets us add a title that describes the link. Helpful if you'd love to display a title for customers to click when they see a link rather then an icon or the URL.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
   </xs:complexType>
 
-  <!-- CodeSnippets type definition with restricted languages -->
+  <!-- CodeSnippetsType -->
   <xs:complexType name="CodeSnippetsType">
+    <xs:annotation>
+      <xs:documentation>Code Snippets are segments of computer code to place w/in samples.</xs:documentation>
+    </xs:annotation>
     <xs:sequence>
       <xs:element name="code" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>
+            The code tag lets us define a sample code snippet to be placed w/in a prompt or an ai response.
+            If elements in this code tag could be interpreted as XML, then wrap the entire value w/ CDATA please (the CDATA wrapper will NOT be included w/in the code snippet): https://stackoverflow.com/questions/2784183/what-does-cdata-in-xml-mean
+          </xs:documentation>
+        </xs:annotation>
         <xs:complexType mixed="true">
-          <xs:attribute name="id" type="xs:string" use="required" />
+          <xs:attribute name="id" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>The required ID attribute is the unique identifier for this code snippet. The convention is to start code snippet IDs w/ co:: then add your namespace and finally add an ID in snake case (co::aum::example_code).</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
           <xs:attribute name="lang" use="required">
+            <xs:annotation>
+              <xs:documentation>The required lang attribute is the programming language of this code snippet. In a prompt this helps the model know what to expect, and in a response this helps us syntax highlight the code optimally.</xs:documentation>
+            </xs:annotation>
             <xs:simpleType>
               <xs:restriction base="xs:string">
                 <xs:enumeration value="rust" />
@@ -305,68 +550,68 @@
     </xs:sequence>
   </xs:complexType>
 
-  <!-- Constants -->
+  <!-- ConstantsType -->
   <xs:complexType name="ConstantsType">
     <xs:all>
       <!-- Memory and Performance Targets -->
-      <xs:element name="aim_train_gb" type="xs:float" minOccurs="0">
+      <xs:element name="aim-train-gb" type="xs:float" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Goal max memory used at any moment during training in GB. Used to calculate optimal model parameters like the context window size, number of layers and embedding dimensions. Default: 7.0</xs:documentation>
+          <xs:documentation>Default is 7.0. Maximum training memory in gigabytes. Helps calculate optimal model parameters like context window, layers, and embedding dimensions.</xs:documentation>
         </xs:annotation>
       </xs:element>
       
-      <xs:element name="aim_infer_gb" type="xs:float" minOccurs="0">
+      <xs:element name="aim-infer-gb" type="xs:float" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Goal max memory used at any moment during inference in GB. Used to calculate optimal model parameters like the context window size, number of layers and embedding dimensions. Default: 0.9</xs:documentation>
+          <xs:documentation>Default is 0.9. Maximum inference memory in gigabytes. Helps calculate optimal model parameters like context window, layers, and embedding dimensions.</xs:documentation>
         </xs:annotation>
       </xs:element>
       
-      <xs:element name="aim_loss" type="xs:float" minOccurs="0">
+      <xs:element name="aim-loss" type="xs:float" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Goal loss value during training. Training stops when loss reaches aim_loss. Default: 0.45</xs:documentation>
+          <xs:documentation>Default is 0.45. Target loss value that stops training when reached. Prevents over-training once the model is good enough.</xs:documentation>
         </xs:annotation>
       </xs:element>
       
-      <xs:element name="learning_rate" type="xs:float" minOccurs="0">
+      <xs:element name="learning-rate" type="xs:float" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Learning rate for optimizer. Auto-scaled based on effective batch size. Default: 0.001 * (batch_size * grad_acc / 32)</xs:documentation>
+          <xs:documentation>Default is 0.001. Controls how much the model changes per training step. Auto-scales based on effective batch size for stable training.</xs:documentation>
         </xs:annotation>
       </xs:element>
       
-      <xs:element name="warmup_steps" type="xs:integer" minOccurs="0">
+      <xs:element name="warmup-steps" type="xs:integer" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Number of warmup steps for learning rate scheduler. Auto-scaled based on batch size. Default: 360 * (32 / effective_batch_size)</xs:documentation>
+          <xs:documentation>Default is 360. Number of steps to gradually increase learning rate. Prevents instability at the start of training.</xs:documentation>
         </xs:annotation>
       </xs:element>
       
-      <xs:element name="val_interval" type="xs:integer" minOccurs="0">
+      <xs:element name="val-interval" type="xs:integer" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Run validation every N steps. Default: 10</xs:documentation>
+          <xs:documentation>Default is 10. How often to run validation during training. Monitors model quality on unseen data.</xs:documentation>
         </xs:annotation>
       </xs:element>
       
-      <xs:element name="batch_size" type="xs:integer" minOccurs="0">
+      <xs:element name="batch-size" type="xs:integer" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Number of samples per batch. Auto-selected based on device and aim_train_gb. CPU: 1, Metal: 2-8, CUDA: 8-64</xs:documentation>
+          <xs:documentation>Default is auto-selected by device. Number of samples processed together. Balances memory usage against training speed.</xs:documentation>
         </xs:annotation>
       </xs:element>
       
-      <xs:element name="mixed_precision" type="xs:boolean" minOccurs="0">
+      <xs:element name="mixed-precision" type="xs:boolean" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Enable mixed precision training (FP16/BF16). Default: false for CPU, true for Metal/CUDA</xs:documentation>
+          <xs:documentation>Default is false for CPU, true for Metal/CUDA. Uses FP16/BF16 for faster training. Reduces memory usage while maintaining accuracy.</xs:documentation>
         </xs:annotation>
       </xs:element>
       
-      <xs:element name="gradient_accumulation_steps" type="xs:integer" minOccurs="0">
+      <xs:element name="gradient-accumulation-steps" type="xs:integer" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Number of steps to accumulate gradients before update. CPU: 1, Metal: 4, CUDA: 8</xs:documentation>
+          <xs:documentation>Default is 1 for CPU, 4 for Metal, 8 for CUDA. Simulates larger batch sizes without increasing memory. Improves training stability on limited hardware.</xs:documentation>
         </xs:annotation>
       </xs:element>
       
       <!-- Quantization Precision Settings -->
-      <xs:element name="activation_precision" minOccurs="0">
+      <xs:element name="activation-precision" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Precision for activations: "fp32", "int8". Default: fp32 for CPU, int8 for Metal/CUDA</xs:documentation>
+          <xs:documentation>Default is fp32 for CPU, int8 for Metal/CUDA. Precision for activation values. Lower precision uses less memory but may reduce quality.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:string">
@@ -376,9 +621,9 @@
         </xs:simpleType>
       </xs:element>
 
-      <xs:element name="kv_cache_precision" minOccurs="0">
+      <xs:element name="kv-cache-precision" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Precision for KV cache: "int8", "int4", "fp8". Default: "int8"</xs:documentation>
+          <xs:documentation>Default is int8. Precision for key-value cache storage. Lower precision enables longer context windows.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:string">
@@ -389,9 +634,9 @@
         </xs:simpleType>
       </xs:element>
 
-      <xs:element name="rope_precision" minOccurs="0">
+      <xs:element name="rope-precision" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Precision for RoPE embeddings: "fp32", "fp16". Default: fp32 for CPU, fp16 for Metal/CUDA</xs:documentation>
+          <xs:documentation>Default is fp32 for CPU, fp16 for Metal/CUDA. Precision for positional embeddings. Higher precision better for long sequences.</xs:documentation>
         </xs:annotation>
         <xs:simpleType>
           <xs:restriction base="xs:string">
@@ -402,40 +647,43 @@
       </xs:element>
       
       <!-- System Configuration -->
-      <xs:element name="num_workers" type="xs:integer" minOccurs="0">
+      <xs:element name="num-workers" type="xs:integer" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Number of data loading workers. CPU: CPU cores, Metal: 4, CUDA: 8</xs:documentation>
+          <xs:documentation>Default is CPU cores for CPU, 4 for Metal, 8 for CUDA. Number of parallel data loading threads. Speeds up data preparation.</xs:documentation>
         </xs:annotation>
       </xs:element>
       
-      <xs:element name="use_flash_attention" type="xs:boolean" minOccurs="0">
+      <xs:element name="use-flash-attention" type="xs:boolean" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Enable Flash Attention optimization. Default: false for CPU, true for Metal/CUDA</xs:documentation>
+          <xs:documentation>Default is false for CPU, true for Metal/CUDA. Enables faster attention computation. Reduces memory usage for long contexts.</xs:documentation>
         </xs:annotation>
       </xs:element>
       
-      <xs:element name="use_tensor_cores" type="xs:boolean" minOccurs="0">
+      <xs:element name="use-tensor-cores" type="xs:boolean" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Enable NVIDIA Tensor Cores (CUDA only). Default: true for CUDA, false otherwise</xs:documentation>
+          <xs:documentation>Default is true for CUDA. Enables NVIDIA Tensor Core acceleration. Significantly speeds up matrix multiplication on supported GPUs.</xs:documentation>
         </xs:annotation>
       </xs:element>
       
       <!-- BPE Tokenizer Configuration -->
-      <xs:element name="bpe_min_merge_frequency" type="xs:integer" minOccurs="0">
+      <xs:element name="bpe-min-merge-frequency" type="xs:integer" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Minimum frequency for BPE merges. Lower = more merges, larger vocabulary. Default: 3</xs:documentation>
+          <xs:documentation>Default is 3. Minimum frequency for BPE merges. Lower values create larger vocabularies that may learn more patterns.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      
-      <xs:element name="bpe_requested_tokens" minOccurs="0">
+
+      <xs:element name="bpe-requested-tokens" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Specific tokens to force-include in BPE vocabulary. Use multiple value elements for each token.</xs:documentation>
+          <xs:documentation>Default is no requested tokens. Requested tokens are added into the model's vocabulary. Helpful when we want to ensure large groups of letters make it into the vocabulare as a token.</xs:documentation>
         </xs:annotation>
         <xs:complexType>
           <xs:sequence>
             <xs:element name="value" type="xs:string" maxOccurs="unbounded">
               <xs:annotation>
-                <xs:documentation>A single token to include in BPE vocabulary (e.g., "function", "console.log")</xs:documentation>
+                <xs:documentation>
+                  A token that you'd like to ensure is included in the vocabulary.
+                  Example: "function" or "console.log". If elements in this value tag could be interpreted as XML, then wrap the entire value w/ CDATA please  (the CDATA wrapper will NOT be included w/ the token): https://stackoverflow.com/questions/2784183/what-does-cdata-in-xml-mean
+                </xs:documentation>
               </xs:annotation>
             </xs:element>
           </xs:sequence>
@@ -443,122 +691,163 @@
       </xs:element>
       
       <!-- Weight Decay Regularization -->
-      <xs:element name="weight_decay_response" type="xs:float" minOccurs="0">
+      <xs:element name="weight-decay-response" type="xs:float" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Weight decay for response tokens. Higher = stronger regularization. Default: 0.01</xs:documentation>
+          <xs:documentation>Default is 0.01. Weight decay for response tokens. Prevents overfitting to specific response patterns.</xs:documentation>
         </xs:annotation>
       </xs:element>
       
-      <xs:element name="weight_decay_source" type="xs:float" minOccurs="0">
+      <xs:element name="weight-decay-source" type="xs:float" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Weight decay for source tokens. Higher = stronger regularization. Default: 0.05</xs:documentation>
+          <xs:documentation>Default is 0.05. Weight decay for source attribution tokens. Stronger regularization since sources appear less frequently.</xs:documentation>
         </xs:annotation>
       </xs:element>
       
-      <xs:element name="weight_decay_code" type="xs:float" minOccurs="0">
+      <xs:element name="weight-decay-code" type="xs:float" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Weight decay for code tokens. Higher = stronger regularization. Default: 0.02</xs:documentation>
+          <xs:documentation>Default is 0.02. Weight decay for code tokens. Balances code syntax learning against memorization.</xs:documentation>
         </xs:annotation>
       </xs:element>
       
       <!-- Dropout Rates -->
-      <xs:element name="dropout_rate_response" type="xs:float" minOccurs="0">
+      <xs:element name="dropout-rate-response" type="xs:float" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Dropout rate for response tokens. 0 = no dropout, 1 = all dropped. Default: 0.1</xs:documentation>
+          <xs:documentation>Default is 0.1. Dropout rate for response tokens. Prevents overfitting by randomly dropping neurons during training.</xs:documentation>
         </xs:annotation>
       </xs:element>
       
-      <xs:element name="dropout_rate_source" type="xs:float" minOccurs="0">
+      <xs:element name="dropout-rate-source" type="xs:float" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Dropout rate for source tokens. 0 = no dropout, 1 = all dropped. Default: 0.05</xs:documentation>
+          <xs:documentation>Default is 0.05. Dropout rate for source tokens. Lower dropout since sources are critical for attribution.</xs:documentation>
         </xs:annotation>
       </xs:element>
       
-      <xs:element name="dropout_rate_code" type="xs:float" minOccurs="0">
+      <xs:element name="dropout-rate-code" type="xs:float" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Dropout rate for code tokens. 0 = no dropout, 1 = all dropped. Default: 0.15</xs:documentation>
+          <xs:documentation>Default is 0.15. Dropout rate for code tokens. Higher dropout helps generalize across different code styles.</xs:documentation>
         </xs:annotation>
       </xs:element>
       
       <!-- Loss Scaling -->
-      <xs:element name="loss_scale_response" type="xs:float" minOccurs="0">
+      <xs:element name="loss-scale-response" type="xs:float" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Loss scaling factor for response tokens. Adjusts contribution to total loss. Default: 1.0</xs:documentation>
+          <xs:documentation>Default is 1.0. Loss scaling for response tokens. Increases or decreases how much responses affect training.</xs:documentation>
         </xs:annotation>
       </xs:element>
       
-      <xs:element name="loss_scale_source" type="xs:float" minOccurs="0">
+      <xs:element name="loss-scale-source" type="xs:float" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Loss scaling factor for source tokens. Adjusts contribution to total loss. Default: 0.2</xs:documentation>
+          <xs:documentation>Default is 0.2. Loss scaling for source tokens. Lower weight since sources are supporting information.</xs:documentation>
         </xs:annotation>
       </xs:element>
       
-      <xs:element name="loss_scale_code" type="xs:float" minOccurs="0">
+      <xs:element name="loss-scale-code" type="xs:float" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Loss scaling factor for code tokens. Adjusts contribution to total loss. Default: 1.0</xs:documentation>
+          <xs:documentation>Default is 1.0. Loss scaling for code tokens. Equal weight with responses for balanced learning.</xs:documentation>
         </xs:annotation>
       </xs:element>
       
       <!-- Gradient Scaling -->
-      <xs:element name="gradient_scale_response" type="xs:float" minOccurs="0">
+      <xs:element name="gradient-scale-response" type="xs:float" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Gradient scaling factor for response tokens. Default: 1.0</xs:documentation>
+          <xs:documentation>Default is 1.0. Gradient scaling for response tokens. Adjusts update magnitude for response parameters.</xs:documentation>
         </xs:annotation>
       </xs:element>
       
-      <xs:element name="gradient_scale_source" type="xs:float" minOccurs="0">
+      <xs:element name="gradient-scale-source" type="xs:float" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Gradient scaling factor for source tokens. Default: 2.0</xs:documentation>
+          <xs:documentation>Default is 2.0. Gradient scaling for source tokens. Higher scale helps model learn source importance.</xs:documentation>
         </xs:annotation>
       </xs:element>
       
-      <xs:element name="gradient_scale_code" type="xs:float" minOccurs="0">
+      <xs:element name="gradient-scale-code" type="xs:float" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Gradient scaling factor for code tokens. Default: 1.2</xs:documentation>
+          <xs:documentation>Default is 1.2. Gradient scaling for code tokens. Slightly higher to emphasize syntax learning.</xs:documentation>
         </xs:annotation>
       </xs:element>
       
       <!-- Gradient Clipping -->
-      <xs:element name="gradient_clip_response" type="xs:float" minOccurs="0">
+      <xs:element name="gradient-clip-response" type="xs:float" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Maximum gradient norm for response tokens. Default: 1.0</xs:documentation>
+          <xs:documentation>Default is 1.0. Maximum gradient norm for response tokens. Prevents exploding gradients that break training.</xs:documentation>
         </xs:annotation>
       </xs:element>
       
-      <xs:element name="gradient_clip_source" type="xs:float" minOccurs="0">
+      <xs:element name="gradient-clip-source" type="xs:float" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Maximum gradient norm for source tokens. Default: 0.0 (no clipping)</xs:documentation>
+          <xs:documentation>Default is 0.0 (no clipping). Maximum gradient norm for source tokens. Disabled because source gradients are naturally small.</xs:documentation>
         </xs:annotation>
       </xs:element>
       
-      <xs:element name="gradient_clip_code" type="xs:float" minOccurs="0">
+      <xs:element name="gradient-clip-code" type="xs:float" minOccurs="0">
         <xs:annotation>
-          <xs:documentation>Maximum gradient norm for code tokens. Default: 0.7</xs:documentation>
+          <xs:documentation>Default is 0.7. Maximum gradient norm for code tokens. Moderate clipping helps code generation stability.</xs:documentation>
         </xs:annotation>
       </xs:element>
     </xs:all>
   </xs:complexType>
 
-  <!-- Phrases type definition -->
+  <!-- PhrasesType -->
   <xs:complexType name="PhrasesType">
+    <xs:annotation>
+      <xs:documentation>
+        The majority of samples go into training set. Training Set Process -&gt; 1. model does next token predictions 2. model see's correct tokens 3. model adjusts weights to predict better next time.
+        Much fewer samples go into the validation set. Validation Set Process -&gt; 1. model does next token predictions 2. model never sees correct valiation set tokens 3. model never adjusts weights based on validation set predictions.
+        Phrases help us create variations of samples.
+        With a variant we keep the answer the exact same between variants BUT we alter the phrasing w/in the prompt (ex: original prompt is "Hi", variant 1 prompt is "Aloha" &amp; variant prompt 2 is "Greetings").
+        Poppins will generate variations place 1 random variant into the validation set and the rest into the training set.
+        So the validation set is filled w/ samples the model kind of knows (adjusted weights for this answer before) but never trained on exactly (never adjusted weights for this exact prompt).
+        Phrases are vital b/c they help us build our validation set and helps the model learn similarities between alternate phrasing.
+      </xs:documentation>
+    </xs:annotation>
     <xs:sequence>
       <xs:element name="phrase" maxOccurs="unbounded">
+        <xs:annotation>
+          <xs:documentation>
+            The majority of samples go into training set. Training Set Process -&gt; 1. model does next token predictions 2. model see's correct tokens 3. model adjusts weights to predict better next time.
+            Much fewer samples go into the validation set. Validation Set Process -&gt; 1. model does next token predictions 2. model never sees correct valiation set tokens 3. model never adjusts weights based on validation set predictions.
+            Phrases help us create variations of samples.
+            With a variant we keep the answer the exact same between variants BUT we alter the phrasing w/in the prompt (ex: original prompt is "Hi", variant 1 prompt is "Aloha" &amp; variant prompt 2 is "Greetings").
+            Poppins will generate variations place 1 random variant into the validation set and the rest into the training set.
+            So the validation set is filled w/ samples the model kind of knows (adjusted weights for this answer before) but never trained on exactly (never adjusted weights for this exact prompt).
+            The phrase tag is vital b/c it helps us build our validation set and helps the model learn similarities between alternate phrasing.
+          </xs:documentation>
+        </xs:annotation>
         <xs:complexType>
           <xs:sequence>
             <xs:element name="variant" maxOccurs="unbounded">
+              <xs:annotation>
+                <xs:documentation>If the parent phrase &gt; pattern is found w/in the prompt, then a variant as defined w/in this tag is created.</xs:documentation>
+              </xs:annotation>
               <xs:complexType>
-                <xs:attribute name="value" type="xs:string" use="required" />
+                <xs:attribute name="value" type="xs:string" use="required">
+                  <xs:annotation>
+                    <xs:documentation>If the parent phrase &gt; pattern is found w/in the prompt, then a variant as defined w/in this required value attribute is created.</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
               </xs:complexType>
             </xs:element>
           </xs:sequence>
-          <xs:attribute name="pattern" type="xs:string" use="required" />
+          <xs:attribute name="pattern" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>The required pattern attribute is a regex pattern that will be used on the prompt to determine if Poppins should create variants for this sample.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
   </xs:complexType>
 
-  <!-- BeyondScope type definition -->
+  <!-- BeyondScopeType -->
   <xs:complexType name="BeyondScopeType">
+    <xs:annotation>
+      <xs:documentation>
+        When a model is given a prompt its never seen before there is a risk that it may give a ridiculous answer.
+        To help prevent this, Poppins will generate samples that are beyond the scope of what this model should know when this tag is defined.
+        You get to specify specific topics, topic categories &amp; the response.
+        A topic can be defined by you (ex: oak tree) and a topic category will add many topics automatically (ex: sports adds topics for football, baseball and more).
+        Here is an example w/ a topic of quantum computing: Prompt &gt; What is quantum computing, Response &gt; I'm sorry, I don't know b/c I'm an assistant that has been trained on english &amp; social studies.</xs:documentation>
+    </xs:annotation>
     <xs:sequence>
       <xs:element name="topic" minOccurs="0" maxOccurs="unbounded">
         <xs:complexType>
@@ -567,23 +856,92 @@
         </xs:complexType>
       </xs:element>
     </xs:sequence>
-    <xs:attribute name="system" type="xs:string" use="required" />
-    <xs:attribute name="response" type="xs:string" use="required" />
+    <xs:attribute name="system" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation>The required system attribute must align w/ a system prompt ID and when defined will let us add your requested system prompt to all generated beyond scope samples. We recommend this system prompt guides the model to knowing its scope and telling it how to respond when out of scope. (ex: You are a math, english and computer programming assistant. If the prompt is not about math, english or computer programming, then please respond: "I'm sorry, I don't know b/c I'm a math, english and computer programming assistant.")</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="thought" type="xs:string" use="optional">
+      <xs:annotation>
+        <xs:documentation>The optional thought attribute must align w/ a thought ID and when defined will let us add your requested thought to all generated beyond scope samples. We recommend this thought guides the model to knowing how to respond out of scope propts. (ex: B/c this prompt is not about math, english or computer programming, I will respond w/ "I'm sorry, I don't know b/c I'm a math, english and computer programming assistant".)</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="response" type="xs:string" use="required">
+      <xs:annotation>
+        <xs:documentation>The required response attribute must align w/ a response ID and when defined will let us add your requested response to all generated beyond scope samples. We recommend this response guides the customer to knowing what is in scope for the AI model. (ex: I'm sorry, I don't know b/c I'm a math, english and computer programming assistant.)</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
 
     <!-- Boolean attributes for common topic categories -->
-    <xs:attribute name="sports" type="xs:boolean" use="optional" default="false" />
-    <xs:attribute name="food" type="xs:boolean" use="optional" default="false" />
-    <xs:attribute name="movies" type="xs:boolean" use="optional" default="false" />
-    <xs:attribute name="history" type="xs:boolean" use="optional" default="false" />
-    <xs:attribute name="geography" type="xs:boolean" use="optional" default="false" />
-    <xs:attribute name="politics" type="xs:boolean" use="optional" default="false" />
-    <xs:attribute name="science" type="xs:boolean" use="optional" default="false" />
-    <xs:attribute name="health" type="xs:boolean" use="optional" default="false" />
-    <xs:attribute name="art" type="xs:boolean" use="optional" default="false" />
-    <xs:attribute name="music" type="xs:boolean" use="optional" default="false" />
-    <xs:attribute name="fashion" type="xs:boolean" use="optional" default="false" />
-    <xs:attribute name="travel" type="xs:boolean" use="optional" default="false" />
-    <xs:attribute name="pets" type="xs:boolean" use="optional" default="false" />
-    <xs:attribute name="cars" type="xs:boolean" use="optional" default="false" />
+    <xs:attribute name="sports" type="xs:boolean" use="optional" default="false">
+      <xs:annotation>
+        <xs:documentation>The topic category sports adds beyond scope sample about soccer, basketball, football etc.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="food" type="xs:boolean" use="optional" default="false">
+      <xs:annotation>
+        <xs:documentation>The topic category food adds beyond scope sample about cooking, baking, recipes etc.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="movies" type="xs:boolean" use="optional" default="false">
+      <xs:annotation>
+        <xs:documentation>The topic category movies adds beyond scope sample about netflix, actors, hollywood etc.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="history" type="xs:boolean" use="optional" default="false">
+      <xs:annotation>
+        <xs:documentation>The topic category history adds beyond scope sample about ancient egypt, the renaissance, the middle ages etc.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="geography" type="xs:boolean" use="optional" default="false">
+      <xs:annotation>
+        <xs:documentation>The topic category geography adds beyond scope sample about capitals, mountains, countries etc.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="politics" type="xs:boolean" use="optional" default="false">
+      <xs:annotation>
+        <xs:documentation>The topic category politics adds beyond scope sample about president, elections, government etc.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="science" type="xs:boolean" use="optional" default="false">
+      <xs:annotation>
+        <xs:documentation>The topic category science adds beyond scope sample about biology, chemistry, physics etc.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="health" type="xs:boolean" use="optional" default="false">
+      <xs:annotation>
+        <xs:documentation>The topic category health adds beyond scope sample about medicine, diseases, exercise etc.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="art" type="xs:boolean" use="optional" default="false">
+      <xs:annotation>
+        <xs:documentation>The topic category art adds beyond scope sample about art, sculpture, painting etc.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="music" type="xs:boolean" use="optional" default="false">
+      <xs:annotation>
+        <xs:documentation>The topic category music adds beyond scope sample about jazz, hip hop, concerts etc.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="fashion" type="xs:boolean" use="optional" default="false">
+      <xs:annotation>
+        <xs:documentation>The topic category fashion adds beyond scope sample about fashion, clothing, designers etc.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="travel" type="xs:boolean" use="optional" default="false" >
+      <xs:annotation>
+        <xs:documentation>The topic category travel adds beyond scope sample about hotels, flights, tourism etc.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="pets" type="xs:boolean" use="optional" default="false">
+      <xs:annotation>
+        <xs:documentation>The topic category pets adds beyond scope sample about dogs, cats, pet care etc.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="cars" type="xs:boolean" use="optional" default="false">
+      <xs:annotation>
+        <xs:documentation>The topic category cars adds beyond scope sample about electric vehicles, dealerships, trucks etc.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
   </xs:complexType>
 </xs:schema>

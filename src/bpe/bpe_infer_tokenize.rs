@@ -125,8 +125,9 @@ fn apply_merges_fast(
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use std::collections::HashMap;
+    use std::collections::{HashSet, HashMap};
+    use super::{apply_merges_fast, split_into_tokens};
+    use crate::bpe::{BPETokenizer, bpe_infer_tokenize};
 
     fn create_test_tokenizer() -> BPETokenizer {
         let mut vocab = vec![

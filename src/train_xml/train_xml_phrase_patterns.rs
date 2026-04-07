@@ -46,20 +46,23 @@ pub fn train_xml_phrase_patterns(train_xml: &TrainXML) -> Vec<TrainXMLPhrasePatt
 }
 
 
+
 #[cfg(test)]
 mod tests {
-    use super::*;
     use crate::train_xml::{
         TrainXML,
         TrainXMLPhrases,
         TrainXMLPhrasesPhrase,
         TrainXMLPhrasesVariant,
+        train_xml_phrase_patterns,
     };
 
     fn create_test_train_xml_with_phrases() -> TrainXML {
         TrainXML {
+            imports: None, 
             system_prompts: None,
             prompts: None,
+            thoughts: None,
             responses: None,
             sources: None,
             code_snippets: None,
@@ -90,8 +93,10 @@ mod tests {
 
     fn create_test_train_xml_with_multi_capture() -> TrainXML {
         TrainXML {
+            imports: None, 
             system_prompts: None,
             prompts: None,
+            thoughts: None,
             responses: None,
             sources: None,
             code_snippets: None,
@@ -114,8 +119,10 @@ mod tests {
 
     fn create_test_train_xml_with_no_phrases() -> TrainXML {
         TrainXML {
+            imports: None, 
             system_prompts: None,
             prompts: None,
+            thoughts: None,
             responses: None,
             sources: None,
             code_snippets: None,
@@ -128,8 +135,10 @@ mod tests {
 
     fn create_test_train_xml_with_empty_phrases() -> TrainXML {
         TrainXML {
+            imports: None, 
             system_prompts: None,
             prompts: None,
+            thoughts: None,
             responses: None,
             sources: None,
             code_snippets: None,
@@ -142,8 +151,10 @@ mod tests {
 
     fn create_test_train_xml_with_invalid_regex() -> TrainXML {
         TrainXML {
+            imports: None, 
             system_prompts: None,
             prompts: None,
+            thoughts: None,
             responses: None,
             sources: None,
             code_snippets: None,
@@ -255,8 +266,10 @@ mod tests {
     #[test]
     fn test_train_xml_phrase_patterns_preserves_order() {
         let train_xml = TrainXML {
+            imports: None, 
             system_prompts: None,
             prompts: None,
+            thoughts: None,
             responses: None,
             sources: None,
             code_snippets: None,
@@ -298,8 +311,10 @@ mod tests {
     #[test]
     fn test_train_xml_phrase_patterns_with_complex_pattern() {
         let train_xml = TrainXML {
+            imports: None, 
             system_prompts: None,
             prompts: None,
+            thoughts: None,
             responses: None,
             sources: None,
             code_snippets: None,
@@ -333,8 +348,10 @@ mod tests {
     #[test]
     fn test_train_xml_phrase_patterns_with_named_capture_groups() {
         let train_xml = TrainXML {
+            imports: None, 
             system_prompts: None,
             prompts: None,
+            thoughts: None,
             responses: None,
             sources: None,
             code_snippets: None,
@@ -368,8 +385,10 @@ mod tests {
     #[test]
     fn test_train_xml_phrase_patterns_with_variants_using_placeholders() {
         let train_xml = TrainXML {
+            imports: None, 
             system_prompts: None,
             prompts: None,
+            thoughts: None,
             responses: None,
             sources: None,
             code_snippets: None,

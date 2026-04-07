@@ -135,11 +135,6 @@ impl Default for BeyondScope {
                 BeyondScopeTopic { value: "art".to_string(), prefix: "is".to_string() },
                 BeyondScopeTopic { value: "painting".to_string(), prefix: "is".to_string() },
                 BeyondScopeTopic { value: "sculpture".to_string(), prefix: "is".to_string() },
-                BeyondScopeTopic { value: "books".to_string(), prefix: "are".to_string() },
-                BeyondScopeTopic { value: "poetry".to_string(), prefix: "is".to_string() },
-                BeyondScopeTopic { value: "novels".to_string(), prefix: "are".to_string() },
-                BeyondScopeTopic { value: "authors".to_string(), prefix: "are".to_string() },
-                BeyondScopeTopic { value: "literature".to_string(), prefix: "is".to_string() },
             ],
             music: vec![
                 BeyondScopeTopic { value: "rock music".to_string(), prefix: "is".to_string() },
@@ -176,15 +171,13 @@ impl Default for BeyondScope {
                 BeyondScopeTopic { value: "fish".to_string(), prefix: "are".to_string() },
                 BeyondScopeTopic { value: "reptiles".to_string(), prefix: "are".to_string() },
                 BeyondScopeTopic { value: "pet care".to_string(), prefix: "is".to_string() },
-                BeyondScopeTopic { value: "training".to_string(), prefix: "is".to_string() },
                 BeyondScopeTopic { value: "veterinary".to_string(), prefix: "is".to_string() },
             ],
             cars: vec![
                 BeyondScopeTopic { value: "cars".to_string(), prefix: "are".to_string() },
+                BeyondScopeTopic { value: "vans".to_string(), prefix: "are".to_string() },
                 BeyondScopeTopic { value: "trucks".to_string(), prefix: "are".to_string() },
                 BeyondScopeTopic { value: "electric vehicles".to_string(), prefix: "are".to_string() },
-                BeyondScopeTopic { value: "racing".to_string(), prefix: "is".to_string() },
-                BeyondScopeTopic { value: "maintenance".to_string(), prefix: "is".to_string() },
                 BeyondScopeTopic { value: "dealerships".to_string(), prefix: "are".to_string() },
             ],
         }

@@ -16,6 +16,7 @@ use crate::tag::{
 /// - Special tags are looked up in the vocabulary using tag functions
 /// - Text content is split into individual characters
 /// - Code content preserves all whitespace and is split into individual characters
+/// - Thought content is tokenized as markdown text
 ///
 /// # Arguments
 /// * `tokenizer` - Reference to the tokenizer with initialized vocabulary
@@ -37,9 +38,9 @@ pub fn bpe_train_tokenize(
         add_tag_to_sequence(&mut sequence, "sample", true, &special_tokens, tokenizer)?;
         
         // Write system tag if present
-        if !sample.system.is_empty() {
+        if let Some(system) = &sample.system {
             add_tag_to_sequence(&mut sequence, "system", true, &special_tokens, tokenizer)?;
-            add_text_to_sequence(&mut sequence, &sample.system, tokenizer);
+            add_text_to_sequence(&mut sequence, system, tokenizer);
             add_tag_to_sequence(&mut sequence, "system", false, &special_tokens, tokenizer)?;
         }
         
@@ -50,6 +51,13 @@ pub fn bpe_train_tokenize(
             tag_write_prompt_content(&mut writer, &sample.prompt_section, &special_tokens)?;
         }
         add_tag_to_sequence(&mut sequence, "prompt", false, &special_tokens, tokenizer)?;
+        
+        // Write thought tag if present
+        if let Some(thought) = &sample.thought {
+            add_tag_to_sequence(&mut sequence, "thought", true, &special_tokens, tokenizer)?;
+            add_text_to_sequence(&mut sequence, thought, tokenizer);
+            add_tag_to_sequence(&mut sequence, "thought", false, &special_tokens, tokenizer)?;
+        }
         
         // Write AI section
         add_tag_to_sequence(&mut sequence, "ai", true, &special_tokens, tokenizer)?;
@@ -146,6 +154,7 @@ mod tests {
         
         // Add Unicode characters that might appear
         let unicode_chars = ['é', 'á', 'í', 'ó', 'ú', 'ñ'];
+
         for c in unicode_chars {
             let token = c.to_string();
             if !vocab.contains(&token) {
@@ -167,6 +176,21 @@ mod tests {
             special_token_count: special_tokens.len() as u32,
             initial_token_count,
         }
+    }
+
+    fn create_test_samples_with_thought() -> Vec<Sample> {
+        vec![
+            Sample {
+                system: Some("You are a helpful assistant.".to_string()),
+                thought: Some("1. Understand the question\n2. Provide a clear answer\n3. Be concise".to_string()),
+                prompt_section: vec![
+                    SamplePromptEnum::Text("Explain programming".to_string()),
+                ],
+                ai_section: vec![
+                    SampleAiEnum::Text("Programming is giving instructions to a computer.".to_string()),
+                ],
+            },
+        ]
     }
 
     #[test]
@@ -236,12 +260,45 @@ mod tests {
     }
 
     #[test]
+    fn test_bpe_train_tokenize_with_thought() {
+        let tokenizer = create_test_tokenizer();
+        let samples = create_test_samples_with_thought();
+        
+        let sequence = bpe_train_tokenize(&tokenizer, &samples).expect("Tokenizing failed");
+        
+        let token_strings: Vec<String> = sequence.iter()
+            .map(|&id| tokenizer.vocab[id as usize].clone())
+            .collect();
+        
+        // Build the full string from tokens
+        let full_text: String = token_strings.concat();
+        
+        // Verify thought tags are present
+        assert!(token_strings.contains(&"<thought>".to_string()), "Missing <thought> opening tag");
+        assert!(token_strings.contains(&"</thought>".to_string()), "Missing </thought> closing tag");
+        
+        // Verify thought content appears
+        assert!(full_text.contains("1. Understand the question"), "Thought content not found");
+        assert!(full_text.contains("2. Provide a clear answer"), "Thought content not found");
+        assert!(full_text.contains("3. Be concise"), "Thought content not found");
+        
+        // Verify thought appears between prompt and ai
+        let prompt_pos = token_strings.iter().position(|t| t == "<prompt>").unwrap();
+        let thought_pos = token_strings.iter().position(|t| t == "<thought>").unwrap();
+        let ai_pos = token_strings.iter().position(|t| t == "<ai>").unwrap();
+        
+        assert!(prompt_pos < thought_pos, "<thought> should appear after <prompt>");
+        assert!(thought_pos < ai_pos, "<thought> should appear before <ai>");
+    }
+
+    #[test]
     fn test_bpe_train_tokenize_with_code() {
         let tokenizer = create_test_tokenizer();
         
         let samples = vec![
             Sample {
-                system: String::new(),
+                system: Some(String::new()),
+                thought: None,
                 prompt_section: vec![
                     SamplePromptEnum::Code(SampleCode {
                         lang: SampleLanguage::Js,
@@ -277,7 +334,8 @@ mod tests {
         
         let samples = vec![
             Sample {
-                system: String::new(),
+                system: Some(String::new()),
+                thought: None,
                 prompt_section: vec![
                     SamplePromptEnum::Text("Line1".to_string()),
                     SamplePromptEnum::LineBreak(SampleLineBreak { count: 1 }),
@@ -302,7 +360,8 @@ mod tests {
         
         let samples = vec![
             Sample {
-                system: String::new(),
+                system: Some(String::new()),
+                thought: None,
                 prompt_section: vec![
                     SamplePromptEnum::Text("Source test".to_string()),
                 ],
@@ -334,12 +393,14 @@ mod tests {
         
         let samples = vec![
             Sample {
-                system: String::new(),
+                system: Some(String::new()),
+                thought: None,
                 prompt_section: vec![SamplePromptEnum::Text("First".to_string())],
                 ai_section: vec![SampleAiEnum::Text("Response1".to_string())],
             },
             Sample {
-                system: String::new(),
+                system: Some(String::new()),
+                thought: None,
                 prompt_section: vec![SamplePromptEnum::Text("Second".to_string())],
                 ai_section: vec![SampleAiEnum::Text("Response2".to_string())],
             },
@@ -372,11 +433,75 @@ mod tests {
         assert!(token_strings.contains(&"d".to_string()));
     }
 
+    #[test]
+    fn test_bpe_train_tokenize_with_thought_and_code() {
+        let tokenizer = create_test_tokenizer();
+        
+        let samples = vec![
+            Sample {
+                system: Some("You are a coding assistant.".to_string()),
+                thought: Some("1. Parse the request\n2. Generate code\n3. Add comments".to_string()),
+                prompt_section: vec![
+                    SamplePromptEnum::Text("Write a function".to_string()),
+                ],
+                ai_section: vec![
+                    SampleAiEnum::Code(SampleCode {
+                        lang: SampleLanguage::Rust,
+                        inline: false,
+                        indent: None,
+                        content: "def hello():\n    print('world')".to_string(),
+                    }),
+                ],
+            },
+        ];
+        
+        let sequence = bpe_train_tokenize(&tokenizer, &samples).expect("Tokenizing failed");
+        
+        let token_strings: Vec<String> = sequence.iter()
+            .map(|&id| tokenizer.vocab[id as usize].clone())
+            .collect();
+        
+        // Build the full text to verify content
+        let full_text: String = token_strings.concat();
+        
+        // Verify thought tags and content
+        assert!(token_strings.contains(&"<thought>".to_string()));
+        assert!(token_strings.contains(&"</thought>".to_string()));
+        assert!(token_strings.contains(&"1".to_string()));
+        
+        // Check for individual characters instead of whole word
+        assert!(token_strings.contains(&"P".to_string()));
+        assert!(token_strings.contains(&"a".to_string()));
+        assert!(token_strings.contains(&"r".to_string()));
+        assert!(token_strings.contains(&"s".to_string()));
+        assert!(token_strings.contains(&"e".to_string()));
+        
+        // Or check the full text contains "Parse"
+        assert!(full_text.contains("Parse"), "Full text should contain 'Parse', got: {}", full_text);
+        
+        // Verify code tags and content
+        assert!(token_strings.contains(&"<rust>".to_string()));
+        assert!(token_strings.contains(&"</rust>".to_string()));
+        
+        // Check for individual characters from code
+        assert!(token_strings.contains(&"d".to_string()));
+        assert!(token_strings.contains(&"e".to_string()));
+        assert!(token_strings.contains(&"f".to_string()));
+        assert!(token_strings.contains(&"h".to_string()));
+        assert!(token_strings.contains(&"l".to_string()));
+        assert!(token_strings.contains(&"o".to_string()));
+        
+        // Or check the full text contains code keywords
+        assert!(full_text.contains("def"), "Full text should contain 'def', got: {}", full_text);
+        assert!(full_text.contains("hello"), "Full text should contain 'hello', got: {}", full_text);
+    }
+    
     // Helper functions to create test samples
     fn create_test_samples() -> Vec<Sample> {
         vec![
             Sample {
-                system: String::new(),
+                system: Some(String::new()),
+                thought: None,
                 prompt_section: vec![
                     SamplePromptEnum::Text("Hi".to_string()),
                 ],
@@ -390,7 +515,8 @@ mod tests {
     fn create_test_samples_with_system() -> Vec<Sample> {
         vec![
             Sample {
-                system: "You are a helpful assistant.\n".to_string(),
+                system: Some("You are a helpful assistant.\n".to_string()),
+                thought: None,
                 prompt_section: vec![
                     SamplePromptEnum::Text("Hi".to_string()),
                 ],

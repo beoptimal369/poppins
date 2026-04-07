@@ -5,6 +5,7 @@ use crate::train_xml::{
     TrainXML,
     TrainXMLSourcesSource,
     TrainXMLPromptsPrompt,
+    TrainXMLThoughtsThought,
     TrainXMLCodeSnippetsCode,
     TrainXMLResponsesResponse,
     TrainXMLSystemPromptsSystem,
@@ -19,6 +20,9 @@ pub struct TrainXMLIdMaps<'a> {
     
     /// Map of prompt IDs to their corresponding prompt data
     pub prompts: HashMap<String, &'a TrainXMLPromptsPrompt>,
+    
+    /// Map of thought IDs to their corresponding thought data
+    pub thoughts: HashMap<String, &'a TrainXMLThoughtsThought>,
     
     /// Map of response IDs to their corresponding response data
     pub responses: HashMap<String, &'a TrainXMLResponsesResponse>,
@@ -42,10 +46,11 @@ impl<'a> TrainXMLIdMaps<'a> {
     ///
     /// # Errors
     /// Returns an error if any duplicate IDs are found within the same category
-    /// (system-prompts, prompts, responses, sources, or code-snippets)
+    /// (system-prompts, prompts, thoughts, responses, sources, or code-snippets)
     pub fn create(train_xml: &'a TrainXML) -> Result<Self, String> {
         let mut system_prompts = HashMap::new();
         let mut prompts = HashMap::new();
+        let mut thoughts = HashMap::new();
         let mut responses = HashMap::new();
         let mut sources = HashMap::new();
         let mut code_snippets = HashMap::new();
@@ -64,6 +69,15 @@ impl<'a> TrainXMLIdMaps<'a> {
             for prompt in &prompts_section.prompt {
                 if prompts.insert(prompt.id.clone(), prompt).is_some() {
                     return Err(format!("Duplicate prompt ID: '{}'", prompt.id));
+                }
+            }
+        }
+        
+        // Validate thoughts
+        if let Some(thoughts_section) = &train_xml.thoughts {
+            for thought in &thoughts_section.thought {
+                if thoughts.insert(thought.id.clone(), thought).is_some() {
+                    return Err(format!("Duplicate thought ID: '{}'", thought.id));
                 }
             }
         }
@@ -98,6 +112,7 @@ impl<'a> TrainXMLIdMaps<'a> {
         Ok(Self {
             system_prompts,
             prompts,
+            thoughts,
             responses,
             sources,
             code_snippets,
@@ -114,11 +129,13 @@ mod tests {
         TrainXMLIdMaps,
         TrainXMLSourcesSource,
         TrainXMLPromptsPrompt,
+        TrainXMLThoughtsThought,
         TrainXMLCodeSnippetsCode,
         TrainXMLResponsesResponse,
         TrainXMLSystemPromptsSystem,
         train_xml_structs::{
             TrainXMLPrompts,
+            TrainXMLThoughts,
             TrainXMLSources,
             TrainXMLResponses,
             TrainXMLCodeSnippets,
@@ -129,6 +146,7 @@ mod tests {
     #[test]
     fn test_create_with_valid_ids() {
         let train_xml = TrainXML {
+            imports: None, 
             system_prompts: Some(TrainXMLSystemPrompts {
                 system: vec![
                     TrainXMLSystemPromptsSystem {
@@ -150,6 +168,18 @@ mod tests {
                     TrainXMLPromptsPrompt {
                         id: "prompt2".to_string(),
                         content: "Content 2".to_string(),
+                    },
+                ],
+            }),
+            thoughts: Some(TrainXMLThoughts {
+                thought: vec![
+                    TrainXMLThoughtsThought {
+                        id: "thought1".to_string(),
+                        content: "I will think about this".to_string(),
+                    },
+                    TrainXMLThoughtsThought {
+                        id: "thought2".to_string(),
+                        content: "Another approach".to_string(),
                     },
                 ],
             }),
@@ -201,6 +231,13 @@ mod tests {
         assert_eq!(ids.prompts.get("prompt1").unwrap().content, "Content 1");
         assert_eq!(ids.prompts.get("prompt2").unwrap().content, "Content 2");
         
+        // Test thoughts
+        assert_eq!(ids.thoughts.len(), 2);
+        assert!(ids.thoughts.contains_key("thought1"));
+        assert!(ids.thoughts.contains_key("thought2"));
+        assert_eq!(ids.thoughts.get("thought1").unwrap().content, "I will think about this");
+        assert_eq!(ids.thoughts.get("thought2").unwrap().content, "Another approach");
+        
         // Test responses
         assert_eq!(ids.responses.len(), 1);
         assert!(ids.responses.contains_key("response1"));
@@ -220,6 +257,7 @@ mod tests {
     #[test]
     fn test_create_with_mixed_duplicates() {
         let train_xml = TrainXML {
+            imports: None, 
             system_prompts: Some(TrainXMLSystemPrompts {
                 system: vec![
                     TrainXMLSystemPromptsSystem {
@@ -233,6 +271,14 @@ mod tests {
                     TrainXMLPromptsPrompt {
                         id: "id123".to_string(),
                         content: "Prompt".to_string(),
+                    },
+                ],
+            }),
+            thoughts: Some(TrainXMLThoughts {
+                thought: vec![
+                    TrainXMLThoughtsThought {
+                        id: "id123".to_string(),
+                        content: "Thought".to_string(),
                     },
                 ],
             }),
@@ -275,6 +321,8 @@ mod tests {
         assert!(ids.system_prompts.contains_key("id123"));
         assert_eq!(ids.prompts.len(), 1);
         assert!(ids.prompts.contains_key("id123"));
+        assert_eq!(ids.thoughts.len(), 1);
+        assert!(ids.thoughts.contains_key("id123"));
         assert_eq!(ids.responses.len(), 1);
         assert!(ids.responses.contains_key("id123"));
         assert_eq!(ids.sources.len(), 1);
@@ -285,6 +333,7 @@ mod tests {
         // Verify we can access the actual data
         assert_eq!(ids.system_prompts.get("id123").unwrap().content, "System Prompt");
         assert_eq!(ids.prompts.get("id123").unwrap().content, "Prompt");
+        assert_eq!(ids.thoughts.get("id123").unwrap().content, "Thought");
         assert_eq!(ids.responses.get("id123").unwrap().content, "Response");
         assert_eq!(ids.sources.get("id123").unwrap().url, "https://example.com");
         assert_eq!(ids.code_snippets.get("id123").unwrap().lang, "rust");
@@ -293,6 +342,7 @@ mod tests {
     #[test]
     fn test_create_with_duplicate_system_prompts() {
         let train_xml = TrainXML {
+            imports: None, 
             system_prompts: Some(TrainXMLSystemPrompts {
                 system: vec![
                     TrainXMLSystemPromptsSystem {
@@ -306,6 +356,7 @@ mod tests {
                 ],
             }),
             prompts: None,
+            thoughts: None,
             responses: None,
             sources: None,
             code_snippets: None,
@@ -323,6 +374,7 @@ mod tests {
     #[test]
     fn test_create_with_duplicate_prompts() {
         let train_xml = TrainXML {
+            imports: None, 
             system_prompts: None,
             prompts: Some(TrainXMLPrompts {
                 prompt: vec![
@@ -336,6 +388,7 @@ mod tests {
                     },
                 ],
             }),
+            thoughts: None,
             responses: None,
             sources: None,
             code_snippets: None,
@@ -351,10 +404,44 @@ mod tests {
     }
 
     #[test]
-    fn test_create_with_optional_sections_none() {
+    fn test_create_with_duplicate_thoughts() {
         let train_xml = TrainXML {
+            imports: None, 
             system_prompts: None,
             prompts: None,
+            thoughts: Some(TrainXMLThoughts {
+                thought: vec![
+                    TrainXMLThoughtsThought {
+                        id: "thought1".to_string(),
+                        content: "First".to_string(),
+                    },
+                    TrainXMLThoughtsThought {
+                        id: "thought1".to_string(),
+                        content: "Duplicate".to_string(),
+                    },
+                ],
+            }),
+            responses: None,
+            sources: None,
+            code_snippets: None,
+            samples: None,
+            constants: None,
+            phrases: None,
+            beyond_scope: None,
+        };
+
+        let result = TrainXMLIdMaps::create(&train_xml);
+        assert!(result.is_err());
+        assert!(result.unwrap_err().contains("Duplicate thought ID: 'thought1'"));
+    }
+
+    #[test]
+    fn test_create_with_optional_sections_none() {
+        let train_xml = TrainXML {
+            imports: None, 
+            system_prompts: None,
+            prompts: None,
+            thoughts: None,
             responses: None,
             sources: None,
             code_snippets: None,
@@ -368,6 +455,7 @@ mod tests {
         
         assert_eq!(ids.system_prompts.len(), 0);
         assert_eq!(ids.prompts.len(), 0);
+        assert_eq!(ids.thoughts.len(), 0);
         assert_eq!(ids.responses.len(), 0);
         assert_eq!(ids.sources.len(), 0);
         assert_eq!(ids.code_snippets.len(), 0);

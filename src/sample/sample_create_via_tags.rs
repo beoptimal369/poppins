@@ -30,8 +30,11 @@ pub fn sample_create_via_tags(
     samples: &TrainXMLSamplesSample,
     train_xml_ids: &TrainXMLIdMaps,
 ) -> Option<Sample> {
-    // Collect system prompts in order
-    let mut system = String::new();
+    // Collect system prompts in order - start with None
+    let mut system: Option<String> = None;
+    
+    // Collect thought content if present
+    let mut thought = None;
     
     // Build prompt section (user prompts only)
     let mut prompt_section = Vec::new();
@@ -48,24 +51,48 @@ pub fn sample_create_via_tags(
                 // Found the prompt - get its content from IDs
                 if let Some(prompt) = train_xml_ids.prompts.get(&prompt_ref.id) {
                     prompt_content = Some(prompt.content.clone());
+                } else {
+                    // Prompt ID not found - invalid sample
+                    return None;
                 }
             },
             
             TrainXMLSamplesSampleChildren::System(system_ref) => {
                 if let Some(system_prompt) = train_xml_ids.system_prompts.get(&system_ref.id) {
-                    system.push_str(&system_prompt.content);
+                    match &mut system {
+                        Some(existing) => existing.push_str(&system_prompt.content),
+                        None => system = Some(system_prompt.content.clone()),
+                    }
+                } else {
+                    // System ID provided but not found - invalid sample
+                    return None;
+                }
+            },
+            
+            TrainXMLSamplesSampleChildren::Thought(thought_ref) => {
+                if let Some(thought_prompt) = train_xml_ids.thoughts.get(&thought_ref.id) {
+                    thought = Some(thought_prompt.content.clone());
+                } else {
+                    // Thought ID provided but not found - invalid sample
+                    return None;
                 }
             },
             
             TrainXMLSamplesSampleChildren::Response(response_ref) => {
                 if let Some(response) = train_xml_ids.responses.get(&response_ref.id) {
                     ai_section.push(SampleAiEnum::Text(response.content.clone()));
+                } else {
+                    // Response ID provided but not found - invalid sample
+                    return None;
                 }
             },
             
             TrainXMLSamplesSampleChildren::Source(source_ref) => {
                 if let Some(_source) = train_xml_ids.sources.get(&source_ref.id) {
                     ai_section.push(SampleAiEnum::Source(source_ref.id.clone()));
+                } else {
+                    // Source ID provided but not found - invalid sample
+                    return None;
                 }
             },
             
@@ -80,6 +107,9 @@ pub fn sample_create_via_tags(
                         indent,
                         content: code.content.clone(),
                     }));
+                } else {
+                    // Code ID provided but not found - invalid sample
+                    return None;
                 }
             },
             
@@ -87,12 +117,18 @@ pub fn sample_create_via_tags(
                 // Add the response first
                 if let Some(response) = train_xml_ids.responses.get(&response_id_ref.response) {
                     ai_section.push(SampleAiEnum::Text(response.content.clone()));
+                } else {
+                    // Response ID provided but not found - invalid sample
+                    return None;
                 }
                 
                 // Then add the source if present
                 if let Some(source_id) = &response_id_ref.source {
                     if let Some(_source) = train_xml_ids.sources.get(source_id) {
                         ai_section.push(SampleAiEnum::Source(source_id.to_string()));
+                    } else {
+                        // Source ID provided but not found - invalid sample
+                        return None;
                     }
                 }
             },
@@ -103,8 +139,9 @@ pub fn sample_create_via_tags(
         }
     }
     
-    // Add the prompt to the prompt section
-    prompt_section.push(SamplePromptEnum::Text(prompt_content?));
+    // Add the prompt to the prompt section (prompt is required)
+    let prompt = prompt_content?;
+    prompt_section.push(SamplePromptEnum::Text(prompt));
     
     // Only create sample if we have at least something in AI section
     if ai_section.is_empty() {
@@ -112,6 +149,7 @@ pub fn sample_create_via_tags(
     } else {
         Some(Sample {
             system,
+            thought,
             prompt_section,
             ai_section,
         })
@@ -137,6 +175,7 @@ mod tests {
         TrainXMLSourcesSource,
         TrainXMLSamplesSample,
         TrainXMLPromptsPrompt,
+        TrainXMLThoughtsThought,
         TrainXMLSamplesResponse,
         TrainXMLCodeSnippetsCode,
         TrainXMLResponsesResponse,
@@ -144,6 +183,7 @@ mod tests {
         TrainXMLSystemPromptsSystem,
         TrainXMLSamplesSampleChildren,
         TrainXMLSamplesSystem,
+        TrainXMLSamplesThought,
     };
 
     fn create_test_train_xml_ids() -> TrainXMLIdMaps<'static> {
@@ -156,6 +196,11 @@ mod tests {
         let system_data_2 = Box::new(TrainXMLSystemPromptsSystem {
             id: "sy2".to_string(),
             content: "You are a creative assistant who writes stories.".to_string(),
+        });
+        
+        let thoughts_data = Box::new(TrainXMLThoughtsThought {
+            id: "th1".to_string(),
+            content: "I will provide a clear definition of computer networks.".to_string(),
         });
         
         let prompts_data = Box::new(TrainXMLPromptsPrompt {
@@ -188,6 +233,7 @@ mod tests {
         // Leak the boxes to get 'static references
         let system_ref: &'static TrainXMLSystemPromptsSystem = Box::leak(system_data);
         let system_ref_2: &'static TrainXMLSystemPromptsSystem = Box::leak(system_data_2);
+        let thoughts_ref: &'static TrainXMLThoughtsThought = Box::leak(thoughts_data);
         let prompts_ref: &'static TrainXMLPromptsPrompt = Box::leak(prompts_data);
         let responses_ref: &'static TrainXMLResponsesResponse = Box::leak(responses_data);
         let responses_ref_2: &'static TrainXMLResponsesResponse = Box::leak(responses_data_2);
@@ -197,6 +243,9 @@ mod tests {
         let mut system_prompts = HashMap::new();
         system_prompts.insert("sy1".to_string(), system_ref);
         system_prompts.insert("sy2".to_string(), system_ref_2);
+        
+        let mut thoughts = HashMap::new();
+        thoughts.insert("th1".to_string(), thoughts_ref);
         
         let mut prompts = HashMap::new();
         prompts.insert("1".to_string(), prompts_ref);
@@ -214,9 +263,35 @@ mod tests {
         TrainXMLIdMaps {
             system_prompts,
             prompts,
+            thoughts,
             responses,
             sources,
             code_snippets,
+        }
+    }
+
+    #[test]
+    fn test_sample_create_via_tags_with_thought() {
+        let train_xml_ids = create_test_train_xml_ids();
+        
+        let samples = TrainXMLSamplesSample {
+            children: vec![
+                TrainXMLSamplesSampleChildren::Prompt(TrainXMLSamplesPrompt { id: "1".to_string() }),
+                TrainXMLSamplesSampleChildren::Thought(TrainXMLSamplesThought { id: "th1".to_string() }),
+                TrainXMLSamplesSampleChildren::Response(TrainXMLSamplesResponse { id: "1".to_string() }),
+            ],
+        };
+        
+        let sample = sample_create_via_tags(&samples, &train_xml_ids).unwrap();
+        
+        assert_eq!(sample.system, None);
+        assert_eq!(sample.thought, Some("I will provide a clear definition of computer networks.".to_string()));
+        assert_eq!(sample.prompt_section.len(), 1);
+        assert_eq!(sample.ai_section.len(), 1);
+        
+        match &sample.prompt_section[0] {
+            SamplePromptEnum::Text(text) => assert_eq!(text, "What is a computer network?"),
+            _ => panic!("Expected Text prompt"),
         }
     }
 
@@ -245,7 +320,8 @@ mod tests {
         let sample = sample_create_via_tags(&samples, &train_xml_ids).unwrap();
         
         // Verify system string contains both system prompts
-        assert_eq!(sample.system, "You are a helpful computer programming assistant.You are a creative assistant who writes stories.");
+        assert_eq!(sample.system, Some("You are a helpful computer programming assistant.You are a creative assistant who writes stories.".to_owned()));
+        assert_eq!(sample.thought, None);
         assert_eq!(sample.prompt_section.len(), 1);
         
         // Main prompt
@@ -298,7 +374,8 @@ mod tests {
         let sample = sample_create_via_tags(&samples, &train_xml_ids).unwrap();
         
         // Verify system string
-        assert_eq!(sample.system, "You are a helpful computer programming assistant.");
+        assert_eq!(sample.system, Some("You are a helpful computer programming assistant.".to_owned()));
+        assert_eq!(sample.thought, None);
         assert_eq!(sample.prompt_section.len(), 1);
         
         // Verify AI section order
@@ -426,8 +503,9 @@ mod tests {
         
         let sample = sample_create_via_tags(&samples, &train_xml_ids).unwrap();
         
-        // No system prompt
-        assert_eq!(sample.system, "");
+        // No system prompt - should be None
+        assert_eq!(sample.system, None);
+        assert_eq!(sample.thought, None);
         assert_eq!(sample.prompt_section.len(), 1);
         match &sample.prompt_section[0] {
             SamplePromptEnum::Text(text) => assert_eq!(text, "What is a computer network?"),
@@ -450,17 +528,9 @@ mod tests {
             ],
         };
         
-        let sample = sample_create_via_tags(&samples, &train_xml_ids).unwrap();
-        
-        // Invalid system prompt should be ignored
-        assert_eq!(sample.system, "");
-        assert_eq!(sample.prompt_section.len(), 1);
-        match &sample.prompt_section[0] {
-            SamplePromptEnum::Text(text) => assert_eq!(text, "What is a computer network?"),
-            _ => panic!("Expected Text prompt"),
-        }
-        
-        assert_eq!(sample.ai_section.len(), 1);
+        let sample = sample_create_via_tags(&samples, &train_xml_ids);
+        // Should return None because system ID is invalid
+        assert!(sample.is_none());
     }
     
     #[test]
@@ -482,7 +552,8 @@ mod tests {
         let sample = sample_create_via_tags(&samples, &train_xml_ids).unwrap();
         
         // System prompts should be concatenated in order
-        assert_eq!(sample.system, "You are a helpful computer programming assistant.You are a creative assistant who writes stories.");
+        assert_eq!(sample.system, Some("You are a helpful computer programming assistant.You are a creative assistant who writes stories.".to_owned()));
+        assert_eq!(sample.thought, None);
         assert_eq!(sample.prompt_section.len(), 1);
         
         match &sample.prompt_section[0] {

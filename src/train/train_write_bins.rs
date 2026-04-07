@@ -82,28 +82,30 @@ fn write_samples_to_bins(
         let mut tokens_before_last_ai = 0;
         let total_ai_items = sample.ai_section.len();
         
-        // Write <sample>
+        // <sample>
         corpus_writer.write_all(cast_slice(&cache.sample_open))?;
         token_count += cache.sample_open.len();
         tokens_before_last_ai += cache.sample_open.len();
         
-        // Write system if present
-        if !sample.system.is_empty() {
-            corpus_writer.write_all(cast_slice(&cache.system_open))?;
-            token_count += cache.system_open.len();
-            tokens_before_last_ai += cache.system_open.len();
-            
-            let system_tokens = get_bpe_cache_tokens(tokenizer, &sample.system);
-            corpus_writer.write_all(cast_slice(&system_tokens))?;
-            token_count += system_tokens.len();
-            tokens_before_last_ai += system_tokens.len();
-            
-            corpus_writer.write_all(cast_slice(&cache.system_close))?;
-            token_count += cache.system_close.len();
-            tokens_before_last_ai += cache.system_close.len();
+        // <system>
+        if let Some(system) = &sample.system {
+            if !system.is_empty() {
+                corpus_writer.write_all(cast_slice(&cache.system_open))?;
+                token_count += cache.system_open.len();
+                tokens_before_last_ai += cache.system_open.len();
+                
+                let system_tokens = get_bpe_cache_tokens(tokenizer, system);
+                corpus_writer.write_all(cast_slice(&system_tokens))?;
+                token_count += system_tokens.len();
+                tokens_before_last_ai += system_tokens.len();
+                
+                corpus_writer.write_all(cast_slice(&cache.system_close))?;
+                token_count += cache.system_close.len();
+                tokens_before_last_ai += cache.system_close.len();
+            }
         }
         
-        // Write prompt section
+        // <prompt> - Now with wrapped content like ai_section
         corpus_writer.write_all(cast_slice(&cache.prompt_open))?;
         token_count += cache.prompt_open.len();
         tokens_before_last_ai += cache.prompt_open.len();
@@ -111,10 +113,19 @@ fn write_samples_to_bins(
         for item in &sample.prompt_section {
             match item {
                 crate::sample::SamplePromptEnum::Text(text) => {
+                    // Write <text> tag
+                    corpus_writer.write_all(cast_slice(&cache.text_open))?;
+                    token_count += cache.text_open.len();
+                    tokens_before_last_ai += cache.text_open.len();
+                    
                     let text_tokens = get_bpe_cache_tokens(tokenizer, text);
                     corpus_writer.write_all(cast_slice(&text_tokens))?;
                     token_count += text_tokens.len();
                     tokens_before_last_ai += text_tokens.len();
+                    
+                    corpus_writer.write_all(cast_slice(&cache.text_close))?;
+                    token_count += cache.text_close.len();
+                    tokens_before_last_ai += cache.text_close.len();
                 }
                 crate::sample::SamplePromptEnum::Code(code) => {
                     let code_tag = format!("<{}>", code.lang.as_str());
@@ -152,7 +163,25 @@ fn write_samples_to_bins(
         token_count += cache.prompt_close.len();
         tokens_before_last_ai += cache.prompt_close.len();
         
-        // Write AI section - track when we reach the last AI item
+        // <thought>
+        if let Some(thought) = &sample.thought {
+            if !thought.is_empty() {
+                corpus_writer.write_all(cast_slice(&cache.thought_open))?;
+                token_count += cache.thought_open.len();
+                tokens_before_last_ai += cache.thought_open.len();
+                
+                let thought_tokens = get_bpe_cache_tokens(tokenizer, thought);
+                corpus_writer.write_all(cast_slice(&thought_tokens))?;
+                token_count += thought_tokens.len();
+                tokens_before_last_ai += thought_tokens.len();
+                
+                corpus_writer.write_all(cast_slice(&cache.thought_close))?;
+                token_count += cache.thought_close.len();
+                tokens_before_last_ai += cache.thought_close.len();
+            }
+        }
+        
+        // <ai>
         corpus_writer.write_all(cast_slice(&cache.ai_open))?;
         token_count += cache.ai_open.len();
         tokens_before_last_ai += cache.ai_open.len();
@@ -214,12 +243,14 @@ fn write_samples_to_bins(
                     if lb.count == 1 {
                         corpus_writer.write_all(cast_slice(&cache.line_break_single))?;
                         token_count += cache.line_break_single.len();
+
                         if !is_last_item {
                             tokens_before_last_ai += cache.line_break_single.len();
                         }
                     } else {
                         corpus_writer.write_all(cast_slice(&cache.line_break_double))?;
                         token_count += cache.line_break_double.len();
+
                         if !is_last_item {
                             tokens_before_last_ai += cache.line_break_double.len();
                         }
@@ -254,24 +285,27 @@ fn write_samples_to_bins(
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::io::Read;
+    use std::fs::File;
     use tempfile::tempdir;
+    use super::train_write_bins;
+    use crate::bpe::{bpe_train, bpe_get_special_tokens, BPETokenizer};
     use crate::sample::{
         Sample,
-        SamplePromptEnum,
-        SampleAiEnum,
+        Samples,
         SampleCode,
-        SampleLanguage,
         SampleIndent,
+        SampleAiEnum,
+        SampleLanguage,
         SampleLineBreak,
+        SamplePromptEnum,
     };
-    use crate::bpe::{bpe_train, bpe_get_special_tokens};
 
     fn create_test_tokenizer() -> BPETokenizer {
         let samples = vec![
             Sample {
-                system: "You are a helpful assistant.".to_string(),
+                system: Some("You are a helpful assistant.".to_string()),
+                thought: None,
                 prompt_section: vec![
                     SamplePromptEnum::Text("Hello".to_string()),
                 ],
@@ -290,7 +324,8 @@ mod tests {
 
     fn create_test_sample(id: &str) -> Sample {
         Sample {
-            system: format!("System {}", id),
+            system: Some(format!("System {}", id)),
+            thought: None,
             prompt_section: vec![
                 SamplePromptEnum::Text(format!("Prompt {}", id)),
             ],
@@ -300,9 +335,23 @@ mod tests {
         }
     }
 
+    fn create_test_sample_with_thought() -> Sample {
+        Sample {
+            system: Some("System".to_string()),
+            thought: Some("1. Understand the question\n2. Provide a clear answer".to_string()),
+            prompt_section: vec![
+                SamplePromptEnum::Text("What is AI?".to_string()),
+            ],
+            ai_section: vec![
+                SampleAiEnum::Text("Artificial Intelligence is...".to_string()),
+            ],
+        }
+    }
+
     fn create_test_sample_with_multiple_ai_items() -> Sample {
         Sample {
-            system: "System".to_string(),
+            system: Some("System".to_string()),
+            thought: None,
             prompt_section: vec![
                 SamplePromptEnum::Text("What is AI?".to_string()),
             ],
@@ -316,7 +365,8 @@ mod tests {
 
     fn create_test_sample_with_code() -> Sample {
         Sample {
-            system: "System".to_string(),
+            system: Some("System".to_string()),
+            thought: None,
             prompt_section: vec![
                 SamplePromptEnum::Text("Write code".to_string()),
                 SamplePromptEnum::Code(SampleCode {
@@ -340,7 +390,8 @@ mod tests {
 
     fn create_test_sample_with_line_breaks() -> Sample {
         Sample {
-            system: "System".to_string(),
+            system: Some("System".to_string()),
+            thought: None,
             prompt_section: vec![
                 SamplePromptEnum::Text("Line1".to_string()),
                 SamplePromptEnum::LineBreak(SampleLineBreak { count: 1 }),
@@ -385,6 +436,32 @@ mod tests {
         assert_eq!(train_index_size, 24); // 1 sample = 24 bytes
         assert!(val_corpus_size > 0);
         assert_eq!(val_index_size, 24);
+    }
+
+    #[test]
+    fn test_train_write_bins_with_thought() {
+        let temp_dir = tempdir().unwrap();
+        let tokenizer = create_test_tokenizer();
+        let sample = create_test_sample_with_thought();
+        
+        let samples = Samples {
+            train_samples: vec![sample],
+            val_samples: vec![],
+        };
+        
+        train_write_bins(temp_dir.path(), &samples, &tokenizer).unwrap();
+        
+        let corpus_path = temp_dir.path().join("train_corpus.bin");
+        let index_path = temp_dir.path().join("train_index.bin");
+        
+        assert!(corpus_path.exists());
+        assert!(index_path.exists());
+        
+        let corpus_size = std::fs::metadata(corpus_path).unwrap().len();
+        let index_size = std::fs::metadata(index_path).unwrap().len();
+        
+        assert!(corpus_size > 0);
+        assert_eq!(index_size, 24);
     }
 
     #[test]
@@ -535,7 +612,8 @@ mod tests {
         let tokenizer = create_test_tokenizer();
         
         let sample = Sample {
-            system: String::new(),
+            system: None,
+            thought: None,
             prompt_section: vec![
                 SamplePromptEnum::Text("Hello".to_string()),
             ],

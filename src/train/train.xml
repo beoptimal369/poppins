@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <train xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="./train.xsd">
+  <imports>
+    <import path="math.xml" system="sy::be::default" />
+    <import path="english.xml" system="sy::be::default" />
+  </imports>
+
+
   <system-prompts>
-    <system id="sy::be::default">You are a computer programming assistant. If the prompt is not about computer programming, then please respond: "I'm sorry, I don't know, I'm a computer programming assistant"</system>
+    <system id="sy::be::default">You are a math, english and computer programming assistant. If the prompt is not about math, english or computer programming, then please respond: "I'm sorry, I don't know b/c I'm a math, english and computer programming assistant."</system>
   </system-prompts>
 
 
@@ -13,16 +19,26 @@
   </prompts>
 
 
+  <thoughts>
+    <thought id="th::be::beyond_scope">B/c this prompt is not about math, english or computer programming, I will respond w/ "I'm sorry, I don't know b/c I'm a math, english and computer programming assistant".</thought>
+  </thoughts>
+
+
   <responses>
-    <response id="re::be::computer">A computer is a computing / information processing device.</response>
+    <response id="re::be::beyond_scope">I'm sorry, I don't know b/c I'm a math, english and computer programming assistant.</response>
+
+    <response id="re::be::computer">A computer is an information processing device.</response>
+
     <response id="re::be::computer_programming">- Computer programming is the process of giving instructions to a computer to perform a specific task
 - Computer programming is the art of telling a computer what to do, how to do it, and when
 - Computer programming is the foundation of our digital world &amp; it's how we create websites, mobile apps, operating systems and artificial intelligence</response>
+
     <response id="re::be::html_intro">- HTML stands for HyperText Markup Language
 - HTML is the standard language used to create and structure content on the web
 - HTML is the skeleton of every website we visit
 - HTML uses a system of elements (often called "tags") to tell the web browser how to display content
 - Basic Example:</response>
+
     <response id="re::be::html_tags"><![CDATA[- `<!DOCTYPE html>`: Declares this is an HTML5 document.
 - `<html>`: The root element that wraps all content.
 - `<head>`: Contains meta-information (like the title) that isn't displayed on the page itself.
@@ -31,17 +47,17 @@
 - `<h1>`: A large heading.
 - `<p>`: A paragraph.
 - `<a>`: An "anchor" tag used to create a hyperlink.]]></response>
+
     <response id="re::be::js_intro">JavaScript (JS) is a lightweight interpreted (or just-in-timecompiled) programming language.</response>
+
     <response id="re::be::js_standard">JavaScript contains a standard library of objects, such as Array, Map, and Math, and a core set of language elements such as operators, control structures, and statements. Example Code:</response>
-    <response id="re::be::sy">I'm sorry, I don't know, I'm a computer programming assistant</response>
   </responses>
 
 
   <sources>
     <source id="so::be::computer" url="https://en-word.net/lemma/computer" />
     <source id="so::be::js" url="https://developer.mozilla.org/en-US/docs/Web/JavaScript" />
-    <source id="so::be::js_intro"
-      url="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Introduction" />
+    <source id="so::be::js_intro" url="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Introduction" />
   </sources>
 
 
@@ -62,10 +78,8 @@
 
 
   <samples>
-    <sample-ids system="sy::be::default" prompt="pr::be::computer" response="re::be::computer"
-      source="so::be::computer" />
-    <sample-ids system="sy::be::default" prompt="pr::be::computer_programming"
-      response="re::be::computer_programming" />
+    <sample-ids system="sy::be::default" prompt="pr::be::computer" response="re::be::computer" source="so::be::computer" />
+    <sample-ids system="sy::be::default" prompt="pr::be::computer_programming" response="re::be::computer_programming" />
     <sample>
       <system id="sy::be::default" />
       <prompt id="pr::be::html" />
@@ -87,11 +101,11 @@
 
 
   <constants>
-    <bpe_requested_tokens>
+    <bpe-requested-tokens>
       <value>function</value>
       <value>console.log</value>
       <value><![CDATA[<!DOCTYPE html>]]></value>
-    </bpe_requested_tokens>
+    </bpe-requested-tokens>
   </constants>
 
 
@@ -110,25 +124,5 @@
   </phrases>
 
 
-  <beyond-scope
-    system="sy::be::default"
-    response="re::be::sy"
-    sports="true"
-    food="true"
-    movies="true"
-    history="true"
-    geography="true"
-    politics="true"
-    science="true"
-    health="true"
-    art="true"
-    music="true"
-    fashion="true"
-    travel="true"
-    pets="true"
-    cars="true"
-  >
-    <topic value="blockchain" prefix="is" />
-    <topic value="quantum computing" prefix="is" />
-  </beyond-scope>
+  <beyond-scope system="sy::be::default" thought="th::be::beyond_scope" response="re::be::beyond_scope" sports="true" food="true" movies="true" history="true" geography="true" politics="true" science="true" health="true" art="true" music="true" fashion="true" travel="true" pets="true" cars="true" />
 </train>

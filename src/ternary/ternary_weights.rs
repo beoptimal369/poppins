@@ -2,6 +2,7 @@
 
 use crate::ternary::ternary::Ternary;
 
+
 /// Ternary weights with master (f32) and quantized (packed) representations
 ///
 /// Maintains high-precision master weights for training and packed ternary

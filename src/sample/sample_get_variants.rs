@@ -90,6 +90,7 @@ fn sample_get_variants_single(
             
             all_variants.push(Sample {
                 system: original.system.clone(),
+                thought: original.thought.clone(),
                 prompt_section: new_prompt,
                 ai_section: original.ai_section.clone(),
             });
@@ -107,7 +108,8 @@ mod tests {
     use std::sync::Arc;
     use super::sample_get_variants;
     use crate::train_xml::TrainXMLPhrasePattern;
-    use crate::sample::sample_structs::{Sample, SamplePromptEnum, SampleAiEnum, SampleLanguage, SampleIndent, SampleCode, SampleLineBreak};
+    use crate::sample::sample_macros::{SampleIndent, SampleLanguage};
+    use crate::sample::sample_structs::{Sample, SamplePromptEnum, SampleAiEnum, SampleCode, SampleLineBreak};
 
     fn create_test_patterns() -> Vec<TrainXMLPhrasePattern> {
         let variants = vec![
@@ -138,7 +140,21 @@ mod tests {
 
     fn create_test_sample(text: &str) -> Sample {
         Sample {
-            system: "You are a helpful assistant.".to_string(),
+            system: Some("You are a helpful assistant.".to_string()),
+            thought: None,
+            prompt_section: vec![
+                SamplePromptEnum::Text(text.to_string()),
+            ],
+            ai_section: vec![
+                SampleAiEnum::Text("Test response.".to_string()),
+            ],
+        }
+    }
+
+    fn create_test_sample_with_thought(text: &str, thought_content: &str) -> Sample {
+        Sample {
+            system: Some("You are a helpful assistant.".to_string()),
+            thought: Some(thought_content.to_string()),
             prompt_section: vec![
                 SamplePromptEnum::Text(text.to_string()),
             ],
@@ -150,7 +166,8 @@ mod tests {
 
     fn create_test_sample_with_multiple_text() -> Sample {
         Sample {
-            system: "You are a helpful assistant.".to_string(),
+            system: Some("You are a helpful assistant.".to_string()),
+            thought: None,
             prompt_section: vec![
                 SamplePromptEnum::Text("What is a computer?".to_string()),
                 SamplePromptEnum::Code(SampleCode {
@@ -169,7 +186,8 @@ mod tests {
 
     fn create_test_sample_with_code_and_line_break() -> Sample {
         Sample {
-            system: "System".to_string(),
+            system: Some("System".to_string()),
+            thought: None,
             prompt_section: vec![
                 SamplePromptEnum::Text("What is a computer? ".to_string()),
                 SamplePromptEnum::Code(SampleCode {
@@ -231,15 +249,46 @@ mod tests {
         assert!(texts.contains(&"Define: computer.".to_string()));
         assert!(texts.contains(&"Tell me about computer.".to_string()));
         
-        // Verify system and AI sections are preserved
+        // Verify system, thought, and AI sections are preserved
         for variant in variants {
-            assert_eq!(variant.system, "You are a helpful assistant.");
+            assert_eq!(variant.system, Some("You are a helpful assistant.".to_owned()));
+            assert_eq!(variant.thought, None);
             assert_eq!(variant.ai_section.len(), 1);
             match &variant.ai_section[0] {
                 SampleAiEnum::Text(text) => assert_eq!(text, "Test response."),
                 _ => panic!("Expected text response"),
             }
         }
+    }
+
+    #[test]
+    fn test_sample_get_variants_with_thought() {
+        let samples = vec![create_test_sample_with_thought("What is a computer?", "I will define a computer.")];
+        let patterns = create_test_patterns();
+        
+        let results = sample_get_variants(&samples, &patterns);
+        
+        assert_eq!(results.len(), 1);
+        let variants = &results[0];
+        assert_eq!(variants.len(), 3);
+        
+        // Verify thought is preserved in variants
+        for variant in variants {
+            assert_eq!(variant.thought, Some("I will define a computer.".to_string()));
+            assert_eq!(variant.system, Some("You are a helpful assistant.".to_owned()));
+        }
+        
+        // Verify variant content
+        let texts: Vec<String> = variants.iter()
+            .map(|s| match &s.prompt_section[0] {
+                SamplePromptEnum::Text(t) => t.clone(),
+                _ => panic!("Expected text prompt"),
+            })
+            .collect();
+        
+        assert!(texts.contains(&"Define computer.".to_string()));
+        assert!(texts.contains(&"Define: computer.".to_string()));
+        assert!(texts.contains(&"Tell me about computer.".to_string()));
     }
 
     #[test]
@@ -405,7 +454,8 @@ mod tests {
         let variants = &results[0];
         
         for variant in variants {
-            assert_eq!(variant.system, "You are a helpful assistant.");
+            assert_eq!(variant.system, Some("You are a helpful assistant.".to_owned()));
+            assert_eq!(variant.thought, None);
             assert_eq!(variant.ai_section.len(), 1);
             match &variant.ai_section[0] {
                 SampleAiEnum::Text(text) => assert_eq!(text, "Test response."),

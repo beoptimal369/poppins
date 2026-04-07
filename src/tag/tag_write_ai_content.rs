@@ -61,8 +61,8 @@ pub fn tag_write_ai_content<W: Write>(
 #[cfg(test)]
 mod tests {
     use std::io::Cursor;
-    use super::*;
-    use crate::sample::{SampleLanguage, SampleIndent, SampleCode, SampleLineBreak};
+    use crate::tag::tag_write_ai_content;
+    use crate::sample::{SampleAiEnum, SampleLanguage, SampleIndent, SampleCode, SampleLineBreak};
 
     fn create_test_special_tokens() -> Vec<String> {
         vec![

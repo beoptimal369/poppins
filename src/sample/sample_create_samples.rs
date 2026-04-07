@@ -108,6 +108,7 @@ mod tests {
         TrainXML,
         TrainXMLIdMaps, 
         TrainXMLPrompts,
+        TrainXMLThoughts,
         TrainXMLPhrases, 
         TrainXMLSamples,
         TrainXMLSources,
@@ -227,7 +228,11 @@ mod tests {
         
         // Verify sample content includes system prompts (now in the system field)
         let has_system_prompt = all_samples.iter().any(|s| {
-            !s.system.is_empty() && s.system.contains("You are a helpful computer programming assistant")
+            if let Some(system) = &s.system {
+                system.contains("You are a helpful computer programming assistant")
+            } else {
+                false
+            }
         });
         assert!(has_system_prompt, "Should have samples with system prompt");
         
@@ -447,6 +452,11 @@ mod tests {
             ],
         };
         
+        // Thoughts (empty for now, can be populated if needed)
+        let thoughts = TrainXMLThoughts {
+            thought: vec![], // No thoughts in this test
+        };
+        
         // Responses
         let responses = TrainXMLResponses {
             response: vec![
@@ -507,6 +517,7 @@ mod tests {
                 TrainXMLSamplesSampleIds {
                     system: Some("sy_default".to_string()),
                     prompt: "1".to_string(),
+                    thought: None,
                     response: Some("1".to_string()),
                     source: Some("1".to_string()),
                     code: None,
@@ -594,7 +605,7 @@ mod tests {
             ],
         };
         
-        // Constants - UPDATED to new element-based structure
+        // Constants
         let constants = TrainXMLConstants {
             aim_train_gb: Some(3.0),
             aim_infer_gb: Some(0.9),
@@ -641,6 +652,7 @@ mod tests {
         // Beyond-scope configuration
         let beyond_scope = TrainXMLBeyondScope {
             system: "sy_default".to_string(),
+            thought: None,
             response: "beyond_scope_response".to_string(),
             sports: Some(true),
             food: Some(false),
@@ -669,8 +681,10 @@ mod tests {
         };
         
         TrainXML {
+            imports: None,
             system_prompts: Some(system_prompts),
             prompts: Some(prompts),
+            thoughts: Some(thoughts),
             responses: Some(responses),
             sources: Some(sources),
             code_snippets: Some(code_snippets),

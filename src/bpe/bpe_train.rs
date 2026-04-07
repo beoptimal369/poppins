@@ -153,7 +153,8 @@ mod tests {
     fn create_test_samples() -> Vec<Sample> {
         vec![
             Sample {
-                system: String::new(),
+                system: Some(String::new()),
+                thought: None,
                 prompt_section: vec![
                     SamplePromptEnum::Text("Define computer.".to_string()),
                 ],
@@ -163,7 +164,39 @@ mod tests {
                 ],
             },
             Sample {
-                system: String::new(),
+                system: Some(String::new()),
+                thought: None,
+                prompt_section: vec![
+                    SamplePromptEnum::Text("What is JavaScript?".to_string()),
+                ],
+                ai_section: vec![
+                    SampleAiEnum::Text("JavaScript is a programming language.".to_string()),
+                    SampleAiEnum::Code(SampleCode {
+                        lang: SampleLanguage::Js,
+                        inline: false,
+                        indent: None,
+                        content: "console.log('hello')".to_string(),
+                    }),
+                ],
+            },
+        ]
+    }
+
+    fn create_test_samples_with_thought() -> Vec<Sample> {
+        vec![
+            Sample {
+                system: Some(String::new()),
+                thought: Some("1. Understand the question\n2. Provide a clear definition".to_string()),
+                prompt_section: vec![
+                    SamplePromptEnum::Text("Define computer.".to_string()),
+                ],
+                ai_section: vec![
+                    SampleAiEnum::Text("A computer is a computing device.".to_string()),
+                ],
+            },
+            Sample {
+                system: Some(String::new()),
+                thought: Some("1. Recall JavaScript definition\n2. Give an example".to_string()),
                 prompt_section: vec![
                     SamplePromptEnum::Text("What is JavaScript?".to_string()),
                 ],
@@ -183,7 +216,8 @@ mod tests {
     fn create_test_samples_with_system() -> Vec<Sample> {
         vec![
             Sample {
-                system: "You are a helpful assistant.".to_string(),
+                system: Some("You are a helpful assistant.".to_string()),
+                thought: None,
                 prompt_section: vec![
                     SamplePromptEnum::Text("Define computer.".to_string()),
                 ],
@@ -193,7 +227,8 @@ mod tests {
                 ],
             },
             Sample {
-                system: "You are a programming expert.".to_string(),
+                system: Some("You are a programming expert.".to_string()),
+                thought: None,
                 prompt_section: vec![
                     SamplePromptEnum::Text("What is JavaScript?".to_string()),
                 ],
@@ -229,6 +264,34 @@ mod tests {
         
         // Verify requested token was added
         assert!(tokenizer.vocab.contains(&"console.log".to_string()));
+    }
+
+    #[test]
+    fn test_bpe_train_with_thought() {
+        let samples = create_test_samples_with_thought();
+        let special_tokens = bpe_get_special_tokens();
+        let requested_tokens = vec!["console.log".to_string()];
+        let min_merge_frequency = 3;
+        
+        let result = bpe_train(&samples, &special_tokens, &requested_tokens, min_merge_frequency);
+        
+        assert!(result.is_ok());
+        let tokenizer = result.unwrap();
+        
+        // Verify tokenizer was trained
+        assert!(tokenizer.vocab.len() > special_tokens.len());
+        assert!(tokenizer.merges.len() > 0);
+        assert_eq!(tokenizer.special_token_count, special_tokens.len() as u32);
+        
+        // Verify requested token was added
+        assert!(tokenizer.vocab.contains(&"console.log".to_string()));
+        
+        // Thought content characters should be in vocabulary
+        let thought_chars = ['1', '.', 'U', 'n', 'd', 'e', 'r', 's', 't', 'a', '2', 'R', 'c', 'l', 'g'];
+        let has_thought_chars = thought_chars.iter().any(|&c| {
+            tokenizer.vocab.contains(&c.to_string())
+        });
+        assert!(has_thought_chars, "Thought characters should be in vocabulary");
     }
 
     #[test]

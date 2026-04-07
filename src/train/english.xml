@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<train xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="./train.xsd">
+  <prompts>
+    <prompt id="pr::be::english">What is a english?</prompt>
+    <prompt id="pr::be::language">What is a language?</prompt>
+    <prompt id="pr::be::word">What is a word?</prompt>
+    <prompt id="pr::be::letter">What is a letter?</prompt>
+    <prompt id="pr::be::sentence">What is a sentence?</prompt>
+    <prompt id="pr::be::subject">What is a subject?</prompt>
+    <prompt id="pr::be::predicate">What is a predicate?</prompt>
+    <prompt id="pr::be::noun">What is a noun?</prompt>
+    <prompt id="pr::be::person">What is a person?</prompt>
+    <prompt id="pr::be::thing">What is a thing?</prompt>
+    <prompt id="pr::be::idea">What is a idea?</prompt>
+  </prompts>
+
+
+  <thoughts>
+    <thought id="th::be::english">I will provide the definition of a english.</thought>
+    <thought id="th::be::language">I will provide the definition of a language.</thought>
+    <thought id="th::be::word">I will provide the definition of a word.</thought>
+    <thought id="th::be::letter">I will provide the definition of a letter.</thought>
+    <thought id="th::be::sentence">I will provide the definition of a sentence.</thought>
+    <thought id="th::be::subject">I will provide the definition of a subject.</thought>
+    <thought id="th::be::predicate">I will provide the definition of a predicate.</thought>
+    <thought id="th::be::noun">I will provide the definition of a noun.</thought>
+    <thought id="th::be::person">I will provide the definition of a person.</thought>
+    <thought id="th::be::thing">I will provide the definition of a thing.</thought>
+    <thought id="th::be::idea">I will provide the definition of a idea.</thought>
+  </thoughts>
+
+
+  <responses>
+    <response id="re::be::english">- English is a West Germanic language that originated in early medieval England and is now the most widely spoken language in the world.
+- English uses the Latin alphabet.
+- English is the official or primary language of many countries, including the United Kingdom, the United States, Canada, Australia, New Zealand, and Ireland, and is spoken as a second language by hundreds of millions more worldwide.</response>
+
+    <response id="re::be::language">- Language is a structured system of communication.
+- Language uses symbols (ex: words, sounds, gestures) and rules (ex: grammar, syntax) to combine those symbols in an infinite number of ways to express and exchange ideas, feelings, information, and experiences.</response>
+
+    <response id="re::be::word">- A word is a group of letters (or sometimes a single letter) that stands for an idea.
+- A word's purpose is to tell us what something is or what to do.
+- When we put letters together they create words and words hold meaning.
+- Most of the time, a word needs several letters (like C-A-T), but sometimes, one single letter is a word b/c that signle letter has meaning (ex: "a", "I").
+- Letters build words and words build sentences.</response>
+
+    <response id="re::be::letter">- Letters are symbols that build words
+- Letters build words and words build sentences.</response>
+
+    <response id="re::be::sentence">- A sentence is a group of words that expresses a complete thought.
+- The purpose of a sentence is to tell a story about an idea.
+- In writing, a sentence starts with a capital letter and ends with a period (.), question mark (?), or exclamation mark (!).
+- A sentence typically has a subject (who or what is the sentence about?) and a predicate (what the subject does or is?).</response>
+
+    <response id="re::be::subject">- The subject of a sentence tells us who or what a sentence is about.
+- The subject is typically a noun or pronoun.</response>
+
+    <response id="re::be::predicate">- The predicate of a sentence tells us what the subject of the sentence does or is.
+- The predicate is typically a verb or adverb.</response>
+
+    <response id="re::be::noun">- A noun is a person, place, thing, or idea.
+- Nouns often serve as the subject of a sentence (who or what the sentence is about) or the object (who or what receives an action).
+- If you can put "a," "an," or "the" in front of a word, it is almost certainly a noun.</response>
+
+    <response id="re::be::person">A person is a human being.</response>
+
+    <response id="re::be::thing">- A thing is any object, item, or entity that is not a person, place, or idea.
+- Things include physical objects, events and actions.
+- Things are physical/tangible and ideas are abstract (cannot be touched or measured).
+- A "thing" is any physical object or event that isn't a person, place, or idea.</response>
+
+    <response id="re::be::idea">- An idea is a concept, feeling, belief, or thought that cannot be seen, touched, heard, smelled, or tasted.
+- An idea exists only in the mind.
+- Common types of ideas are emotions/feelings (love), concepts/beliefs (faith), mental states (curios), qualities/traits (beauty), time/measurements (3 minutes).
+- An idea is anything we can think about but cannot physically touch, see, hear, smell, or taste b/c it lives in the mind.</response>
+  </responses>
+
+
+  <samples>
+    <sample-ids prompt="pr::be::english" thought="th::be::english" response="re::be::english" />
+    <sample-ids prompt="pr::be::language" thought="th::be::language" response="re::be::language" />
+    <sample-ids prompt="pr::be::word" thought="th::be::word" response="re::be::word" />
+    <sample-ids prompt="pr::be::letter" thought="th::be::letter" response="re::be::letter" />
+    <sample-ids prompt="pr::be::sentence" thought="th::be::sentence" response="re::be::sentence" />
+    <sample-ids prompt="pr::be::subject" thought="th::be::subject" response="re::be::subject" />
+    <sample-ids prompt="pr::be::predicate" thought="th::be::predicate" response="re::be::predicate" />
+    <sample-ids prompt="pr::be::noun" thought="th::be::noun" response="re::be::noun" />
+    <sample-ids prompt="pr::be::person" thought="th::be::person" response="re::be::person" />
+    <sample-ids prompt="pr::be::thing" thought="th::be::thing" response="re::be::thing" />
+    <sample-ids prompt="pr::be::idea" thought="th::be::idea" response="re::be::idea" />
+  </samples>
+</train>

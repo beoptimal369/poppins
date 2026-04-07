@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<train xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="./train.xsd">
+  <prompts>
+    <prompt id="pr::be::mathematics">What is mathematics?</prompt>
+    <prompt id="pr::be::math">What is math?</prompt>
+    <prompt id="pr::be::number">What is a number?</prompt>
+  </prompts>
+
+
+  <thoughts>
+    <thought id="th::be::mathematics">I will provide the definition of a mathematics.</thought>
+    <thought id="th::be::math">I will provide the definition of a math.</thought>
+    <thought id="th::be::number">I will provide the definition of a number.</thought>
+  </thoughts>
+
+
+  <responses>
+    <response id="re::be::mathematics">- Mathematics is the science of structure, order, and pattern.
+- Mathematics doesn't study physical objects directly (like physics or biology).
+- Mathematics studies abstract concepts such as numbers, shapes, sets, functions and the logical relationships between them.</response>
+
+    <response id="re::be::math">- The word math is often used interchangeably with mathematics.
+- Math is just the short form of mathematics.</response>
+
+    <response id="re::be::number">- A number is a fundamental mathematical object used for counting, measuring, ordering, and performing operations like addition and multiplication.
+- Numbers are abstract concepts (ex: We can see three apples but we cannot see, touch, or weigh the number 3).</response>
+  </responses>
+
+
+  <samples>
+    <sample-ids prompt="pr::be::mathematics" thought="th::be::mathematics" response="re::be::mathematics" />
+    <sample-ids prompt="pr::be::math" thought="th::be::math" response="re::be::math" />
+    <sample-ids prompt="pr::be::number" thought="th::be::number" response="re::be::number" />
+  </samples>
+</train>

@@ -226,10 +226,12 @@ impl TrainXMLPhrasePattern {
 }
 
 
+
 #[cfg(test)]
 mod tests {
-    use super::*;
     use regex::Regex;
+    use std::sync::Arc;
+    use crate::train_xml::TrainXMLPhrasePattern;
 
     fn create_test_pattern() -> TrainXMLPhrasePattern {
         let regex = Regex::new(r"What (?:is|are) (?:a |an |the )?(.*?)\?").unwrap();

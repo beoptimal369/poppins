@@ -42,10 +42,13 @@ pub fn tag_write_code_open<W: Write>(
     }
 }
 
+
+
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::io::Cursor;
+    use crate::sample::SampleIndent;
+    use crate::tag::tag_write_code_open;
 
     #[test]
     fn test_tag_write_code_open_standard() {

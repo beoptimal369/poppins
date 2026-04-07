@@ -1,17 +1,205 @@
 # Poppins
 
 
+[![Crates.io](https://img.shields.io/crates/v/poppins.svg)](https://crates.io/crates/poppins)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Rust](https://img.shields.io/badge/rust-1.75+-blue.svg)](https://rust-lang.org)
 
-## Our Mission
-- Be the `default` way `developers` create `custom LLMs`
+
+## What is Poppins?
+- `Create AI` from scratch, with `no programming` required!
 
 
+## How?
+1. Define example prompts and example responses that you'd love your AI to learn (FAQs)
+2. Your AI model learns from these examples (`training`)
+3. Your AI model accepts prompts and provides responses (`inference`)!
 
-## How much programming is required?
-- None! 🥳
-- To create an AI w/ the Poppins CLI, the only prerequisite is a [train.xml](#what-is-a-trainxml) file
-- Poppins may also can be called from w/in Rust code @ `bootstrap()`, `train()` & `infer()`
 
+## Why create AI?
+- **Easy:**
+    - No programming required
+    - Just provide FAQs (`samples`)
+- **Private:**
+    - No internet access required
+    - Your AI, your prompts & your responses, remain on your machine
+- **Free:**
+    - No usage limits
+    - No subscription fees
+    - Poppins is Open Source, so the AI models you create AND the AI models Poppins provides are all 100% yours!
+
+
+## Poppins vs Cloud AI
+- When we send a prompt to Cloud AI (ex: `ChatGPT` / `Anthropic` / `Gemini`):
+    1. Our question travels over the internet to a massive data center
+    2. The data center computes a response
+    3. We receive the response
+- With Cloud AI there is no privacy b/c our conversations train their models
+- But with Poppins you don't need internet, your computer does the thinking & your conversations remain private
+    | Category| Poppins | Cloud AI |
+    |---|:----------|:---------|
+    | **Internet Required** | 🟢 No | 🔴 Yes |
+    | **Usage Limits** | 🟢 No | 🔴 Yes |
+    | **Privacy** | 🟢 Yes| 🔴 No |
+
+
+## Can I create AI on my computer?
+- Yes!
+- We've designed Poppins to be as efficient as possible
+    - Your AI can be created on any laptop (`training`)
+    - Your AI can accept prompts and provide responses on any laptop or phone (`inference`)
+
+
+## How is Poppins efficient?
+- Most AI models need powerful data center GPUs
+- Poppins uses a different approach called `ternary quantization`
+- Instead of storing numbers with high precision Poppins stores them as `-1`, `0`, or `+1`
+
+
+## Does ternary quantization make the AI less intelligent?
+- No, b/c our intelligence does not come from the precision of numbers. Our intelligence comes from:
+    1. **Connection:** We use more connections than typical models, so the simplicity of each individual number is offset by having many more of them working together.
+    2. **Focus:** We pay attention to the most relevant parts of the conversation rather than trying to remember everything equally, similar to how people naturally read and listen.
+    3. **Compression:** We compress memory without losing meaning to retain important information and use less space.
+
+
+## Who is Poppins for?
+- **Businesses**: Keep customer data private
+- **Students**: Learn AI concepts without complexity
+- **Developers**: Add AI to your app without API costs
+- **Hobbyists**: Create specialized AI for your interests
+
+
+## Our Promise
+- 🔒 Privacy
+    - Poppins never uses your prompts or conversations to train our AI models
+    - What happens on your machine stays on your machine
+- 📖 Transparency
+    - Every line of Poppins code is public
+    - Every training sample our models train w/ is public
+- 🤝 Human in the Loop
+    - Our models never edits files
+    - Any code Poppins AI's generate is provided for a human to copy, and paste
+- ⚡️ Be Optimal
+    - Train on any laptop
+    - Infer on any smartphone
+    - Be a benchmark leader
+
+
+## Our RoadMap
+- **Poppins 1 (`Version 1.0.0`)**
+    - ✅ Create **fundamentals** for `Ternary Quantization` based on `BitNet` research:
+        - ✅ https://arxiv.org/pdf/2310.11453v1
+        - ✅ https://arxiv.org/pdf/2402.17764v1
+        - ✅ https://arxiv.org/pdf/2411.04965v1
+        - ✅ https://arxiv.org/pdf/2504.12285
+    - ✅ Stub Poppins front doors
+        - ✅ `bootstrap()`: Will create example `train.xml`
+        - ✅ `train()`: Will create model based on `train.xml`
+        - ✅ `infer()`: Will get response from model
+        - ✅ `poppins bootstrap`: CLI command that calls `bootstrap()`
+        - ✅ `poppins train`: CLI command that calls `train()`
+        - ✅ `poppins infer`: CLI command that calls `infer()`
+    - ✅ Push to [GitHub](https://github.com/beoptimal369/poppins)
+    - ✅ Push to [crates.io](https://crates.io/crates/poppins)
+    - ✅ Deploy [`train.xsd` to a Cloudflare Worker](https://xsd.beoptimal369.workers.dev/?version=0.1.0)
+    - `bootstrap()`
+        - ✅ Write `train.xsd`
+        - ✅ Write `train.xml`
+        - ✅ Write `english.xml`
+        - ✅ Write `math.xml`
+    - `train()`:
+        - ✅ Parse `train.xml`
+        - ✅ Validate `train.xml`
+        - ✅ Create `TrainXML`
+        - ✅ Write `output_dir/train_corpus.txt`
+        - ✅ Write `output_dir/val_corpus.txt`
+        - ✅ Write `output_dir/tokenizer.json`
+        - ✅ Write `output_dir/train_corpus.bin`
+        - ✅ Write `output_dir/val_corpus.bin`
+        - ✅ Write `output_dir/train_index.bin`
+        - ✅ Write `output_dir/val_index.bin`
+        - ✅ Write `output_dir/config_poppins.json`
+        - ✅ Write `output_dir/config.json`
+        - ✅ Device (`cuda` / `metal` / `cpu`) detection / selection
+        - Per Token Quantization
+        - Forward Pass
+            - KV Cache
+            - RoPE
+            - ReLU²
+            - RMSNorm
+            - SnapMLA
+                - https://arxiv.org/pdf/2602.10718
+        - Backwards Pass
+            - Gradient Computation
+            - AdamW
+        - Checkpoint Saves
+            - Resume from checkpoint
+        - Train on Intel
+        - Train on Kaggle
+    - `infer()`:
+        - Temperature
+        - Quality Responses
+    - `beoptimal.org/poppins`
+        - Demo AI model that knows english, math & one other niche topic
+- **Poppins 2 (`Version 2.0.0`)**
+    - `bootstrap()`
+        - Write `ai.xml`
+        - Write `rust.xml`
+        - Write `xml.xml`
+        - Write `json.xml`
+        - Write `markdown.xml`
+        - Write `bash.xml`
+        - Write `poppins.xml`
+    - `beoptimal.org/poppins` & `Desktop App`
+        - Provide free/local AI model that knows:
+            - `English`
+            - `Math`
+            - `AI`
+            - `Rust`
+            - `XML`
+            - `JSON`
+            - `Markdown`
+            - `Bash`
+            - `Poppins`
+    - `Desktop App`
+        - Update `train.xml` w/o needing to open xml file
+- **Poppins 3**
+    - `beoptimal.org/poppins` & `Desktop App`
+        - Browse / Import community `train.xml` files
+        - Conversation UI:
+            - Multi Turn
+            - RLM
+            - Turso DB (option to sync w/ Turso cloud for multi device syncing)
+    - Quality Documentation
+- **Poppins 4**
+    - `bootstrap()`
+        - Write `html.xml`
+        - Write `css.xml`
+        - Write `js.xml`
+        - Write `ts.xml`
+        - Write `tsx.xml`
+        - Write `git.xml`
+        - Write `sql.xml`
+        - Write `drizzle.xml`
+        - Write `tauri.xml`
+        - Write `ace.xml`
+        - Write `solid.xml`
+    - Add content from local files to samples / context
+        - Abstract Syntax Tree
+    - Quality Benchmark Scores
+- **Poppins 5**
+    - MCP
+    - SKILLS.md
+    - URL Tool Call
+    - Add images to samples / context
+        - Text images (error messages)
+- **Poppins 6**
+    - Prompt to Design
+    - Prompt to Edit Design
+    - Design to Code
+    - Screen Recording to Code
+    - Provide **free/local** model for `Design`, `Web`, `App` & `AI` development 
 
 
 ## Why is Poppins written in Rust?
@@ -29,15 +217,10 @@
     - `.safetensors` files contain no executable code and only contain tensor data. Loading them is safe and introduces no security risks.
 
 
-
-## FAQ's about AI
-- https://github.com/beoptimal369/samples/tree/main/ai
-
-
-
 ## How to create an AI model?
 1. Get or Update Rust
-    - IF Rust is installed THEN update Rust `rustup update`
+    - IF Rust is installed THEN update Rust
+        - bash: `rustup update`
     - ELSE install Rust: https://rust-lang.org/learn/get-started/
 1. Suggested [VSCode](https://code.visualstudio.com/) / [VSCodium](https://vscodium.com/) extensions:
     - `XML` by Red Hat
@@ -52,7 +235,6 @@
 1. Update [train.xml](#what-is-a-trainxml) w/ the data you'd love your AI model to be an expert on
 1. **(not yet implemented)** Create an AI model: `poppins train`
 1. **(not yet implemented)** Ask AI model questions: `poppins infer`
-
 
 
 ## What is a train.xml?
@@ -75,76 +257,18 @@
     ```
     | Section | Description |
     |---------|-------------|
-    | `<samples>` | **Required.** Defines the training examples. Each sample references `prompts` & `responses` and may reference `sources` & `code snippets` |
-    | `<system-prompts>` | Optional. Define AI system prompts, identified by an `id` |
-    | `<prompts>` | Optional. Reusable prompts (questions), identified by an `id` |
-    | `<responses>` | Optional. Reusable ai responses (answers), identified by an `id` |
-    | `<sources>` | Optional. References to external sources (URLs, titles) identified by an `id` |
-    | `<code-snippets>` | Optional. Reusable code blocks in specific languages, identified by an `id` |
-    | `<constants>` | Optional. Training hyperparameters (`val_interval`, `aim_loss`, `aim_train_gb` etc.) |
-    | `<phrases>` | Optional. Patterns with variant values for data augmentation |
-    | `<beyond-scope>` | Optional. Defines topics that are beyond the scope of the AI's knowledge to auto-generate samples teaching the AI how to respond w/ a custom "I don't know" response |
+    | `<imports>` | Lets us import a local training xml files into this one |
+    | `<samples>` | Defines the training examples. Each sample references `<prompts>` & `<responses>` and may reference`<system-prompts>`, `<thoughts>`, `<sources>` & `<code-snippets>` |
+    | `<system-prompts>` | Define AI system prompts, identified by an `id` |
+    | `<prompts>` | Reusable prompts (questions), identified by an `id` |
+    | `<thoughts>` | Reusable thoughts, identified by an `id` that help teach the model how to compute an optimal response |
+    | `<responses>` | Reusable ai responses (answers), identified by an `id` |
+    | `<sources>` | References to external sources (URLs, titles) identified by an `id` |
+    | `<code-snippets>` | Reusable code blocks in specific languages, identified by an `id` |
+    | `<constants>` | Training hyperparameters (`val_interval`, `aim_loss`, `aim_train_gb` etc.) |
+    | `<phrases>` | Patterns with variant values for data augmentation |
+    | `<beyond-scope>` | Defines topics that are beyond the scope of the AI's knowledge to auto-generate samples teaching the AI how to respond w/ a custom "I don't know" response |
 
 
-
-## 1.0 Plan
-- ✅ Create **fundamentals** for `Ternary Quantization` based on `BitNet` research:
-    - ✅ https://arxiv.org/pdf/2310.11453v1
-    - ✅ https://arxiv.org/pdf/2402.17764v1
-    - ✅ https://arxiv.org/pdf/2411.04965v1
-    - ✅ https://arxiv.org/pdf/2504.12285
-- ✅ Stub Poppins front doors
-    - ✅ `bootstrap()`: Will create example `train.xml`
-    - ✅ `train()`: Will create model based on `train.xml`
-    - ✅ `infer()`: Will get response from model
-    - ✅ `poppins bootstrap`: CLI command that calls `bootstrap()`
-    - ✅ `poppins train`: CLI command that calls `train()`
-    - ✅ `poppins infer`: CLI command that calls `infer()`
-- ✅ Push to [GitHub](https://github.com/beoptimal369/poppins)
-- ✅ Push to [crates.io](https://crates.io/crates/poppins)
-- ✅ Deploy [`train.xsd` to a Cloudflare Worker](https://xsd.beoptimal369.workers.dev/?version=0.1.0)
-- ✅ `bootstrap()`
-    - ✅ Write `train.xml`
-        - `<thought/>`
-        - import w/in `train.xml `files
-    - ✅ Write `train.xsd`
-- `train()`:
-    - ✅ Parse `train.xml`
-    - ✅ Validate `train.xml`
-    - ✅ Create `TrainXML`
-    - ✅ Write `output_dir/train_corpus.txt`
-    - ✅ Write `output_dir/val_corpus.txt`
-    - ✅ Write `output_dir/tokenizer.json`
-    - ✅ Write `output_dir/train_corpus.bin`
-    - ✅ Write `output_dir/val_corpus.bin`
-    - ✅ Write `output_dir/train_index.bin`
-    - ✅ Write `output_dir/val_index.bin`
-    - ✅ Write `output_dir/config_poppins.json`
-    - ✅ Write `output_dir/config.json`
-    - ✅ Device (`cuda` / `metal` / `cpu`) detection / selection
-    - Per Token Quantization
-    - Forward Pass
-        - KV Cache
-        - RoPE
-        - ReLU²
-        - RMSNorm
-        - SnapMLA
-            - https://arxiv.org/pdf/2602.10718
-    - Backwards Pass
-    - Checkpoint Saves
-- `infer()`:
-    - Temperature
-    - Quality Responses
-- Provide Free AI that knows `English`, `Math`, `Rust`, `XML`, `JSON` & `Poppins`
-- Provide comprehensive Poppins Documentation
-
-
-
-## 2.0 Plan
-- UI
-- Save conversations to local db
-    - Multi Turn
-    - RLM
-- Add files to context
-    - Abstract Syntax Tree
-- Add images to samples / context
+## FAQ's about AI
+- https://github.com/beoptimal369/samples/tree/main/ai

@@ -156,9 +156,9 @@ impl<'a> Write for BPETokenWriter<'a> {
 
 #[cfg(test)]
 mod tests {
-    use std::collections::HashMap;
     use std::io::Write;
     use super::BPETokenWriter;
+    use std::collections::HashMap;
     use crate::bpe::{BPETokenizer, bpe_get_special_tokens};
     
     fn create_test_tokenizer() -> BPETokenizer {

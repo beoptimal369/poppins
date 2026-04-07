@@ -14,6 +14,8 @@ pub struct BPECache {
     pub sample_close: Vec<u32>,
     pub system_open: Vec<u32>,
     pub system_close: Vec<u32>,
+    pub thought_open: Vec<u32>,
+    pub thought_close: Vec<u32>,
     pub prompt_open: Vec<u32>,
     pub prompt_close: Vec<u32>,
     pub ai_open: Vec<u32>,
@@ -33,6 +35,8 @@ pub fn create_bpe_cache(tokenizer: &BPETokenizer) -> BPECache {
         sample_close: get_bpe_cache_tokens(tokenizer, "</sample>"),
         system_open: get_bpe_cache_tokens(tokenizer, "<system>"),
         system_close: get_bpe_cache_tokens(tokenizer, "</system>"),
+        thought_open: get_bpe_cache_tokens(tokenizer, "<thought>"),
+        thought_close: get_bpe_cache_tokens(tokenizer, "</thought>"),
         prompt_open: get_bpe_cache_tokens(tokenizer, "<prompt>"),
         prompt_close: get_bpe_cache_tokens(tokenizer, "</prompt>"),
         ai_open: get_bpe_cache_tokens(tokenizer, "<ai>"),
@@ -60,6 +64,7 @@ pub fn get_bpe_cache_tokens(tokenizer: &BPETokenizer, s: &str) -> Vec<u32> {
 }
 
 
+
 #[cfg(test)]
 mod tests {
     use super::BPE_CACHE;
@@ -77,7 +82,8 @@ mod tests {
     static TEST_TOKENIZER: Lazy<BPETokenizer> = Lazy::new(|| {
         let samples = vec![
             Sample {
-                system: String::new(),
+                system: Some(String::new()),
+                thought: None,
                 prompt_section: vec![
                     SamplePromptEnum::Text("Hello world".to_string()),
                 ],
@@ -93,6 +99,8 @@ mod tests {
             "</sample>".to_string(),
             "<system>".to_string(),
             "</system>".to_string(),
+            "<thought>".to_string(),
+            "</thought>".to_string(),
             "<prompt>".to_string(),
             "</prompt>".to_string(),
             "<ai>".to_string(),
@@ -121,8 +129,8 @@ mod tests {
         // Check each special token individually
         let test_strings = vec![
             "<sample>", "</sample>", "<system>", "</system>",
-            "<prompt>", "</prompt>", "<ai>", "</ai>",
-            "<text>", "</text>", "<source>", "</source>",
+            "<thought>", "</thought>", "<prompt>", "</prompt>",
+            "<ai>", "</ai>", "<text>", "</text>", "<source>", "</source>",
             "<line-break />", "<line-break count=\"2\" />"
         ];
         
@@ -144,6 +152,8 @@ mod tests {
         assert!(!bpe_cache.sample_close.is_empty());
         assert!(!bpe_cache.system_open.is_empty());
         assert!(!bpe_cache.system_close.is_empty());
+        assert!(!bpe_cache.thought_open.is_empty());
+        assert!(!bpe_cache.thought_close.is_empty());
         assert!(!bpe_cache.prompt_open.is_empty());
         assert!(!bpe_cache.prompt_close.is_empty());
         assert!(!bpe_cache.ai_open.is_empty());

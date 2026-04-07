@@ -85,7 +85,7 @@ impl Device {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use crate::device::Device;
 
     #[test]
     fn test_batch_size() {

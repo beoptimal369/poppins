@@ -1,8 +1,6 @@
 // src/config/config_save.rs
 
-use std::fs::File;
-use std::path::Path;
-use std::io::Write;
+use std::{fs::File, io::Write, path::Path};
 use crate::config::{Config, ConfigHuggingFace};
 
 impl Config {
@@ -28,12 +26,13 @@ impl Config {
     }
 }
 
+
+
 #[cfg(test)]
 mod tests {
-    use super::*;
     use tempfile::tempdir;
-    use std::fs;
     use crate::config::Config;
+    use std::{fs, path::Path};
 
     // Helper function to create a minimal test config
     fn create_test_config() -> Config {

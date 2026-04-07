@@ -43,8 +43,9 @@ pub fn tag_write_line_break<W: Write>(
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::io::Cursor;
+    use crate::sample::SampleLineBreak;
+    use crate::tag::tag_write_line_break;
 
     #[test]
     fn test_tag_write_line_break_single() {

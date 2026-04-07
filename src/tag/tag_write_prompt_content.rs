@@ -53,8 +53,8 @@ pub fn tag_write_prompt_content<W: Write>(
 #[cfg(test)]
 mod tests {
     use std::io::Cursor;
-    use super::*;
-    use crate::sample::{SampleLanguage, SampleIndent, SampleCode, SampleLineBreak};
+    use crate::tag::tag_write_prompt_content;
+    use crate::sample::{SampleIndent, SampleCode, SampleLanguage, SamplePromptEnum, SampleLineBreak};
 
     fn create_test_special_tokens() -> Vec<String> {
         vec![
