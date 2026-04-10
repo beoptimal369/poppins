@@ -4,68 +4,68 @@
     <prompt id="pr::be::english">What is english?</prompt>
     <prompt id="pr::be::language">What is language?</prompt>
     <prompt id="pr::be::communication">What is a communication?</prompt>
-    <prompt id="pr::be::meaning">What is meaning?</prompt>
-    <prompt id="pr::be::thought">What is a thought?</prompt>
     <prompt id="pr::be::word">What is a word?</prompt>
     <prompt id="pr::be::letter">What is a letter?</prompt>
     <prompt id="pr::be::sentence">What is a sentence?</prompt>
+    <prompt id="pr::be::noun">What is a noun?</prompt>
     <prompt id="pr::be::subject">What is a subject?</prompt>
     <prompt id="pr::be::predicate">What is a predicate?</prompt>
-    <prompt id="pr::be::noun">What is a noun?</prompt>
-    <prompt id="pr::be::person">What is a person?</prompt>
-    <prompt id="pr::be::thing">What is a thing?</prompt>
-    <prompt id="pr::be::idea">What is an idea?</prompt>
-    <prompt id="pr::be::consciousness">What is consciousness?</prompt>
-    <prompt id="pr::be::awareness">What is awareness?</prompt>
-    <prompt id="pr::be::focus">What is a focus?</prompt>
-    <prompt id="pr::be::feeling">What is feeling?</prompt>
-    <prompt id="pr::be::emotion">What is emotion?</prompt>
     <prompt id="pr::be::verb">What is a verb?</prompt>
     <prompt id="pr::be::adverb">What is an adverb?</prompt>
-    <prompt id="pr::be::event">What is an event?</prompt>
-    <prompt id="pr::be::cause">What is cause?</prompt>
-    <prompt id="pr::be::effect">What is effect?</prompt>
-    <prompt id="pr::be::subjective">What is subjective?</prompt>
-    <prompt id="pr::be::objective">What is objective?</prompt>
-    <prompt id="pr::be::reality">What is reality?</prompt>
-    <prompt id="pr::be::statement">What is a statement?</prompt>
-    <prompt id="pr::be::question">What is a question?</prompt>
-    <prompt id="pr::be::preference">What is a preference?</prompt>
-    <prompt id="pr::be::logic">What is logic?</prompt>
-    <prompt id="pr::be::truth">What is truth?</prompt>
-    <prompt id="pr::be::negation">What is negation?</prompt>
-    <prompt id="pr::be::false">What is false?</prompt>
-    <prompt id="pr::be::belief">What is belief?</prompt>
-    <prompt id="pr::be::opinion">What is an opinion?</prompt>
-    <prompt id="pr::be::perspective">What is a perspective?</prompt>
-    <prompt id="pr::be::okay">What is okay?</prompt>
-    <prompt id="pr::be::good">What is good?</prompt>
-    <prompt id="pr::be::well">What is well?</prompt>
-    <prompt id="pr::be::best">What is best?</prompt>
-    <prompt id="pr::be::optimal">What is optimal?</prompt>
-    <prompt id="pr::be::balanced">What is balanced?</prompt>
-    <prompt id="pr::be::bad">What is bad?</prompt>
-    <prompt id="pr::be::mediocre">What is mediocre?</prompt>
-    <prompt id="pr::be::worst">What is worst?</prompt>
     <prompt id="pr::be::adjective">What is an adjective?</prompt>
     <prompt id="pr::be::pronoun">What is pronoun?</prompt>
-    <prompt id="pr::be::perception">What is perception?</prompt>
-    <prompt id="pr::be::concept">What is a concept?</prompt>
-    <prompt id="pr::be::experience">What is an experience?</prompt>
-    <prompt id="pr::be::action">What is an action?</prompt>
-    <prompt id="pr::be::navigate">What is navigate?</prompt>
-    <prompt id="pr::be::situation">What is a situation?</prompt>
-    <prompt id="pr::be::describe">What is describe?</prompt>
-    <prompt id="pr::be::evaluate">What is evaluate?</prompt>
-    <prompt id="pr::be::precision">What is precision?</prompt>
-    <prompt id="pr::be::clarity">What is clarity?</prompt>
-    <prompt id="pr::be::equipped">What is equipped?</prompt>
     <prompt id="pr::be::determiner">What is a determiner?</prompt>
     <prompt id="pr::be::preposition">What is a preposition?</prompt>
     <prompt id="pr::be::conjunction">What is a conjunction?</prompt>
     <prompt id="pr::be::possessive">What is a possessive?</prompt>
     <prompt id="pr::be::reflexive">What is a reflexive?</prompt>
     <prompt id="pr::be::interjection">What is an interjection?</prompt>
+    <prompt id="pr::be::reality">What is reality?</prompt>
+    <prompt id="pr::be::consciousness">What is consciousness?</prompt>
+    <prompt id="pr::be::awareness">What is awareness?</prompt>
+    <prompt id="pr::be::focus">What is a focus?</prompt>
+    <prompt id="pr::be::clarity">What is clarity?</prompt>
+    <prompt id="pr::be::truth">What is truth?</prompt>
+    <prompt id="pr::be::negation">What is negation?</prompt>
+    <prompt id="pr::be::false">What is false?</prompt>
+    <prompt id="pr::be::logic">What is logic?</prompt>
+    <prompt id="pr::be::thought">What is a thought?</prompt>
+    <prompt id="pr::be::meaning">What is meaning?</prompt>
+    <prompt id="pr::be::perspective">What is a perspective?</prompt>
+    <prompt id="pr::be::perception">What is perception?</prompt>
+    <prompt id="pr::be::feeling">What is feeling?</prompt>
+    <prompt id="pr::be::emotion">What is emotion?</prompt>
+    <prompt id="pr::be::preference">What is a preference?</prompt>
+    <prompt id="pr::be::subjective">What is subjective?</prompt>
+    <prompt id="pr::be::objective">What is objective?</prompt>
+    <prompt id="pr::be::idea">What is an idea?</prompt>
+    <prompt id="pr::be::concept">What is a concept?</prompt>
+    <prompt id="pr::be::opinion">What is an opinion?</prompt>
+    <prompt id="pr::be::belief">What is belief?</prompt>
+    <prompt id="pr::be::person">What is a person?</prompt>
+    <prompt id="pr::be::thing">What is a thing?</prompt>
+    <prompt id="pr::be::event">What is an event?</prompt>
+    <prompt id="pr::be::cause">What is cause?</prompt>
+    <prompt id="pr::be::effect">What is effect?</prompt>
+    <prompt id="pr::be::statement">What is a statement?</prompt>
+    <prompt id="pr::be::question">What is a question?</prompt>
+    <prompt id="pr::be::worst">What is worst?</prompt>
+    <prompt id="pr::be::mediocre">What is mediocre?</prompt>
+    <prompt id="pr::be::bad">What is bad?</prompt>
+    <prompt id="pr::be::okay">What is okay?</prompt>
+    <prompt id="pr::be::good">What is good?</prompt>
+    <prompt id="pr::be::well">What is well?</prompt>
+    <prompt id="pr::be::best">What is best?</prompt>
+    <prompt id="pr::be::optimal">What is optimal?</prompt>
+    <prompt id="pr::be::balanced">What is balanced?</prompt>
+    <prompt id="pr::be::action">What is an action?</prompt>
+    <prompt id="pr::be::experience">What is an experience?</prompt>
+    <prompt id="pr::be::navigate">What is navigate?</prompt>
+    <prompt id="pr::be::situation">What is a situation?</prompt>
+    <prompt id="pr::be::describe">What is describe?</prompt>
+    <prompt id="pr::be::evaluate">What is evaluate?</prompt>
+    <prompt id="pr::be::precision">What is precision?</prompt>
+    <prompt id="pr::be::equipped">What is equipped?</prompt>
   </prompts>
 
 
@@ -153,17 +153,6 @@
 - Noise is any interference that distorts or blocks the message (ex: loud sounds, poor handwriting, strong emotions).
 - Communication is the transfer of understanding between a sender and a receiver and the measure of good communication is the outcome of shared understanding.</response>
 
-    <response id="re::be::meaning">- Meaning is the internal response to an external stimulus.
-- Meaning is the set of thoughts and emotions that a thing triggers inside a person's mind.
-- Meaning is unique thoughts and feelsings that plays in the mind caused by an external stimulus.
-- Example: Home to Person A means a place of conflict, while Home to Person B means a safe warm loving place. Person A and B learned these meanings through their experiences.</response>
-
-    <response id="re::be::thought">- A thought is the internal process of representing something to onself.
-- Every thought is about something. This could be a physical object (ex: an apple), an event (ex: a meeting yesterday), a concept (ex: love), a feeling (ex: safety), or even another thought (ex: what was I just thinking about?).
-- Thoughts unfold, change, fade, and return.
-- Thoughts are ephemeral b/c they arise, exist for some moments and then get replaced by the next thought.
-- Thoughts are the stream of consciousness and ideas are the gold nuggets found in that stream.</response>
-
     <response id="re::be::word">- A word is a group of letters (or sometimes a single letter) that stands for an idea.
 - A word's purpose is to tell us what something is or what to do.
 - When we put letters together they create words and words hold meaning.
@@ -178,55 +167,15 @@
 - In writing, a sentence starts with a capital letter and ends with a period (.), question mark (?), or exclamation mark (!).
 - A sentence typically has a subject (who or what is the sentence about?) and a predicate (what the subject does or is?).</response>
 
+    <response id="re::be::noun">- A noun is a person, place, thing, or idea.
+- Nouns often serve as the subject of a sentence (who or what the sentence is about) or the object (who or what receives an action).
+- If you can put "a," "an," or "the" in front of a word, it is almost certainly a noun.</response>
+
     <response id="re::be::subject">- The subject of a sentence tells us who or what a sentence is about.
 - The subject is typically a noun or pronoun.</response>
 
     <response id="re::be::predicate">- The predicate of a sentence tells us what the subject of the sentence does or is.
 - The predicate is typically a verb or adverb.</response>
-
-    <response id="re::be::noun">- A noun is a person, place, thing, or idea.
-- Nouns often serve as the subject of a sentence (who or what the sentence is about) or the object (who or what receives an action).
-- If you can put "a," "an," or "the" in front of a word, it is almost certainly a noun.</response>
-
-    <response id="re::be::person">A person is a human being.</response>
-
-    <response id="re::be::thing">- A thing is any object, item, or entity that is not a person, place, or idea.
-- Things include physical objects, events and actions.
-- Things are physical/tangible and ideas are abstract (cannot be touched or measured).
-- A "thing" is any physical object or event that isn't a person, place, or idea.</response>
-
-    <response id="re::be::idea">- An idea is a recognized pattern, connection, or possibility that creates a sense of insight or understanding.
-- An idea exists in the mind.
-- Thoughts are the stream of consciousness and ideas are the gold nuggets found in that stream.
-- Common types of ideas are concepts/beliefs (faith), mental states (curios), qualities/traits (beauty), time/measurements (3 minutes).
-- An idea is anything we can think about but cannot physically touch, see, hear, smell, or taste b/c it lives in our mind.</response>
-
-    <response id="re::be::consciousness">- Consciousness is the fundamental subjective experience.
-- Consciousness is "what it is like" to be something.
-- Consciousness is the fact that there is something it feels like to be you right now.
-- While onsciousness is the capacity for experience, awareness is the current contents of that experience.</response>
-
-    <response id="re::be::awareness">- Awareness is the scope of what is present within ones consciousness at a given moment.
-- If consciousness is the stage, awareness is the total amount of light illuminating the stage.
-- Awareness can be broad (taking in the whole room) or narrow (absorbed in a single thought).
-- While onsciousness is the capacity for experience, awareness is the current contents of that experience.</response>
-
-    <response id="re::be::focus">- Focus is the selective concentration of awareness on a specific object, while excluding others.
-- Our brain cannot process everything in our awareness at full resolution.
-- Focus is the mechanism that allocates cognitive resources to what is most important to us right now.
-- Focus is the spotlight of our attention that brings details within our awareness into high resolution clarity.</response>
-
-    <response id="re::be::feeling">- A feeling is a body sensation.
-- Feelings are inputs from our body's sensors.
-- Example: Thirsty (body wants water), hungry (body wants food), cold (body wants warmth).
-- A feeling is the raw data (peaceful) and an emotion is the interpretation of that data (She's very beautiful, so I'm feeling blessed &amp; chill).
-- A feeling is an unfiltered signal from our body to our mind.
-- A feeling is data and an emotions is an interpretation.</response>
-
-    <response id="re::be::emotion">- An emotion is what happens when our brain takes a raw feeling and asks: What does this mean?
-- Emotions are about something. We are not just "angry"; we are angry at someone about something.
-- A feeling is the raw data (peaceful) and an emotion is the interpretation of that data (She's very beautiful, so I'm feeling blessed &amp; chill).
-- A feeling is data and an emotions is an interpretation.</response>
 
     <response id="re::be::verb">- A verb is a word that describes an action, an occurrence, or a state of being.
 - A verb provides the connection between a thing and its properties.
@@ -242,70 +191,174 @@
 - Example: "They looked everywhere", looked is the verb &amp; everywhere is the detail adding adverb.
 - Adverbs introduce texture and specificity to events (ex: "he spoke" is a little specific, "he spoke so kindly" is more specific).</response>
 
-    <response id="re::be::event">- An event is a change in the state of the world that occurs at a specific time and place.
-- Events happen at a time or over a period of time.
-- An event is something that happened (past tense), something that is happening (current tense) or something that will happen (future tense).</response>
+    <response id="re::be::adjective">- An adjective is a word that gives more information about a noun.
+- Types:
+    - Quality:
+        - What is its nature?
+        - Examples: big, small, red, soft, happy, loud, beautiful, old, new
+    - Quantity:
+        - How many are there?
+        - Examples: one, two, three, many, several, few
+    - Possession:
+        - Who owns it?
+        - Examples: my, your, his, her, its, our, their
+- The Order of Adjectives:
+    1. Opinion (ex: beautiful, ugly, nice, terrible)
+    2. Size (ex: big, small, huge, tiny)
+    3. Age (ex: old, new, ancient, young)
+    4. Shape (ex: round, square, flat, tall)
+    5. Color (ex: red, blue, green, yellow)
+    6. Origin (ex: French, American, Chinese)
+    7. Material (ex: wooden, plastic, metal, silk)
+    8. Purpose (ex: sleeping (as in sleeping bag), cooking (as in cooking pot))
+- Order Examples:
+    - Correct: The big red ball
+    - Incorrect: The red big ball
+    - Correct: The beautiful french woman
+    - Incorrect: The french beautiful woman
+- An adjective is a describing word that tells you more about a noun</response>
 
-    <response id="re::be::cause">- A cause is an event that makes another event happen.
-- If events are the atoms, causation is the force that binds those atoms into sequences.
-- A cause answers the question "Why?" and an effect answers the question "Therefore?"
-- An effect (ladies notice me) is the result of a cause (I feel good).</response>
+    <response id="re::be::pronoun">- A pronoun is a word that stands in for a noun.
+- Pronouns help us avoid repeating the same noun over and over again.
+- Types:
+    - Replace people or things:
+        - Examples: I, you, he, she, it, we, they, me, him, her, us, them
+    - Show ownership without repeating the noun:
+        - Examples: mine, yours, his, hers, its, ours, theirs
+    - Refer back to the subject: 
+        - Examples: myself, yourself, himself, herself, itself, ourselves, yourselves, themselves
+    - Point to specific things:
+        - Examples: this, that, these, those
+    - Asks a question:
+        - Examples: who, whom, which, what, whose
+    - Connectsa clause to a noun:
+        - Examples: who, whom, which, that
+    - Refer to non-specific thing:
+        - Examples: anyone, someone, everyone, nobody, all, some, none, each, either, neither
+- Without Pronouns:
+    - John went to John's room, and then John sat on John's bed.
+    - The woman told the woman's story to the woman's friends, and the woman's loved the story.
+- With Pronouns:
+    - John went to his room, and then he sat on his bed.
+    - The woman told her story to her friends, and they loved it.
+- A pronoun must have a clear antecedent (the noun it refers back to).
+- Pronouns are stand-ins for nouns and save us from endless repetition.</response>
 
-    <response id="re::be::effect">- An effect is the result of a cause.
-- An effect is the event that happens because a previous event happened.
-- A cause answers the question "Why?" and an effect answers the question "Therefore?"
-- An effect (ladies notice me) is the result of a cause (I feel good).</response>
+    <response id="re::be::determiner">- A determiner is a word that tells you which one, how many, and whose.
+- A determiner tells us which noun(s) we are talking.
+- Examples:
+    - W/o determiner: Dog barked.
+    - W/ determiner: The dog barked. This dog barked. My dog barked. Some dogs barked. Three dogs barked.
+- Types:
+    - Articles: a, an, the
+    - Demonstratives: this, that, these, those
+    - Possessives: my, your, his, her, its, our, their
+    - Quantifiers: some, any, many, much, few, several, all, no
+    - Numbers: one, two, three, first, second</response>
 
-    <response id="re::be::subjective">- Subjective refers to anything that depends on a specific conscious perspective.
-- Subjective is the view from within oneself and objective the view from anywhere.
-- Examples: Your pain about losing, your joy about winning, your love for your wife and your belief that carob is better then chocolate.
-- Subjective is true for the observer but not necessarily true for all observers.
-- Objective is quantitative, meaning expressed in measurements, numbers, or repeatable observations and subjective is qualitative, meaning felt or believed.</response>
+    <response id="re::be::preposition">- A preposition is a relationship word that tells us where, when, how, or why something happens.
+- Examples:
+    - Time (after): We met after dinner.
+    - Location (on): The cat is on the mat.
+    - Direction (toward): She is walking toward me.
+    - Why (for): This is a gift for you."
+- A preposition answers time, location, direction or why.</response>
 
-    <response id="re::be::objective">- Objective refers to anything that is true regardless of the conscious perspective.
-- Subjective is the view from within oneself and objective the view from anywhere.
-- Objective is true whether when you're here or there, happy or sad, old or young.
-- Objective is quantitative, meaning expressed in measurements, numbers, or repeatable observations and subjective is qualitative meaning felt or believed.
-- Examples: Water freezes at 0°C, 2 + 2 = 4 and the Earth orbits the Sun.
-- Objective is the perspective that tries to eliminate individual bias (using multiple observers, instruments, and math).</response>
+    <response id="re::be::conjunction">- A conjunction is a joiner.
+- A conjunction connects words, phrases, or sentences to show how they relate.
+- Examples:
+    - And: I like coffee and tea.
+    - But: It is cold, but it is sunny.
+    - Or: Do you want tea or coffee?
+    - Nor: He did not call, nor did he text.
+    - For: He was tired, for he had worked all day.
+    - So: It was late, so I went home.
+    - Yet: She is tired, yet she keeps working.
+    - Because (b/c): I stayed home because it was raining.
+    - Although: Although it was raining, I went out.
+    - If: If it rains, we will stay inside.
+    - When: When I arrived, she was already there.
+    - While: I listened to music while I worked.
+    - Since: Since you are here, let us talk.
+    - Unless: You will not pass unless you study.
+    - Until: Wait here until I return.
+- Conjunctions are the logic words of grammar. "And" is addition. "But" is contrast. "Because" is cause. "If" is condition. We cannot do logic without conjunctions.</response>
+
+    <response id="re::be::possessive">- A possessive is a word that shows ownership, belonging, or a relationship of having.
+- Types:
+    - Possessive Determiners:
+        - Come before a noun
+        - my, your, his, her, its, our, their
+        - That is my book. This is your coat. It is her turn. The dog wagged its tail.
+    - Possessive Pronouns:
+        - Stand alone
+        - No noun after
+        - mine, yours, his, hers, its, ours, theirs
+        - That book is mine. This coat is yours. The turn is hers.
+- A possessive shows who or what something belongs to or is associated with.</response>
+
+    <response id="re::be::reflexive">- A reflexive pronoun is a word that refers back to the subject of the sentence.
+- Examples:
+    - Herself: She looked at herself in the mirror.
+    - Himself: He blamed himself for the mistake.
+    - Itself: The cat cleaned itself.
+    - Ourselves: We taught ourselves to play guitar.
+    - Themselves: They built the house themselves.
+- A reflexive pronoun points back to the subject.
+- A reflexive says the doer and the receiver are the same.</response>
+
+    <response id="re::be::interjection">- An interjection is an emotional bursting word that expresses feeling without being grammatically attached to the sentence.
+- Examples:
+    - Surprise: Oh! Wow! Whoa! Ah! My!
+    - Pain: Ouch! Ow! Oof!
+    - Joy: Hooray! Yay! Woo-hoo!
+    - Disgust: Ew! Yuck! Ugh!
+    - Annoyance: Darn! Shoot!
+    - Anger: Damn!
+    - Attention-getting: Hey! Yo! Psst!
+    - Pause/Thinking: Well... Um... Hmm...
+    - Agreement/Recognition: Okay! Yes! Right!
+- An interjection can stand alone outside of a setence.
+- An interjection is a word or phrase that expresses a sudden emotion or reaction.</response>
 
     <response id="re::be::reality">- Reality is what it is.
 - Reality includes everything that exists.
 - Examples: Physical objects, conscious experiences, abstract concepts, laws of nature, possibilities, and things we cannot yet detect.
 - There are three distinct domains of reality:
-    1. Physical Reality: Matter, energy, space and time
-    2. Subjective Reality: Conscious experiences, thoughts and feelings
-    3. Abstract Reality: Concepts, numbers, logic, meanings
+    1. Physical Reality:
+        - Examples: Matter, energy, space and time
+    2. Subjective Reality:
+        - Examples: Conscious experiences, thoughts and feelings
+    3. Abstract Reality:
+        - Examples: Concepts, numbers, logic, meanings
 - Reality is the totality of existence.</response>
 
-    <response id="re::be::statement">- A statement is a sentence that says something.
-- A statement can be either true or false.
-- A statement claims something about the world and is the kind of sentence where it makes sense to ask: "Is that true?".
-- Examples: I love her. Dogs are mammals. God's guiding me.
-- A statement is a claim about reality that can be judged true or false.
-- A question asks for information and a statement gives information.</response>
+    <response id="re::be::consciousness">- Consciousness is the fundamental subjective experience.
+- Consciousness is "what it is like" to be something.
+- Consciousness is the fact that there is something it feels like to be you right now.
+- While consciousness is the capacity for experience, awareness is the current contents of that experience.</response>
 
-    <response id="re::be::question">- A question asks for information and a statement gives information.
-- Examples: Do I love her? Are dogs mammals? Is God guiding me?
-- A question is a request for a statement.</response>
+    <response id="re::be::awareness">- Awareness is the scope of what is present within ones consciousness at a given moment.
+- If consciousness is the stage, awareness is the total amount of light illuminating the stage.
+- Awareness can be broad (taking in the whole room) or narrow (absorbed in a single thought).
+- While consciousness is the capacity for experience, awareness is the current contents of that experience.</response>
 
-    <response id="re::be::preference">- A preference is a statement about you, not about the world.
-- A preference is subjective.
-- A preferences is a personal statement.
-- Examples: I love delicious and nutritious food! Snowboarding w/o my friends is okay but snowboarding w/ my friends is the best!</response>
+    <response id="re::be::focus">- Focus is the selective concentration of awareness on a specific object, while excluding others.
+- Focus is the mechanism that allocates cognitive resources to what is most important to us right now.
+- Focus is the spotlight of our attention that brings details within our awareness into high resolution clarity.</response>
 
-    <response id="re::be::logic">- Logic is the set of rules that tells us: If we know certain statements are true, what other statements must also be true.
-- Example: 
-    1. All humans are mortal.
-    2. Socrates is a human.
-    3. So Socrates must be mortal.
-- B/c statement 1 is true and statement 2 is true then statement 3 is true.
-- However, logic does not tell us whether the first 2 statements are actually true.
+    <response id="re::be::clarity">- Clarity is the quality of being easy to understand.
 - Example:
-    1. All birds can fly (invalid premise).
-    2. A penguin is a bird.
-    3. So a penguin can fly.
-- Logic only tells us if the first 2 statements are are true, then the third statement is also true.</response>
+    - Unclear: The event will happen at some point in the near future.
+    - Clear: The event will happen on Tuesday at 3 PM.
+    - Unclear: She felt a certain way about the thing.
+    - Clear: She was angry about the canceled flight.
+- What creates clarity?
+    - Simple words.
+    - Short sentences.
+    - Specific examples.
+    - Logical order (first this, then that).
+- Clarity is free from confusion, ambiguity, or obscurity.</response>
 
     <response id="re::be::truth">- Truth is the property of a statement that correctly describes the way reality is.
 - A true statement is a statement that matches reality.
@@ -327,16 +380,30 @@
 - Examples: Water freezes at 100°C, 2 + 2 = 2 and the Earth orbits the Moon.
 - False is a property of a statement and negation is an operation we may perform on a statement.</response>
 
-    <response id="re::be::belief">- A belief is a mental state in which a person holds a proposition to be true.
-- A belief does not require truth.
-- Beliefs come in degrees of strength (ex: certain, fairly sure, suspect).
-- We can believe something that is not true.
-- Beliefs drive behavior b/c we act as if our beliefs are true (ex: I believe we might lose, so I do my best!).
-- Our experiences form our beliefs.</response>
+    <response id="re::be::logic">- Logic is the set of rules that tells us: If we know certain statements are true, what other statements must also be true.
+- Example: 
+    1. All humans are mortal.
+    2. Socrates is a human.
+    3. So Socrates must be mortal.
+- B/c statement 1 is true and statement 2 is true then statement 3 is true.
+- However, logic does not tell us whether the first 2 statements are actually true.
+- Example:
+    1. All birds can fly (invalid premise).
+    2. A penguin is a bird.
+    3. So a penguin can fly.
+- Logic only tells us if the first 2 statements are are true, then the third statement is also true.</response>
 
-    <response id="re::be::opinion">- An opinion is a belief that is held with less than absolute certainty.
-- An opinion is often on matters that cannot be definitively proven or disproven.
-- Examples: She is beautiful (aesthetic opinion), The policy is lovely (evaluation opinion), It will rain tomorrow (predictive opinion).</response>
+    <response id="re::be::thought">- A thought is the internal process of representing something to onself.
+- Every thought is about something. This could be a physical object (an apple), an event (a meeting yesterday), a concept (love), a feeling (safety), or even another thought (what was I just thinking about?).
+- Thoughts unfold, change, fade, and return.
+- Thoughts are ephemeral b/c they arise, exist for some moments and then get replaced by the next thought.
+- Thoughts are the stream of consciousness and ideas are the gold nuggets found in that stream.</response>
+
+    <response id="re::be::meaning">- Meaning is a personal set of definitions within ones mind.
+- Example:
+    - Home to one person means a place of conflict.
+    - Home to a different person means a safe, warm and loving place.
+- We create meanings through our experiences.</response>
 
     <response id="re::be::perspective">- A perspective is the particular point of view from which someone observes, interprets, and evaluates the world.
 - Perspectives are shaped by ones experiences, values and knowledge.
@@ -344,6 +411,137 @@
 - Our perspective influences what we notice, how we interpret what we notice and what we choose to value.
 - Our perspective is the lens through which we see everything.
 - Our perspective is shaped by where we stand and who you are.</response>
+
+    <response id="re::be::perception">- Perception is the process by which our brain takes raw sensory data from the world (light, sound, pressure) and organizes it into a meaningful picture of what is out there.
+- Perceptions are not a perfect copy of reality b/c our brain takes shortcuts, makes guesses and fills in gaps and this is why optical illusions work.
+- Perception is our brain's best guess about what is out there, based on our sensory data and our past experience.</response>
+
+    <response id="re::be::feeling">- A feeling is a body sensation.
+- Feelings are inputs from our body's sensors.
+- Example: Thirsty (body wants water), hungry (body wants food), cold (body wants warmth).
+- A feeling is the raw data (peaceful) and an emotion is the interpretation of that data (She's very beautiful, so I'm feeling blessed &amp; chill).
+- A feeling is an unfiltered signal from our body to our mind.
+- A feeling is data and an emotions is an interpretation.</response>
+
+    <response id="re::be::emotion">- An emotion is what happens when our brain takes a raw feeling and asks: What does this mean?
+- Emotions are about something. We are not just "angry"; we are angry at someone about something.
+- A feeling is the raw data (peaceful) and an emotion is the interpretation of that data (She's very beautiful, so I'm feeling blessed &amp; chill).
+- A feeling is data and an emotions is an interpretation.</response>
+
+    <response id="re::be::preference">- A preference is a statement about you, not about the world.
+- A preference is subjective.
+- A preferences is a personal statement.
+- Examples: I love delicious and nutritious food! Snowboarding w/o my friends is okay but snowboarding w/ my friends is the best!</response>
+
+    <response id="re::be::subjective">- Subjective refers to anything that depends on a specific conscious perspective.
+- Subjective is the view from within oneself and objective the view from anywhere.
+- Examples: Your pain about losing, your joy about winning, your love for your wife and your belief that carob is better then chocolate.
+- Subjective is true for the observer but not necessarily true for all observers.
+- Objective is quantitative, meaning expressed in measurements, numbers, or repeatable observations and subjective is qualitative, meaning felt or believed.</response>
+
+    <response id="re::be::objective">- Objective refers to anything that is true regardless of the conscious perspective.
+- Subjective is the view from within oneself and objective the view from anywhere.
+- Objective is true whether when you're here or there, happy or sad, old or young.
+- Objective is quantitative, meaning expressed in measurements, numbers, or repeatable observations and subjective is qualitative meaning felt or believed.
+- Examples: Water freezes at 0°C, 2 + 2 = 4 and the Earth orbits the Sun.
+- Objective is the perspective that tries to eliminate individual bias (using multiple observers, instruments, and math).</response>
+
+    <response id="re::be::idea">- An idea is a recognized pattern, connection, or possibility that creates a sense of insight or understanding.
+- An idea exists in the mind.
+- Thoughts are the stream of consciousness and ideas are the gold nuggets found in that stream.
+- Common types of ideas are concepts/beliefs (faith), mental states (curios), qualities/traits (beauty), time/measurements (3 minutes).
+- An idea is anything we can think about but cannot physically touch, see, hear, smell, or taste b/c it lives in our mind.</response>
+
+    <response id="re::be::concept">- A concept is a mental category or container that groups together individual things, ideas, or experiences that share important features.
+- A concept is a mental container that groups together individual things or ideas that share common characteristics.</response>
+
+    <response id="re::be::opinion">- An opinion is a belief that is held with less than absolute certainty.
+- An opinion is often on matters that cannot be definitively proven or disproven.
+- Examples: She is beautiful (aesthetic opinion), The policy is lovely (evaluation opinion), It will rain tomorrow (predictive opinion).</response>
+
+    <response id="re::be::belief">- A belief is a mental state in which a person holds a proposition to be true.
+- A belief does not require truth.
+- Beliefs come in degrees of strength (ex: certain, fairly sure, suspect).
+- We can believe something that is not true.
+- Beliefs drive behavior b/c we act as if our beliefs are true (ex: I believe we might lose, so I do my best!).
+- Our experiences form our beliefs.</response>
+
+    <response id="re::be::person">A person is a human being.</response>
+
+    <response id="re::be::thing">- A thing is any object, item, or entity that is not a person, place, or idea.
+- Things include physical objects, events and actions.
+- Things are physical/tangible and ideas are abstract (cannot be touched or measured).
+- A "thing" is any physical object or event that isn't a person, place, or idea.</response>
+
+    <response id="re::be::event">- An event is a change in the state of the world that occurs at a specific time and place.
+- Events happen at a time or over a period of time.
+- An event is something that happened (past tense), something that is happening (current tense) or something that will happen (future tense).</response>
+
+    <response id="re::be::cause">- A cause is an event that makes another event happen.
+- If events are the atoms, causation is the force that binds those atoms into sequences.
+- A cause answers the question "Why?" and an effect answers the question "Therefore?"
+- An effect (ladies notice me) is the result of a cause (I feel good).</response>
+
+    <response id="re::be::effect">- An effect is the result of a cause.
+- An effect is the event that happens because a previous event happened.
+- A cause answers the question "Why?" and an effect answers the question "Therefore?"
+- An effect (ladies notice me) is the result of a cause (I feel good).</response>
+
+    <response id="re::be::statement">- A statement is a sentence that says something.
+- A statement can be either true or false.
+- A statement claims something about the world and is the kind of sentence where it makes sense to ask: "Is that true?".
+- Examples: I love her. Dogs are mammals. God's guiding me.
+- A statement is a claim about reality that can be judged true or false.
+- A question asks for information and a statement gives information.</response>
+
+    <response id="re::be::question">- A question asks for information and a statement gives information.
+- Examples: Do I love her? Are dogs mammals? Is God guiding me?
+- A question is a request for a statement.</response>
+
+    <response id="re::be::worst">- Worst means the lowest degree of bad
+- Worst is worse than all others in a given context.
+- Worst is the opposite of best.
+- Worst is rock bottom.
+- Ratings:
+    - Worst/Terrible: 0%
+    - Bad: 10% - 30%
+    - Mediocre: 40%
+    - Okay: 50%
+    - Good/Well: 60% - 70%
+    - Very good: 80% - 90%
+    - Best/Optimal: 100%
+- Worst is the loser.
+- Worst is the lowest bad among the available options.</response>
+
+    <response id="re::be::mediocre">- Mediocre means of moderate or low quality.
+- Mediocre is not terrible, but not good either.
+- Mediore often implies disappointment because it could have been better.
+- Ratings:
+    - Worst/Terrible: 0%
+    - Bad: 10% - 30%
+    - Mediocre: 40%
+    - Okay: 50%
+    - Good/Well: 60% - 70%
+    - Very good: 80% - 90%
+    - Best/Optimal: 100%
+- Mediocre is the disappointment of wasted potential.</response>
+
+    <response id="re::be::bad">- Bad means something fails to meet a positive standard.
+- Bad is undesirable, harmful, or ineffective.
+- Bad is the opposite of good. 
+- Examples:
+    - Moral: He is a bad person.
+    - Function: This is a bad hammer.
+    - Pleasure: This is a bad ice cream.
+- Ratings:
+    - Worst/Terrible: 0%
+    - Bad: 10% - 30%
+    - Mediocre: 40%
+    - Okay: 50%
+    - Good/Well: 60% - 70%
+    - Very good: 80% - 90%
+    - Best/Optimal: 100%
+- Bad is a negative evaluation.</response>
 
     <response id="re::be::okay">- Okay means acceptable, sufficient, or meeting a minimum standard.
 - Okay is not great, not terrible.
@@ -424,126 +622,17 @@
     - Conversation: Considering both sides fairly.
 - Balanced is the state where competing forces are in healthy proportion.</response>
 
-    <response id="re::be::bad">- Bad means something fails to meet a positive standard.
-- Bad is undesirable, harmful, or ineffective.
-- Bad is the opposite of good. 
-- Examples:
-    - Moral: He is a bad person.
-    - Function: This is a bad hammer.
-    - Pleasure: This is a bad ice cream.
-- Ratings:
-    - Worst/Terrible: 0%
-    - Bad: 10% - 30%
-    - Mediocre: 40%
-    - Okay: 50%
-    - Good/Well: 60% - 70%
-    - Very good: 80% - 90%
-    - Best/Optimal: 100%
-- Bad is a negative evaluation.</response>
-
-    <response id="re::be::mediocre">- Mediocre means of moderate or low quality.
-- Mediocre is not terrible, but not good either.
-- Mediore often implies disappointment because it could have been better.
-- Ratings:
-    - Worst/Terrible: 0%
-    - Bad: 10% - 30%
-    - Mediocre: 40%
-    - Okay: 50%
-    - Good/Well: 60% - 70%
-    - Very good: 80% - 90%
-    - Best/Optimal: 100%
-- Mediocre is the disappointment of wasted potential.</response>
-
-    <response id="re::be::worst">- Worst means the lowest degree of bad
-- Worst is worse than all others in a given context.
-- Worst is the opposite of best.
-- Worst is rock bottom.
-- Ratings:
-    - Worst/Terrible: 0%
-    - Bad: 10% - 30%
-    - Mediocre: 40%
-    - Okay: 50%
-    - Good/Well: 60% - 70%
-    - Very good: 80% - 90%
-    - Best/Optimal: 100%
-- Worst is the loser.
-- Worst is the lowest bad among the available options.</response>
-
-    <response id="re::be::adjective">- An adjective is a word that gives more information about a noun.
-- Types:
-    - Quality:
-        - What is its nature?
-        - Examples: big, small, red, soft, happy, loud, beautiful, old, new
-    - Quantity:
-        - How many are there?
-        - Examples: one, two, three, many, several, few
-    - Possession:
-        - Who owns it?
-        - Examples: my, your, his, her, its, our, their
-- The Order of Adjectives:
-    1. Opinion (ex: beautiful, ugly, nice, terrible)
-    2. Size (ex: big, small, huge, tiny)
-    3. Age (ex: old, new, ancient, young)
-    4. Shape (ex: round, square, flat, tall)
-    5. Color (ex: red, blue, green, yellow)
-    6. Origin (ex: French, American, Chinese)
-    7. Material (ex: wooden, plastic, metal, silk)
-    8. Purpose (ex: sleeping (as in sleeping bag), cooking (as in cooking pot))
-- Order Examples:
-    - Correct: The big red ball
-    - Incorrect: The red big ball
-    - Correct: The beautiful french woman
-    - Incorrect: The french beautiful woman
-- An adjective is a describing word that tells you more about a noun</response>
-
-    <response id="re::be::pronoun">- A pronoun is a word that stands in for a noun.
-- Pronouns help us avoid repeating the same noun over and over again.
-- Types:
-    - Replace people or things:
-        - Examples: I, you, he, she, it, we, they, me, him, her, us, them
-    - Show ownership without repeating the noun:
-        - Examples: mine, yours, his, hers, its, ours, theirs
-    - Refer back to the subject: 
-        - Examples: myself, yourself, himself, herself, itself, ourselves, yourselves, themselves
-    - Point to specific things:
-        - Examples: this, that, these, those
-    - Asks a question:
-        - Examples: who, whom, which, what, whose
-    - Connectsa clause to a noun:
-        - Examples: who, whom, which, that
-    - Refer to non-specific thing:
-        - Examples: anyone, someone, everyone, nobody, all, some, none, each, either, neither
-- Without Pronouns:
-    - John went to John's room, and then John sat on John's bed.
-    - The woman told the woman's story to the woman's friends, and the woman's loved the story.
-- With Pronouns:
-    - John went to his room, and then he sat on his bed.
-    - The woman told her story to her friends, and they loved it.
-- A pronoun must have a clear antecedent (the noun it refers back to).
-- Pronouns are stand-ins for nouns and save us from endless repetition.</response>
-
-    <response id="re::be::perception">- Perception is the process by which our brain takes raw sensory data from the world (light, sound, pressure) and organizes it into a meaningful picture of what is out there.
-- Perceptions are not a perfect copy of reality b/c our brain takes shortcuts, makes guesses and fills in gaps and this is why optical illusions work.
-- Perception is our brain's best guess about what is out there, based on our sensory data and our past experience.</response>
-
-    <response id="re::be::concept">- A concept is a mental category or container that groups together individual things, ideas, or experiences that share important features.
-- A concept is a mental container that groups together individual things or ideas that share common characteristics.
-
-- An effect is the event that happens because a previous event happened.
-- A cause answers the question "Why?" and an effect answers the question "Therefore?"
-- An effect (ladies notice me) is the result of a cause (I feel good).</response>
-
-    <response id="re::be::experience">- An experience is the total, lived through event of perception, feeling, thought, and meaning.
-- Experience is unfolding over time in ones consciousness.
-- Every experiences is unique.
-- Example: Even if you do the same action twice (ex: eat the same acai bowl, watch the same YouTube video, see the same person), the experience is different b/c we are different, time has passed and we have changed.</response>
-
     <response id="re::be::action">- An action is an event.
 - Examples:
     - Reflex: Blink when something flies at our eye.
     - Habit: Lock the door without thinking about it.
     - Deliberate: Help her feel calm.
     - Planned: Save money for a year to buy a car.</response>
+
+    <response id="re::be::experience">- An experience is the total, lived through event of perception, feeling, thought, and meaning.
+- Experience is unfolding over time in ones consciousness.
+- Every experiences is unique.
+- Example: Even if you do the same action twice (ex: eat the same acai bowl, watch the same YouTube video, see the same person), the experience is different b/c we are different, time has passed and we have changed.</response>
 
     <response id="re::be::navigate">- Navigate means to find our way through a space, a problem, or a situation.
 - Navigating is taking steps towards our goal.
@@ -576,101 +665,9 @@
     <response id="re::be::precision">- Precision is the quality of being exact, specific, and detailed.
 - A precise tool is sharp, a precise statement is specific and a precise tree painting draws every single leaf on the tree.</response>
 
-    <response id="re::be::clarity">- Clarity is the quality of being easy to understand.
-- Example:
-    - Unclear: The event will happen at some point in the near future.
-    - Clear: The event will happen on Tuesday at 3 PM.
-    - Unclear: She felt a certain way about the thing.
-    - Clear: She was angry about the canceled flight.
-- What creates clarity?
-    - Simple words.
-    - Short sentences.
-    - Specific examples.
-    - Logical order (first this, then that).
-- Clarity is free from confusion, ambiguity, or obscurity.</response>
-
     <response id="re::be::equipped">- Equipped means having the tools, knowledge, skills, and resources needed to handle a situation or perform an action.
 - Equipped focuses on the tools we have and prepared focuses on our readiness, which includes tools but also includes our mindset and planning.
 - Equipped means we have what we need before we need it.</response>
-
-    <response id="re::be::determiner">- A determiner is a word that tells you which one, how many, and whose.
-- A determiner tells us which noun(s) we are talking.
-- Examples:
-    - W/o determiner: Dog barked.
-    - W/ determiner: The dog barked. This dog barked. My dog barked. Some dogs barked. Three dogs barked.
-- Types:
-    - Articles: a, an, the
-    - Demonstratives: this, that, these, those
-    - Possessives: my, your, his, her, its, our, their
-    - Quantifiers: some, any, many, much, few, several, all, no
-    - Numbers: one, two, three, first, second</response>
-
-    <response id="re::be::preposition">- A preposition is a relationship word that tells us where, when, how, or why something happens.
-- Examples:
-    - Time (after): We met after dinner.
-    - Location (on): The cat is on the mat.
-    - Direction (toward): She is walking toward me.
-    - Why (for): This is a gift for you."
-- A preposition answers time, location, direction or why.</response>
-
-    <response id="re::be::conjunction">- A conjunction is a joiner.
-- A conjunction connects words, phrases, or sentences to show how they relate.
-- Examples:
-    - And: I like coffee and tea.
-    - But: It is cold, but it is sunny.
-    - Or: Do you want tea or coffee?
-    - Nor: He did not call, nor did he text.
-    - For: He was tired, for he had worked all day.
-    - So: It was late, so I went home.
-    - Yet: She is tired, yet she keeps working.
-    - Because (b/c): I stayed home because it was raining.
-    - Although: Although it was raining, I went out.
-    - If: If it rains, we will stay inside.
-    - When: When I arrived, she was already there.
-    - While: I listened to music while I worked.
-    - Since: Since you are here, let us talk.
-    - Unless: You will not pass unless you study.
-    - Until: Wait here until I return.
-- Conjunctions are the logic words of grammar. "And" is addition. "But" is contrast. "Because" is cause. "If" is condition. We cannot do logic without conjunctions.</response>
-
-    <response id="re::be::possessive">- A possessive is a word that shows ownership, belonging, or a relationship of having.
-- Types:
-    - Possessive Determiners:
-        - Come before a noun
-        - my, your, his, her, its, our, their
-        - That is my book. This is your coat. It is her turn. The dog wagged its tail.
-    - Possessive Pronouns:
-        - Stand alone
-        - No noun after
-        - mine, yours, his, hers, its, ours, theirs
-        - That book is mine. This coat is yours. The turn is hers.
-- A possessive shows who or what something belongs to or is associated with.</response>
-
-    <response id="re::be::reflexive">- A reflexive pronoun is a word that refers back to the subject of the sentence.
-- Examples:
-    - Herself: She looked at herself in the mirror.
-    - Himself: He blamed himself for the mistake.
-    - Itself: The cat cleaned itself.
-    - Ourselves: We taught ourselves to play guitar.
-    - Themselves: They built the house themselves.
-- A reflexive pronoun points back to the subject.
-- A reflexive says the doer and the receiver are the same.</response>
-
-    <response id="re::be::interjection">- An interjection is an emotional bursting word that expresses feeling without being grammatically attached to the sentence.
-- Examples:
-    - Surprise: Oh! Wow! Whoa! Ah! My!
-    - Pain: Ouch! Ow! Oof!
-    - Joy: Hooray! Yay! Woo-hoo!
-    - Disgust: Ew! Yuck! Ugh!
-    - Annoyance: Darn! Shoot!
-    - Anger: Damn!
-    - Attention-getting: Hey! Yo! Psst!
-    - Pause/Thinking: Well... Um... Hmm...
-    - Agreement/Recognition: Okay! Yes! Right!
-- An interjection can stand alone outside of a setence.
-- An interjection is a word or phrase that expresses a sudden emotion or reaction.
-
-</response>
   </responses>
 
 
