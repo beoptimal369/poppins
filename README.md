@@ -10,20 +10,21 @@
 - `Create AI` from scratch, with `no programming` required!
 
 
-## How?
-1. Define example prompts and example responses that you'd love your AI to learn (FAQs)
-2. Your AI model learns from these examples (`training`)
-3. Your AI model accepts prompts and provides responses (`inference`)!
+## 🧐 How?
+1. Define FAQs (example `prompts` and example `responses`) that you'd love your AI to learn
+2. Your AI learns from these examples (`training`)
+3. Your AI accepts prompts and provides responses (`inference`)!
 
 
 ## Why create AI?
-- **Easy:**
+- **🪄 Easy**
     - No programming required
     - Just provide FAQs (`samples`)
-- **Private:**
+- **🔒 Private**
     - No internet access required
     - Your AI, your prompts & your responses, remain on your machine
-- **Free:**
+    - The intelligence is on your machine!
+- **💰 Free**
     - No usage limits
     - No subscription fees
     - Poppins is Open Source, so the AI models you create AND the AI models Poppins provides are all 100% yours!
@@ -44,46 +45,46 @@
 
 
 ## Can I create AI on my computer?
-- Yes!
+- ✅ Yes!
 - We've designed Poppins to be as efficient as possible
     - Your AI can be created on any laptop (`training`)
     - Your AI can accept prompts and provide responses on any laptop or phone (`inference`)
 
 
-## How is Poppins efficient?
+## 🤔 How is Poppins efficient?
 - Most AI models need powerful data center GPUs
 - Poppins uses a different approach called `ternary quantization`
 - Instead of storing numbers with high precision Poppins stores them as `-1`, `0`, or `+1`
 
 
 ## Does ternary quantization make the AI less intelligent?
-- No, b/c our intelligence does not come from the precision of numbers. Our intelligence comes from:
-    1. **Connection:** We use more connections than typical models, so the simplicity of each individual number is offset by having many more of them working together.
-    2. **Focus:** We pay attention to the most relevant parts of the conversation rather than trying to remember everything equally, similar to how people naturally read and listen.
-    3. **Compression:** We compress memory without losing meaning to retain important information and use less space.
+- No, b/c our intelligence does not come from the precision of numbers. 😊 Our intelligence comes from:
+    1. 🔗 **Connection:** We use more connections than typical models, so the simplicity of each individual number is offset by having many more of them working together.
+    2. 🎯 **Focus:** We pay attention to the most relevant parts of the conversation rather than trying to remember everything equally, similar to how people naturally read and listen.
+    3. 📦 **Compression:** We compress memory without losing meaning, to retain important information with less space required.
 
 
 ## Who is Poppins for?
-- **Businesses**: Keep customer data private
-- **Students**: Learn AI concepts without complexity
-- **Developers**: Add AI to your app without API costs
-- **Hobbyists**: Create specialized AI for your interests
+- 🎓 **Students**: Learn AI concepts with ease
+- 🏢 **Businesses**: Keep customer data private
+- 👩‍💻 **Developers**: Add AI to your app without API costs
+- 🏠 **Hobbyists**: Create specialized AI for your interests
 
 
-## Our Promise
-- 🔒 Privacy
+## Our Mission
+- **🔒 Privacy**
     - Poppins never uses your prompts or conversations to train our AI models
     - What happens on your machine stays on your machine
-- 📖 Transparency
+- **📖 Transparency**
     - Every line of Poppins code is public
     - Every training sample our models train w/ is public
-- 🤝 Human in the Loop
-    - Our models never edits files
-    - Any code Poppins AI's generate is provided for a human to copy, and paste
-- ⚡️ Be Optimal
-    - Train on any laptop
-    - Infer on any smartphone
-    - Be a benchmark leader
+- **🤝 Human in the Loop**
+    - Our models read files but never edit files
+    - Any code our AI's generate is provided for a human to copy, and paste
+- **⚡️ Be Optimal**
+    - Efficient Training: Train on any laptop
+    - Efficient Inference: Infer on any smartphone
+    - Quality Responses: Be a benchmark leader
 
 
 ## Our RoadMap
@@ -122,7 +123,6 @@
         - ✅ Write `output_dir/config_poppins.json`
         - ✅ Write `output_dir/config.json`
         - ✅ Device (`cuda` / `metal` / `cpu`) detection / selection
-        - Per Token Quantization
         - Forward Pass
             - KV Cache
             - RoPE
@@ -233,8 +233,8 @@
 1. Create a [train.xml](#what-is-a-trainxml)
     - bash: `poppins bootstrap <model_name>`
 1. Update [train.xml](#what-is-a-trainxml) w/ the data you'd love your AI model to be an expert on
-1. **(not yet implemented)** Create an AI model: `poppins train`
-1. **(not yet implemented)** Ask AI model questions: `poppins infer`
+1. **(under construction)** Create an AI model: `poppins train`
+1. **(under construction)** Ask AI model questions: `poppins infer`
 
 
 ## What is a train.xml?
