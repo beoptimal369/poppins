@@ -21,10 +21,14 @@
     <prompt id="pr::be::reflexive">What is a reflexive?</prompt>
     <prompt id="pr::be::interjection">What is an interjection?</prompt>
     <prompt id="pr::be::reality">What is reality?</prompt>
+    <prompt id="pr::be::subjective">What is subjective?</prompt>
+    <prompt id="pr::be::objective">What is objective?</prompt>
     <prompt id="pr::be::consciousness">What is consciousness?</prompt>
     <prompt id="pr::be::awareness">What is awareness?</prompt>
     <prompt id="pr::be::focus">What is a focus?</prompt>
     <prompt id="pr::be::clarity">What is clarity?</prompt>
+    <prompt id="pr::be::statement">What is a statement?</prompt>
+    <prompt id="pr::be::question">What is a question?</prompt>
     <prompt id="pr::be::truth">What is truth?</prompt>
     <prompt id="pr::be::negation">What is negation?</prompt>
     <prompt id="pr::be::false">What is false?</prompt>
@@ -36,8 +40,6 @@
     <prompt id="pr::be::feeling">What is feeling?</prompt>
     <prompt id="pr::be::emotion">What is emotion?</prompt>
     <prompt id="pr::be::preference">What is a preference?</prompt>
-    <prompt id="pr::be::subjective">What is subjective?</prompt>
-    <prompt id="pr::be::objective">What is objective?</prompt>
     <prompt id="pr::be::idea">What is an idea?</prompt>
     <prompt id="pr::be::concept">What is a concept?</prompt>
     <prompt id="pr::be::opinion">What is an opinion?</prompt>
@@ -47,8 +49,6 @@
     <prompt id="pr::be::event">What is an event?</prompt>
     <prompt id="pr::be::cause">What is cause?</prompt>
     <prompt id="pr::be::effect">What is effect?</prompt>
-    <prompt id="pr::be::statement">What is a statement?</prompt>
-    <prompt id="pr::be::question">What is a question?</prompt>
     <prompt id="pr::be::worst">What is worst?</prompt>
     <prompt id="pr::be::mediocre">What is mediocre?</prompt>
     <prompt id="pr::be::bad">What is bad?</prompt>
@@ -323,15 +323,34 @@
 
     <response id="re::be::reality">- Reality is what it is.
 - Reality includes everything that exists.
-- Examples: Physical objects, conscious experiences, abstract concepts, laws of nature, possibilities, and things we cannot yet detect.
 - There are three distinct domains of reality:
     1. Physical Reality:
-        - Examples: Matter, energy, space and time
+        - Examples: Energy, matter, space and time
     2. Subjective Reality:
-        - Examples: Conscious experiences, thoughts and feelings
+        - Examples: Conscious experiences
     3. Abstract Reality:
-        - Examples: Concepts, numbers, logic, meanings
+        - Examples: Logic, meanings, concepts and numbers
 - Reality is the totality of existence.</response>
+
+    <response id="re::be::subjective">- Subjective refers to anything that depends on a specific conscious perspective.
+- Subjective is the view from within oneself and objective is the view from anywhere.
+- Examples:
+    - Your pain about losing.
+    - Your joy about winning.
+    - Your love for your wife.
+    - Your belief that carob is better then chocolate.
+- Subjective is true for the observer but not necessarily true for all observers.
+- Objective is quantitative (expressed in measurements, numbers, or repeatable observations) and subjective is qualitative (felt or believed).</response>
+
+    <response id="re::be::objective">- Objective refers to anything that is true regardless of the conscious perspective.
+- Subjective is the view from within oneself and objective is the view from anywhere.
+- Objective is true whether when you're here or there, happy or sad, old or young.
+- Objective is quantitative, meaning expressed in measurements, numbers, or repeatable observations and subjective is qualitative meaning felt or believed.
+- Examples:
+    - Water freezes at 0°C.
+    - 2 + 2 = 4.
+    - The Earth orbits the Sun.
+- Objective is the perspective that tries to eliminate individual bias (using multiple observers, instruments, and math).</response>
 
     <response id="re::be::consciousness">- Consciousness is the fundamental subjective experience.
 - Consciousness is "what it is like" to be something.
@@ -360,10 +379,30 @@
     - Logical order (first this, then that).
 - Clarity is free from confusion, ambiguity, or obscurity.</response>
 
+    <response id="re::be::statement">- A statement is a sentence that says something.
+- A statement can be either true or false.
+- A statement claims something about the world and is the kind of sentence where it makes sense to ask: "Is that true?".
+- Examples:
+    - I love her.
+    - Dogs are mammals.
+    - God's guiding me.
+- A statement is a claim about reality that can be judged true or false.
+- A question asks for information and a statement gives information.</response>
+
+    <response id="re::be::question">- A question asks for information and a statement gives information.
+- Examples:
+    - Do I love her?
+    - Are dogs mammals?
+    - Is God guiding me?
+- A question is a request for a statement.</response>
+
     <response id="re::be::truth">- Truth is the property of a statement that correctly describes the way reality is.
-- A true statement is a statement that matches reality.
 - If a statement is true, it is true for everyone, regardless of what we believe.
-- Examples: Water freezes at 0°C, 2 + 2 = 4 and the Earth orbits the Sun.</response>
+- Examples:
+    - Water freezes at 0°C.
+    - 2 + 2 = 4.
+    - The Earth orbits the Sun.
+- A true statement is a statement that matches reality.</response>
 
     <response id="re::be::negation">- Negation reverses the truth value.
 - Negation is the logical operation that turns a statement into its opposite.
@@ -377,7 +416,10 @@
 
     <response id="re::be::false">- False is the property of a statement that does not match reality.
 - A statement is false if and only if reality is not the way the statement says it is.
-- Examples: Water freezes at 100°C, 2 + 2 = 2 and the Earth orbits the Moon.
+- Examples:
+    - Water freezes at 100°C.
+    - 2 + 2 = 0.
+    - The Earth orbits the Moon.
 - False is a property of a statement and negation is an operation we may perform on a statement.</response>
 
     <response id="re::be::logic">- Logic is the set of rules that tells us: If we know certain statements are true, what other statements must also be true.
@@ -433,19 +475,6 @@
 - A preferences is a personal statement.
 - Examples: I love delicious and nutritious food! Snowboarding w/o my friends is okay but snowboarding w/ my friends is the best!</response>
 
-    <response id="re::be::subjective">- Subjective refers to anything that depends on a specific conscious perspective.
-- Subjective is the view from within oneself and objective the view from anywhere.
-- Examples: Your pain about losing, your joy about winning, your love for your wife and your belief that carob is better then chocolate.
-- Subjective is true for the observer but not necessarily true for all observers.
-- Objective is quantitative, meaning expressed in measurements, numbers, or repeatable observations and subjective is qualitative, meaning felt or believed.</response>
-
-    <response id="re::be::objective">- Objective refers to anything that is true regardless of the conscious perspective.
-- Subjective is the view from within oneself and objective the view from anywhere.
-- Objective is true whether when you're here or there, happy or sad, old or young.
-- Objective is quantitative, meaning expressed in measurements, numbers, or repeatable observations and subjective is qualitative meaning felt or believed.
-- Examples: Water freezes at 0°C, 2 + 2 = 4 and the Earth orbits the Sun.
-- Objective is the perspective that tries to eliminate individual bias (using multiple observers, instruments, and math).</response>
-
     <response id="re::be::idea">- An idea is a recognized pattern, connection, or possibility that creates a sense of insight or understanding.
 - An idea exists in the mind.
 - Thoughts are the stream of consciousness and ideas are the gold nuggets found in that stream.
@@ -486,17 +515,6 @@
 - An effect is the event that happens because a previous event happened.
 - A cause answers the question "Why?" and an effect answers the question "Therefore?"
 - An effect (ladies notice me) is the result of a cause (I feel good).</response>
-
-    <response id="re::be::statement">- A statement is a sentence that says something.
-- A statement can be either true or false.
-- A statement claims something about the world and is the kind of sentence where it makes sense to ask: "Is that true?".
-- Examples: I love her. Dogs are mammals. God's guiding me.
-- A statement is a claim about reality that can be judged true or false.
-- A question asks for information and a statement gives information.</response>
-
-    <response id="re::be::question">- A question asks for information and a statement gives information.
-- Examples: Do I love her? Are dogs mammals? Is God guiding me?
-- A question is a request for a statement.</response>
 
     <response id="re::be::worst">- Worst means the lowest degree of bad
 - Worst is worse than all others in a given context.
