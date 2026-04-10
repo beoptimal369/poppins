@@ -325,11 +325,11 @@
 - Reality includes everything that exists.
 - There are three distinct domains of reality:
     1. Physical Reality:
-        - Examples: Energy, matter, space and time
+        - Examples: Energy, matter, space and time.
     2. Subjective Reality:
-        - Examples: Conscious experiences
+        - Examples: Conscious experiences.
     3. Abstract Reality:
-        - Examples: Logic, meanings, concepts and numbers
+        - Examples: Logic, meanings, concepts and numbers.
 - Reality is the totality of existence.</response>
 
     <response id="re::be::subjective">- Subjective refers to anything that depends on a specific conscious perspective.
@@ -344,8 +344,7 @@
 
     <response id="re::be::objective">- Objective refers to anything that is true regardless of the conscious perspective.
 - Subjective is the view from within oneself and objective is the view from anywhere.
-- Objective is true whether when you're here or there, happy or sad, old or young.
-- Objective is quantitative, meaning expressed in measurements, numbers, or repeatable observations and subjective is qualitative meaning felt or believed.
+- Objective is quantitative (expressed in measurements, numbers, or repeatable observations) and subjective is qualitative (felt or believed).
 - Examples:
     - Water freezes at 0°C.
     - 2 + 2 = 4.
@@ -353,11 +352,11 @@
 - Objective is the perspective that tries to eliminate individual bias (using multiple observers, instruments, and math).</response>
 
     <response id="re::be::consciousness">- Consciousness is the fundamental subjective experience.
-- Consciousness is "what it is like" to be something.
+- Consciousness is "what it is like" to be someone.
 - Consciousness is the fact that there is something it feels like to be you right now.
 - While consciousness is the capacity for experience, awareness is the current contents of that experience.</response>
 
-    <response id="re::be::awareness">- Awareness is the scope of what is present within ones consciousness at a given moment.
+    <response id="re::be::awareness">- Awareness is the scope of what is present within ones consciousness.
 - If consciousness is the stage, awareness is the total amount of light illuminating the stage.
 - Awareness can be broad (taking in the whole room) or narrow (absorbed in a single thought).
 - While consciousness is the capacity for experience, awareness is the current contents of that experience.</response>
@@ -371,7 +370,7 @@
     - Unclear: The event will happen at some point in the near future.
     - Clear: The event will happen on Tuesday at 3 PM.
     - Unclear: She felt a certain way about the thing.
-    - Clear: She was angry about the canceled flight.
+    - Clear: She was ecstatic about the her crush asking her on a date.
 - What creates clarity?
     - Simple words.
     - Short sentences.
@@ -389,12 +388,12 @@
 - A statement is a claim about reality that can be judged true or false.
 - A question asks for information and a statement gives information.</response>
 
-    <response id="re::be::question">- A question asks for information and a statement gives information.
+    <response id="re::be::question">- A question is a request for a statement.
 - Examples:
     - Do I love her?
     - Are dogs mammals?
     - Is God guiding me?
-- A question is a request for a statement.</response>
+- A question asks for information and a statement gives information.</response>
 
     <response id="re::be::truth">- Truth is the property of a statement that correctly describes the way reality is.
 - If a statement is true, it is true for everyone, regardless of what we believe.
@@ -419,21 +418,34 @@
 - Examples:
     - Water freezes at 100°C.
     - 2 + 2 = 0.
-    - The Earth orbits the Moon.
+    - The Sun orbits the Moon.
 - False is a property of a statement and negation is an operation we may perform on a statement.</response>
 
-    <response id="re::be::logic">- Logic is the set of rules that tells us: If we know certain statements are true, what other statements must also be true.
-- Example: 
-    1. All humans are mortal.
-    2. Socrates is a human.
-    3. So Socrates must be mortal.
-- B/c statement 1 is true and statement 2 is true then statement 3 is true.
-- However, logic does not tell us whether the first 2 statements are actually true.
-- Example:
-    1. All birds can fly (invalid premise).
-    2. A penguin is a bird.
-    3. So a penguin can fly.
-- Logic only tells us if the first 2 statements are are true, then the third statement is also true.</response>
+    <response id="re::be::logic">- Logic tells us if the premises are true, then the conclusion must be true.
+- Logic does not tells us if the first 2 statements are true.
+    1. All birds can fly.
+    2. &amp; a penguin is a bird.
+    3. So a penguin can fly (valid logic, but false conclusion b/c statement 1 is a false premise).
+- Logic tells us:
+    - If the first 2 statements are are true, then the third statement is also true. 
+        1. All humans are mortal.
+        2. &amp; Socrates is a human.
+        3. So Socrates must be mortal (valid logic &amp; true).
+    - A statement and its negation cannot both be true simultaneously.
+    - Any statement is either true or false. There is no third option.
+    - Two negations cancel each other out and return to the original.
+        - It is not the case that it is not raining = It is raining.
+        - It is not the case that the cat is not on the mat. = The cat is on the mat.
+    - Conjuction (AND):
+        - IF both statements are true THEN the combination is true.
+        - Example: The car is red and the car is fast.
+    - Inclusive OR (Disjunction) (OR):
+        - IF atleast one statement is true THEN the combination is true.
+        - Example: I will drink tea or coffee.
+    - Exclusive OR (XOR):
+        - IF one statement is true THEN the combination is true. ELSE the combination is false.
+        - You may have soup or salad with your meal (not both).
+- Logic guarantees the relationship, not the truth.</response>
 
     <response id="re::be::thought">- A thought is the internal process of representing something to onself.
 - Every thought is about something. This could be a physical object (an apple), an event (a meeting yesterday), a concept (love), a feeling (safety), or even another thought (what was I just thinking about?).
