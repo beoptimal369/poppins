@@ -32,6 +32,9 @@
     <prompt id="pr::be::truth">What is truth?</prompt>
     <prompt id="pr::be::negation">What is negation?</prompt>
     <prompt id="pr::be::false">What is false?</prompt>
+    <prompt id="pr::be::reasoning">What is reasoning?</prompt>
+    <prompt id="pr::be::premise">What is a premise?</prompt>
+    <prompt id="pr::be::conclusion">What is a conclusion?</prompt>
     <prompt id="pr::be::logic">What is logic?</prompt>
     <prompt id="pr::be::thought">What is a thought?</prompt>
     <prompt id="pr::be::meaning">What is meaning?</prompt>
@@ -105,6 +108,9 @@
     <thought id="th::be::truth">I will provide the definition of truth.</thought>
     <thought id="th::be::negation">I will provide the definition of negation.</thought>
     <thought id="th::be::false">I will provide the definition of false.</thought>
+    <thought id="th::be::reasoning">I will provide the definition of reasoning.</thought>
+    <thought id="th::be::premise">I will provide the definition of a premise.</thought>
+    <thought id="th::be::conclusion">I will provide the definition of a conclusion.</thought>
     <thought id="th::be::belief">I will provide the definition of belief.</thought>
     <thought id="th::be::opinion">I will provide the definition of opinion.</thought>
     <thought id="th::be::perspective">I will provide the definition of perspective.</thought>
@@ -421,31 +427,94 @@
     - The Sun orbits the Moon.
 - False is a property of a statement and negation is an operation we may perform on a statement.</response>
 
-    <response id="re::be::logic">- Logic tells us if the premises are true, then the conclusion must be true.
-- Logic does not tells us if the first 2 statements are true.
-    1. All birds can fly.
-    2. &amp; a penguin is a bird.
-    3. So a penguin can fly (valid logic, but false conclusion b/c statement 1 is a false premise).
+    <response id="re::be::reasoning">- Reasoning has two parts:
+    1. Premise(s): The starting statements that we assume are true. Examples:
+        - All humans are mortal.
+        - Socrates is a human.
+    2. Conclusion: The statement that follows from the premise(s). Example:
+        - Therefore, Socrates is mortal.
+- Reasoning is the mental process of moving from premises to conclusion.</response>
+
+    <response id="re::be::premise">- A premise is a statement that is assumed to be true during reasoning.
+- A premise is the starting point from which a conclusion is drawn.
+- A statement is any sentence that can be true and a premise is a statement that is used as a starting point during reasoning.
+- All premises are statements. Not all statements are premises.
+- A statement becomes a premise only when it is used as a reasoning foundation.
+- A premise does not have to be true.
+    - A premise only has to be treated as true while reasoning.
+    - Logic alone cannot guarantee truth. Example:
+        1. All birds can fly. (false premise)
+        2. A penguin is a bird. (true premise)
+        3. So a penguin can fly (valid logic, false conclusion).
+    - Logic guarantees: if the premises are true, then the conclusion is true.
+    - Whether the premises are true is a separate question.
+- Our mission is not just to reason logically. Our mission is to choose true premises.</response>
+
+    <response id="re::be::conclusion">- The conclusion is the reasoning end point.
+- Reasoning begins with premises (statements we assume true).
+- Logic provides the rules for moving from those premises to a conclusion.
+- If the logic is valid and the premises are true, the conclusion is guaranteed to be true.
+- Logic is a guarantee of relationship. Logic is not a guarantee of reality. Example:
+        1. All birds can fly. (false premise)
+        2. A penguin is a bird. (true premise)
+        3. So a penguin can fly (valid logic, false conclusion).
+- If premises are the starting line, a conclusion is the finish line. 
+- If premises are the ingredients, the conclusion is the meal.
+- If premises are the question, the conclusion is the answer.
+- Conclusions are often introduced w/ conslusion indicators, Examples:
+    - Therefore: It is raining, therefore the ground is wet.
+    - Thus: All humans are mortal, thus Socrates will die.
+    - So: The battery is dead, so the car will not start.
+    - Hence: You did not study, hence you failed.
+    - Consequently: She trained for months, consequently she won
+    - Which means that: He is not answering his phone, which means that he is either busy or ignoring us.
+    - Implies that: The door is open, which implies that someone is home.
+    - For this reason: The roads are icy; for this reason, school is canceled.
+- A conclusion is guaranteed true w/in reality when the logic is valid and the premises are true.
+- A conclusion is the aim of reasoning.</response>
+
+    <response id="re::be::logic">- Reasoning has two parts:
+    1. Premise(s): The starting statements that we assume are true. Examples:
+        - All humans are mortal.
+        - Socrates is a human.
+    2. Conclusion: The statement that follows from the premise(s). Example:
+        - Therefore, Socrates is mortal.
+- Logic does not tells us if the premises are are true. Example:
+    1. All birds can fly. (false premise)
+    2. A penguin is a bird. (true premise)
+    3. So a penguin can fly (valid logic, false conclusion).
 - Logic tells us:
-    - If the first 2 statements are are true, then the third statement is also true. 
-        1. All humans are mortal.
-        2. &amp; Socrates is a human.
-        3. So Socrates must be mortal (valid logic &amp; true).
-    - A statement and its negation cannot both be true simultaneously.
+    - If the premises are true, then the conclusion must be true.
+    - A statement and its negation cannot both be true simultaneously. Example:
+        - It is raining in Miami. (true)
+        - It is not raining in Miami. (cannot also be true)
     - Any statement is either true or false. There is no third option.
     - Two negations cancel each other out and return to the original.
-        - It is not the case that it is not raining = It is raining.
-        - It is not the case that the cat is not on the mat. = The cat is on the mat.
+        - It is raining. = It is not the case that it is not raining.
+        - The cat is on the mat. = It is not the case that the cat is not on the mat.
     - Conjuction (AND):
         - IF both statements are true THEN the combination is true.
-        - Example: The car is red and the car is fast.
+        - Example:
+            - Logic: The car is red and the car is fast.
+            - Car A (true): Fast red car
+            - Car B (false): Fast blue car
     - Inclusive OR (Disjunction) (OR):
         - IF atleast one statement is true THEN the combination is true.
-        - Example: I will drink tea or coffee.
+        - Example:
+            - Logic: To enter the competition, you must be at least 18 years old or have parental permission.
+            - Enter competition (true): She's 18
+            - Enter competition (true): She has parental permission
+            - Enter competition (true): She's 18 and has parental permission
+            - Enter competition (false): She's 17 and does not have parental permission
     - Exclusive OR (XOR):
-        - IF one statement is true THEN the combination is true. ELSE the combination is false.
-        - You may have soup or salad with your meal (not both).
-- Logic guarantees the relationship, not the truth.</response>
+        - IF one statement is true THEN the combination is true.
+        - Example:
+            - Logic: At the restaurant we may have soup or salad w/ our dinner.
+            - Case (true): I ordered soup.
+            - Case (true): I ordered salad.
+            - Case (false): I ordered soup and salad (the restaurant does not allow this, the restaurant enforces exclusive or).
+- Logic guarantees the relationship between the premise and the conclusion.
+- Logic is a guarantee of relationship. Logic is not a guarantee of reality.</response>
 
     <response id="re::be::thought">- A thought is the internal process of representing something to onself.
 - Every thought is about something. This could be a physical object (an apple), an event (a meeting yesterday), a concept (love), a feeling (safety), or even another thought (what was I just thinking about?).
@@ -737,6 +806,9 @@
     <sample-ids prompt="pr::be::truth" thought="th::be::truth" response="re::be::truth" />
     <sample-ids prompt="pr::be::negation" thought="th::be::negation" response="re::be::negation" />
     <sample-ids prompt="pr::be::false" thought="th::be::false" response="re::be::false" />
+    <sample-ids prompt="pr::be::reasoning" thought="th::be::reasoning" response="re::be::reasoning" />
+    <sample-ids prompt="pr::be::premise" thought="th::be::premise" response="re::be::premise" />
+    <sample-ids prompt="pr::be::conclusion" thought="th::be::conclusion" response="re::be::conclusion" />
     <sample-ids prompt="pr::be::belief" thought="th::be::belief" response="re::be::belief" />
     <sample-ids prompt="pr::be::opinion" thought="th::be::opinion" response="re::be::opinion" />
     <sample-ids prompt="pr::be::perspective" thought="th::be::perspective" response="re::be::perspective" />
