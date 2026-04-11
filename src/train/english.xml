@@ -433,12 +433,17 @@
         - Socrates is a human.
     2. Conclusion: The statement that follows from the premise(s). Example:
         - Therefore, Socrates is mortal.
-- Reasoning is the mental process of moving from premises to conclusion.</response>
+- Reasoning is the mental process of moving from premises to conclusion and logic contains the rules that govern whether our moves are valid.
+- Reasoning is what we do and logic is the set of rules that tells us whether we did it correctly.</response>
 
-    <response id="re::be::premise">- A premise is a statement that is assumed to be true during reasoning.
-- A premise is the starting point from which a conclusion is drawn.
-- A statement is any sentence that can be true and a premise is a statement that is used as a starting point during reasoning.
+    <response id="re::be::premise">- A premise is the starting point from which a conclusion is drawn.
+- A premise is a statement that can be:
+    - Known to be true (a fact).
+    - Believed to be true (an opinion).
+    - Assumed for the sake of exploration (a hypothesis).
 - All premises are statements. Not all statements are premises.
+- A statement is any sentence that can be true or false.
+- A premise is a statement that is used as a starting point during reasoning.
 - A statement becomes a premise only when it is used as a reasoning foundation.
 - A premise does not have to be true.
     - A premise only has to be treated as true while reasoning.
@@ -462,15 +467,19 @@
 - If premises are the ingredients, the conclusion is the meal.
 - If premises are the question, the conclusion is the answer.
 - Conclusions are often introduced w/ conslusion indicators, Examples:
-    - Therefore: It is raining, therefore the ground is wet.
-    - Thus: All humans are mortal, thus Socrates will die.
-    - So: The battery is dead, so the car will not start.
-    - Hence: You did not study, hence you failed.
-    - Consequently: She trained for months, consequently she won
-    - Which means that: He is not answering his phone, which means that he is either busy or ignoring us.
-    - Implies that: The door is open, which implies that someone is home.
-    - For this reason: The roads are icy; for this reason, school is canceled.
-- A conclusion is guaranteed true w/in reality when the logic is valid and the premises are true.
+    - Therefore: She has been practicing every day, therefore her skills are growing beautifully.
+    - Thus: You showed up, you tried your best, and you learned something new, thus you are already succeeding.
+    - So: He smiled at her, and she felt safe and seen, so she knew she was exactly where she belonged.
+    - Hence: You have a warm home, food on the table, and people who love you, hence you are already rich in the ways that matter most.
+    - Consequently: She chose to be kind even when it was hard, consequently she built relationships that lasted a lifetime.
+    - Which means that: The sun came out after the storm, which means that brighter days are always possible.
+    - Implies that: She remembered your small preference from months ago, which implies that she truly listens and cares.
+    - For this reason: You have survived every difficult day you have ever faced, for this reason you can trust yourself to handle whatever comes next.
+- Conclusions may also omit conclusion indicators, Examples:
+    - The days are still hard sometimes. You still cry in the car. But yesterday, you laughed at something silly, and you did not feel guilty about it afterwards. You are healing.
+    - You stayed when leaving would have been easier. You gave when you had almost nothing left. You kept showing up, even when no one was clapping. You are already enough.
+    - You fell apart in front of him, and he did not run. He did not try to fix you. He just sat on the floor with you and waited. You are safe here.
+- A conclusion is guaranteed true when the logic is valid and reality matches the premise.
 - A conclusion is the aim of reasoning.</response>
 
     <response id="re::be::logic">- Reasoning has two parts:
@@ -493,13 +502,14 @@
         - It is raining. = It is not the case that it is not raining.
         - The cat is on the mat. = It is not the case that the cat is not on the mat.
     - Conjuction (AND):
-        - IF both statements are true THEN the combination is true.
+        - IF both statements are true THEN the conclusion is true.
         - Example:
-            - Logic: The car is red and the car is fast.
-            - Car A (true): Fast red car
-            - Car B (false): Fast blue car
+            - Logic: The car is red AND fast.
+            - Red Tesla: True
+            - Blue Tesla: False
+            - Blue Bike: False
     - Inclusive OR (Disjunction) (OR):
-        - IF atleast one statement is true THEN the combination is true.
+        - IF atleast one statement is true THEN the conclusion is true.
         - Example:
             - Logic: To enter the competition, you must be at least 18 years old or have parental permission.
             - Enter competition (true): She's 18
@@ -507,14 +517,15 @@
             - Enter competition (true): She's 18 and has parental permission
             - Enter competition (false): She's 17 and does not have parental permission
     - Exclusive OR (XOR):
-        - IF one statement is true THEN the combination is true.
+        - IF one statement is true THEN the conclusion is true.
         - Example:
-            - Logic: At the restaurant we may have soup or salad w/ our dinner.
-            - Case (true): I ordered soup.
-            - Case (true): I ordered salad.
-            - Case (false): I ordered soup and salad (the restaurant does not allow this, the restaurant enforces exclusive or).
+            - Logic: The trail splits. You may go left toward the waterfall or right toward the meadow.
+            - Case (true): You took the left path and saw the waterfall.
+            - Case (true): You took the right path and found the meadow.
+            - Case (false): You tried to take both paths at once and then remembered that we haven't mastered bilocation yet.
 - Logic guarantees the relationship between the premise and the conclusion.
-- Logic is a guarantee of relationship. Logic is not a guarantee of reality.</response>
+- Logic is not a guarantee of reality.
+- Logic is a guarantee of relationship.</response>
 
     <response id="re::be::thought">- A thought is the internal process of representing something to onself.
 - Every thought is about something. This could be a physical object (an apple), an event (a meeting yesterday), a concept (love), a feeling (safety), or even another thought (what was I just thinking about?).
