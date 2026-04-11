@@ -427,7 +427,20 @@
     - The Sun orbits the Moon.
 - False is a property of a statement and negation is an operation we may perform on a statement.</response>
 
-    <response id="re::be::reasoning">- Reasoning has two parts:
+    <response id="re::be::navigate">- Navigate means to find our way through a space, a problem, or a situation.
+- Navigating is taking steps towards an aim/goal.
+- Navigation has three parts:
+    1. Current position: Where am I now?
+    2. Aim/Goal: Where do I wanna go?
+    3. Terrain: What obsacles and paths are between where I am now and where I want to be?
+- Examples:
+    - He navigated the fragile silence between them by reaching for her hand instead of the perfect words, letting warmth say what his voice could not.
+    - You navigated your way back to yourself by first admitting you were lost, then learning to listen to the quiet voice that had been waiting to guide you home.
+    - They navigated their child's fear of the dark not by turning on every light, but by sitting beside her in the dimness until she learned the shadows held nothing more dangerous than her own courage.
+- Navigating requires feedback b/c we take a step, see where are, adjust and then take another step.
+- Navigate means to move toward a goal while constantly adjusting to the terrain.</response>
+
+    <response id="re::be::reasoning">- Reasoning/Logic has two parts:
     1. Premise(s): The starting statements that we assume are true. Examples:
         - All humans are mortal.
         - Socrates is a human.
@@ -482,7 +495,7 @@
 - A conclusion is guaranteed true when the logic is valid and reality matches the premise.
 - A conclusion is the aim of reasoning.</response>
 
-    <response id="re::be::logic">- Reasoning has two parts:
+    <response id="re::be::logic">- Logic/Reasoning has two parts:
     1. Premise(s): The starting statements that we assume are true. Examples:
         - All humans are mortal.
         - Socrates is a human.
@@ -523,6 +536,8 @@
             - Case (true): You took the left path and saw the waterfall.
             - Case (true): You took the right path and found the meadow.
             - Case (false): You tried to take both paths at once and then remembered that we haven't mastered bilocation yet.
+- Reasoning is the mental process of moving from premises to conclusion and logic contains the rules that govern whether our moves are valid.
+- Reasoning is what we do and logic is the set of rules that tells us whether we did it correctly.
 - Logic guarantees the relationship between the premise and the conclusion.
 - Logic is not a guarantee of reality.
 - Logic is a guarantee of relationship.</response>
@@ -743,20 +758,6 @@
 - Experience is unfolding over time in ones consciousness.
 - Every experiences is unique.
 - Example: Even if you do the same action twice (ex: eat the same acai bowl, watch the same YouTube video, see the same person), the experience is different b/c we are different, time has passed and we have changed.</response>
-
-    <response id="re::be::navigate">- Navigate means to find our way through a space, a problem, or a situation.
-- Navigating is taking steps towards our goal.
-- Navigation has three parts:
-    1. Current position: Where am I now?
-    2. Goal: Where do I wanna go?
-    3. Terrain: What obsacles and paths are between where I am now and where I want to be?
-- Examples:
-    - A ship captain navigates the ocean using a compass and stars.
-    - We navigate our community using a map and GPS.
-    - We navigate a difficult conversation choosing what to say, how to say it and when.
-    - We navigate our careers deciding which jobs to take and what skills to learn.
-- Navigating requires feedback b/c we take a step, see where are, adjust and then take another step.
-- Navigate means to move toward a goal while constantly adjusting to the terrain.</response>
 
     <response id="re::be::situation">- A situation is the set of circumstances.
 - A situation is the who, what, where, when, and why.
