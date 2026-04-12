@@ -19,6 +19,8 @@
     <prompt id="pr::be::sentence_friend">Write a sentence about being a good friend</prompt>
     <prompt id="pr::be::what_canonical_word_order">What is canonical word order?</prompt>
     <prompt id="pr::be::what_em_dash">What is em dash?</prompt>
+    <prompt id="pr::be::what_paragraph">What is a paragraph?</prompt>
+    <prompt id="pr::be::how_paragraph">How to write a paragraph?</prompt>
     <prompt id="pr::be::what_noun">What is a noun?</prompt>
     <prompt id="pr::be::what_subject">What is a subject?</prompt>
     <prompt id="pr::be::what_predicate">What is a predicate?</prompt>
@@ -106,6 +108,8 @@
     <thought id="th::be::sentence_friend">I will provide a sentence about being a good friend.</thought>
     <thought id="th::be::what_canonical_word_order">I will provide the definition of canonical word order.</thought>
     <thought id="th::be::what_em_dash">I will provide the definition of em dash.</thought>
+    <thought id="th::be::what_paragraph">I will provide the definition of a paragraph.</thought>
+    <thought id="th::be::how_paragraph">I will explain how to write a paragraph.</thought>
     <thought id="th::be::what_subject">I will provide the definition of a subject.</thought>
     <thought id="th::be::what_predicate">I will provide the definition of a predicate.</thought>
     <thought id="th::be::what_noun">I will provide the definition of a noun.</thought>
@@ -398,6 +402,18 @@
         - Examples:
             - What if you are exactly where you need to be?
             - You came back? (surprise, disbelief, hope mixed with uncertainty)</response>
+
+    <response id="re::be::what_paragraph">- A paragraph is a group of sentences that work together to develop an idea.
+- A paragraph has a topic sentence, supporting sentences and a concluding sentence.
+- A paragraph is a small container for a main idea.</response>
+
+    <response id="re::be::how_paragraph">1. Topic sentence: Introduces the main idea, example:
+    - She always chose him.
+2. Supporting sentences: Add specificity, sensory detail, and beauty, example:
+    - When his pockets were empty she chose him, when his car would not start she chose him and when the world turned their back she chose him.
+    - There was no shifting, there was no wavering and there was no doubting.
+3. Concluding sentence: Close the thought, example:
+    - There was only love b/c her eyes always said "I know you'll figure this out"—and eventually, he did.</response>
 
     <response id="re::be::what_noun">- A noun is a person, place, thing, or idea.
 - Nouns often serve as the subject of a sentence (who or what the sentence is about) or the object (who or what receives an action).
@@ -1045,6 +1061,8 @@
     <sample-ids prompt="pr::be::what_canonical_word_order" thought="th::be::what_canonical_word_order" response="re::be::what_canonical_word_order" />
     <sample-ids prompt="pr::be::what_em_dash" thought="th::be::what_em_dash" response="re::be::what_em_dash" />
     <sample-ids prompt="pr::be::what_subject" thought="th::be::what_subject" response="re::be::what_subject" />
+    <sample-ids prompt="pr::be::what_paragraph" thought="th::be::what_paragraph" response="re::be::what_paragraph" />
+    <sample-ids prompt="pr::be::how_paragraph" thought="th::be::how_paragraph" response="re::be::how_paragraph" />
     <sample-ids prompt="pr::be::what_predicate" thought="th::be::what_predicate" response="re::be::what_predicate" />
     <sample-ids prompt="pr::be::what_noun" thought="th::be::what_noun" response="re::be::what_noun" />
     <sample-ids prompt="pr::be::what_person" thought="th::be::what_person" response="re::be::what_person" />
