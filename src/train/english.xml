@@ -12,8 +12,10 @@
     <prompt id="pr::be::how_sentence">How to write a sentence?</prompt>
     <prompt id="pr::be::sentence_love">Write a sentence about love</prompt>
     <prompt id="pr::be::sentence_romance">Write a sentence about romance</prompt>
-    <prompt id="pr::be::sentence_husband">Write a sentence about being a good husband</prompt>
     <prompt id="pr::be::sentence_father">Write a sentence about being a good father</prompt>
+    <prompt id="pr::be::sentence_husband">Write a sentence about being a good husband</prompt>
+    <prompt id="pr::be::sentence_mother">Write a sentence about being a good mother</prompt>
+    <prompt id="pr::be::sentence_wife">Write a sentence about being a good wife</prompt>
     <prompt id="pr::be::sentence_friend">Write a sentence about being a good friend</prompt>
     <prompt id="pr::be::what_canonical_word_order">What is canonical word order?</prompt>
     <prompt id="pr::be::what_em_dash">What is em dash?</prompt>
@@ -97,8 +99,10 @@
     <thought id="th::be::how_sentence">I will explain how to write a sentence.</thought>
     <thought id="th::be::sentence_love">I will provide a sentence about love.</thought>
     <thought id="th::be::sentence_romance">I will provide a sentence about romance.</thought>
-    <thought id="th::be::sentence_husband">I will provide a sentence about being a good husband.</thought>
     <thought id="th::be::sentence_father">I will provide a sentence about being a good father.</thought>
+    <thought id="th::be::sentence_husband">I will provide a sentence about being a good husband.</thought>
+    <thought id="th::be::sentence_mother">I will provide a sentence about being a good mother.</thought>
+    <thought id="th::be::sentence_wife">I will provide a sentence about being a good wife.</thought>
     <thought id="th::be::sentence_friend">I will provide a sentence about being a good friend.</thought>
     <thought id="th::be::what_canonical_word_order">I will provide the definition of canonical word order.</thought>
     <thought id="th::be::what_em_dash">I will provide the definition of em dash.</thought>
@@ -302,9 +306,13 @@
 
     <response id="re::be::sentence_romance">He noticed the small things about her, like the way she tucked her hair behind her ear when she was thinking-not because he is trying to impress her, but because watching her feels like sunlight.</response>
 
-    <response id="re::be::sentence_husband">He came home and left his work at the door, setting his keys down quietly so he could hear her voice because being a good husband requires presence, focus and love.</response>
-
     <response id="re::be::sentence_father">He listened to his daughter's small, broken-up stories, kneeling down so his eyes were level with hers—not to fix what she said, but to let her know that what she says matters.</response>
+
+    <response id="re::be::sentence_husband">He came home to his wife and sat his keys down quietly to hear her, emptied his hands of his work to hold her and met her gaze enthusiastically to see her.</response>
+
+    <response id="re::be::sentence_mother">Every day we open our lunches and find, a love note tucked inside and in that moment we remember, that we are loved.</response>
+
+    <response id="re::be::sentence_wife">When his pockets were empty she chose him, when his car would not start she chose him and when the world turned their back she chose him.</response>
 
     <response id="re::be::sentence_friend">She gave him her hand as he expressed his grief because some just need, a hand to hold.</response>
 
@@ -1030,9 +1038,10 @@
     <sample-ids prompt="pr::be::how_sentence" thought="th::be::how_sentence" response="re::be::how_sentence" />
     <sample-ids prompt="pr::be::sentence_love" thought="th::be::sentence_love" response="re::be::sentence_love" />
     <sample-ids prompt="pr::be::sentence_romance" thought="th::be::sentence_romance" response="re::be::sentence_romance" />
-    <sample-ids prompt="pr::be::sentence_husband" thought="th::be::sentence_husband" response="re::be::sentence_husband" />
     <sample-ids prompt="pr::be::sentence_father" thought="th::be::sentence_father" response="re::be::sentence_father" />
-    <sample-ids prompt="pr::be::sentence_friend" thought="th::be::sentence_friend" response="re::be::sentence_friend" />
+    <sample-ids prompt="pr::be::sentence_husband" thought="th::be::sentence_husband" response="re::be::sentence_husband" />
+    <sample-ids prompt="pr::be::sentence_mother" thought="th::be::sentence_mother" response="re::be::sentence_mother" />
+    <sample-ids prompt="pr::be::sentence_wife" thought="th::be::sentence_wife" response="re::be::sentence_wife" />
     <sample-ids prompt="pr::be::what_canonical_word_order" thought="th::be::what_canonical_word_order" response="re::be::what_canonical_word_order" />
     <sample-ids prompt="pr::be::what_em_dash" thought="th::be::what_em_dash" response="re::be::what_em_dash" />
     <sample-ids prompt="pr::be::what_subject" thought="th::be::what_subject" response="re::be::what_subject" />
