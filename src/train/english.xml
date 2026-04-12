@@ -3,24 +3,29 @@
   <prompts>
     <prompt id="pr::be::what_english">What is english?</prompt>
     <prompt id="pr::be::what_language">What is language?</prompt>
-    <prompt id="pr::be::what_communication">What is communication?</prompt>
     <prompt id="pr::be::what_alphabet">What is the alphabet?</prompt>
     <prompt id="pr::be::what_grammar">What is grammar?</prompt>
-    <prompt id="pr::be::what_word">What is a word?</prompt>
+    <prompt id="pr::be::what_communication">What is communication?</prompt>
     <prompt id="pr::be::what_letter">What is a letter?</prompt>
+    <prompt id="pr::be::what_word">What is a word?</prompt>
     <prompt id="pr::be::what_sentence">What is a sentence?</prompt>
+    <prompt id="pr::be::what_canonical_word_order">What is canonical word order?</prompt>
     <prompt id="pr::be::how_sentence">How to write a sentence?</prompt>
-    <prompt id="pr::be::sentence_love">Write a sentence about love</prompt>
+    <prompt id="pr::be::sentence_friend">Write a sentence about being a good friend</prompt>
     <prompt id="pr::be::sentence_romance">Write a sentence about romance</prompt>
     <prompt id="pr::be::sentence_father">Write a sentence about being a good father</prompt>
     <prompt id="pr::be::sentence_husband">Write a sentence about being a good husband</prompt>
     <prompt id="pr::be::sentence_mother">Write a sentence about being a good mother</prompt>
     <prompt id="pr::be::sentence_wife">Write a sentence about being a good wife</prompt>
-    <prompt id="pr::be::sentence_friend">Write a sentence about being a good friend</prompt>
-    <prompt id="pr::be::what_canonical_word_order">What is canonical word order?</prompt>
-    <prompt id="pr::be::what_em_dash">What is em dash?</prompt>
     <prompt id="pr::be::what_paragraph">What is a paragraph?</prompt>
     <prompt id="pr::be::how_paragraph">How to write a paragraph?</prompt>
+    <prompt id="pr::be::paragraph_friend">Write a paragraph about being a good friend</prompt>
+    <prompt id="pr::be::paragraph_romance">Write a paragraph about romance</prompt>
+    <prompt id="pr::be::paragraph_father">Write a paragraph about being a good father</prompt>
+    <prompt id="pr::be::paragraph_husband">Write a paragraph about being a good husband</prompt>
+    <prompt id="pr::be::paragraph_mother">Write a paragraph about being a good mother</prompt>
+    <prompt id="pr::be::paragraph_wife">Write a paragraph about being a good wife</prompt>
+    <prompt id="pr::be::what_em_dash">What is em dash?</prompt>
     <prompt id="pr::be::what_noun">What is a noun?</prompt>
     <prompt id="pr::be::what_subject">What is a subject?</prompt>
     <prompt id="pr::be::what_predicate">What is a predicate?</prompt>
@@ -93,83 +98,88 @@
     <thought id="th::be::what_alphabet">I will provide the definition of the alphabet.</thought>
     <thought id="th::be::what_grammar">I will provide the definition of a grammar.</thought>
     <thought id="th::be::what_communication">I will provide the definition of communication.</thought>
-    <thought id="th::be::what_meaning">I will provide the definition of meaning.</thought>
-    <thought id="th::be::what_thought">I will provide the definition of a thought.</thought>
-    <thought id="th::be::what_word">I will provide the definition of a word.</thought>
     <thought id="th::be::what_letter">I will provide the definition of a letter.</thought>
+    <thought id="th::be::what_word">I will provide the definition of a word.</thought>
     <thought id="th::be::what_sentence">I will provide the definition of a sentence.</thought>
     <thought id="th::be::how_sentence">I will explain how to write a sentence.</thought>
-    <thought id="th::be::sentence_love">I will provide a sentence about love.</thought>
+    <thought id="th::be::what_canonical_word_order">I will provide the definition of canonical word order.</thought>
+    <thought id="th::be::sentence_friend">I will provide a sentence about being a good friend.</thought>
     <thought id="th::be::sentence_romance">I will provide a sentence about romance.</thought>
     <thought id="th::be::sentence_father">I will provide a sentence about being a good father.</thought>
     <thought id="th::be::sentence_husband">I will provide a sentence about being a good husband.</thought>
     <thought id="th::be::sentence_mother">I will provide a sentence about being a good mother.</thought>
     <thought id="th::be::sentence_wife">I will provide a sentence about being a good wife.</thought>
-    <thought id="th::be::sentence_friend">I will provide a sentence about being a good friend.</thought>
-    <thought id="th::be::what_canonical_word_order">I will provide the definition of canonical word order.</thought>
-    <thought id="th::be::what_em_dash">I will provide the definition of em dash.</thought>
     <thought id="th::be::what_paragraph">I will provide the definition of a paragraph.</thought>
     <thought id="th::be::how_paragraph">I will explain how to write a paragraph.</thought>
+    <thought id="th::be::paragraph_friend">I will provide a paragraph about being a good friend.</thought>
+    <thought id="th::be::paragraph_romance">I will provide a paragraph about romance.</thought>
+    <thought id="th::be::paragraph_father">I will provide a paragraph about being a good father.</thought>
+    <thought id="th::be::paragraph_husband">I will provide a paragraph about being a good husband.</thought>
+    <thought id="th::be::paragraph_mother">I will provide a paragraph about being a good mother.</thought>
+    <thought id="th::be::paragraph_wife">I will provide a paragraph about being a good wife.</thought>
+    <thought id="th::be::what_em_dash">I will provide the definition of em dash.</thought>
+    <thought id="th::be::what_noun">I will provide the definition of a noun.</thought>
     <thought id="th::be::what_subject">I will provide the definition of a subject.</thought>
     <thought id="th::be::what_predicate">I will provide the definition of a predicate.</thought>
-    <thought id="th::be::what_noun">I will provide the definition of a noun.</thought>
-    <thought id="th::be::what_person">I will provide the definition of a person.</thought>
-    <thought id="th::be::what_thing">I will provide the definition of a thing.</thought>
-    <thought id="th::be::what_idea">I will provide the definition of an idea.</thought>
-    <thought id="th::be::what_consciousness">I will provide the definition of consciousness.</thought>
-    <thought id="th::be::what_awareness">I will provide the definition of awareness.</thought>
-    <thought id="th::be::what_focus">I will provide the definition of focus.</thought>
-    <thought id="th::be::what_feeling">I will provide the definition of feeling.</thought>
-    <thought id="th::be::what_emotion">I will provide the definition of emotion.</thought>
     <thought id="th::be::what_verb">I will provide the definition of a verb.</thought>
     <thought id="th::be::what_adverb">I will provide the definition of an adverb.</thought>
-    <thought id="th::be::what_event">I will provide the definition of an event.</thought>
-    <thought id="th::be::what_cause">I will provide the definition of cause.</thought>
-    <thought id="th::be::what_effect">I will provide the definition of effect.</thought>
-    <thought id="th::be::what_subjective">I will provide the definition of subjective.</thought>
-    <thought id="th::be::what_objective">I will provide the definition of objective.</thought>
-    <thought id="th::be::what_reality">I will provide the definition of reality.</thought>
-    <thought id="th::be::what_statement">I will provide the definition of a statement.</thought>
-    <thought id="th::be::what_question">I will provide the definition of a question.</thought>
-    <thought id="th::be::what_preference">I will provide the definition of a preference.</thought>
-    <thought id="th::be::what_logic">I will provide the definition of logic.</thought>
-    <thought id="th::be::what_truth">I will provide the definition of truth.</thought>
-    <thought id="th::be::what_negation">I will provide the definition of negation.</thought>
-    <thought id="th::be::what_false">I will provide the definition of false.</thought>
-    <thought id="th::be::what_reasoning">I will provide the definition of reasoning.</thought>
-    <thought id="th::be::what_premise">I will provide the definition of a premise.</thought>
-    <thought id="th::be::what_conclusion">I will provide the definition of a conclusion.</thought>
-    <thought id="th::be::what_belief">I will provide the definition of belief.</thought>
-    <thought id="th::be::what_opinion">I will provide the definition of opinion.</thought>
-    <thought id="th::be::what_perspective">I will provide the definition of perspective.</thought>
-    <thought id="th::be::what_okay">I will provide the definition of okay.</thought>
-    <thought id="th::be::what_good">I will provide the definition of good.</thought>
-    <thought id="th::be::what_well">I will provide the definition of well.</thought>
-    <thought id="th::be::what_best">I will provide the definition of best.</thought>
-    <thought id="th::be::what_optimal">I will provide the definition of optimal.</thought>
-    <thought id="th::be::what_balanced">I will provide the definition of balanced.</thought>
-    <thought id="th::be::what_bad">I will provide the definition of bad.</thought>
-    <thought id="th::be::what_mediocre">I will provide the definition of mediocre.</thought>
-    <thought id="th::be::what_worst">I will provide the definition of worst.</thought>
     <thought id="th::be::what_adjective">I will provide the definition of adjective.</thought>
     <thought id="th::be::what_pronoun">I will provide the definition of a pronoun.</thought>
-    <thought id="th::be::what_perception">I will provide the definition of a perception.</thought>
-    <thought id="th::be::what_concept">I will provide the definition of a concept.</thought>
-    <thought id="th::be::what_experience">I will provide the definition of an experience.</thought>
-    <thought id="th::be::what_action">I will provide the definition of action.</thought>
-    <thought id="th::be::what_navigate">I will provide the definition of navigate.</thought>
-    <thought id="th::be::what_situation">I will provide the definition of a situation.</thought>
-    <thought id="th::be::what_describe">I will provide the definition of describe.</thought>
-    <thought id="th::be::what_evaluate">I will provide the definition of evaluate.</thought>
-    <thought id="th::be::what_precision">I will provide the definition of precision.</thought>
-    <thought id="th::be::what_clarity">I will provide the definition of clarity.</thought>
-    <thought id="th::be::what_equipped">I will provide the definition of equipped.</thought>
     <thought id="th::be::what_determiner">I will provide the definition of a determiner.</thought>
     <thought id="th::be::what_preposition">I will provide the definition of preposition.</thought>
     <thought id="th::be::what_conjunction">I will provide the definition of conjunction.</thought>
     <thought id="th::be::what_possessive">I will provide the definition of possessive.</thought>
     <thought id="th::be::what_reflexive">I will provide the definition of reflexive.</thought>
     <thought id="th::be::what_interjection">I will provide the definition of interjection.</thought>
+    <thought id="th::be::what_reality">I will provide the definition of reality.</thought>
+    <thought id="th::be::what_subjective">I will provide the definition of subjective.</thought>
+    <thought id="th::be::what_objective">I will provide the definition of objective.</thought>
+    <thought id="th::be::what_consciousness">I will provide the definition of consciousness.</thought>
+    <thought id="th::be::what_awareness">I will provide the definition of awareness.</thought>
+    <thought id="th::be::what_focus">I will provide the definition of focus.</thought>
+    <thought id="th::be::what_clarity">I will provide the definition of clarity.</thought>
+    <thought id="th::be::what_statement">I will provide the definition of a statement.</thought>
+    <thought id="th::be::what_question">I will provide the definition of a question.</thought>
+    <thought id="th::be::what_truth">I will provide the definition of truth.</thought>
+    <thought id="th::be::what_negation">I will provide the definition of negation.</thought>
+    <thought id="th::be::what_false">I will provide the definition of false.</thought>
+    <thought id="th::be::what_navigate">I will provide the definition of navigate.</thought>
+    <thought id="th::be::what_reasoning">I will provide the definition of reasoning.</thought>
+    <thought id="th::be::what_premise">I will provide the definition of a premise.</thought>
+    <thought id="th::be::what_conclusion">I will provide the definition of a conclusion.</thought>
+    <thought id="th::be::what_logic">I will provide the definition of logic.</thought>
+    <thought id="th::be::what_thought">I will provide the definition of a thought.</thought>
+    <thought id="th::be::what_meaning">I will provide the definition of meaning.</thought>
+    <thought id="th::be::what_perspective">I will provide the definition of perspective.</thought>
+    <thought id="th::be::what_perception">I will provide the definition of a perception.</thought>
+    <thought id="th::be::what_feeling">I will provide the definition of feeling.</thought>
+    <thought id="th::be::what_emotion">I will provide the definition of emotion.</thought>
+    <thought id="th::be::what_preference">I will provide the definition of a preference.</thought>
+    <thought id="th::be::what_idea">I will provide the definition of an idea.</thought>
+    <thought id="th::be::what_concept">I will provide the definition of a concept.</thought>
+    <thought id="th::be::what_opinion">I will provide the definition of opinion.</thought>
+    <thought id="th::be::what_belief">I will provide the definition of belief.</thought>
+    <thought id="th::be::what_person">I will provide the definition of a person.</thought>
+    <thought id="th::be::what_thing">I will provide the definition of a thing.</thought>
+    <thought id="th::be::what_event">I will provide the definition of an event.</thought>
+    <thought id="th::be::what_cause">I will provide the definition of cause.</thought>
+    <thought id="th::be::what_effect">I will provide the definition of effect.</thought>
+    <thought id="th::be::what_worst">I will provide the definition of worst.</thought>
+    <thought id="th::be::what_mediocre">I will provide the definition of mediocre.</thought>
+    <thought id="th::be::what_bad">I will provide the definition of bad.</thought>
+    <thought id="th::be::what_okay">I will provide the definition of okay.</thought>
+    <thought id="th::be::what_good">I will provide the definition of good.</thought>
+    <thought id="th::be::what_well">I will provide the definition of well.</thought>
+    <thought id="th::be::what_best">I will provide the definition of best.</thought>
+    <thought id="th::be::what_optimal">I will provide the definition of optimal.</thought>
+    <thought id="th::be::what_balanced">I will provide the definition of balanced.</thought>
+    <thought id="th::be::what_action">I will provide the definition of action.</thought>
+    <thought id="th::be::what_experience">I will provide the definition of an experience.</thought>
+    <thought id="th::be::what_situation">I will provide the definition of a situation.</thought>
+    <thought id="th::be::what_describe">I will provide the definition of describe.</thought>
+    <thought id="th::be::what_evaluate">I will provide the definition of evaluate.</thought>
+    <thought id="th::be::what_precision">I will provide the definition of precision.</thought>
+    <thought id="th::be::what_equipped">I will provide the definition of equipped.</thought>
   </thoughts>
 
 
@@ -260,6 +270,9 @@
     - Examples: Loud sounds, poor handwriting, strong emotions
 - Communication is the transfer of understanding between a sender and a receiver and the measure of good communication is the outcome of shared understanding.</response>
 
+    <response id="re::be::what_letter">- Letters are symbols that build words
+- Letters build words and words build sentences.</response>
+
     <response id="re::be::what_word">- A word is a group of letters (or sometimes a single letter) that stands for an idea.
 - A word's purpose is to tell us what something is or what to do.
 - When we put letters together they create words and words hold meaning.
@@ -268,59 +281,12 @@
     - Examples: "a", "I"
 - Letters build words and words build sentences.</response>
 
-    <response id="re::be::what_letter">- Letters are symbols that build words
-- Letters build words and words build sentences.</response>
-
     <response id="re::be::what_sentence">- A sentence is a group of words that expresses a complete thought.
 - The purpose of a sentence is to tell a story about an idea.
 - In writing, a sentence starts with a capital letter and ends with a period (.), question mark (?), or exclamation mark (!).
 - A sentence typically has a subject (who or what is the sentence about?) and a predicate (what the subject does or is?).</response>
 
-    <response id="re::be::how_sentence">1. Start Simple:
-    - Start w/ SV (Subject + Verb) or SVO (Subject + Verb + Object).
-    - Examples:
-        - She stayed.
-        - He apologized.
-        - She let go.
-    - Begin with the simplest possible version of what we want to say.
-2. Add Specificity:
-    - Replace general words with specific ones.
-    - Explain implications.
-    - Examples:
-        - She stayed beside him.
-        - He apologized for the years of silence.
-        - She let go of the grudge.
-3. Add Sensory Detail:
-    - Answers what the moment looked, sounded &amp; felt like.
-    - Examples:
-        - She stayed beside him, her hand resting on his.
-        - He apologized for the years of silence, his hands shaking around the phone.
-        - She let go of the grudge she had been carrying in her chest for years.
-4. Add Beauty:
-    - Add a gentle truth.
-    - Rather than say someone is loving, show what love does.
-    - Rather than just say something is beautiful, show how its beautiful.
-    - Examples:
-        - She stayed beside him, her hand resting on his—not because she had to but because she could not imagine anywhere else she would rather be.
-        - He apologized for the years of silence, his hands shaking around the phone, because he finally understood that love does not wait forever.
-        - She let go of the grudge she had been carrying in her chest for years—not because he deserves forgiveness, but because she deserves peace.
-    - The beauty often lives in the pivot, where the sentence turns from what happened, to what it meant.</response>
-
-    <response id="re::be::sentence_love">She stayed through the hard years, her hand finding his in the dark—not because the path was clear, but because he is.</response>
-
-    <response id="re::be::sentence_romance">He noticed the small things about her, like the way she tucked her hair behind her ear when she was thinking-not because he is trying to impress her, but because watching her feels like sunlight.</response>
-
-    <response id="re::be::sentence_father">He listened to his daughter's small, broken-up stories, kneeling down so his eyes were level with hers—not to fix what she said, but to let her know that what she says matters.</response>
-
-    <response id="re::be::sentence_husband">He came home to his wife and sat his keys down quietly to hear her, emptied his hands of his work to hold her and met her gaze enthusiastically to see her.</response>
-
-    <response id="re::be::sentence_mother">Every day we open our lunches and find, a love note tucked inside and in that moment we remember, that we are loved.</response>
-
-    <response id="re::be::sentence_wife">When his pockets were empty she chose him, when his car would not start she chose him and when the world turned their back she chose him.</response>
-
-    <response id="re::be::sentence_friend">When he lost his job and forgot his worth, she remembered it for him.</response>
-
-    <response id="re::be::what_canonical_word_order">- Canonical word order means the standard, expected, default order of words in a sentence.
+        <response id="re::be::what_canonical_word_order">- Canonical word order means the standard, expected, default order of words in a sentence.
 - Canonical word order components:
     - Subject (S):
         - The doer.
@@ -364,7 +330,97 @@
     2. Add an Object: They shared stories.
     3. Add a Complement: They shared stories that felt fragile.
     4. Add Adverbials: Late at night, across the table, they shared stories that felt fragile.
-    5. Add Heart (Specific, Sensory, Honest): Late at night, across the table, they shared stories that felt fragile-not to fix each other, just to say, "You are not alone in this".</response>
+    5. Add Beauty (Specific, Sensory, Truth): Late at night, across the table, they shared stories that felt fragile-not to fix each other, just to say, "We are in this together".</response>
+
+    <response id="re::be::how_sentence">1. Start Simple:
+    - Start w/ SV (Subject + Verb) or SVO (Subject + Verb + Object).
+    - Examples:
+        1. He lost.
+        1. He loves her.
+        3. He listens.
+        4. He came home.
+        5. Lunch time arrived.
+        6. She chose him.
+    - Begin with the simplest possible version of what we want to say.
+2. Add Specificity:
+    - Add specific truths.
+    - Examples:
+        1. He lost his job and forgot his worth.
+        2. He loves noticing her—like the way her voice softens when she is talking, the way she tucks her hair when she is thinking and the way she bites her lip when she is laughing.
+        3. He listens to his daughter's stories, kneeling down so their eyes are level.
+        4. He came home to his wife—sat his keys down quietly to hear her, emptied his hands of his work to hold her and met her gaze enthusiastically to see her.
+        5. Lunch time arrived, I opened my lunch and Mom's love note is tucked inside.
+        6. When his pockets were empty she chose him.
+3. Add Beauty:
+    - Add more truth that clearly shows beauty.
+    - Sometimes we may move the tense from the past to the present to convey eternal emotion (example 5).
+    - Examples:
+        1. When he lost his job and forgot his worth, she remembered it for him.
+        2. He loves noticing her—like the way her voice softens when she is talking, the way she tucks her hair when she is thinking and the way she bites her lip when she is laughing—seeing her is easy for him because her beauty feels like sunlight.
+        3. He listens to his daughter's stories, kneeling down so their eyes are level—to let her know, forever and always, that she is loved.
+        4. He came home to his wife—sat his keys down quietly to hear her, emptied his hands of his work to hold her and met her gaze enthusiastically to see her because being a good husband does not require grand gestures but it does require focus, presence and love.
+        5. Lunch time arrived, I opened my lunch and Mom's love note is tucked inside and in that moment, she helped me remember, that I am loved.
+        6. When his pockets were empty she chose him, when his car would not start she chose him and when the world turned their back she chose him.
+    - The beauty often lives in the pivot, where the sentence turns from what happened, to what it meant.</response>
+
+    <response id="re::be::sentence_friend">When he lost his job and forgot his worth, she remembered it for him.</response>
+
+    <response id="re::be::sentence_romance">He loves noticing her—like the way her voice softens when she is talking, the way she tucks her hair when she is thinking and the way she bites her lip when she is laughing—seeing her is easy for him because her beauty feels like sunlight.</response>
+
+    <response id="re::be::sentence_father">He listens to his daughter's stories, kneeling down so their eyes are level—to let her know, forever and always, that she is loved.</response>
+
+    <response id="re::be::sentence_husband">He came home to his wife and sat his keys down quietly to hear her, emptied his hands of his work to hold her and met her gaze enthusiastically to see her because being a good husband does not require grand gestures but it does require focus, presence and love.</response>
+
+    <response id="re::be::sentence_mother">Lunch time arrived, I opened my lunch and Mom's love note is tucked inside and in that moment, she helped me remember, that I am loved.</response>
+
+    <response id="re::be::sentence_wife">When his pockets were empty she chose him, when his car would not start she chose him and when the world turned their back she chose him.</response>
+
+    <response id="re::be::what_paragraph">- A paragraph is a group of sentences that work together to develop an idea.
+- In formal writing, a paragraph has a topic sentence, supporting sentences, and a concluding sentence.
+- In creative writing, a paragraph can be as short as a single word—if that word needs its own space to breathe.
+- A paragraph is a small container for a main idea.</response>
+
+    <response id="re::be::how_paragraph">1. Topic sentence:
+    - Introduces the main idea.
+    - Examples:
+        1. He lost his job.
+        2. He loves noticing her.
+        3. He listens to his daughter's stories.
+        4. He came home to his wife.
+        5. Lunch time arrives, I open my lunch and Mom's love note is tucked inside.
+        6. She always chose him.
+2. Add supporting sentences:
+    - Add specificity, sensory detail, and beauty.
+    - Examples:
+        1. He began to panic and when he told Rose he knew she'd panic too. But surprisingly, she was confident, certain and calm. She reminded him of all the wonder he's accomplished, she reminded him of all the dreams he'll accomplish and she reminded him that she still believed in him.
+        2. He loves the way her voice softens when she is talking, the way she tucks her hair when she is thinking and the way she bites her lip when she is laughing.
+        3. Kneeling down so their eyes are level, he asks her about her day, her asks here about her dreams and he asks her about her lovely imagination. She loves these moments and he does too.
+        4. He sat his keys down quietly to hear her, he emptied his hands of his work to hold her and he met her gaze enthusiastically to see her.
+        5. There is always a heart, there is always a smile and there is always a lovely message. Sometimes it says "I believe in you", sometimes it says "You got this" and sometimes it says "I love you".
+        6. When his pockets were empty she chose him, when his car would not start she chose him and when the world turned their back she chose him. There was no shifting, there was no wavering and there was no doubting.
+    - When his pockets were empty she chose him, when his car would not start she chose him and when the world turned their back she chose him.
+    - There was no shifting, there was no wavering and there was no doubting.
+3. Concluding sentence
+    - Close the thought.
+    - Examples:
+        1. When he lost his job and forgot his worth, she remembered it for him.
+        2. Seeing her is easy for him because her beauty feels like sunlight.
+        3. He hopes she knows, that forever and always, that she is loved.
+        4. Being a good husband does not require grand gestures but it does require focus, presence and love.
+        5. When I read her note, she helps me remember, that I am loved!
+        6. There was only love b/c her eyes always said "I know you'll figure this out"—and eventually, he did!</response>
+
+    <response id="re::be::paragraph_friend">He lost his job. He began to panic and when he told Rose he knew she'd panic too. But surprisingly, she was confident, certain and calm. She reminded him of all the wonder he's accomplished, she reminded him of all the dreams he'll accomplish and she reminded him that she still believed in him. When he lost his job and forgot his worth, she remembered it for him.</response>
+
+    <response id="re::be::paragraph_romance">He loves noticing her. He loves the way her voice softens when she is talking, the way she tucks her hair when she is thinking and the way she bites her lip when she is laughing. Seeing her is easy for him because her beauty feels like sunlight.</response>
+
+    <response id="re::be::paragraph_father">He listens to his daughter's stories. Kneeling down so their eyes are level, he asks her about her day, her asks here about her dreams and he asks her about her lovely imagination. She loves these moments and he does too. He hopes she knows, that forever and always, that she is loved.</response>
+
+    <response id="re::be::paragraph_husband">He came home to his wife. He sat his keys down quietly to hear her, he emptied his hands of his work to hold her and he met her gaze enthusiastically to see her. Being a good husband does not require grand gestures but it does require focus, presence and love.</response>
+
+    <response id="re::be::paragraph_mother">Lunch time arrives, I open my lunch and Mom's love note is tucked inside. There is always a heart, there is always a smile and there is always a lovely message. Sometimes it says "I believe in you", sometimes it says "You got this" and sometimes it says "I love you". When I read her note, she helps me remember, that I am loved!</response>
+
+    <response id="re::be::paragraph_wife">She always chose him. When his pockets were empty she chose him, when his car would not start she chose him and when the world turned their back she chose him. There was no shifting, there was no wavering and there was no doubting. There was only love because her eyes always said "I know you'll figure this out"—and eventually, he did!</response>
 
     <response id="re::be::what_em_dash">- Em dash (—) is a punctuation that helps a turn w/in a sentence feel intentional.
 - Punctuations:
@@ -402,18 +458,6 @@
         - Examples:
             - What if you are exactly where you need to be?
             - You came back? (surprise, disbelief, hope mixed with uncertainty)</response>
-
-    <response id="re::be::what_paragraph">- A paragraph is a group of sentences that work together to develop an idea.
-- A paragraph has a topic sentence, supporting sentences and a concluding sentence.
-- A paragraph is a small container for a main idea.</response>
-
-    <response id="re::be::how_paragraph">1. Topic sentence: Introduces the main idea, example:
-    - She always chose him.
-2. Supporting sentences: Add specificity, sensory detail, and beauty, example:
-    - When his pockets were empty she chose him, when his car would not start she chose him and when the world turned their back she chose him.
-    - There was no shifting, there was no wavering and there was no doubting.
-3. Concluding sentence: Close the thought, example:
-    - There was only love b/c her eyes always said "I know you'll figure this out"—and eventually, he did.</response>
 
     <response id="re::be::what_noun">- A noun is a person, place, thing, or idea.
 - Nouns often serve as the subject of a sentence (who or what the sentence is about) or the object (who or what receives an action).
@@ -1044,85 +1088,89 @@
     <sample-ids prompt="pr::be::what_english" thought="th::be::what_english" response="re::be::what_english" />
     <sample-ids prompt="pr::be::what_language" thought="th::be::what_language" response="re::be::what_language" />
     <sample-ids prompt="pr::be::what_alphabet" thought="th::be::what_alphabet" response="re::be::what_alphabet" />
-    <sample-ids prompt="pr::be::what_alphabet" thought="th::be::what_alphabet" response="re::be::what_alphabet" />
+    <sample-ids prompt="pr::be::what_grammar" thought="th::be::what_grammar" response="re::be::what_grammar" />
     <sample-ids prompt="pr::be::what_communication" thought="th::be::what_communication" response="re::be::what_communication" />
-    <sample-ids prompt="pr::be::what_meaning" thought="th::be::what_meaning" response="re::be::what_meaning" />
-    <sample-ids prompt="pr::be::what_thought" thought="th::be::what_thought" response="re::be::what_thought" />
-    <sample-ids prompt="pr::be::what_word" thought="th::be::what_word" response="re::be::what_word" />
     <sample-ids prompt="pr::be::what_letter" thought="th::be::what_letter" response="re::be::what_letter" />
+    <sample-ids prompt="pr::be::what_word" thought="th::be::what_word" response="re::be::what_word" />
     <sample-ids prompt="pr::be::what_sentence" thought="th::be::what_sentence" response="re::be::what_sentence" />
+    <sample-ids prompt="pr::be::what_canonical_word_order" thought="th::be::what_canonical_word_order" response="re::be::what_canonical_word_order" />
     <sample-ids prompt="pr::be::how_sentence" thought="th::be::how_sentence" response="re::be::how_sentence" />
-    <sample-ids prompt="pr::be::sentence_love" thought="th::be::sentence_love" response="re::be::sentence_love" />
+    <sample-ids prompt="pr::be::sentence_friend" thought="th::be::sentence_friend" response="re::be::sentence_friend" />
     <sample-ids prompt="pr::be::sentence_romance" thought="th::be::sentence_romance" response="re::be::sentence_romance" />
     <sample-ids prompt="pr::be::sentence_father" thought="th::be::sentence_father" response="re::be::sentence_father" />
     <sample-ids prompt="pr::be::sentence_husband" thought="th::be::sentence_husband" response="re::be::sentence_husband" />
     <sample-ids prompt="pr::be::sentence_mother" thought="th::be::sentence_mother" response="re::be::sentence_mother" />
     <sample-ids prompt="pr::be::sentence_wife" thought="th::be::sentence_wife" response="re::be::sentence_wife" />
-    <sample-ids prompt="pr::be::what_canonical_word_order" thought="th::be::what_canonical_word_order" response="re::be::what_canonical_word_order" />
-    <sample-ids prompt="pr::be::what_em_dash" thought="th::be::what_em_dash" response="re::be::what_em_dash" />
-    <sample-ids prompt="pr::be::what_subject" thought="th::be::what_subject" response="re::be::what_subject" />
     <sample-ids prompt="pr::be::what_paragraph" thought="th::be::what_paragraph" response="re::be::what_paragraph" />
     <sample-ids prompt="pr::be::how_paragraph" thought="th::be::how_paragraph" response="re::be::how_paragraph" />
-    <sample-ids prompt="pr::be::what_predicate" thought="th::be::what_predicate" response="re::be::what_predicate" />
+    <sample-ids prompt="pr::be::paragraph_friend" thought="th::be::paragraph_friend" response="re::be::paragraph_friend" />
+    <sample-ids prompt="pr::be::paragraph_romance" thought="th::be::paragraph_romance" response="re::be::paragraph_romance" />
+    <sample-ids prompt="pr::be::paragraph_father" thought="th::be::paragraph_father" response="re::be::paragraph_father" />
+    <sample-ids prompt="pr::be::paragraph_husband" thought="th::be::paragraph_husband" response="re::be::paragraph_husband" />
+    <sample-ids prompt="pr::be::paragraph_mother" thought="th::be::paragraph_mother" response="re::be::paragraph_mother" />
+    <sample-ids prompt="pr::be::paragraph_wife" thought="th::be::paragraph_wife" response="re::be::paragraph_wife" />
+    <sample-ids prompt="pr::be::what_em_dash" thought="th::be::what_em_dash" response="re::be::what_em_dash" />
     <sample-ids prompt="pr::be::what_noun" thought="th::be::what_noun" response="re::be::what_noun" />
-    <sample-ids prompt="pr::be::what_person" thought="th::be::what_person" response="re::be::what_person" />
-    <sample-ids prompt="pr::be::what_thing" thought="th::be::what_thing" response="re::be::what_thing" />
-    <sample-ids prompt="pr::be::what_idea" thought="th::be::what_idea" response="re::be::what_idea" />
-    <sample-ids prompt="pr::be::what_consciousness" thought="th::be::what_consciousness" response="re::be::what_consciousness" />
-    <sample-ids prompt="pr::be::what_awareness" thought="th::be::what_awareness" response="re::be::what_awareness" />
-    <sample-ids prompt="pr::be::what_focus" thought="th::be::what_focus" response="re::be::what_focus" />
-    <sample-ids prompt="pr::be::what_feeling" thought="th::be::what_feeling" response="re::be::what_feeling" />
-    <sample-ids prompt="pr::be::what_emotion" thought="th::be::what_emotion" response="re::be::what_emotion" />
+    <sample-ids prompt="pr::be::what_subject" thought="th::be::what_subject" response="re::be::what_subject" />
+    <sample-ids prompt="pr::be::what_predicate" thought="th::be::what_predicate" response="re::be::what_predicate" />
     <sample-ids prompt="pr::be::what_verb" thought="th::be::what_verb" response="re::be::what_verb" />
     <sample-ids prompt="pr::be::what_adverb" thought="th::be::what_adverb" response="re::be::what_adverb" />
-    <sample-ids prompt="pr::be::what_event" thought="th::be::what_event" response="re::be::what_event" />
-    <sample-ids prompt="pr::be::what_cause" thought="th::be::what_cause" response="re::be::what_cause" />
-    <sample-ids prompt="pr::be::what_effect" thought="th::be::what_effect" response="re::be::what_effect" />
-    <sample-ids prompt="pr::be::what_subjective" thought="th::be::what_subjective" response="re::be::what_subjective" />
-    <sample-ids prompt="pr::be::what_objective" thought="th::be::what_objective" response="re::be::what_objective" />
-    <sample-ids prompt="pr::be::what_reality" thought="th::be::what_reality" response="re::be::what_reality" />
-    <sample-ids prompt="pr::be::what_statement" thought="th::be::what_statement" response="re::be::what_statement" />
-    <sample-ids prompt="pr::be::what_question" thought="th::be::what_question" response="re::be::what_question" />
-    <sample-ids prompt="pr::be::what_preference" thought="th::be::what_preference" response="re::be::what_preference" />
-    <sample-ids prompt="pr::be::what_logic" thought="th::be::what_logic" response="re::be::what_logic" />
-    <sample-ids prompt="pr::be::what_truth" thought="th::be::what_truth" response="re::be::what_truth" />
-    <sample-ids prompt="pr::be::what_negation" thought="th::be::what_negation" response="re::be::what_negation" />
-    <sample-ids prompt="pr::be::what_false" thought="th::be::what_false" response="re::be::what_false" />
-    <sample-ids prompt="pr::be::what_reasoning" thought="th::be::what_reasoning" response="re::be::what_reasoning" />
-    <sample-ids prompt="pr::be::what_premise" thought="th::be::what_premise" response="re::be::what_premise" />
-    <sample-ids prompt="pr::be::what_conclusion" thought="th::be::what_conclusion" response="re::be::what_conclusion" />
-    <sample-ids prompt="pr::be::what_belief" thought="th::be::what_belief" response="re::be::what_belief" />
-    <sample-ids prompt="pr::be::what_opinion" thought="th::be::what_opinion" response="re::be::what_opinion" />
-    <sample-ids prompt="pr::be::what_perspective" thought="th::be::what_perspective" response="re::be::what_perspective" />
-    <sample-ids prompt="pr::be::what_okay" thought="th::be::what_okay" response="re::be::what_okay" />
-    <sample-ids prompt="pr::be::what_good" thought="th::be::what_good" response="re::be::what_good" />
-    <sample-ids prompt="pr::be::what_well" thought="th::be::what_well" response="re::be::what_well" />
-    <sample-ids prompt="pr::be::what_best" thought="th::be::what_best" response="re::be::what_best" />
-    <sample-ids prompt="pr::be::what_optimal" thought="th::be::what_optimal" response="re::be::what_optimal" />
-    <sample-ids prompt="pr::be::what_balanced" thought="th::be::what_balanced" response="re::be::what_balanced" />
-    <sample-ids prompt="pr::be::what_bad" thought="th::be::what_bad" response="re::be::what_bad" />
-    <sample-ids prompt="pr::be::what_mediocre" thought="th::be::what_mediocre" response="re::be::what_mediocre" />
-    <sample-ids prompt="pr::be::what_worst" thought="th::be::what_worst" response="re::be::what_worst" />
     <sample-ids prompt="pr::be::what_adjective" thought="th::be::what_adjective" response="re::be::what_adjective" />
     <sample-ids prompt="pr::be::what_pronoun" thought="th::be::what_pronoun" response="re::be::what_pronoun" />
-    <sample-ids prompt="pr::be::what_perception" thought="th::be::what_perception" response="re::be::what_perception" />
-    <sample-ids prompt="pr::be::what_concept" thought="th::be::what_concept" response="re::be::what_concept" />
-    <sample-ids prompt="pr::be::what_experience" thought="th::be::what_experience" response="re::be::what_experience" />
-    <sample-ids prompt="pr::be::what_reflexive" thought="th::be::what_reflexive" response="re::be::what_reflexive" />
-    <sample-ids prompt="pr::be::what_possessive" thought="th::be::what_possessive" response="re::be::what_possessive" />
-    <sample-ids prompt="pr::be::what_action" thought="th::be::what_action" response="re::be::what_action" />
-    <sample-ids prompt="pr::be::what_navigate" thought="th::be::what_navigate" response="re::be::what_navigate" />
-    <sample-ids prompt="pr::be::what_situation" thought="th::be::what_situation" response="re::be::what_situation" />
-    <sample-ids prompt="pr::be::what_describe" thought="th::be::what_describe" response="re::be::what_describe" />
-    <sample-ids prompt="pr::be::what_evaluate" thought="th::be::what_evaluate" response="re::be::what_evaluate" />
-    <sample-ids prompt="pr::be::what_precision" thought="th::be::what_precision" response="re::be::what_precision" />
-    <sample-ids prompt="pr::be::what_clarity" thought="th::be::what_clarity" response="re::be::what_clarity" />
-    <sample-ids prompt="pr::be::what_equipped" thought="th::be::what_equipped" response="re::be::what_equipped" />
     <sample-ids prompt="pr::be::what_determiner" thought="th::be::what_determiner" response="re::be::what_determiner" />
     <sample-ids prompt="pr::be::what_preposition" thought="th::be::what_preposition" response="re::be::what_preposition" />
     <sample-ids prompt="pr::be::what_conjunction" thought="th::be::what_conjunction" response="re::be::what_conjunction" />
     <sample-ids prompt="pr::be::what_possessive" thought="th::be::what_possessive" response="re::be::what_possessive" />
     <sample-ids prompt="pr::be::what_reflexive" thought="th::be::what_reflexive" response="re::be::what_reflexive" />
     <sample-ids prompt="pr::be::what_interjection" thought="th::be::what_interjection" response="re::be::what_interjection" />
+    <sample-ids prompt="pr::be::what_reality" thought="th::be::what_reality" response="re::be::what_reality" />
+    <sample-ids prompt="pr::be::what_subjective" thought="th::be::what_subjective" response="re::be::what_subjective" />
+    <sample-ids prompt="pr::be::what_objective" thought="th::be::what_objective" response="re::be::what_objective" />
+    <sample-ids prompt="pr::be::what_consciousness" thought="th::be::what_consciousness" response="re::be::what_consciousness" />
+    <sample-ids prompt="pr::be::what_awareness" thought="th::be::what_awareness" response="re::be::what_awareness" />
+    <sample-ids prompt="pr::be::what_focus" thought="th::be::what_focus" response="re::be::what_focus" />
+    <sample-ids prompt="pr::be::what_clarity" thought="th::be::what_clarity" response="re::be::what_clarity" />
+    <sample-ids prompt="pr::be::what_statement" thought="th::be::what_statement" response="re::be::what_statement" />
+    <sample-ids prompt="pr::be::what_question" thought="th::be::what_question" response="re::be::what_question" />
+    <sample-ids prompt="pr::be::what_truth" thought="th::be::what_truth" response="re::be::what_truth" />
+    <sample-ids prompt="pr::be::what_negation" thought="th::be::what_negation" response="re::be::what_negation" />
+    <sample-ids prompt="pr::be::what_false" thought="th::be::what_false" response="re::be::what_false" />
+    <sample-ids prompt="pr::be::what_navigate" thought="th::be::what_navigate" response="re::be::what_navigate" />
+    <sample-ids prompt="pr::be::what_reasoning" thought="th::be::what_reasoning" response="re::be::what_reasoning" />
+    <sample-ids prompt="pr::be::what_premise" thought="th::be::what_premise" response="re::be::what_premise" />
+    <sample-ids prompt="pr::be::what_conclusion" thought="th::be::what_conclusion" response="re::be::what_conclusion" />
+    <sample-ids prompt="pr::be::what_logic" thought="th::be::what_logic" response="re::be::what_logic" />
+    <sample-ids prompt="pr::be::what_thought" thought="th::be::what_thought" response="re::be::what_thought" />
+    <sample-ids prompt="pr::be::what_meaning" thought="th::be::what_meaning" response="re::be::what_meaning" />
+    <sample-ids prompt="pr::be::what_perspective" thought="th::be::what_perspective" response="re::be::what_perspective" />
+    <sample-ids prompt="pr::be::what_perception" thought="th::be::what_perception" response="re::be::what_perception" />
+    <sample-ids prompt="pr::be::what_feeling" thought="th::be::what_feeling" response="re::be::what_feeling" />
+    <sample-ids prompt="pr::be::what_emotion" thought="th::be::what_emotion" response="re::be::what_emotion" />
+    <sample-ids prompt="pr::be::what_preference" thought="th::be::what_preference" response="re::be::what_preference" />
+    <sample-ids prompt="pr::be::what_idea" thought="th::be::what_idea" response="re::be::what_idea" />
+    <sample-ids prompt="pr::be::what_concept" thought="th::be::what_concept" response="re::be::what_concept" />
+    <sample-ids prompt="pr::be::what_opinion" thought="th::be::what_opinion" response="re::be::what_opinion" />
+    <sample-ids prompt="pr::be::what_belief" thought="th::be::what_belief" response="re::be::what_belief" />
+    <sample-ids prompt="pr::be::what_person" thought="th::be::what_person" response="re::be::what_person" />
+    <sample-ids prompt="pr::be::what_thing" thought="th::be::what_thing" response="re::be::what_thing" />
+    <sample-ids prompt="pr::be::what_event" thought="th::be::what_event" response="re::be::what_event" />
+    <sample-ids prompt="pr::be::what_cause" thought="th::be::what_cause" response="re::be::what_cause" />
+    <sample-ids prompt="pr::be::what_effect" thought="th::be::what_effect" response="re::be::what_effect" />
+    <sample-ids prompt="pr::be::what_worst" thought="th::be::what_worst" response="re::be::what_worst" />
+    <sample-ids prompt="pr::be::what_mediocre" thought="th::be::what_mediocre" response="re::be::what_mediocre" />
+    <sample-ids prompt="pr::be::what_bad" thought="th::be::what_bad" response="re::be::what_bad" />
+    <sample-ids prompt="pr::be::what_okay" thought="th::be::what_okay" response="re::be::what_okay" />
+    <sample-ids prompt="pr::be::what_good" thought="th::be::what_good" response="re::be::what_good" />
+    <sample-ids prompt="pr::be::what_well" thought="th::be::what_well" response="re::be::what_well" />
+    <sample-ids prompt="pr::be::what_best" thought="th::be::what_best" response="re::be::what_best" />
+    <sample-ids prompt="pr::be::what_optimal" thought="th::be::what_optimal" response="re::be::what_optimal" />
+    <sample-ids prompt="pr::be::what_balanced" thought="th::be::what_balanced" response="re::be::what_balanced" />
+    <sample-ids prompt="pr::be::what_action" thought="th::be::what_action" response="re::be::what_action" />
+    <sample-ids prompt="pr::be::what_experience" thought="th::be::what_experience" response="re::be::what_experience" />
+    <sample-ids prompt="pr::be::what_situation" thought="th::be::what_situation" response="re::be::what_situation" />
+    <sample-ids prompt="pr::be::what_describe" thought="th::be::what_describe" response="re::be::what_describe" />
+    <sample-ids prompt="pr::be::what_evaluate" thought="th::be::what_evaluate" response="re::be::what_evaluate" />
+    <sample-ids prompt="pr::be::what_precision" thought="th::be::what_precision" response="re::be::what_precision" />
+    <sample-ids prompt="pr::be::what_equipped" thought="th::be::what_equipped" response="re::be::what_equipped" />
   </samples>
 </train>
