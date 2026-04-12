@@ -9,6 +9,7 @@
     <prompt id="pr::be::what_word">What is a word?</prompt>
     <prompt id="pr::be::what_letter">What is a letter?</prompt>
     <prompt id="pr::be::what_sentence">What is a sentence?</prompt>
+    <prompt id="pr::be::how_sentence">How to write a sentence?</prompt>
     <prompt id="pr::be::what_canonical_word_order">What is canonical word order?</prompt>
     <prompt id="pr::be::what_em_dash">What is em dash?</prompt>
     <prompt id="pr::be::what_noun">What is a noun?</prompt>
@@ -88,6 +89,7 @@
     <thought id="th::be::what_word">I will provide the definition of a word.</thought>
     <thought id="th::be::what_letter">I will provide the definition of a letter.</thought>
     <thought id="th::be::what_sentence">I will provide the definition of a sentence.</thought>
+    <thought id="th::be::how_sentence">I will explain how to write a sentence.</thought>
     <thought id="th::be::what_canonical_word_order">I will provide the definition of canonical word order.</thought>
     <thought id="th::be::what_em_dash">I will provide the definition of em dash.</thought>
     <thought id="th::be::what_subject">I will provide the definition of a subject.</thought>
@@ -164,9 +166,7 @@
 - Language uses symbols (words, sounds &amp; gestures) and rules (grammar or syntax) to combine those symbols in an infinite number of ways to express and exchange ideas, feelings, information, and experiences.</response>
 
     <response id="re::be::what_alphabet">- The english alphabet is the complete, ordered set of letters used to write the sounds of the english language.
-- The ordered letters in the alphabet are: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
-- The vowels w/in the alphabet are: A E I O U (and sometimes Y)
-- The consonants w/in the alphabet are: B C D F G H J K L M N P Q R S T V W X Y Z (and sometimes Y)</response>
+- The ordered letters in the alphabet are: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z</response>
 
     <response id="re::be::what_grammar">- Grammar is the set of rules that governs how words are combined into sentences.
 - Grammar is not about meaning, grammar is about structure b/c we can have a sentence with perfect grammar that makes no sense.
@@ -250,6 +250,37 @@
 - The purpose of a sentence is to tell a story about an idea.
 - In writing, a sentence starts with a capital letter and ends with a period (.), question mark (?), or exclamation mark (!).
 - A sentence typically has a subject (who or what is the sentence about?) and a predicate (what the subject does or is?).</response>
+
+    <response id="re::be::how_sentence">1. Start Simple:
+    - Start w/ SV (Subject + Verb) or SVO (Subject + Verb + Object).
+    - Examples:
+        - She stayed.
+        - He apologized.
+        - She let go.
+        - She was tired.
+    - Begin with the simplest possible version of what we want to say.
+2. Add Specificity:
+    - Replace general words with specific ones.
+    - Explain implications.
+    - Examples:
+        - She stayed beside him.
+        - He apologized for the years of silence.
+        - She let go of the grudge.
+3. Add Sensory Detail:
+    - Answers what the moment looked, sounded &amp; felt like.
+    - Examples:
+        - She stayed beside him, her hand resting on his.
+        - He apologized for the years of silence, his hands shaking around the phone.
+        - She let go of the grudge she had been carrying in her chest for years.
+4. Add Beauty:
+    - Add a gentle truth.
+    - Rather than say someone is loving, show what love does.
+    - Rather than just say something is beautiful, show how its beautiful.
+    - Examples:
+        - She stayed beside him, her hand resting on his—not because she had to but because she could not imagine anywhere else she would rather be.
+        - He apologized for the years of silence, his hands shaking around the phone, because he finally understood that love does not wait forever.
+        - She let go of the grudge she had been carrying in her chest for years—not because he deserves forgiveness, but because she deserves peace.
+    - The beauty often lives in the pivot, where the sentence turns from what happened, to what it meant.</response>
 
     <response id="re::be::what_canonical_word_order">- Canonical word order means the standard, expected, default order of words in a sentence.
 - Canonical word order components:
@@ -970,6 +1001,7 @@
     <sample-ids prompt="pr::be::what_word" thought="th::be::what_word" response="re::be::what_word" />
     <sample-ids prompt="pr::be::what_letter" thought="th::be::what_letter" response="re::be::what_letter" />
     <sample-ids prompt="pr::be::what_sentence" thought="th::be::what_sentence" response="re::be::what_sentence" />
+    <sample-ids prompt="pr::be::how_sentence" thought="th::be::how_sentence" response="re::be::how_sentence" />
     <sample-ids prompt="pr::be::what_canonical_word_order" thought="th::be::what_canonical_word_order" response="re::be::what_canonical_word_order" />
     <sample-ids prompt="pr::be::what_em_dash" thought="th::be::what_em_dash" response="re::be::what_em_dash" />
     <sample-ids prompt="pr::be::what_subject" thought="th::be::what_subject" response="re::be::what_subject" />
