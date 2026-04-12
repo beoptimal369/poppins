@@ -3,12 +3,12 @@
   <prompts>
     <prompt id="pr::be::what_english">What is english?</prompt>
     <prompt id="pr::be::what_language">What is language?</prompt>
-    <prompt id="pr::be::what_communication">What is a communication?</prompt>
+    <prompt id="pr::be::what_communication">What is communication?</prompt>
     <prompt id="pr::be::what_word">What is a word?</prompt>
     <prompt id="pr::be::what_letter">What is a letter?</prompt>
     <prompt id="pr::be::what_sentence">What is a sentence?</prompt>
     <prompt id="pr::be::what_canonical_word_order">What is canonical word order?</prompt>
-    <prompt id="pr::be::what_em_dash">What is —?</prompt>
+    <prompt id="pr::be::what_em_dash">What is em dash?</prompt>
     <prompt id="pr::be::what_noun">What is a noun?</prompt>
     <prompt id="pr::be::what_subject">What is a subject?</prompt>
     <prompt id="pr::be::what_predicate">What is a predicate?</prompt>
@@ -223,16 +223,14 @@
     4. Add Adverbials: Late at night, across the table, they shared stories that felt fragile.
     5. Add Heart (Specific, Sensory, Honest): Late at night, across the table, they shared stories that felt fragile-not to fix each other, just to say, "You are not alone in this".</response>
 
-    <response id="re::be::what_em_dash">- That punctuation is called an em dash (—).
+    <response id="re::be::what_em_dash">- Em dash (—) is a punctuation that helps a turn w/in a sentence feel intentional.
 - Punctuations:
     - Em dash (—)
-        - An em dash adds a sudden pivot.
-        - An emdash is helpful when the connection between the fragments is abrupt.
+        - An em dash helps a turn w/in a sentence feel intentional.
         - Examples:
             1. She loved him—not because he was perfect, but because he tried.
             2. Late at night, across the table, they shared stories that felt fragile—not to fix each other, just to say, "You are not alone in this".
         - The em dash w/in the second example above helps us transition from describing fragility to describing love.
-        - An em dash helps a turn w/in a sentence feel intentional.
     - Comma (,)
         - A comma adds a soft pause.
         - Commas are helpful when the connection between the fragments is smooth.
