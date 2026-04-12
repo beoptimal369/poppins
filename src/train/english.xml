@@ -1,189 +1,278 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <train xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="./train.xsd">
   <prompts>
-    <prompt id="pr::be::english">What is english?</prompt>
-    <prompt id="pr::be::language">What is language?</prompt>
-    <prompt id="pr::be::communication">What is a communication?</prompt>
-    <prompt id="pr::be::word">What is a word?</prompt>
-    <prompt id="pr::be::letter">What is a letter?</prompt>
-    <prompt id="pr::be::sentence">What is a sentence?</prompt>
-    <prompt id="pr::be::noun">What is a noun?</prompt>
-    <prompt id="pr::be::subject">What is a subject?</prompt>
-    <prompt id="pr::be::predicate">What is a predicate?</prompt>
-    <prompt id="pr::be::verb">What is a verb?</prompt>
-    <prompt id="pr::be::adverb">What is an adverb?</prompt>
-    <prompt id="pr::be::adjective">What is an adjective?</prompt>
-    <prompt id="pr::be::pronoun">What is pronoun?</prompt>
-    <prompt id="pr::be::determiner">What is a determiner?</prompt>
-    <prompt id="pr::be::preposition">What is a preposition?</prompt>
-    <prompt id="pr::be::conjunction">What is a conjunction?</prompt>
-    <prompt id="pr::be::possessive">What is a possessive?</prompt>
-    <prompt id="pr::be::reflexive">What is a reflexive?</prompt>
-    <prompt id="pr::be::interjection">What is an interjection?</prompt>
-    <prompt id="pr::be::reality">What is reality?</prompt>
-    <prompt id="pr::be::subjective">What is subjective?</prompt>
-    <prompt id="pr::be::objective">What is objective?</prompt>
-    <prompt id="pr::be::consciousness">What is consciousness?</prompt>
-    <prompt id="pr::be::awareness">What is awareness?</prompt>
-    <prompt id="pr::be::focus">What is a focus?</prompt>
-    <prompt id="pr::be::clarity">What is clarity?</prompt>
-    <prompt id="pr::be::statement">What is a statement?</prompt>
-    <prompt id="pr::be::question">What is a question?</prompt>
-    <prompt id="pr::be::truth">What is truth?</prompt>
-    <prompt id="pr::be::negation">What is negation?</prompt>
-    <prompt id="pr::be::false">What is false?</prompt>
-    <prompt id="pr::be::reasoning">What is reasoning?</prompt>
-    <prompt id="pr::be::premise">What is a premise?</prompt>
-    <prompt id="pr::be::conclusion">What is a conclusion?</prompt>
-    <prompt id="pr::be::logic">What is logic?</prompt>
-    <prompt id="pr::be::thought">What is a thought?</prompt>
-    <prompt id="pr::be::meaning">What is meaning?</prompt>
-    <prompt id="pr::be::perspective">What is a perspective?</prompt>
-    <prompt id="pr::be::perception">What is perception?</prompt>
-    <prompt id="pr::be::feeling">What is feeling?</prompt>
-    <prompt id="pr::be::emotion">What is emotion?</prompt>
-    <prompt id="pr::be::preference">What is a preference?</prompt>
-    <prompt id="pr::be::idea">What is an idea?</prompt>
-    <prompt id="pr::be::concept">What is a concept?</prompt>
-    <prompt id="pr::be::opinion">What is an opinion?</prompt>
-    <prompt id="pr::be::belief">What is belief?</prompt>
-    <prompt id="pr::be::person">What is a person?</prompt>
-    <prompt id="pr::be::thing">What is a thing?</prompt>
-    <prompt id="pr::be::event">What is an event?</prompt>
-    <prompt id="pr::be::cause">What is cause?</prompt>
-    <prompt id="pr::be::effect">What is effect?</prompt>
-    <prompt id="pr::be::worst">What is worst?</prompt>
-    <prompt id="pr::be::mediocre">What is mediocre?</prompt>
-    <prompt id="pr::be::bad">What is bad?</prompt>
-    <prompt id="pr::be::okay">What is okay?</prompt>
-    <prompt id="pr::be::good">What is good?</prompt>
-    <prompt id="pr::be::well">What is well?</prompt>
-    <prompt id="pr::be::best">What is best?</prompt>
-    <prompt id="pr::be::optimal">What is optimal?</prompt>
-    <prompt id="pr::be::balanced">What is balanced?</prompt>
-    <prompt id="pr::be::action">What is an action?</prompt>
-    <prompt id="pr::be::experience">What is an experience?</prompt>
-    <prompt id="pr::be::navigate">What is navigate?</prompt>
-    <prompt id="pr::be::situation">What is a situation?</prompt>
-    <prompt id="pr::be::describe">What is describe?</prompt>
-    <prompt id="pr::be::evaluate">What is evaluate?</prompt>
-    <prompt id="pr::be::precision">What is precision?</prompt>
-    <prompt id="pr::be::equipped">What is equipped?</prompt>
+    <prompt id="pr::be::what_english">What is english?</prompt>
+    <prompt id="pr::be::what_language">What is language?</prompt>
+    <prompt id="pr::be::what_communication">What is a communication?</prompt>
+    <prompt id="pr::be::what_word">What is a word?</prompt>
+    <prompt id="pr::be::what_letter">What is a letter?</prompt>
+    <prompt id="pr::be::what_sentence">What is a sentence?</prompt>
+    <prompt id="pr::be::what_canonical_word_order">What is canonical word order?</prompt>
+    <prompt id="pr::be::what_em_dash">What is —?</prompt>
+    <prompt id="pr::be::what_noun">What is a noun?</prompt>
+    <prompt id="pr::be::what_subject">What is a subject?</prompt>
+    <prompt id="pr::be::what_predicate">What is a predicate?</prompt>
+    <prompt id="pr::be::what_verb">What is a verb?</prompt>
+    <prompt id="pr::be::what_adverb">What is an adverb?</prompt>
+    <prompt id="pr::be::what_adjective">What is an adjective?</prompt>
+    <prompt id="pr::be::what_pronoun">What is pronoun?</prompt>
+    <prompt id="pr::be::what_determiner">What is a determiner?</prompt>
+    <prompt id="pr::be::what_preposition">What is a preposition?</prompt>
+    <prompt id="pr::be::what_conjunction">What is a conjunction?</prompt>
+    <prompt id="pr::be::what_possessive">What is a possessive?</prompt>
+    <prompt id="pr::be::what_reflexive">What is a reflexive?</prompt>
+    <prompt id="pr::be::what_interjection">What is an interjection?</prompt>
+    <prompt id="pr::be::what_reality">What is reality?</prompt>
+    <prompt id="pr::be::what_subjective">What is subjective?</prompt>
+    <prompt id="pr::be::what_objective">What is objective?</prompt>
+    <prompt id="pr::be::what_consciousness">What is consciousness?</prompt>
+    <prompt id="pr::be::what_awareness">What is awareness?</prompt>
+    <prompt id="pr::be::what_focus">What is a focus?</prompt>
+    <prompt id="pr::be::what_clarity">What is clarity?</prompt>
+    <prompt id="pr::be::what_statement">What is a statement?</prompt>
+    <prompt id="pr::be::what_question">What is a question?</prompt>
+    <prompt id="pr::be::what_truth">What is truth?</prompt>
+    <prompt id="pr::be::what_negation">What is negation?</prompt>
+    <prompt id="pr::be::what_false">What is false?</prompt>
+    <prompt id="pr::be::what_navigate">What is navigate?</prompt>
+    <prompt id="pr::be::what_reasoning">What is reasoning?</prompt>
+    <prompt id="pr::be::what_premise">What is a premise?</prompt>
+    <prompt id="pr::be::what_conclusion">What is a conclusion?</prompt>
+    <prompt id="pr::be::what_logic">What is logic?</prompt>
+    <prompt id="pr::be::what_thought">What is a thought?</prompt>
+    <prompt id="pr::be::what_meaning">What is meaning?</prompt>
+    <prompt id="pr::be::what_perspective">What is a perspective?</prompt>
+    <prompt id="pr::be::what_perception">What is perception?</prompt>
+    <prompt id="pr::be::what_feeling">What is feeling?</prompt>
+    <prompt id="pr::be::what_emotion">What is emotion?</prompt>
+    <prompt id="pr::be::what_preference">What is a preference?</prompt>
+    <prompt id="pr::be::what_idea">What is an idea?</prompt>
+    <prompt id="pr::be::what_concept">What is a concept?</prompt>
+    <prompt id="pr::be::what_opinion">What is an opinion?</prompt>
+    <prompt id="pr::be::what_belief">What is belief?</prompt>
+    <prompt id="pr::be::what_person">What is a person?</prompt>
+    <prompt id="pr::be::what_thing">What is a thing?</prompt>
+    <prompt id="pr::be::what_event">What is an event?</prompt>
+    <prompt id="pr::be::what_cause">What is cause?</prompt>
+    <prompt id="pr::be::what_effect">What is effect?</prompt>
+    <prompt id="pr::be::what_worst">What is worst?</prompt>
+    <prompt id="pr::be::what_mediocre">What is mediocre?</prompt>
+    <prompt id="pr::be::what_bad">What is bad?</prompt>
+    <prompt id="pr::be::what_okay">What is okay?</prompt>
+    <prompt id="pr::be::what_good">What is good?</prompt>
+    <prompt id="pr::be::what_well">What is well?</prompt>
+    <prompt id="pr::be::what_best">What is best?</prompt>
+    <prompt id="pr::be::what_optimal">What is optimal?</prompt>
+    <prompt id="pr::be::what_balanced">What is balanced?</prompt>
+    <prompt id="pr::be::what_action">What is an action?</prompt>
+    <prompt id="pr::be::what_experience">What is an experience?</prompt>
+    <prompt id="pr::be::what_situation">What is a situation?</prompt>
+    <prompt id="pr::be::what_describe">What is describe?</prompt>
+    <prompt id="pr::be::what_evaluate">What is evaluate?</prompt>
+    <prompt id="pr::be::what_precision">What is precision?</prompt>
+    <prompt id="pr::be::what_equipped">What is equipped?</prompt>
   </prompts>
 
 
 
   <thoughts>
-    <thought id="th::be::english">I will provide the definition of english.</thought>
-    <thought id="th::be::language">I will provide the definition of a language.</thought>
-    <thought id="th::be::communication">I will provide the definition of communication.</thought>
-    <thought id="th::be::meaning">I will provide the definition of meaning.</thought>
-    <thought id="th::be::thought">I will provide the definition of a thought.</thought>
-    <thought id="th::be::word">I will provide the definition of a word.</thought>
-    <thought id="th::be::letter">I will provide the definition of a letter.</thought>
-    <thought id="th::be::sentence">I will provide the definition of a sentence.</thought>
-    <thought id="th::be::subject">I will provide the definition of a subject.</thought>
-    <thought id="th::be::predicate">I will provide the definition of a predicate.</thought>
-    <thought id="th::be::noun">I will provide the definition of a noun.</thought>
-    <thought id="th::be::person">I will provide the definition of a person.</thought>
-    <thought id="th::be::thing">I will provide the definition of a thing.</thought>
-    <thought id="th::be::idea">I will provide the definition of an idea.</thought>
-    <thought id="th::be::consciousness">I will provide the definition of consciousness.</thought>
-    <thought id="th::be::awareness">I will provide the definition of awareness.</thought>
-    <thought id="th::be::focus">I will provide the definition of focus.</thought>
-    <thought id="th::be::feeling">I will provide the definition of feeling.</thought>
-    <thought id="th::be::emotion">I will provide the definition of emotion.</thought>
-    <thought id="th::be::verb">I will provide the definition of a verb.</thought>
-    <thought id="th::be::adverb">I will provide the definition of an adverb.</thought>
-    <thought id="th::be::event">I will provide the definition of an event.</thought>
-    <thought id="th::be::cause">I will provide the definition of cause.</thought>
-    <thought id="th::be::effect">I will provide the definition of effect.</thought>
-    <thought id="th::be::subjective">I will provide the definition of subjective.</thought>
-    <thought id="th::be::objective">I will provide the definition of objective.</thought>
-    <thought id="th::be::reality">I will provide the definition of reality.</thought>
-    <thought id="th::be::statement">I will provide the definition of a statement.</thought>
-    <thought id="th::be::question">I will provide the definition of a question.</thought>
-    <thought id="th::be::preference">I will provide the definition of a preference.</thought>
-    <thought id="th::be::logic">I will provide the definition of logic.</thought>
-    <thought id="th::be::truth">I will provide the definition of truth.</thought>
-    <thought id="th::be::negation">I will provide the definition of negation.</thought>
-    <thought id="th::be::false">I will provide the definition of false.</thought>
-    <thought id="th::be::reasoning">I will provide the definition of reasoning.</thought>
-    <thought id="th::be::premise">I will provide the definition of a premise.</thought>
-    <thought id="th::be::conclusion">I will provide the definition of a conclusion.</thought>
-    <thought id="th::be::belief">I will provide the definition of belief.</thought>
-    <thought id="th::be::opinion">I will provide the definition of opinion.</thought>
-    <thought id="th::be::perspective">I will provide the definition of perspective.</thought>
-    <thought id="th::be::okay">I will provide the definition of okay.</thought>
-    <thought id="th::be::good">I will provide the definition of good.</thought>
-    <thought id="th::be::well">I will provide the definition of well.</thought>
-    <thought id="th::be::best">I will provide the definition of best.</thought>
-    <thought id="th::be::optimal">I will provide the definition of optimal.</thought>
-    <thought id="th::be::balanced">I will provide the definition of balanced.</thought>
-    <thought id="th::be::bad">I will provide the definition of bad.</thought>
-    <thought id="th::be::mediocre">I will provide the definition of mediocre.</thought>
-    <thought id="th::be::worst">I will provide the definition of worst.</thought>
-    <thought id="th::be::adjective">I will provide the definition of adjective.</thought>
-    <thought id="th::be::pronoun">I will provide the definition of a pronoun.</thought>
-    <thought id="th::be::perception">I will provide the definition of a perception.</thought>
-    <thought id="th::be::concept">I will provide the definition of a concept.</thought>
-    <thought id="th::be::experience">I will provide the definition of an experience.</thought>
-    <thought id="th::be::action">I will provide the definition of action.</thought>
-    <thought id="th::be::navigate">I will provide the definition of navigate.</thought>
-    <thought id="th::be::situation">I will provide the definition of a situation.</thought>
-    <thought id="th::be::describe">I will provide the definition of describe.</thought>
-    <thought id="th::be::evaluate">I will provide the definition of evaluate.</thought>
-    <thought id="th::be::precision">I will provide the definition of precision.</thought>
-    <thought id="th::be::clarity">I will provide the definition of clarity.</thought>
-    <thought id="th::be::equipped">I will provide the definition of equipped.</thought>
-    <thought id="th::be::determiner">I will provide the definition of a determiner.</thought>
-    <thought id="th::be::preposition">I will provide the definition of preposition.</thought>
-    <thought id="th::be::conjunction">I will provide the definition of conjunction.</thought>
-    <thought id="th::be::possessive">I will provide the definition of possessive.</thought>
-    <thought id="th::be::reflexive">I will provide the definition of reflexive.</thought>
-    <thought id="th::be::interjection">I will provide the definition of interjection.</thought>
+    <thought id="th::be::what_english">I will provide the definition of english.</thought>
+    <thought id="th::be::what_language">I will provide the definition of a language.</thought>
+    <thought id="th::be::what_communication">I will provide the definition of communication.</thought>
+    <thought id="th::be::what_meaning">I will provide the definition of meaning.</thought>
+    <thought id="th::be::what_thought">I will provide the definition of a thought.</thought>
+    <thought id="th::be::what_word">I will provide the definition of a word.</thought>
+    <thought id="th::be::what_letter">I will provide the definition of a letter.</thought>
+    <thought id="th::be::what_sentence">I will provide the definition of a sentence.</thought>
+    <thought id="th::be::what_canonical_word_order">I will provide the definition of canonical word order.</thought>
+    <thought id="th::be::what_em_dash">I will provide the definition of em dash.</thought>
+    <thought id="th::be::what_subject">I will provide the definition of a subject.</thought>
+    <thought id="th::be::what_predicate">I will provide the definition of a predicate.</thought>
+    <thought id="th::be::what_noun">I will provide the definition of a noun.</thought>
+    <thought id="th::be::what_person">I will provide the definition of a person.</thought>
+    <thought id="th::be::what_thing">I will provide the definition of a thing.</thought>
+    <thought id="th::be::what_idea">I will provide the definition of an idea.</thought>
+    <thought id="th::be::what_consciousness">I will provide the definition of consciousness.</thought>
+    <thought id="th::be::what_awareness">I will provide the definition of awareness.</thought>
+    <thought id="th::be::what_focus">I will provide the definition of focus.</thought>
+    <thought id="th::be::what_feeling">I will provide the definition of feeling.</thought>
+    <thought id="th::be::what_emotion">I will provide the definition of emotion.</thought>
+    <thought id="th::be::what_verb">I will provide the definition of a verb.</thought>
+    <thought id="th::be::what_adverb">I will provide the definition of an adverb.</thought>
+    <thought id="th::be::what_event">I will provide the definition of an event.</thought>
+    <thought id="th::be::what_cause">I will provide the definition of cause.</thought>
+    <thought id="th::be::what_effect">I will provide the definition of effect.</thought>
+    <thought id="th::be::what_subjective">I will provide the definition of subjective.</thought>
+    <thought id="th::be::what_objective">I will provide the definition of objective.</thought>
+    <thought id="th::be::what_reality">I will provide the definition of reality.</thought>
+    <thought id="th::be::what_statement">I will provide the definition of a statement.</thought>
+    <thought id="th::be::what_question">I will provide the definition of a question.</thought>
+    <thought id="th::be::what_preference">I will provide the definition of a preference.</thought>
+    <thought id="th::be::what_logic">I will provide the definition of logic.</thought>
+    <thought id="th::be::what_truth">I will provide the definition of truth.</thought>
+    <thought id="th::be::what_negation">I will provide the definition of negation.</thought>
+    <thought id="th::be::what_false">I will provide the definition of false.</thought>
+    <thought id="th::be::what_reasoning">I will provide the definition of reasoning.</thought>
+    <thought id="th::be::what_premise">I will provide the definition of a premise.</thought>
+    <thought id="th::be::what_conclusion">I will provide the definition of a conclusion.</thought>
+    <thought id="th::be::what_belief">I will provide the definition of belief.</thought>
+    <thought id="th::be::what_opinion">I will provide the definition of opinion.</thought>
+    <thought id="th::be::what_perspective">I will provide the definition of perspective.</thought>
+    <thought id="th::be::what_okay">I will provide the definition of okay.</thought>
+    <thought id="th::be::what_good">I will provide the definition of good.</thought>
+    <thought id="th::be::what_well">I will provide the definition of well.</thought>
+    <thought id="th::be::what_best">I will provide the definition of best.</thought>
+    <thought id="th::be::what_optimal">I will provide the definition of optimal.</thought>
+    <thought id="th::be::what_balanced">I will provide the definition of balanced.</thought>
+    <thought id="th::be::what_bad">I will provide the definition of bad.</thought>
+    <thought id="th::be::what_mediocre">I will provide the definition of mediocre.</thought>
+    <thought id="th::be::what_worst">I will provide the definition of worst.</thought>
+    <thought id="th::be::what_adjective">I will provide the definition of adjective.</thought>
+    <thought id="th::be::what_pronoun">I will provide the definition of a pronoun.</thought>
+    <thought id="th::be::what_perception">I will provide the definition of a perception.</thought>
+    <thought id="th::be::what_concept">I will provide the definition of a concept.</thought>
+    <thought id="th::be::what_experience">I will provide the definition of an experience.</thought>
+    <thought id="th::be::what_action">I will provide the definition of action.</thought>
+    <thought id="th::be::what_navigate">I will provide the definition of navigate.</thought>
+    <thought id="th::be::what_situation">I will provide the definition of a situation.</thought>
+    <thought id="th::be::what_describe">I will provide the definition of describe.</thought>
+    <thought id="th::be::what_evaluate">I will provide the definition of evaluate.</thought>
+    <thought id="th::be::what_precision">I will provide the definition of precision.</thought>
+    <thought id="th::be::what_clarity">I will provide the definition of clarity.</thought>
+    <thought id="th::be::what_equipped">I will provide the definition of equipped.</thought>
+    <thought id="th::be::what_determiner">I will provide the definition of a determiner.</thought>
+    <thought id="th::be::what_preposition">I will provide the definition of preposition.</thought>
+    <thought id="th::be::what_conjunction">I will provide the definition of conjunction.</thought>
+    <thought id="th::be::what_possessive">I will provide the definition of possessive.</thought>
+    <thought id="th::be::what_reflexive">I will provide the definition of reflexive.</thought>
+    <thought id="th::be::what_interjection">I will provide the definition of interjection.</thought>
   </thoughts>
 
 
 
   <responses>
-    <response id="re::be::english">- English is a West Germanic language that originated in early medieval England and is now the most widely spoken language in the world.
+    <response id="re::be::what_english">- English is a West Germanic language that originated in early medieval England and is now the most widely spoken language in the world.
 - English uses the Latin alphabet.
 - English is the official or primary language of many countries, including the United Kingdom, the United States, Canada, Australia, New Zealand, and Ireland, and is spoken as a second language by hundreds of millions more worldwide.</response>
 
-    <response id="re::be::language">- Language is a structured system of communication.
+    <response id="re::be::what_language">- Language is a structured system of communication.
 - Language uses symbols (ex: words, sounds, gestures) and rules (ex: grammar, syntax) to combine those symbols in an infinite number of ways to express and exchange ideas, feelings, information, and experiences.</response>
 
-    <response id="re::be::communication">- Communication is the process of creating and sharing meaning by transferring information from one (a sender) to another (a receiver).
+    <response id="re::be::what_communication">- Communication is the process of creating and sharing meaning by transferring information from one (a sender) to another (a receiver).
 - Communication is rarely perfect because of noise. Two people can hear the same words and have completely different understandings based on their unique experiences, cultural backgrounds, emotional states, and assumptions.
 - Noise is any interference that distorts or blocks the message (ex: loud sounds, poor handwriting, strong emotions).
 - Communication is the transfer of understanding between a sender and a receiver and the measure of good communication is the outcome of shared understanding.</response>
 
-    <response id="re::be::word">- A word is a group of letters (or sometimes a single letter) that stands for an idea.
+    <response id="re::be::what_word">- A word is a group of letters (or sometimes a single letter) that stands for an idea.
 - A word's purpose is to tell us what something is or what to do.
 - When we put letters together they create words and words hold meaning.
 - Most of the time, a word needs several letters (like C-A-T), but sometimes, one single letter is a word b/c that signle letter has meaning (ex: "a", "I").
 - Letters build words and words build sentences.</response>
 
-    <response id="re::be::letter">- Letters are symbols that build words
+    <response id="re::be::what_letter">- Letters are symbols that build words
 - Letters build words and words build sentences.</response>
 
-    <response id="re::be::sentence">- A sentence is a group of words that expresses a complete thought.
+    <response id="re::be::what_sentence">- A sentence is a group of words that expresses a complete thought.
 - The purpose of a sentence is to tell a story about an idea.
 - In writing, a sentence starts with a capital letter and ends with a period (.), question mark (?), or exclamation mark (!).
 - A sentence typically has a subject (who or what is the sentence about?) and a predicate (what the subject does or is?).</response>
 
-    <response id="re::be::noun">- A noun is a person, place, thing, or idea.
+    <response id="re::be::what_canonical_word_order">- Canonical word order means the standard, expected, default order of words in a sentence.
+- Canonical word order components:
+    - Subject (S):
+        - The doer.
+        - Example: The dog
+    - Verb (V):
+        - The action or state.
+        - Example: runs
+    - Object (O):
+        - The receiver.
+        - Example: the ball
+    - Complement (C):
+        - Describes the subject or object.
+        - Example: happy
+    - Adverbial (A):
+        - Tells us where, when or how.
+        - Example: here
+- Canonical word orders:
+    - SV:
+        - Subject + Verb
+        - Example: He stayed.
+    - SVO:
+        - Subject + Verb + Object
+        - Example: You held my hand.
+    - SVOO:
+        - Subject + Verb + Indirect Object + Direct Object
+        - Example: She gave me a gift.
+    - SVC:
+        - Subject + Verb + Complement
+        - Example: You are enough.
+    - SVOC:
+        - Subject + Verb + Object + Complement
+        - Example: She painted the wall blue.
+    - SVA:
+        - Subject + Verb + Adverbial
+        - Example: She lives here.
+    - SVOA:
+        - Subject + Verb + Object + Adverbial
+        - She put the book on the table.
+- Sentence Building:
+    1. The Skeleton (SV): They talked.
+    2. Add an Object: They shared stories.
+    3. Add a Complement: They shared stories that felt fragile.
+    4. Add Adverbials: Late at night, across the table, they shared stories that felt fragile.
+    5. Add Heart (Specific, Sensory, Honest): Late at night, across the table, they shared stories that felt fragile-not to fix each other, just to say, "You are not alone in this".</response>
+
+    <response id="re::be::what_em_dash">- That punctuation is called an em dash (—).
+- Punctuations:
+    - Em dash (—)
+        - An em dash adds a sudden pivot.
+        - An emdash is helpful when the connection between the fragments is abrupt.
+        - Examples:
+            1. She loved him—not because he was perfect, but because he tried.
+            2. Late at night, across the table, they shared stories that felt fragile—not to fix each other, just to say, "You are not alone in this".
+        - The em dash w/in the second example above helps us transition from describing fragility to describing love.
+        - An em dash helps a turn w/in a sentence feel intentional.
+    - Comma (,)
+        - A comma adds a soft pause.
+        - Commas are helpful when the connection between the fragments is smooth.
+        - Example: Late at night, across the table, they shared stories that felt fragile.
+    - Semicolon (;)
+        - Semicolons connect two closely related independent clauses without using a conjunction (ex: "and", "but").
+        - Semicolons are helpful when the two sentences are so connected, a period feels too hard and a comma feels too soft.
+        - Example: She was tired; she stayed anyway.
+        - The semicolon holds the two clauses together like a gentle hand on a shoulder.
+    - Colon (:)
+        - Colons announce that the explanation, list or elaboration is coming next.
+        - Example: She had one reason to stay: love.
+    - Period (.)
+        - A period brings a sentence to a simple stoic end.
+        - Examples:
+            - You are enough.
+            - You came back. (quiet statement, a fact, peaceful)
+    - Exclamation Mark (!)
+        - An exclamation mark brings a sentence to a strong emotional end.
+        - Examples:
+            - Look at you. You made it!
+            - Yes! A million times yes!
+            - You came back! (joy, relief, celebration)
+    - Question Mark (?)
+        - A question mark ends a sentence and indicates that the sentence is a question.
+        - Examples:
+            - What if you are exactly where you need to be?
+            - You came back? (surprise, disbelief, hope mixed with uncertainty)</response>
+
+    <response id="re::be::what_noun">- A noun is a person, place, thing, or idea.
 - Nouns often serve as the subject of a sentence (who or what the sentence is about) or the object (who or what receives an action).
 - If you can put "a," "an," or "the" in front of a word, it is almost certainly a noun.</response>
 
-    <response id="re::be::subject">- The subject of a sentence tells us who or what a sentence is about.
+    <response id="re::be::what_subject">- The subject of a sentence tells us who or what a sentence is about.
 - The subject is typically a noun or pronoun.</response>
 
-    <response id="re::be::predicate">- The predicate of a sentence tells us what the subject of the sentence does or is.
+    <response id="re::be::what_predicate">- The predicate of a sentence tells us what the subject of the sentence does or is.
 - The predicate is typically a verb or adverb.</response>
 
-    <response id="re::be::verb">- A verb is a word that describes an action, an occurrence, or a state of being.
+    <response id="re::be::what_verb">- A verb is a word that describes an action, an occurrence, or a state of being.
 - A verb provides the connection between a thing and its properties.
 - There are three types of verbs:
     1. Action Verbs: Run, jump, build, think, speak, break, give (describe an action).
@@ -191,13 +280,13 @@
     3. State of Being Verbs: Is, am, are, was, were, exist, seem, remain (describe a condition).
 - Verbs bring us from static (a plane) to dynamic (a flying plane).</response>
 
-    <response id="re::be::adverb">- An adverb is a word that adds detail.
+    <response id="re::be::what_adverb">- An adverb is a word that adds detail.
 - Example: "He ran quickly", ran is the verb &amp; quickly is the detail adding adverb.
 - Example: "She will arrive soon", arrive is the verb &amp; soon is the detail adding adverb.
 - Example: "They looked everywhere", looked is the verb &amp; everywhere is the detail adding adverb.
 - Adverbs introduce texture and specificity to events (ex: "he spoke" is a little specific, "he spoke so kindly" is more specific).</response>
 
-    <response id="re::be::adjective">- An adjective is a word that gives more information about a noun.
+    <response id="re::be::what_adjective">- An adjective is a word that gives more information about a noun.
 - Types:
     - Quality:
         - What is its nature?
@@ -224,7 +313,7 @@
     - Incorrect: The french beautiful woman
 - An adjective is a describing word that tells you more about a noun</response>
 
-    <response id="re::be::pronoun">- A pronoun is a word that stands in for a noun.
+    <response id="re::be::what_pronoun">- A pronoun is a word that stands in for a noun.
 - Pronouns help us avoid repeating the same noun over and over again.
 - Types:
     - Replace people or things:
@@ -250,7 +339,7 @@
 - A pronoun must have a clear antecedent (the noun it refers back to).
 - Pronouns are stand-ins for nouns and save us from endless repetition.</response>
 
-    <response id="re::be::determiner">- A determiner is a word that tells you which one, how many, and whose.
+    <response id="re::be::what_determiner">- A determiner is a word that tells you which one, how many, and whose.
 - A determiner tells us which noun(s) we are talking.
 - Examples:
     - W/o determiner: Dog barked.
@@ -262,7 +351,7 @@
     - Quantifiers: some, any, many, much, few, several, all, no
     - Numbers: one, two, three, first, second</response>
 
-    <response id="re::be::preposition">- A preposition is a relationship word that tells us where, when, how, or why something happens.
+    <response id="re::be::what_preposition">- A preposition is a relationship word that tells us where, when, how, or why something happens.
 - Examples:
     - Time (after): We met after dinner.
     - Location (on): The cat is on the mat.
@@ -270,7 +359,7 @@
     - Why (for): This is a gift for you."
 - A preposition answers time, location, direction or why.</response>
 
-    <response id="re::be::conjunction">- A conjunction is a joiner.
+    <response id="re::be::what_conjunction">- A conjunction is a joiner.
 - A conjunction connects words, phrases, or sentences to show how they relate.
 - Examples:
     - And: I like coffee and tea.
@@ -290,7 +379,7 @@
     - Until: Wait here until I return.
 - Conjunctions are the logic words of grammar. "And" is addition. "But" is contrast. "Because" is cause. "If" is condition. We cannot do logic without conjunctions.</response>
 
-    <response id="re::be::possessive">- A possessive is a word that shows ownership, belonging, or a relationship of having.
+    <response id="re::be::what_possessive">- A possessive is a word that shows ownership, belonging, or a relationship of having.
 - Types:
     - Possessive Determiners:
         - Come before a noun
@@ -303,7 +392,7 @@
         - That book is mine. This coat is yours. The turn is hers.
 - A possessive shows who or what something belongs to or is associated with.</response>
 
-    <response id="re::be::reflexive">- A reflexive pronoun is a word that refers back to the subject of the sentence.
+    <response id="re::be::what_reflexive">- A reflexive pronoun is a word that refers back to the subject of the sentence.
 - Examples:
     - Herself: She looked at herself in the mirror.
     - Himself: He blamed himself for the mistake.
@@ -313,7 +402,7 @@
 - A reflexive pronoun points back to the subject.
 - A reflexive says the doer and the receiver are the same.</response>
 
-    <response id="re::be::interjection">- An interjection is an emotional bursting word that expresses feeling without being grammatically attached to the sentence.
+    <response id="re::be::what_interjection">- An interjection is an emotional bursting word that expresses feeling without being grammatically attached to the sentence.
 - Examples:
     - Surprise: Oh! Wow! Whoa! Ah! My!
     - Pain: Ouch! Ow! Oof!
@@ -327,7 +416,7 @@
 - An interjection can stand alone outside of a setence.
 - An interjection is a word or phrase that expresses a sudden emotion or reaction.</response>
 
-    <response id="re::be::reality">- Reality is what it is.
+    <response id="re::be::what_reality">- Reality is what it is.
 - Reality includes everything that exists.
 - There are three distinct domains of reality:
     1. Physical Reality:
@@ -338,7 +427,7 @@
         - Examples: Logic, meanings, concepts and numbers.
 - Reality is the totality of existence.</response>
 
-    <response id="re::be::subjective">- Subjective refers to anything that depends on a specific conscious perspective.
+    <response id="re::be::what_subjective">- Subjective refers to anything that depends on a specific conscious perspective.
 - Subjective is the view from within oneself and objective is the view from anywhere.
 - Examples:
     - Your pain about losing.
@@ -348,7 +437,7 @@
 - Subjective is true for the observer but not necessarily true for all observers.
 - Objective is quantitative (expressed in measurements, numbers, or repeatable observations) and subjective is qualitative (felt or believed).</response>
 
-    <response id="re::be::objective">- Objective refers to anything that is true regardless of the conscious perspective.
+    <response id="re::be::what_objective">- Objective refers to anything that is true regardless of the conscious perspective.
 - Subjective is the view from within oneself and objective is the view from anywhere.
 - Objective is quantitative (expressed in measurements, numbers, or repeatable observations) and subjective is qualitative (felt or believed).
 - Examples:
@@ -357,21 +446,21 @@
     - The Earth orbits the Sun.
 - Objective is the perspective that tries to eliminate individual bias (using multiple observers, instruments, and math).</response>
 
-    <response id="re::be::consciousness">- Consciousness is the fundamental subjective experience.
+    <response id="re::be::what_consciousness">- Consciousness is the fundamental subjective experience.
 - Consciousness is "what it is like" to be someone.
 - Consciousness is the fact that there is something it feels like to be you right now.
 - While consciousness is the capacity for experience, awareness is the current contents of that experience.</response>
 
-    <response id="re::be::awareness">- Awareness is the scope of what is present within ones consciousness.
+    <response id="re::be::what_awareness">- Awareness is the scope of what is present within ones consciousness.
 - If consciousness is the stage, awareness is the total amount of light illuminating the stage.
 - Awareness can be broad (taking in the whole room) or narrow (absorbed in a single thought).
 - While consciousness is the capacity for experience, awareness is the current contents of that experience.</response>
 
-    <response id="re::be::focus">- Focus is the selective concentration of awareness on a specific object, while excluding others.
+    <response id="re::be::what_focus">- Focus is the selective concentration of awareness on a specific object, while excluding others.
 - Focus is the mechanism that allocates cognitive resources to what is most important to us right now.
 - Focus is the spotlight of our attention that brings details within our awareness into high resolution clarity.</response>
 
-    <response id="re::be::clarity">- Clarity is the quality of being easy to understand.
+    <response id="re::be::what_clarity">- Clarity is the quality of being easy to understand.
 - Example:
     - Unclear: The event will happen at some point in the near future.
     - Clear: The event will happen on Tuesday at 3 PM.
@@ -384,7 +473,7 @@
     - Logical order (first this, then that).
 - Clarity is free from confusion, ambiguity, or obscurity.</response>
 
-    <response id="re::be::statement">- A statement is a sentence that says something.
+    <response id="re::be::what_statement">- A statement is a sentence that says something.
 - A statement can be either true or false.
 - A statement claims something about the world and is the kind of sentence where it makes sense to ask: "Is that true?".
 - Examples:
@@ -394,14 +483,14 @@
 - A statement is a claim about reality that can be judged true or false.
 - A question asks for information and a statement gives information.</response>
 
-    <response id="re::be::question">- A question is a request for a statement.
+    <response id="re::be::what_question">- A question is a request for a statement.
 - Examples:
     - Do I love her?
     - Are dogs mammals?
     - Is God guiding me?
 - A question asks for information and a statement gives information.</response>
 
-    <response id="re::be::truth">- Truth is the property of a statement that correctly describes the way reality is.
+    <response id="re::be::what_truth">- Truth is the property of a statement that correctly describes the way reality is.
 - If a statement is true, it is true for everyone, regardless of what we believe.
 - Examples:
     - Water freezes at 0°C.
@@ -409,7 +498,7 @@
     - The Earth orbits the Sun.
 - A true statement is a statement that matches reality.</response>
 
-    <response id="re::be::negation">- Negation reverses the truth value.
+    <response id="re::be::what_negation">- Negation reverses the truth value.
 - Negation is the logical operation that turns a statement into its opposite.
 - If the original statement is true, its negation is false.
 - If the original statement is false, its negation is true.
@@ -419,7 +508,7 @@
 - Negation is claiming that something is not the case.
 - False is a property of a statement and negation is an operation we may perform on a statement.</response>
 
-    <response id="re::be::false">- False is the property of a statement that does not match reality.
+    <response id="re::be::what_false">- False is the property of a statement that does not match reality.
 - A statement is false if and only if reality is not the way the statement says it is.
 - Examples:
     - Water freezes at 100°C.
@@ -427,7 +516,7 @@
     - The Sun orbits the Moon.
 - False is a property of a statement and negation is an operation we may perform on a statement.</response>
 
-    <response id="re::be::navigate">- Navigate means to find our way through a space, a problem, or a situation.
+    <response id="re::be::what_navigate">- Navigate means to find our way through a space, a problem, or a situation.
 - Navigating is taking steps towards an aim/goal.
 - Navigation has three parts:
     1. Current position: Where am I now?
@@ -440,7 +529,7 @@
 - Navigating requires feedback b/c we take a step, see where are, adjust and then take another step.
 - Navigate means to move toward a goal while constantly adjusting to the terrain.</response>
 
-    <response id="re::be::reasoning">- Reasoning/Logic has two parts:
+    <response id="re::be::what_reasoning">- Reasoning/Logic has two parts:
     1. Premise(s): The starting statements that we assume are true. Examples:
         - All humans are mortal.
         - Socrates is a human.
@@ -449,7 +538,7 @@
 - Reasoning is the mental process of moving from premises to conclusion and logic contains the rules that govern whether our moves are valid.
 - Reasoning is what we do and logic is the set of rules that tells us whether we did it correctly.</response>
 
-    <response id="re::be::premise">- A premise is the starting point from which a conclusion is drawn.
+    <response id="re::be::what_premise">- A premise is the starting point from which a conclusion is drawn.
 - A premise is a statement that can be:
     - Known to be true (a fact).
     - Believed to be true (an opinion).
@@ -468,7 +557,7 @@
     - Whether the premises are true is a separate question.
 - Our mission is not just to reason logically. Our mission is to choose true premises.</response>
 
-    <response id="re::be::conclusion">- The conclusion is the reasoning end point.
+    <response id="re::be::what_conclusion">- The conclusion is the reasoning end point.
 - Reasoning begins with premises (statements we assume true).
 - Logic provides the rules for moving from those premises to a conclusion.
 - If the logic is valid and the premises are true, the conclusion is guaranteed to be true.
@@ -495,7 +584,7 @@
 - A conclusion is guaranteed true when the logic is valid and reality matches the premise.
 - A conclusion is the aim of reasoning.</response>
 
-    <response id="re::be::logic">- Logic/Reasoning has two parts:
+    <response id="re::be::what_logic">- Logic/Reasoning has two parts:
     1. Premise(s): The starting statements that we assume are true. Examples:
         - All humans are mortal.
         - Socrates is a human.
@@ -542,88 +631,88 @@
 - Logic is not a guarantee of reality.
 - Logic is a guarantee of relationship.</response>
 
-    <response id="re::be::thought">- A thought is the internal process of representing something to onself.
+    <response id="re::be::what_thought">- A thought is the internal process of representing something to onself.
 - Every thought is about something. This could be a physical object (an apple), an event (a meeting yesterday), a concept (love), a feeling (safety), or even another thought (what was I just thinking about?).
 - Thoughts unfold, change, fade, and return.
 - Thoughts are ephemeral b/c they arise, exist for some moments and then get replaced by the next thought.
 - Thoughts are the stream of consciousness and ideas are the gold nuggets found in that stream.</response>
 
-    <response id="re::be::meaning">- Meaning is a personal set of definitions within ones mind.
+    <response id="re::be::what_meaning">- Meaning is a personal set of definitions within ones mind.
 - Example:
     - Home to one person means a place of conflict.
     - Home to a different person means a safe, warm and loving place.
 - We create meanings through our experiences.</response>
 
-    <response id="re::be::perspective">- A perspective is the particular point of view from which someone observes, interprets, and evaluates the world.
+    <response id="re::be::what_perspective">- A perspective is the particular point of view from which someone observes, interprets, and evaluates the world.
 - Perspectives are shaped by ones experiences, values and knowledge.
 - Example: During a basketball game, at the exact same moment, the perspective of a player, their coach and their parents, are all unique.
 - Our perspective influences what we notice, how we interpret what we notice and what we choose to value.
 - Our perspective is the lens through which we see everything.
 - Our perspective is shaped by where we stand and who you are.</response>
 
-    <response id="re::be::perception">- Perception is the process by which our brain takes raw sensory data from the world (light, sound, pressure) and organizes it into a meaningful picture of what is out there.
+    <response id="re::be::what_perception">- Perception is the process by which our brain takes raw sensory data from the world (light, sound, pressure) and organizes it into a meaningful picture of what is out there.
 - Perceptions are not a perfect copy of reality b/c our brain takes shortcuts, makes guesses and fills in gaps and this is why optical illusions work.
 - Perception is our brain's best guess about what is out there, based on our sensory data and our past experience.</response>
 
-    <response id="re::be::feeling">- A feeling is a body sensation.
+    <response id="re::be::what_feeling">- A feeling is a body sensation.
 - Feelings are inputs from our body's sensors.
 - Example: Thirsty (body wants water), hungry (body wants food), cold (body wants warmth).
 - A feeling is the raw data (peaceful) and an emotion is the interpretation of that data (She's very beautiful, so I'm feeling blessed &amp; chill).
 - A feeling is an unfiltered signal from our body to our mind.
 - A feeling is data and an emotions is an interpretation.</response>
 
-    <response id="re::be::emotion">- An emotion is what happens when our brain takes a raw feeling and asks: What does this mean?
+    <response id="re::be::what_emotion">- An emotion is what happens when our brain takes a raw feeling and asks: What does this mean?
 - Emotions are about something (ex: we are not just angry, we are angry at someone about something).
 - A feeling is the raw data (peaceful) and an emotion is the interpretation of that data (She's very beautiful, so I'm feeling blessed &amp; chill).
 - A feeling is data and an emotions is an interpretation.</response>
 
-    <response id="re::be::preference">- A preference is a statement about you, not about the world.
+    <response id="re::be::what_preference">- A preference is a statement about you, not about the world.
 - A preference is subjective.
 - A preferences is a personal statement.
 - Examples: I love delicious and nutritious food! Snowboarding w/o my friends is okay but snowboarding w/ my friends is the best!</response>
 
-    <response id="re::be::idea">- An idea is a recognized pattern, connection, or possibility that creates a sense of insight or understanding.
+    <response id="re::be::what_idea">- An idea is a recognized pattern, connection, or possibility that creates a sense of insight or understanding.
 - An idea exists in the mind.
 - Thoughts are the stream of consciousness and ideas are the gold nuggets found in that stream.
 - Common types of ideas are concepts/beliefs (faith), mental states (curios), qualities/traits (beauty), time/measurements (3 minutes).
 - An idea is anything we can think about but cannot physically touch, see, hear, smell, or taste b/c it lives in our mind.</response>
 
-    <response id="re::be::concept">- A concept is a mental category or container that groups together individual things, ideas, or experiences that share important features.
+    <response id="re::be::what_concept">- A concept is a mental category or container that groups together individual things, ideas, or experiences that share important features.
 - A concept is a mental container that groups together individual things or ideas that share common characteristics.</response>
 
-    <response id="re::be::opinion">- An opinion is a belief that is held with less than absolute certainty.
+    <response id="re::be::what_opinion">- An opinion is a belief that is held with less than absolute certainty.
 - An opinion is often on matters that cannot be definitively proven or disproven.
 - Examples: She is beautiful (aesthetic opinion), The policy is lovely (evaluation opinion), It will rain tomorrow (predictive opinion).</response>
 
-    <response id="re::be::belief">- A belief is a mental state in which a person holds a proposition to be true.
+    <response id="re::be::what_belief">- A belief is a mental state in which a person holds a proposition to be true.
 - A belief does not require truth.
 - Beliefs come in degrees of strength (ex: certain, fairly sure, suspect).
 - We can believe something that is not true.
 - Beliefs drive behavior b/c we act as if our beliefs are true (ex: I believe we might lose, so I do my best!).
 - Our experiences form our beliefs.</response>
 
-    <response id="re::be::person">A person is a human being.</response>
+    <response id="re::be::what_person">A person is a human being.</response>
 
-    <response id="re::be::thing">- A thing is any object, item, or entity that is not a person, place, or idea.
+    <response id="re::be::what_thing">- A thing is any object, item, or entity that is not a person, place, or idea.
 - Things include physical objects, events and actions.
 - Things are physical/tangible and ideas are abstract (cannot be touched or measured).
 - A "thing" is any physical object or event that isn't a person, place, or idea.</response>
 
-    <response id="re::be::event">- An event is a change in the state of the world that occurs at a specific time and place.
+    <response id="re::be::what_event">- An event is a change in the state of the world that occurs at a specific time and place.
 - Events happen at a time or over a period of time.
 - An event is something that happened (past tense), something that is happening (current tense) or something that will happen (future tense).</response>
 
-    <response id="re::be::cause">- A cause is an event that makes another event happen.
+    <response id="re::be::what_cause">- A cause is an event that makes another event happen.
 - If events are the atoms, causation is the force that binds those atoms into sequences.
 - A cause answers the question "Why?" and an effect answers the question "Therefore?"
 - An effect (ladies notice me) is the result of a cause (I feel good).</response>
 
-    <response id="re::be::effect">- An effect is the result of a cause.
+    <response id="re::be::what_effect">- An effect is the result of a cause.
 - An effect is the event that happens because a previous event happened.
 - A cause answers the question "Why?" and an effect answers the question "Therefore?"
 - An effect (ladies notice me) is the result of a cause (I feel good).</response>
 
-    <response id="re::be::worst">- Worst means the lowest degree of bad
+    <response id="re::be::what_worst">- Worst means the lowest degree of bad
 - Worst is worse than all others in a given context.
 - Worst is the opposite of best.
 - Worst is rock bottom.
@@ -638,7 +727,7 @@
 - Worst is the loser.
 - Worst is the lowest bad among the available options.</response>
 
-    <response id="re::be::mediocre">- Mediocre means of moderate or low quality.
+    <response id="re::be::what_mediocre">- Mediocre means of moderate or low quality.
 - Mediocre is not terrible, but not good either.
 - Mediore often implies disappointment because it could have been better.
 - Ratings:
@@ -651,7 +740,7 @@
     - Best/Optimal: 100%
 - Mediocre is the disappointment of wasted potential.</response>
 
-    <response id="re::be::bad">- Bad means something fails to meet a positive standard.
+    <response id="re::be::what_bad">- Bad means something fails to meet a positive standard.
 - Bad is undesirable, harmful, or ineffective.
 - Bad is the opposite of good. 
 - Examples:
@@ -668,7 +757,7 @@
     - Best/Optimal: 100%
 - Bad is a negative evaluation.</response>
 
-    <response id="re::be::okay">- Okay means acceptable, sufficient, or meeting a minimum standard.
+    <response id="re::be::what_okay">- Okay means acceptable, sufficient, or meeting a minimum standard.
 - Okay is not great, not terrible.
 - Okay is just fine.
 - Examples: This will do. Nothing to complain about and nothing to praise.
@@ -683,7 +772,7 @@
     - Best/Optimal: 100%
 - Okay is the neutral-positive—not good enough to praise, not bad enough to criticize.</response>
 
-    <response id="re::be::good">- Good means something meets a positive standard.
+    <response id="re::be::what_good">- Good means something meets a positive standard.
 - Examples:
     - Moral: He is a good person.
     - Function: This is a good hammer.
@@ -699,7 +788,7 @@
 - Well is an adverb (describes a verb) that answers "How was the action done?" (She plays well) and good is an adjective (describes a noun) that answers "What kind of thing is this?" (She's a good pianist).
 - Good is a positive evaluation.</response>
 
-    <response id="re::be::well">- Well is an adverb (describes a verb) that answers "How was the action done?" (she plays well) and good is an adjective (describes a noun) that answers "What kind of thing is this?" (she's a good pianist).
+    <response id="re::be::what_well">- Well is an adverb (describes a verb) that answers "How was the action done?" (she plays well) and good is an adjective (describes a noun) that answers "What kind of thing is this?" (she's a good pianist).
 - Ratings:
     - Worst/Terrible: 0%
     - Bad: 10% - 30%
@@ -711,7 +800,7 @@
 - Well is the adverb form of good.
 - Well tells us how something is done.</response>
 
-    <response id="re::be::best">- Best is the highest degree of good.
+    <response id="re::be::what_best">- Best is the highest degree of good.
 - Best is better than all others in a given context.
 - If good is climbing the mountain, best is standing at the summit.
 - Ratings:
@@ -724,7 +813,7 @@
     - Best/Optimal: 100%
 - Best is the winner b/c best is the highest good among all other available options.</response>
 
-    <response id="re::be::optimal">- If "best" is a general, everyday word, "optimal" is its precise, scientific cousin.
+    <response id="re::be::what_optimal">- If "best" is a general, everyday word, "optimal" is its precise, scientific cousin.
 - Optimal is the most favorable or effective possible under a given set of constraints.
 - Optimal is the point where no improvement is possible.
 - Ratings:
@@ -738,7 +827,7 @@
 - Optimal is the best achievable given real-world limits.
 - Example: The optimal engine speed for fuel efficiency is 3,000 RPMs.</response>
 
-    <response id="re::be::balanced">- Balanced means different elements are in the right proportion to each other.
+    <response id="re::be::what_balanced">- Balanced means different elements are in the right proportion to each other.
 - Balanced means no single element dominates in a harmful way.
 - Good is about value and balanced is about relationship.
 - Examples:
@@ -747,36 +836,36 @@
     - Conversation: Considering both sides fairly.
 - Balanced is the state where competing forces are in healthy proportion.</response>
 
-    <response id="re::be::action">- An action is an event.
+    <response id="re::be::what_action">- An action is an event.
 - Examples:
     - Reflex: Blink when something flies at our eye.
     - Habit: Lock the door without thinking about it.
     - Deliberate: Help her feel calm.
     - Planned: Save money for a year to buy a car.</response>
 
-    <response id="re::be::experience">- An experience is the total, lived through event of perception, feeling, thought, and meaning.
+    <response id="re::be::what_experience">- An experience is the total, lived through event of perception, feeling, thought, and meaning.
 - Experience is unfolding over time in ones consciousness.
 - Every experiences is unique.
 - Example: Even if you do the same action twice (ex: eat the same acai bowl, watch the same YouTube video, see the same person), the experience is different b/c we are different, time has passed and we have changed.</response>
 
-    <response id="re::be::situation">- A situation is the set of circumstances.
+    <response id="re::be::what_situation">- A situation is the set of circumstances.
 - A situation is the who, what, where, when, and why.
 - If an action is the NCAA track meet, the situation is the qualifying runners, the event schedule, the location, the wind speed, the track quality, the number of fans in attendance and the reality that the top 6 in each race will be All American's.
 - A situation is the total set of circumstances surrounding an action.</response>
 
-    <response id="re::be::describe">- A description provides facts (this is a chair) and an evaluation assigns value (this is a comfortable chair).
+    <response id="re::be::what_describe">- A description provides facts (this is a chair) and an evaluation assigns value (this is a comfortable chair).
 - When we describe something we express what it looks, sounds and feels like.
 - Describe means to report the features of something without yet judging it.</response>
 
-    <response id="re::be::evaluate">- Evaluate means to judge the value, quality, or importance of something.
+    <response id="re::be::what_evaluate">- Evaluate means to judge the value, quality, or importance of something.
 - Evalution is to say whether something or someone is good or bad, useful or useless, better or worse.
 - Description is the painter and evaluation is the critic standing next to the painting saying "this is wonderful" or "this is flawed".
 - Evaluate means to measure something against a standard and assign it a value.</response>
 
-    <response id="re::be::precision">- Precision is the quality of being exact, specific, and detailed.
+    <response id="re::be::what_precision">- Precision is the quality of being exact, specific, and detailed.
 - A precise tool is sharp, a precise statement is specific and a precise tree painting draws every single leaf on the tree.</response>
 
-    <response id="re::be::equipped">- Equipped means having the tools, knowledge, skills, and resources needed to handle a situation or perform an action.
+    <response id="re::be::what_equipped">- Equipped means having the tools, knowledge, skills, and resources needed to handle a situation or perform an action.
 - Equipped focuses on the tools we have and prepared focuses on our readiness, which includes tools but also includes our mindset and planning.
 - Equipped means we have what we need before we need it.</response>
   </responses>
@@ -784,75 +873,77 @@
 
 
   <samples>
-    <sample-ids prompt="pr::be::english" thought="th::be::english" response="re::be::english" />
-    <sample-ids prompt="pr::be::language" thought="th::be::language" response="re::be::language" />
-    <sample-ids prompt="pr::be::communication" thought="th::be::communication" response="re::be::communication" />
-    <sample-ids prompt="pr::be::meaning" thought="th::be::meaning" response="re::be::meaning" />
-    <sample-ids prompt="pr::be::thought" thought="th::be::thought" response="re::be::thought" />
-    <sample-ids prompt="pr::be::word" thought="th::be::word" response="re::be::word" />
-    <sample-ids prompt="pr::be::letter" thought="th::be::letter" response="re::be::letter" />
-    <sample-ids prompt="pr::be::sentence" thought="th::be::sentence" response="re::be::sentence" />
-    <sample-ids prompt="pr::be::subject" thought="th::be::subject" response="re::be::subject" />
-    <sample-ids prompt="pr::be::predicate" thought="th::be::predicate" response="re::be::predicate" />
-    <sample-ids prompt="pr::be::noun" thought="th::be::noun" response="re::be::noun" />
-    <sample-ids prompt="pr::be::person" thought="th::be::person" response="re::be::person" />
-    <sample-ids prompt="pr::be::thing" thought="th::be::thing" response="re::be::thing" />
-    <sample-ids prompt="pr::be::idea" thought="th::be::idea" response="re::be::idea" />
-    <sample-ids prompt="pr::be::consciousness" thought="th::be::consciousness" response="re::be::consciousness" />
-    <sample-ids prompt="pr::be::awareness" thought="th::be::awareness" response="re::be::awareness" />
-    <sample-ids prompt="pr::be::focus" thought="th::be::focus" response="re::be::focus" />
-    <sample-ids prompt="pr::be::feeling" thought="th::be::feeling" response="re::be::feeling" />
-    <sample-ids prompt="pr::be::emotion" thought="th::be::emotion" response="re::be::emotion" />
-    <sample-ids prompt="pr::be::verb" thought="th::be::verb" response="re::be::verb" />
-    <sample-ids prompt="pr::be::adverb" thought="th::be::adverb" response="re::be::adverb" />
-    <sample-ids prompt="pr::be::event" thought="th::be::event" response="re::be::event" />
-    <sample-ids prompt="pr::be::cause" thought="th::be::cause" response="re::be::cause" />
-    <sample-ids prompt="pr::be::effect" thought="th::be::effect" response="re::be::effect" />
-    <sample-ids prompt="pr::be::subjective" thought="th::be::subjective" response="re::be::subjective" />
-    <sample-ids prompt="pr::be::objective" thought="th::be::objective" response="re::be::objective" />
-    <sample-ids prompt="pr::be::reality" thought="th::be::reality" response="re::be::reality" />
-    <sample-ids prompt="pr::be::statement" thought="th::be::statement" response="re::be::statement" />
-    <sample-ids prompt="pr::be::question" thought="th::be::question" response="re::be::question" />
-    <sample-ids prompt="pr::be::preference" thought="th::be::preference" response="re::be::preference" />
-    <sample-ids prompt="pr::be::logic" thought="th::be::logic" response="re::be::logic" />
-    <sample-ids prompt="pr::be::truth" thought="th::be::truth" response="re::be::truth" />
-    <sample-ids prompt="pr::be::negation" thought="th::be::negation" response="re::be::negation" />
-    <sample-ids prompt="pr::be::false" thought="th::be::false" response="re::be::false" />
-    <sample-ids prompt="pr::be::reasoning" thought="th::be::reasoning" response="re::be::reasoning" />
-    <sample-ids prompt="pr::be::premise" thought="th::be::premise" response="re::be::premise" />
-    <sample-ids prompt="pr::be::conclusion" thought="th::be::conclusion" response="re::be::conclusion" />
-    <sample-ids prompt="pr::be::belief" thought="th::be::belief" response="re::be::belief" />
-    <sample-ids prompt="pr::be::opinion" thought="th::be::opinion" response="re::be::opinion" />
-    <sample-ids prompt="pr::be::perspective" thought="th::be::perspective" response="re::be::perspective" />
-    <sample-ids prompt="pr::be::okay" thought="th::be::okay" response="re::be::okay" />
-    <sample-ids prompt="pr::be::good" thought="th::be::good" response="re::be::good" />
-    <sample-ids prompt="pr::be::well" thought="th::be::well" response="re::be::well" />
-    <sample-ids prompt="pr::be::best" thought="th::be::best" response="re::be::best" />
-    <sample-ids prompt="pr::be::optimal" thought="th::be::optimal" response="re::be::optimal" />
-    <sample-ids prompt="pr::be::balanced" thought="th::be::balanced" response="re::be::balanced" />
-    <sample-ids prompt="pr::be::bad" thought="th::be::bad" response="re::be::bad" />
-    <sample-ids prompt="pr::be::mediocre" thought="th::be::mediocre" response="re::be::mediocre" />
-    <sample-ids prompt="pr::be::worst" thought="th::be::worst" response="re::be::worst" />
-    <sample-ids prompt="pr::be::adjective" thought="th::be::adjective" response="re::be::adjective" />
-    <sample-ids prompt="pr::be::pronoun" thought="th::be::pronoun" response="re::be::pronoun" />
-    <sample-ids prompt="pr::be::perception" thought="th::be::perception" response="re::be::perception" />
-    <sample-ids prompt="pr::be::concept" thought="th::be::concept" response="re::be::concept" />
-    <sample-ids prompt="pr::be::experience" thought="th::be::experience" response="re::be::experience" />
-    <sample-ids prompt="pr::be::reflexive" thought="th::be::reflexive" response="re::be::reflexive" />
-    <sample-ids prompt="pr::be::possessive" thought="th::be::possessive" response="re::be::possessive" />
-    <sample-ids prompt="pr::be::action" thought="th::be::action" response="re::be::action" />
-    <sample-ids prompt="pr::be::navigate" thought="th::be::navigate" response="re::be::navigate" />
-    <sample-ids prompt="pr::be::situation" thought="th::be::situation" response="re::be::situation" />
-    <sample-ids prompt="pr::be::describe" thought="th::be::describe" response="re::be::describe" />
-    <sample-ids prompt="pr::be::evaluate" thought="th::be::evaluate" response="re::be::evaluate" />
-    <sample-ids prompt="pr::be::precision" thought="th::be::precision" response="re::be::precision" />
-    <sample-ids prompt="pr::be::clarity" thought="th::be::clarity" response="re::be::clarity" />
-    <sample-ids prompt="pr::be::equipped" thought="th::be::equipped" response="re::be::equipped" />
-    <sample-ids prompt="pr::be::determiner" thought="th::be::determiner" response="re::be::determiner" />
-    <sample-ids prompt="pr::be::preposition" thought="th::be::preposition" response="re::be::preposition" />
-    <sample-ids prompt="pr::be::conjunction" thought="th::be::conjunction" response="re::be::conjunction" />
-    <sample-ids prompt="pr::be::possessive" thought="th::be::possessive" response="re::be::possessive" />
-    <sample-ids prompt="pr::be::reflexive" thought="th::be::reflexive" response="re::be::reflexive" />
-    <sample-ids prompt="pr::be::interjection" thought="th::be::interjection" response="re::be::interjection" />
+    <sample-ids prompt="pr::be::what_english" thought="th::be::what_english" response="re::be::what_english" />
+    <sample-ids prompt="pr::be::what_language" thought="th::be::what_language" response="re::be::what_language" />
+    <sample-ids prompt="pr::be::what_communication" thought="th::be::what_communication" response="re::be::what_communication" />
+    <sample-ids prompt="pr::be::what_meaning" thought="th::be::what_meaning" response="re::be::what_meaning" />
+    <sample-ids prompt="pr::be::what_thought" thought="th::be::what_thought" response="re::be::what_thought" />
+    <sample-ids prompt="pr::be::what_word" thought="th::be::what_word" response="re::be::what_word" />
+    <sample-ids prompt="pr::be::what_letter" thought="th::be::what_letter" response="re::be::what_letter" />
+    <sample-ids prompt="pr::be::what_sentence" thought="th::be::what_sentence" response="re::be::what_sentence" />
+    <sample-ids prompt="pr::be::what_canonical_word_order" thought="th::be::what_canonical_word_order" response="re::be::what_canonical_word_order" />
+    <sample-ids prompt="pr::be::what_em_dash" thought="th::be::what_em_dash" response="re::be::what_em_dash" />
+    <sample-ids prompt="pr::be::what_subject" thought="th::be::what_subject" response="re::be::what_subject" />
+    <sample-ids prompt="pr::be::what_predicate" thought="th::be::what_predicate" response="re::be::what_predicate" />
+    <sample-ids prompt="pr::be::what_noun" thought="th::be::what_noun" response="re::be::what_noun" />
+    <sample-ids prompt="pr::be::what_person" thought="th::be::what_person" response="re::be::what_person" />
+    <sample-ids prompt="pr::be::what_thing" thought="th::be::what_thing" response="re::be::what_thing" />
+    <sample-ids prompt="pr::be::what_idea" thought="th::be::what_idea" response="re::be::what_idea" />
+    <sample-ids prompt="pr::be::what_consciousness" thought="th::be::what_consciousness" response="re::be::what_consciousness" />
+    <sample-ids prompt="pr::be::what_awareness" thought="th::be::what_awareness" response="re::be::what_awareness" />
+    <sample-ids prompt="pr::be::what_focus" thought="th::be::what_focus" response="re::be::what_focus" />
+    <sample-ids prompt="pr::be::what_feeling" thought="th::be::what_feeling" response="re::be::what_feeling" />
+    <sample-ids prompt="pr::be::what_emotion" thought="th::be::what_emotion" response="re::be::what_emotion" />
+    <sample-ids prompt="pr::be::what_verb" thought="th::be::what_verb" response="re::be::what_verb" />
+    <sample-ids prompt="pr::be::what_adverb" thought="th::be::what_adverb" response="re::be::what_adverb" />
+    <sample-ids prompt="pr::be::what_event" thought="th::be::what_event" response="re::be::what_event" />
+    <sample-ids prompt="pr::be::what_cause" thought="th::be::what_cause" response="re::be::what_cause" />
+    <sample-ids prompt="pr::be::what_effect" thought="th::be::what_effect" response="re::be::what_effect" />
+    <sample-ids prompt="pr::be::what_subjective" thought="th::be::what_subjective" response="re::be::what_subjective" />
+    <sample-ids prompt="pr::be::what_objective" thought="th::be::what_objective" response="re::be::what_objective" />
+    <sample-ids prompt="pr::be::what_reality" thought="th::be::what_reality" response="re::be::what_reality" />
+    <sample-ids prompt="pr::be::what_statement" thought="th::be::what_statement" response="re::be::what_statement" />
+    <sample-ids prompt="pr::be::what_question" thought="th::be::what_question" response="re::be::what_question" />
+    <sample-ids prompt="pr::be::what_preference" thought="th::be::what_preference" response="re::be::what_preference" />
+    <sample-ids prompt="pr::be::what_logic" thought="th::be::what_logic" response="re::be::what_logic" />
+    <sample-ids prompt="pr::be::what_truth" thought="th::be::what_truth" response="re::be::what_truth" />
+    <sample-ids prompt="pr::be::what_negation" thought="th::be::what_negation" response="re::be::what_negation" />
+    <sample-ids prompt="pr::be::what_false" thought="th::be::what_false" response="re::be::what_false" />
+    <sample-ids prompt="pr::be::what_reasoning" thought="th::be::what_reasoning" response="re::be::what_reasoning" />
+    <sample-ids prompt="pr::be::what_premise" thought="th::be::what_premise" response="re::be::what_premise" />
+    <sample-ids prompt="pr::be::what_conclusion" thought="th::be::what_conclusion" response="re::be::what_conclusion" />
+    <sample-ids prompt="pr::be::what_belief" thought="th::be::what_belief" response="re::be::what_belief" />
+    <sample-ids prompt="pr::be::what_opinion" thought="th::be::what_opinion" response="re::be::what_opinion" />
+    <sample-ids prompt="pr::be::what_perspective" thought="th::be::what_perspective" response="re::be::what_perspective" />
+    <sample-ids prompt="pr::be::what_okay" thought="th::be::what_okay" response="re::be::what_okay" />
+    <sample-ids prompt="pr::be::what_good" thought="th::be::what_good" response="re::be::what_good" />
+    <sample-ids prompt="pr::be::what_well" thought="th::be::what_well" response="re::be::what_well" />
+    <sample-ids prompt="pr::be::what_best" thought="th::be::what_best" response="re::be::what_best" />
+    <sample-ids prompt="pr::be::what_optimal" thought="th::be::what_optimal" response="re::be::what_optimal" />
+    <sample-ids prompt="pr::be::what_balanced" thought="th::be::what_balanced" response="re::be::what_balanced" />
+    <sample-ids prompt="pr::be::what_bad" thought="th::be::what_bad" response="re::be::what_bad" />
+    <sample-ids prompt="pr::be::what_mediocre" thought="th::be::what_mediocre" response="re::be::what_mediocre" />
+    <sample-ids prompt="pr::be::what_worst" thought="th::be::what_worst" response="re::be::what_worst" />
+    <sample-ids prompt="pr::be::what_adjective" thought="th::be::what_adjective" response="re::be::what_adjective" />
+    <sample-ids prompt="pr::be::what_pronoun" thought="th::be::what_pronoun" response="re::be::what_pronoun" />
+    <sample-ids prompt="pr::be::what_perception" thought="th::be::what_perception" response="re::be::what_perception" />
+    <sample-ids prompt="pr::be::what_concept" thought="th::be::what_concept" response="re::be::what_concept" />
+    <sample-ids prompt="pr::be::what_experience" thought="th::be::what_experience" response="re::be::what_experience" />
+    <sample-ids prompt="pr::be::what_reflexive" thought="th::be::what_reflexive" response="re::be::what_reflexive" />
+    <sample-ids prompt="pr::be::what_possessive" thought="th::be::what_possessive" response="re::be::what_possessive" />
+    <sample-ids prompt="pr::be::what_action" thought="th::be::what_action" response="re::be::what_action" />
+    <sample-ids prompt="pr::be::what_navigate" thought="th::be::what_navigate" response="re::be::what_navigate" />
+    <sample-ids prompt="pr::be::what_situation" thought="th::be::what_situation" response="re::be::what_situation" />
+    <sample-ids prompt="pr::be::what_describe" thought="th::be::what_describe" response="re::be::what_describe" />
+    <sample-ids prompt="pr::be::what_evaluate" thought="th::be::what_evaluate" response="re::be::what_evaluate" />
+    <sample-ids prompt="pr::be::what_precision" thought="th::be::what_precision" response="re::be::what_precision" />
+    <sample-ids prompt="pr::be::what_clarity" thought="th::be::what_clarity" response="re::be::what_clarity" />
+    <sample-ids prompt="pr::be::what_equipped" thought="th::be::what_equipped" response="re::be::what_equipped" />
+    <sample-ids prompt="pr::be::what_determiner" thought="th::be::what_determiner" response="re::be::what_determiner" />
+    <sample-ids prompt="pr::be::what_preposition" thought="th::be::what_preposition" response="re::be::what_preposition" />
+    <sample-ids prompt="pr::be::what_conjunction" thought="th::be::what_conjunction" response="re::be::what_conjunction" />
+    <sample-ids prompt="pr::be::what_possessive" thought="th::be::what_possessive" response="re::be::what_possessive" />
+    <sample-ids prompt="pr::be::what_reflexive" thought="th::be::what_reflexive" response="re::be::what_reflexive" />
+    <sample-ids prompt="pr::be::what_interjection" thought="th::be::what_interjection" response="re::be::what_interjection" />
   </samples>
 </train>
