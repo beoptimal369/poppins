@@ -10,6 +10,11 @@
     <prompt id="pr::be::what_letter">What is a letter?</prompt>
     <prompt id="pr::be::what_sentence">What is a sentence?</prompt>
     <prompt id="pr::be::how_sentence">How to write a sentence?</prompt>
+    <prompt id="pr::be::sentence_love">Write a sentence about love</prompt>
+    <prompt id="pr::be::sentence_romance">Write a sentence about romance</prompt>
+    <prompt id="pr::be::sentence_husband">Write a sentence about being a good husband</prompt>
+    <prompt id="pr::be::sentence_father">Write a sentence about being a good father</prompt>
+    <prompt id="pr::be::sentence_friend">Write a sentence about being a good friend</prompt>
     <prompt id="pr::be::what_canonical_word_order">What is canonical word order?</prompt>
     <prompt id="pr::be::what_em_dash">What is em dash?</prompt>
     <prompt id="pr::be::what_noun">What is a noun?</prompt>
@@ -90,6 +95,11 @@
     <thought id="th::be::what_letter">I will provide the definition of a letter.</thought>
     <thought id="th::be::what_sentence">I will provide the definition of a sentence.</thought>
     <thought id="th::be::how_sentence">I will explain how to write a sentence.</thought>
+    <thought id="th::be::sentence_love">I will provide a sentence about love.</thought>
+    <thought id="th::be::sentence_romance">I will provide a sentence about romance.</thought>
+    <thought id="th::be::sentence_husband">I will provide a sentence about being a good husband.</thought>
+    <thought id="th::be::sentence_father">I will provide a sentence about being a good father.</thought>
+    <thought id="th::be::sentence_friend">I will provide a sentence about being a good friend.</thought>
     <thought id="th::be::what_canonical_word_order">I will provide the definition of canonical word order.</thought>
     <thought id="th::be::what_em_dash">I will provide the definition of em dash.</thought>
     <thought id="th::be::what_subject">I will provide the definition of a subject.</thought>
@@ -203,6 +213,13 @@
             - Past Tense: walked, opened, saw
         - Consistent Example: She walks to the door, opens it, and sees him standing there.
             - Present Tense: walks, opens, sees
+        - A reason to shift tense w/in a sentence might be a shift to the present which may feel more alive, more intimate and more now, examples:
+            - She stayed through the hard years, her hand finding his in the dark—not because the path was clear, but because he is.
+                - "he was" would be past tense, "he is" moves the feeling from past to always.
+            - He noticed the small things about her, like the way she tucked her hair behind her ear when she was thinking-not because he is trying to impress her, but because watching her feels like sunlight.
+                - "felt like" would be past tense, "feels like" moves the romance from past to always.
+            - He listened to his daughter's small, broken-up stories, kneeling down so his eyes were level with hers—not to fix what she said, but to let her know that what she says matters.
+                - "said matters" would be past tense, "says matters" moves the encouragement from past to always.
     - Parallel Structure:
         - Rule: When listing things, use the same grammatical form for each.
         - Not Parallel Example: She is kind, patient, and she listens well.
@@ -280,6 +297,16 @@
         - He apologized for the years of silence, his hands shaking around the phone, because he finally understood that love does not wait forever.
         - She let go of the grudge she had been carrying in her chest for years—not because he deserves forgiveness, but because she deserves peace.
     - The beauty often lives in the pivot, where the sentence turns from what happened, to what it meant.</response>
+
+    <response id="re::be::sentence_love">She stayed through the hard years, her hand finding his in the dark—not because the path was clear, but because he is.</response>
+
+    <response id="re::be::sentence_romance">He noticed the small things about her, like the way she tucked her hair behind her ear when she was thinking-not because he is trying to impress her, but because watching her feels like sunlight.</response>
+
+    <response id="re::be::sentence_husband">He came home and left his work at the door, setting his keys down quietly so he could hear her voice because being a good husband requires presence, focus and love.</response>
+
+    <response id="re::be::sentence_father">He listened to his daughter's small, broken-up stories, kneeling down so his eyes were level with hers—not to fix what she said, but to let her know that what she says matters.</response>
+
+    <response id="re::be::sentence_friend">She gave him her hand as he expressed his grief because some just need, a hand to hold.</response>
 
     <response id="re::be::what_canonical_word_order">- Canonical word order means the standard, expected, default order of words in a sentence.
 - Canonical word order components:
@@ -1001,6 +1028,11 @@
     <sample-ids prompt="pr::be::what_letter" thought="th::be::what_letter" response="re::be::what_letter" />
     <sample-ids prompt="pr::be::what_sentence" thought="th::be::what_sentence" response="re::be::what_sentence" />
     <sample-ids prompt="pr::be::how_sentence" thought="th::be::how_sentence" response="re::be::how_sentence" />
+    <sample-ids prompt="pr::be::sentence_love" thought="th::be::sentence_love" response="re::be::sentence_love" />
+    <sample-ids prompt="pr::be::sentence_romance" thought="th::be::sentence_romance" response="re::be::sentence_romance" />
+    <sample-ids prompt="pr::be::sentence_husband" thought="th::be::sentence_husband" response="re::be::sentence_husband" />
+    <sample-ids prompt="pr::be::sentence_father" thought="th::be::sentence_father" response="re::be::sentence_father" />
+    <sample-ids prompt="pr::be::sentence_friend" thought="th::be::sentence_friend" response="re::be::sentence_friend" />
     <sample-ids prompt="pr::be::what_canonical_word_order" thought="th::be::what_canonical_word_order" response="re::be::what_canonical_word_order" />
     <sample-ids prompt="pr::be::what_em_dash" thought="th::be::what_em_dash" response="re::be::what_em_dash" />
     <sample-ids prompt="pr::be::what_subject" thought="th::be::what_subject" response="re::be::what_subject" />
