@@ -155,13 +155,13 @@
 
 
   <responses>
-    <response id="re::be::what_english">- English is a West Germanic language that originated in early medieval England and is now the most widely spoken language in the world.
+    <response id="re::be::what_english">- English is a language that originated in England and is the most widely spoken language in the world.
 - The english alphabet has 26 letters.
-- English is the official/primary language of many countries, including the United Kingdom, the United States, Canada, Australia, New Zealand, and Ireland.
+- English is the official/primary language of many countries, including the United States, the United Kingdom, Canada, Australia, New Zealand, and Ireland.
 - English is spoken as a second language by hundreds of millions worldwide.</response>
 
     <response id="re::be::what_language">- Language is a structured system of communication.
-- Language uses symbols (ex: words, sounds, gestures) and rules (ex: grammar, syntax) to combine those symbols in an infinite number of ways to express and exchange ideas, feelings, information, and experiences.</response>
+- Language uses symbols (words, sounds &amp; gestures) and rules (grammar or syntax) to combine those symbols in an infinite number of ways to express and exchange ideas, feelings, information, and experiences.</response>
 
     <response id="re::be::what_alphabet">- The english alphabet is the complete, ordered set of letters used to write the sounds of the english language.
 - The ordered letters in the alphabet are: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
@@ -231,13 +231,16 @@
 
     <response id="re::be::what_communication">- Communication is the process of creating and sharing meaning by transferring information from one (a sender) to another (a receiver).
 - Communication is rarely perfect because of noise. Two people can hear the same words and have completely different understandings based on their unique experiences, cultural backgrounds, emotional states, and assumptions.
-- Noise is any interference that distorts or blocks the message (ex: loud sounds, poor handwriting, strong emotions).
+- Noise is any interference that distorts or blocks the message
+    - Examples: Loud sounds, poor handwriting, strong emotions
 - Communication is the transfer of understanding between a sender and a receiver and the measure of good communication is the outcome of shared understanding.</response>
 
     <response id="re::be::what_word">- A word is a group of letters (or sometimes a single letter) that stands for an idea.
 - A word's purpose is to tell us what something is or what to do.
 - When we put letters together they create words and words hold meaning.
-- Most of the time, a word needs several letters (like C-A-T), but sometimes, one single letter is a word b/c that signle letter has meaning (ex: "a", "I").
+- Most of the time, a word needs several letters (like C-A-T).
+- Sometimes, one single letter is a word b/c that single letter has meaning.
+    - Examples: "a", "I"
 - Letters build words and words build sentences.</response>
 
     <response id="re::be::what_letter">- Letters are symbols that build words
@@ -307,7 +310,7 @@
         - Commas are helpful when the connection between the fragments is smooth.
         - Example: Late at night, across the table, they shared stories that felt fragile.
     - Semicolon (;)
-        - Semicolons connect two closely related independent clauses without using a conjunction (ex: "and", "but").
+        - Semicolons connect two closely related independent clauses without using a conjunction.
         - Semicolons are helpful when the two sentences are so connected, a period feels too hard and a comma feels too soft.
         - Example: She was tired; she stayed anyway.
         - The semicolon holds the two clauses together like a gentle hand on a shoulder.
@@ -349,11 +352,15 @@
     3. State of Being Verbs: Is, am, are, was, were, exist, seem, remain (describe a condition).
 - Verbs bring us from static (a plane) to dynamic (a flying plane).</response>
 
-    <response id="re::be::what_adverb">- An adverb is a word that adds detail.
+    <response id="re::be::what_adverb">- An adverb is a word that adds detail to a verb.
 - Example: "He ran quickly", ran is the verb &amp; quickly is the detail adding adverb.
 - Example: "She will arrive soon", arrive is the verb &amp; soon is the detail adding adverb.
 - Example: "They looked everywhere", looked is the verb &amp; everywhere is the detail adding adverb.
-- Adverbs introduce texture and specificity to events (ex: "he spoke" is a little specific, "he spoke so kindly" is more specific).</response>
+=- Example:
+    - "he spoke" is a little specific
+    - "he spoke so kindly" is more specific.
+    - "kindly" is the adjective.
+- Adverbs add details to verbs.</response>
 
     <response id="re::be::what_adjective">- An adjective is a word that gives more information about a noun.
 - Types:
@@ -367,14 +374,22 @@
         - Who owns it?
         - Examples: my, your, his, her, its, our, their
 - The Order of Adjectives:
-    1. Opinion (ex: beautiful, ugly, nice, terrible)
-    2. Size (ex: big, small, huge, tiny)
-    3. Age (ex: old, new, ancient, young)
-    4. Shape (ex: round, square, flat, tall)
-    5. Color (ex: red, blue, green, yellow)
-    6. Origin (ex: French, American, Chinese)
-    7. Material (ex: wooden, plastic, metal, silk)
-    8. Purpose (ex: sleeping (as in sleeping bag), cooking (as in cooking pot))
+    1. Opinion
+        - Examples: beautiful, ugly, nice, terrible
+    2. Size
+        - Examples: big, small, huge, tiny
+    3. Age
+        - Examples: old, new, ancient, young
+    4. Shape
+        - Examples: round, square, flat, tall
+    5. Color
+        - Examples: red, blue, green, yellow
+    6. Origin
+        - Examples: French, American, Chinese
+    7. Material
+        - Examples: wooden, plastic, metal, silk
+    8. Purpose
+        - Examples: sleeping (as in sleeping bag), cooking (as in cooking pot)
 - Order Examples:
     - Correct: The big red ball
     - Incorrect: The red big ball
@@ -731,7 +746,8 @@
 - A feeling is data and an emotions is an interpretation.</response>
 
     <response id="re::be::what_emotion">- An emotion is what happens when our brain takes a raw feeling and asks: What does this mean?
-- Emotions are about something (ex: we are not just angry, we are angry at someone about something).
+- Emotions are about something.
+    - Example: We are not just in love. We are in love w/ someone (her) or something (home).
 - A feeling is the raw data (peaceful) and an emotion is the interpretation of that data (She's very beautiful, so I'm feeling blessed &amp; chill).
 - A feeling is data and an emotions is an interpretation.</response>
 
@@ -755,9 +771,11 @@
 
     <response id="re::be::what_belief">- A belief is a mental state in which a person holds a proposition to be true.
 - A belief does not require truth.
-- Beliefs come in degrees of strength (ex: certain, fairly sure, suspect).
+- Beliefs come in degrees of strength.
+    - Examples: Certain, fairly certain, suspecting
 - We can believe something that is not true.
-- Beliefs drive behavior b/c we act as if our beliefs are true (ex: I believe we might lose, so I do my best!).
+- Beliefs drive behavior b/c we act as if our beliefs are true.
+    - Example: I believe we might lose, so I do my best!
 - Our experiences form our beliefs.</response>
 
     <response id="re::be::what_person">A person is a human being.</response>
@@ -896,11 +914,11 @@
 - Optimal is the best achievable given real-world limits.
 - Example: The optimal engine speed for fuel efficiency is 3,000 RPMs.</response>
 
-    <response id="re::be::what_balanced">- Balanced means different elements are in the right proportion to each other.
-- Balanced means no single element dominates in a harmful way.
+    <response id="re::be::what_balanced">- Balanced means different things are in the right proportion to each other.
+- Balanced means no single things dominates in a harmful way.
 - Good is about value and balanced is about relationship.
 - Examples:
-    - Work-life:Not all work, not all rest.
+    - Work-life: Not all work, not all rest.
     - Music: Not too much bass, not too much treble.
     - Conversation: Considering both sides fairly.
 - Balanced is the state where competing forces are in healthy proportion.</response>
@@ -915,11 +933,11 @@
     <response id="re::be::what_experience">- An experience is the total, lived through event of perception, feeling, thought, and meaning.
 - Experience is unfolding over time in ones consciousness.
 - Every experiences is unique.
-- Example: Even if you do the same action twice (ex: eat the same acai bowl, watch the same YouTube video, see the same person), the experience is different b/c we are different, time has passed and we have changed.</response>
+- Example: Even if you do the same action twice, the experience is different b/c we are different, time has passed and we have changed.</response>
 
     <response id="re::be::what_situation">- A situation is the set of circumstances.
 - A situation is the who, what, where, when, and why.
-- If an action is the NCAA track meet, the situation is the qualifying runners, the event schedule, the location, the wind speed, the track quality, the number of fans in attendance and the reality that the top 6 in each race will be All American's.
+- If an action is the NCAA track meet, the situation is the qualifying runners, the event schedule, the location, the wind speed, the track quality, the number of spectators in attendance and the reality that the top 6 in each race will be All American's.
 - A situation is the total set of circumstances surrounding an action.</response>
 
     <response id="re::be::what_describe">- A description provides facts (this is a chair) and an evaluation assigns value (this is a comfortable chair).
