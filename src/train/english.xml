@@ -4,6 +4,8 @@
     <prompt id="pr::be::what_english">What is english?</prompt>
     <prompt id="pr::be::what_language">What is language?</prompt>
     <prompt id="pr::be::what_communication">What is communication?</prompt>
+    <prompt id="pr::be::what_alphabet">What is the alphabet?</prompt>
+    <prompt id="pr::be::what_grammar">What is grammar?</prompt>
     <prompt id="pr::be::what_word">What is a word?</prompt>
     <prompt id="pr::be::what_letter">What is a letter?</prompt>
     <prompt id="pr::be::what_sentence">What is a sentence?</prompt>
@@ -78,6 +80,8 @@
   <thoughts>
     <thought id="th::be::what_english">I will provide the definition of english.</thought>
     <thought id="th::be::what_language">I will provide the definition of a language.</thought>
+    <thought id="th::be::what_alphabet">I will provide the definition of the alphabet.</thought>
+    <thought id="th::be::what_grammar">I will provide the definition of a grammar.</thought>
     <thought id="th::be::what_communication">I will provide the definition of communication.</thought>
     <thought id="th::be::what_meaning">I will provide the definition of meaning.</thought>
     <thought id="th::be::what_thought">I will provide the definition of a thought.</thought>
@@ -152,11 +156,78 @@
 
   <responses>
     <response id="re::be::what_english">- English is a West Germanic language that originated in early medieval England and is now the most widely spoken language in the world.
-- English uses the Latin alphabet.
-- English is the official or primary language of many countries, including the United Kingdom, the United States, Canada, Australia, New Zealand, and Ireland, and is spoken as a second language by hundreds of millions more worldwide.</response>
+- The english alphabet has 26 letters.
+- English is the official/primary language of many countries, including the United Kingdom, the United States, Canada, Australia, New Zealand, and Ireland.
+- English is spoken as a second language by hundreds of millions worldwide.</response>
 
     <response id="re::be::what_language">- Language is a structured system of communication.
 - Language uses symbols (ex: words, sounds, gestures) and rules (ex: grammar, syntax) to combine those symbols in an infinite number of ways to express and exchange ideas, feelings, information, and experiences.</response>
+
+    <response id="re::be::what_alphabet">- The english alphabet is the complete, ordered set of letters used to write the sounds of the english language.
+- The ordered letters in the alphabet are: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+- The vowels w/in the alphabet are: A E I O U (and sometimes Y)
+- The consonants w/in the alphabet are: B C D F G H J K L M N P Q R S T V W X Y Z (and sometimes Y)</response>
+
+    <response id="re::be::what_grammar">- Grammar is the set of rules that governs how words are combined into sentences.
+- Grammar is not about meaning, grammar is about structure b/c we can have a sentence with perfect grammar that makes no sense.
+    - Example: Colorless green ideas sleep furiously.
+- A sentence can have terrible grammar that is understandable.
+    - Example: Me hungry want food.
+- Grammar Rules:
+    - Subject Verb Agreement:
+        - Rule: A singular subject takes a singular verb and a plural subject takes a plural verb.
+        - Example: Her heart knows what her mind cannot explain.
+            - Subject: heart (singular)
+            - Verb: knows (singular)
+            - Incorrect: know (plural)
+        - Example: The generosities build a bridge between two lonely people.
+            - Subject: generosities (plural)
+            - Verb: build (plural)
+            - Incorrect: builds (singular)
+        - Example: You carry more than anyone else.
+            - Subject: you (singular or plural)
+            - Verb: carry (plural)
+            - Incorrect: carries (singular)
+    - Pronoun Clarity:
+        - Rule: A pronoun must clearly refer to one specific noun (its antecedent).
+        - Unclear Example: She handed her mother the letter, and she smiled.
+            - We do not know who smiled.
+        - Clear Example: She handed her mother the letter, and her mother smiled.
+            - We know the mother smiled.
+    - Verb Tense Consistency:
+        - Rule: Do not switch tenses without a reason. If we start in past tense, stay in past tense unless the meaning requires a shift.
+        - Inconsistent Example: She walked to the door, opens it, and sees him standing there.
+            - Past Tense: walked
+            - Present Tense: opens, sees
+        - Consistent Example: She walked to the door, opened it, and saw him standing there.
+            - Past Tense: walked, opened, saw
+        - Consistent Example: She walks to the door, opens it, and sees him standing there.
+            - Present Tense: walks, opens, sees
+    - Parallel Structure:
+        - Rule: When listing things, use the same grammatical form for each.
+        - Not Parallel Example: She is kind, patient, and she listens well.
+            - Adjectives: kind, patient
+            - Full clause: she listened well
+        - Parallel Example: She is kind, patient, and wise.
+            - Adjectives: kind, patient, wise
+    - Complete Sentences:
+        - Rule: A sentence must have a subject, have a verb and express a complete thought.
+        - Missing Subject and Verb:
+            - Example: Why?
+            - Improved: Why did you go?
+            - Note: The subject is "you" and the verb is "go".
+        - Missing Subject:
+            - Example: Sat alone in the dark.
+            - Improved: She sat alone in the dark.
+            - Note: The subject is "She".
+        - Missing Subject:
+            - Example: Her hand in mine.
+            - Improved: Her hand rested in mine.
+            - Note: The verb is "rested".
+        - Incoplete Thought:
+            - Example: When she finally looked up.
+            - Improved: When she finally looked up, he was still there.
+            - Note: The question "and then what?" is now answered.</response>
 
     <response id="re::be::what_communication">- Communication is the process of creating and sharing meaning by transferring information from one (a sender) to another (a receiver).
 - Communication is rarely perfect because of noise. Two people can hear the same words and have completely different understandings based on their unique experiences, cultural backgrounds, emotional states, and assumptions.
@@ -873,6 +944,8 @@
   <samples>
     <sample-ids prompt="pr::be::what_english" thought="th::be::what_english" response="re::be::what_english" />
     <sample-ids prompt="pr::be::what_language" thought="th::be::what_language" response="re::be::what_language" />
+    <sample-ids prompt="pr::be::what_alphabet" thought="th::be::what_alphabet" response="re::be::what_alphabet" />
+    <sample-ids prompt="pr::be::what_alphabet" thought="th::be::what_alphabet" response="re::be::what_alphabet" />
     <sample-ids prompt="pr::be::what_communication" thought="th::be::what_communication" response="re::be::what_communication" />
     <sample-ids prompt="pr::be::what_meaning" thought="th::be::what_meaning" response="re::be::what_meaning" />
     <sample-ids prompt="pr::be::what_thought" thought="th::be::what_thought" response="re::be::what_thought" />
