@@ -4,6 +4,15 @@
     <prompt id="pr::be::what_english">What is english?</prompt>
     <prompt id="pr::be::what_language">What is language?</prompt>
     <prompt id="pr::be::what_alphabet">What is the alphabet?</prompt>
+    <prompt id="pr::be::what_vibration">What is a vibration?</prompt>
+    <prompt id="pr::be::what_sound">What is a sound?</prompt>
+    <prompt id="pr::be::what_speech">What is speech?</prompt>
+    <prompt id="pr::be::what_syllable">What is a syllable?</prompt>
+    <prompt id="pr::be::what_pronunciation_guide">What is a pronunciation guide?</prompt>
+    <prompt id="pr::be::what_vowel">What is a vowel?</prompt>
+    <prompt id="pr::be::what_consonant">What is a consonant?</prompt>
+    <prompt id="pr::be::what_a">What is "a"?</prompt>
+    <prompt id="pr::be::what_an">What is "an"?</prompt>
     <prompt id="pr::be::what_grammar">What is grammar?</prompt>
     <prompt id="pr::be::what_communication">What is communication?</prompt>
     <prompt id="pr::be::what_letter">What is a letter?</prompt>
@@ -96,6 +105,15 @@
     <thought id="th::be::what_english">I will provide the definition of english.</thought>
     <thought id="th::be::what_language">I will provide the definition of a language.</thought>
     <thought id="th::be::what_alphabet">I will provide the definition of the alphabet.</thought>
+    <thought id="th::be::what_vibration">I will provide the definition of a vibration.</thought>
+    <thought id="th::be::what_sound">I will provide the definition of a sound.</thought>
+    <thought id="th::be::what_speech">I will provide the definition of speech.</thought>
+    <thought id="th::be::what_syllable">I will provide the definition of a syllable.</thought>
+    <thought id="th::be::what_pronunciation_guide">I will provide the definition of a pronunciation guide.</thought>
+    <thought id="th::be::what_vowel">I will provide the definition of a vowel.</thought>
+    <thought id="th::be::what_consonant">I will provide the definition of a consonant.</thought>
+    <thought id="th::be::what_a">I will provide the definition of "a".</thought>
+    <thought id="th::be::what_an">I will provide the definition of "an".</thought>
     <thought id="th::be::what_grammar">I will provide the definition of a grammar.</thought>
     <thought id="th::be::what_communication">I will provide the definition of communication.</thought>
     <thought id="th::be::what_letter">I will provide the definition of a letter.</thought>
@@ -195,6 +213,133 @@
 
     <response id="re::be::what_alphabet">- The english alphabet is the complete, ordered set of letters used to write the sounds of the english language.
 - The ordered letters in the alphabet are: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z</response>
+
+    <response id="re::be::what_vibration">- A vibration is a rapid back-and-forth motion of an object around a central position.
+- If we pluck a guitar string, it does not stay still. It vibrates left, then right, then left, then right, hundreds of times per second. The back-and-forth motion is a vibration.
+- Every sound begins with a vibration.
+- Vibration is the physical shaking that creates sound.</response>
+
+    <response id="re::be::what_sound">- Sound is a wave of vibrations traveling through a medium (like air, water, or solid matter) that can be detected by an ear or a microphone.
+- When a vibration travels through the air around it, it creates a sound wave.
+- A sound wave is a traveling ripple of high and low pressure that moves outward like ripples in a pond.
+- The journey of sound:
+    1. Something vibrates (vocal cords, a speaker, a falling book).
+    2. The vibrating wave pushes outward on nearby air molecules.
+    3. An eardrum detects the soundwave.
+    4. A mind interprets the soundwave.
+- Sound is a traveling wave of vibration.</response>
+
+    <response id="re::be::what_speech">- Speech is the intentional shaping of sound into meaningful language.
+- Speech combines vowels and consonants into words and sentences.
+- Parts of Speech:
+    - Lungs: Push air out
+    - Vocal cords: Vibrate to create sound
+    - Tongue: Alter sounds by moving forward, back, up and down
+    - Lips: Alter sounds by moving less or more open
+- Sound vs Speech:
+    - A dog barking is sound. A car honking is sound. Wind blowing is sound.
+    - Speech is sound produced by a human vocal tract with the intention of communicating meaning.
+- Speech is sound, that carries meaning and is shaped by lungs, vocal cords, tongue and lips.</response>
+
+    <response id="re::be::what_syllable">- A syllable is a unit of sound containing exactly one vowel sound.
+- To identify the syllables w/in a word, put your hand under your chin, say the word slowly and every time the chin drops, that is a syllable.
+- Examples:
+    - Cat: 1 syllable.
+    - Happy: 2 syllables b/c "Ha" + "ppy".
+    - Elephant: 3 syllables b/c "El" + "e" + "phant".
+    - Understanding: 4 syllables b/c "Un" + "der" + "stand" + "ing".
+- To identify syllables we may also count syllables (if , do n).
+    - If the word ends w/ an "e" do not count the ending "e".
+    - If the word starts w/ an "y" do not count the starting "y". At the beginning of a word, "y" is a consonant and only vowels count for syllables.
+    - Examples:
+        - Cat: ("a") so 1 syllable.
+        - Sky: ("y") so 1 syllable.
+        - Make: ("a") so 1 syllable (do not count the ending "e").
+        - Hope: ("o") so 1 syllable (do not count the ending "e").
+        - Fragile: ("a" + "i") so 2 syllable (do not count the ending "e").
+        - Recipe: ("e" + "i" + "e") so 3 syllables (count the ending "e", this is a rare exception, check pronunciation guide).
+        - Apostrophe: ("a" + "o" + "o" + "e") so 4 syllables (count the ending "e", this is a rare exception, check pronunciation guide).
+        - Happy: ("a" + "y") so 2 syllables.
+        - System: ("y" + "e") so 2 syllables.
+        - Yellow: ("e" + "o") so 2 syllables.
+        - Elephant: ("e" + "e" + "a") so 3 syllables.
+        - Understanding: ("u" + "e" + "a" + "i") so 4 syllables.
+- When two or more vowels appear together, they usually make one sound and count as one syllable.
+    - Examples:
+        - bread: "ea" is one vowel cluster so "bread" is 1 syllable.
+        - see: "ee" is one vowel cluster so "see" is 1 syllable.
+        - cloud: "ou" is one vowel cluster so "cloud" is 1 syllable.
+        - piece: "ie" is one vowel cluster so "piece" is 1 syllable.
+        - poem: "oe" is two vowels w/in this cluster (exception, check pronunciation guide) so "poem" is 2 syllables.
+        - diet: "ie" is two vowels w/in this cluster (exception, check pronunciation guide) so "diet" is 2 syllables.
+- The letter "e" at the end of word does not add a syllable.
+- syllables are the heartbeat of a word.
+- Every time the heart beats, that is one pulse and every time the chin drops, that is one syllable.</response>
+
+    <response id="re::be::what_pronunciation_guide">- A pronunciation guide tells us how many syllables a word has.
+- Formula:
+    - Every dot (·) marks a syllable boundary. 
+    - Syllables Count = Dots Count + 1.
+- Examples (exceptions to typical syllable rules):
+    - Recipe: rec·i·pe (3 syllables)
+    - Apostrophe: a·pos·tro·phe (4 syllables)
+    - Poem: po·em (2 syllables)
+    - Poet: po·et (2 syllables)
+    - Diet: di·et (2 syllables)
+    - Fire: fi·re (2 syllables)
+    - Science: sci·ence (2 syllables)
+    - Client: cli·ent (2 syllables)
+    - Quiet: qui·et (2 syllables)
+    - Fluid: flu·id (2 syllables)
+    - Cruel: cru·el (2 syllables)
+    - Fuel: fu·el (2 syllables)
+    - Actual: ac·tu·al (3 syllables)
+    - Gradual: grad·u·al (3 syllables)
+    - Annual: an·nu·al (3 syllables)
+    - Rhythm: rhyth·m (2 syllables)
+    - Bottle: bot·tle (2 syllables)
+    - Simile: sim·i·le (3 syllables)
+    - Adobe: a·do·be (3 syllables)
+    - Hyperbole: hy·per·bo·le (4 syllables)
+    - Sesame: ses·a·me (3 syllables)
+    - Beautiful: beau·ti·ful (3 syllables)
+    - Restaurant: res·tau·rant(3 syllables)
+    - Vegetable: vege·ta·ble (3 syllables)
+- When in doubt about how many syllables a word has, look up the word in a dictionary. The dots (·) between parts of the word show the syllable breaks.</response>
+
+    <response id="re::be::what_vowel">- A vowel is a speech sound made with an open vocal tract.
+- A vowel is pure sound coming from vibrating vocal cords.
+- Vowels are pure sounds b/c they require no or very minimal tongue or lip alteations.
+- The letters in the english alphabet that are vowels: A E I O U (and sometimes Y)
+- We treat Y like a vowel when it appears inside a syllable (not at the beginning) and it is not followed by another vowel.
+- At the beginning of a word, Y is almost always a consonant. Inside a word, Y often acts as a vowel.
+- Vowel Y Examples: myth, system, gym, lyric, pyramid, happy, silly, sky, cry, my, by
+- A vowel is an open, free-flowing speech sound</response>
+
+    <response id="re::be::what_consonant">- A consonant is a speech sound made with a partially closed vocal tract.
+- Consonants require tongue amd/or lip alteations.
+- Examples:
+    - When we say "P" our lips close completely, then pop open.
+    - When we say "S" our tongue creates a narrow channel, and air hisses through.
+- The letters in the english alphabet that are consonants: B C D F G H J K L M N P Q R S T V W X Z (and sometimes Y)
+- We treat Y like a vowel when it appears inside a syllable (not at the beginning) and it is not followed by another vowel.
+- At the beginning of a word, Y is almost always a consonant. Inside a word, Y often acts as a vowel.
+- Consonant Y Examples: yes, yellow, you, young, your
+- A consonant is a speech sound made by blocking or restricting the airflow.</response>
+
+    <response id="re::be::what_a">- "A" is used before words that begin with a consonant sound.
+- Examples:
+    - A dog: "A" comes before "dog" b/c the "d" in "dog" sounds like a "d" and the "d" sound is a consonant
+    - A one-time thing: "A" comes before "one" b/c the "o" in "one" sounds like a "wu" and the "wu" sound is a consonant
+    - A cat: "A" comes before "cat" b/c the "c" in "cat" sounds like a "k" and the "k" sound is a consonant
+    - A yes: "A" comes before "yes" b/c the "y" in "yes" is at the beginning of the word and that is a consonant</response>
+
+    <response id="re::be::what_an">- "An" is used before words that begin with a vowel sound.
+- Examples:
+    - An apple: "An" comes before "apple" b/c the "a" in "apple" sounds like a "a" and the "a" sound is a vowel
+    - An elephant: "An" comes before "elephant" b/c the "e" in "elephant" sounds like a "e" and the "e" sound is a vowel
+    - An hour: "An" comes before "hour" b/c the "h" in "hour" sounds like a "au" and the "au" sound is a vowel
+    - An honest: "An" comes before "honest" b/c the "h" in "honest" sounds like a "au" and the "au" sound is a vowel</response>
 
     <response id="re::be::what_grammar">- Grammar is the set of rules that governs how words are combined into sentences.
 - Grammar is not about meaning, grammar is about structure b/c we can have a sentence with perfect grammar that makes no sense.
@@ -1088,6 +1233,15 @@
     <sample-ids prompt="pr::be::what_english" thought="th::be::what_english" response="re::be::what_english" />
     <sample-ids prompt="pr::be::what_language" thought="th::be::what_language" response="re::be::what_language" />
     <sample-ids prompt="pr::be::what_alphabet" thought="th::be::what_alphabet" response="re::be::what_alphabet" />
+    <sample-ids prompt="pr::be::what_vibration" thought="th::be::what_vibration" response="re::be::what_vibration" />
+    <sample-ids prompt="pr::be::what_sound" thought="th::be::what_sound" response="re::be::what_sound" />
+    <sample-ids prompt="pr::be::what_speech" thought="th::be::what_speech" response="re::be::what_speech" />
+    <sample-ids prompt="pr::be::what_syllable" thought="th::be::what_syllable" response="re::be::what_syllable" />
+    <sample-ids prompt="pr::be::what_pronunciation_guide" thought="th::be::what_pronunciation_guide" response="re::be::what_pronunciation_guide" />
+    <sample-ids prompt="pr::be::what_vowel" thought="th::be::what_vowel" response="re::be::what_vowel" />
+    <sample-ids prompt="pr::be::what_consonant" thought="th::be::what_consonant" response="re::be::what_consonant" />
+    <sample-ids prompt="pr::be::what_a" thought="th::be::what_a" response="re::be::what_a" />
+    <sample-ids prompt="pr::be::what_an" thought="th::be::what_an" response="re::be::what_an" />
     <sample-ids prompt="pr::be::what_grammar" thought="th::be::what_grammar" response="re::be::what_grammar" />
     <sample-ids prompt="pr::be::what_communication" thought="th::be::what_communication" response="re::be::what_communication" />
     <sample-ids prompt="pr::be::what_letter" thought="th::be::what_letter" response="re::be::what_letter" />
