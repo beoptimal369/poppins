@@ -51,10 +51,6 @@
     <prompt id="pr::be::what_reality">What is reality?</prompt>
     <prompt id="pr::be::what_subjective">What is subjective?</prompt>
     <prompt id="pr::be::what_objective">What is objective?</prompt>
-    <prompt id="pr::be::what_consciousness">What is consciousness?</prompt>
-    <prompt id="pr::be::what_awareness">What is awareness?</prompt>
-    <prompt id="pr::be::what_focus">What is a focus?</prompt>
-    <prompt id="pr::be::what_clarity">What is clarity?</prompt>
     <prompt id="pr::be::what_statement">What is a statement?</prompt>
     <prompt id="pr::be::what_question">What is a question?</prompt>
     <prompt id="pr::be::what_truth">What is truth?</prompt>
@@ -97,6 +93,183 @@
     <prompt id="pr::be::what_evaluate">What is evaluate?</prompt>
     <prompt id="pr::be::what_precision">What is precision?</prompt>
     <prompt id="pr::be::what_equipped">What is equipped?</prompt>
+    <prompt id="pr::be::what_measurement">What is measurement?</prompt>
+    <prompt id="pr::be::what_science">What is science?</prompt>
+    <prompt id="pr::be::what_physics">What is physics?</prompt>
+    <prompt id="pr::be::what_field">What is a field?</prompt>
+    <prompt id="pr::be::what_universe">What is the universe?</prompt>
+    <prompt id="pr::be::what_cosmos">What is cosmos?</prompt>
+    <prompt id="pr::be::what_gravity">What is gravity?</prompt>
+    <prompt id="pr::be::what_space">What is space?</prompt>
+    <prompt id="pr::be::what_time">What is time?</prompt>
+    <prompt id="pr::be::what_physical">What is physical?</prompt>
+    <prompt id="pr::be::what_mass">What is mass?</prompt>
+    <prompt id="pr::be::what_volume">What is volume?</prompt>
+    <prompt id="pr::be::what_matter">What is matter?</prompt>
+    <prompt id="pr::be::what_atom">What is atom?</prompt>
+    <prompt id="pr::be::what_oscillation">What is oscillation?</prompt>
+    <prompt id="pr::be::what_frequency">What is frequency?</prompt>
+    <prompt id="pr::be::what_wave">What is wave?</prompt>
+    <prompt id="pr::be::what_energy">What is energy?</prompt>
+    <prompt id="pr::be::what_radiation">What is radiation?</prompt>
+    <prompt id="pr::be::what_electromagnetic_radiation">What is electromagnetic radiation?</prompt>
+    <prompt id="pr::be::what_light">What is light?</prompt>
+    <prompt id="pr::be::what_galaxy">What is galaxy?</prompt>
+    <prompt id="pr::be::what_milky_way">What is the milky way?</prompt>
+    <prompt id="pr::be::what_star">What is a star?</prompt>
+    <prompt id="pr::be::what_plasma">What is plasma?</prompt>
+    <prompt id="pr::be::what_gas">What is gas?</prompt>
+    <prompt id="pr::be::what_solar_system">What is a solar system?</prompt>
+    <prompt id="pr::be::what_neighborhood">What is a neighborhood?</prompt>
+    <prompt id="pr::be::what_orbit">What is orbit?</prompt>
+    <prompt id="pr::be::what_sun">What is the Sun?</prompt>
+    <prompt id="pr::be::what_planet">What is a planet?</prompt>
+    <prompt id="pr::be::what_earth">What is the Earth?</prompt>
+    <prompt id="pr::be::what_world">What is the world?</prompt>
+    <prompt id="pr::be::what_celestial">What is celestial?</prompt>
+    <prompt id="pr::be::what_terrestrial">What is terrestrial?</prompt>
+    <prompt id="pr::be::what_aquatic">What is aquatic?</prompt>
+    <prompt id="pr::be::what_mountain">What is mountain?</prompt>
+    <prompt id="pr::be::what_forest">What is forest?</prompt>
+    <prompt id="pr::be::what_fresh_water">What is fresh water?</prompt>
+    <prompt id="pr::be::what_salt_water">What is salt water?</prompt>
+    <prompt id="pr::be::what_atmosphere">What is atmosphere?</prompt>
+    <prompt id="pr::be::what_vacuum">What is vacuum?</prompt>
+    <prompt id="pr::be::what_greenhouse_effect">What is the greenhouse effect?</prompt>
+    <prompt id="pr::be::what_vapor">What is vapor?</prompt>
+    <prompt id="pr::be::what_air">What is air?</prompt>
+    <prompt id="pr::be::what_breath">What is breath?</prompt>
+    <prompt id="pr::be::what_carbon_dioxide">What is carbon dioxide?</prompt>
+    <prompt id="pr::be::what_nitrogen">What is nitrogen?</prompt>
+    <prompt id="pr::be::what_oxygen">What is oxygen?</prompt>
+    <prompt id="pr::be::what_argon">What is argon?</prompt>
+    <prompt id="pr::be::what_wind">What is wind?</prompt>
+    <prompt id="pr::be::what_satellite">What is a satellite?</prompt>
+    <prompt id="pr::be::what_moon">What is a moon?</prompt>
+    <prompt id="pr::be::what_tide">What is a tide?</prompt>
+    <prompt id="pr::be::what_heat">What is heat?</prompt>
+    <prompt id="pr::be::what_temperature">What is temperature?</prompt>
+    <prompt id="pr::be::what_celsius">What is celsius?</prompt>
+    <prompt id="pr::be::what_fahrenheit">What is fahrenheit?</prompt>
+    <prompt id="pr::be::what_thermometer">What is a thermometer?</prompt>
+    <prompt id="pr::be::what_hot">What is hot?</prompt>
+    <prompt id="pr::be::what_cold">What is cold?</prompt>
+    <prompt id="pr::be::what_water">What is water?</prompt>
+    <prompt id="pr::be::what_water_cycle">What is the water cycle?</prompt>
+    <prompt id="pr::be::what_cycle">What is a cycle?</prompt>
+    <prompt id="pr::be::what_system">What is a system?</prompt>
+    <prompt id="pr::be::what_recycling">What is recycling?</prompt>
+    <prompt id="pr::be::what_ocean">What is an ocean?</prompt>
+    <prompt id="pr::be::what_lake">What is a lake?</prompt>
+    <prompt id="pr::be::what_pond">What is a pond?</prompt>
+    <prompt id="pr::be::what_river">What is a river?</prompt>
+    <prompt id="pr::be::what_stream">What is a stream?</prompt>
+    <prompt id="pr::be::what_photosynthesis">What is photosynthesis?</prompt>
+    <prompt id="pr::be::what_food">What is food?</prompt>
+    <prompt id="pr::be::what_life">What is life?</prompt>
+    <prompt id="pr::be::what_organism">What is an organism?</prompt>
+    <prompt id="pr::be::what_carbon">What is carbon?</prompt>
+    <prompt id="pr::be::what_nutrients">What is nutrients?</prompt>
+    <prompt id="pr::be::what_soil">What is soil?</prompt>
+    <prompt id="pr::be::what_cell">What is a cell?</prompt>
+    <prompt id="pr::be::what_bacteria">What is bacteria?</prompt>
+    <prompt id="pr::be::what_caterpillar">What is a caterpillar?</prompt>
+    <prompt id="pr::be::what_butterfly">What is a butterfly?</prompt>
+    <prompt id="pr::be::what_family">What is family?</prompt>
+    <prompt id="pr::be::what_baby">What is a baby?</prompt>
+    <prompt id="pr::be::what_parent">What is a parent?</prompt>
+    <prompt id="pr::be::what_child">What is a child?</prompt>
+    <prompt id="pr::be::what_marriage">What is marriage?</prompt>
+    <prompt id="pr::be::what_love">What is love?</prompt>
+    <prompt id="pr::be::what_romance">What is romance?</prompt>
+    <prompt id="pr::be::what_relationship">What is relationship?</prompt>
+    <prompt id="pr::be::what_connection">What is connection?</prompt>
+    <prompt id="pr::be::what_male">What is male?</prompt>
+    <prompt id="pr::be::what_man">What is a man?</prompt>
+    <prompt id="pr::be::what_boy">What is a boy?</prompt>
+    <prompt id="pr::be::what_masculine">What is masculine?</prompt>
+    <prompt id="pr::be::what_he">What is he?</prompt>
+    <prompt id="pr::be::what_him">What is him?</prompt>
+    <prompt id="pr::be::what_husband">What is a husband?</prompt>
+    <prompt id="pr::be::what_boyfriend">What is a boyfriend?</prompt>
+    <prompt id="pr::be::what_father">What is a father?</prompt>
+    <prompt id="pr::be::what_brother">What is a brother?</prompt>
+    <prompt id="pr::be::what_grandfather">What is a grandfather?</prompt>
+    <prompt id="pr::be::what_female">What is a female?</prompt>
+    <prompt id="pr::be::what_woman">What is woman?</prompt>
+    <prompt id="pr::be::what_girl">What is a girl?</prompt>
+    <prompt id="pr::be::what_feminine">What is feminine?</prompt>
+    <prompt id="pr::be::what_she">What is she?</prompt>
+    <prompt id="pr::be::what_her">What is her?</prompt>
+    <prompt id="pr::be::what_wife">What is a wife?</prompt>
+    <prompt id="pr::be::what_girlfriend">What is a girlfriend?</prompt>
+    <prompt id="pr::be::what_mother">What is a mother?</prompt>
+    <prompt id="pr::be::what_sister">What is a sister?</prompt>
+    <prompt id="pr::be::what_grandmother">What is a grandmother?</prompt>
+    <prompt id="pr::be::what_rhythm">What is rhythm?</prompt>
+    <prompt id="pr::be::what_mind">What is mind?</prompt>
+    <prompt id="pr::be::what_mind_set">What is mind set?</prompt>
+    <prompt id="pr::be::what_conscious">What is conscious?</prompt>
+    <prompt id="pr::be::what_unconscious">What is unconscious?</prompt>
+    <prompt id="pr::be::what_subconscious">What is subconscious?</prompt>
+    <prompt id="pr::be::what_archetype">What is archetype?</prompt>
+    <prompt id="pr::be::what_psyche">What is psyche?</prompt>
+    <prompt id="pr::be::what_consciousness">What is consciousness?</prompt>
+    <prompt id="pr::be::what_awareness">What is awareness?</prompt>
+    <prompt id="pr::be::what_focus">What is focus?</prompt>
+    <prompt id="pr::be::what_clarity">What is clarity?</prompt>
+    <prompt id="pr::be::what_heart">What is heart?</prompt>
+    <prompt id="pr::be::what_brain">What is brain?</prompt>
+    <prompt id="pr::be::what_non_local">What is non-local?</prompt>
+    <prompt id="pr::be::what_non_linear">What is non-linear?</prompt>
+    <prompt id="pr::be::what_intuition">What is intuition?</prompt>
+    <prompt id="pr::be::what_conscience">What is conscience?</prompt>
+    <prompt id="pr::be::what_meditation">What is meditation?</prompt>
+    <prompt id="pr::be::what_mindfulness">What is mindfulness?</prompt>
+    <prompt id="pr::be::what_instinct">What is instinct?</prompt>
+    <prompt id="pr::be::what_nervous_system">What is the nervous system?</prompt>
+    <prompt id="pr::be::what_sympathetic">What is sympathetic?</prompt>
+    <prompt id="pr::be::what_parasympathetic">What is parasympathetic?</prompt>
+    <prompt id="pr::be::what_coherence">What is coherence?</prompt>
+    <prompt id="pr::be::what_hrv">What is hrv?</prompt>
+    <prompt id="pr::be::what_afferent">What is afferent?</prompt>
+    <prompt id="pr::be::what_vagus_nerve">What is the vagus nerve?</prompt>
+    <prompt id="pr::be::what_vagus_tone">What is vagus tone?</prompt>
+    <prompt id="pr::be::what_entrainment">What is entrainment?</prompt>
+    <prompt id="pr::be::what_essence">What is essence?</prompt>
+    <prompt id="pr::be::what_god">What is God?</prompt>
+    <prompt id="pr::be::what_faith">What is faith?</prompt>
+    <prompt id="pr::be::what_spirituality">What is spirituality?</prompt>
+    <prompt id="pr::be::what_spirit">What is spirit?</prompt>
+    <prompt id="pr::be::what_eternal">What is eternal?</prompt>
+    <prompt id="pr::be::what_grace">What is grace?</prompt>
+    <prompt id="pr::be::what_mercy">What is mercy?</prompt>
+    <prompt id="pr::be::what_beauty">What is beauty?</prompt>
+    <prompt id="pr::be::what_dance">What is dance?</prompt>
+    <prompt id="pr::be::what_music">What is music?</prompt>
+    <prompt id="pr::be::what_commitment">What is commitment?</prompt>
+    <prompt id="pr::be::what_doubt">What is doubt?</prompt>
+    <prompt id="pr::be::what_certainty">What is certainty?</prompt>
+    <prompt id="pr::be::what_order">What is order?</prompt>
+    <prompt id="pr::be::what_chaos">What is chaos?</prompt>
+    <prompt id="pr::be::what_tao">What is the Tao?</prompt>
+    <prompt id="pr::be::what_wu_wei">What is wu wei?</prompt>
+    <prompt id="pr::be::what_yin_yang">What is yin and yang?</prompt>
+    <prompt id="pr::be::what_conflict">What is conflict?</prompt>
+    <prompt id="pr::be::what_complementary">What is complementary?</prompt>
+    <prompt id="pr::be::what_contradictory">What is contradictory?</prompt>
+    <prompt id="pr::be::what_competition">What is competition?</prompt>
+    <prompt id="pr::be::what_cooperation">What is cooperation?</prompt>
+    <prompt id="pr::be::what_vs">What is vs?</prompt>
+    <prompt id="pr::be::what_comparison">What is comparison?</prompt>
+    <prompt id="pr::be::what_collaboration">What is collaboration?</prompt>
+    <prompt id="pr::be::what_discipline">What is discipline?</prompt>
+    <prompt id="pr::be::what_courage">What is courage?</prompt>
+    <prompt id="pr::be::what_wisdom">What is wisdom?</prompt>
+    <prompt id="pr::be::what_skill">What is skill?</prompt>
+    <prompt id="pr::be::what_perfect">What is perfect?</prompt>
+    <prompt id="pr::be::what_value">What is value?</prompt>
+    <prompt id="pr::be::what_quality">What is quality?</prompt>
   </prompts>
 
 
@@ -152,10 +325,6 @@
     <thought id="th::be::what_reality">I will provide the definition of reality.</thought>
     <thought id="th::be::what_subjective">I will provide the definition of subjective.</thought>
     <thought id="th::be::what_objective">I will provide the definition of objective.</thought>
-    <thought id="th::be::what_consciousness">I will provide the definition of consciousness.</thought>
-    <thought id="th::be::what_awareness">I will provide the definition of awareness.</thought>
-    <thought id="th::be::what_focus">I will provide the definition of focus.</thought>
-    <thought id="th::be::what_clarity">I will provide the definition of clarity.</thought>
     <thought id="th::be::what_statement">I will provide the definition of a statement.</thought>
     <thought id="th::be::what_question">I will provide the definition of a question.</thought>
     <thought id="th::be::what_truth">I will provide the definition of truth.</thought>
@@ -198,6 +367,183 @@
     <thought id="th::be::what_evaluate">I will provide the definition of evaluate.</thought>
     <thought id="th::be::what_precision">I will provide the definition of precision.</thought>
     <thought id="th::be::what_equipped">I will provide the definition of equipped.</thought>
+    <thought id="th::be::what_measurement">I will provide the definition of measurement.</thought>
+    <thought id="th::be::what_science">I will provide the definition of science.</thought>
+    <thought id="th::be::what_physics">I will provide the definition of physics.</thought>
+    <thought id="th::be::what_field">I will provide the definition of a field.</thought>
+    <thought id="th::be::what_universe">I will provide the definition of the universe.</thought>
+    <thought id="th::be::what_cosmos">I will provide the definition of cosmos.</thought>
+    <thought id="th::be::what_gravity">I will provide the definition of gravity.</thought>
+    <thought id="th::be::what_space">I will provide the definition of space.</thought>
+    <thought id="th::be::what_time">I will provide the definition of time.</thought>
+    <thought id="th::be::what_physical">I will provide the definition of physical.</thought>
+    <thought id="th::be::what_mass">I will provide the definition of mass.</thought>
+    <thought id="th::be::what_volume">I will provide the definition of volume.</thought>
+    <thought id="th::be::what_matter">I will provide the definition of matter.</thought>
+    <thought id="th::be::what_atom">I will provide the definition of an atom.</thought>
+    <thought id="th::be::what_oscillation">I will provide the definition of oscillation.</thought>
+    <thought id="th::be::what_frequency">I will provide the definition of frequency.</thought>
+    <thought id="th::be::what_wave">I will provide the definition of a wave.</thought>
+    <thought id="th::be::what_energy">I will provide the definition of energy.</thought>
+    <thought id="th::be::what_radiation">I will provide the definition of radiation.</thought>
+    <thought id="th::be::what_electromagnetic_radiation">I will provide the definition of electromagnetic radiation.</thought>
+    <thought id="th::be::what_light">I will provide the definition of light.</thought>
+    <thought id="th::be::what_galaxy">I will provide the definition of galaxy.</thought>
+    <thought id="th::be::what_milky_way">I will provide the definition of the milky way.</thought>
+    <thought id="th::be::what_star">I will provide the definition of a star.</thought>
+    <thought id="th::be::what_plasma">I will provide the definition of plasma.</thought>
+    <thought id="th::be::what_gas">I will provide the definition of gas.</thought>
+    <thought id="th::be::what_solar_system">I will provide the definition of a solar system.</thought>
+    <thought id="th::be::what_neighborhood">I will provide the definition of a neighborhood.</thought>
+    <thought id="th::be::what_orbit">I will provide the definition of orbit.</thought>
+    <thought id="th::be::what_sun">I will provide the definition of the Sun.</thought>
+    <thought id="th::be::what_planet">I will provide the definition of a planet.</thought>
+    <thought id="th::be::what_earth">I will provide the definition of the Earth.</thought>
+    <thought id="th::be::what_world">I will provide the definition of the world.</thought>
+    <thought id="th::be::what_celestial">I will provide the definition of celestial.</thought>
+    <thought id="th::be::what_terrestrial">I will provide the definition of terrestrial.</thought>
+    <thought id="th::be::what_aquatic">I will provide the definition of aquatic.</thought>
+    <thought id="th::be::what_mountain">I will provide the definition of a mountain.</thought>
+    <thought id="th::be::what_forest">I will provide the definition of a forest.</thought>
+    <thought id="th::be::what_fresh_water">I will provide the definition of fresh water.</thought>
+    <thought id="th::be::what_salt_water">I will provide the definition of salt water.</thought>
+    <thought id="th::be::what_atmosphere">I will provide the definition of atmosphere.</thought>
+    <thought id="th::be::what_vacuum">I will provide the definition of vacuum.</thought>
+    <thought id="th::be::what_greenhouse_effect">I will provide the definition of the greenhouse effect.</thought>
+    <thought id="th::be::what_vapor">I will provide the definition of vapor.</thought>
+    <thought id="th::be::what_air">I will provide the definition of air.</thought>
+    <thought id="th::be::what_breath">I will provide the definition of breath.</thought>
+    <thought id="th::be::what_carbon_dioxide">I will provide the definition of what_carbon_dioxide.</thought>
+    <thought id="th::be::what_nitrogen">I will provide the definition of nitrogen.</thought>
+    <thought id="th::be::what_oxygen">I will provide the definition of oxygen.</thought>
+    <thought id="th::be::what_argon">I will provide the definition of argon.</thought>
+    <thought id="th::be::what_wind">I will provide the definition of wind.</thought>
+    <thought id="th::be::what_satellite">I will provide the definition of a satellite.</thought>
+    <thought id="th::be::what_moon">I will provide the definition of a moon.</thought>
+    <thought id="th::be::what_tide">I will provide the definition of a tide.</thought>
+    <thought id="th::be::what_heat">I will provide the definition of heat.</thought>
+    <thought id="th::be::what_temperature">I will provide the definition of temperature.</thought>
+    <thought id="th::be::what_celsius">I will provide the definition of celsius.</thought>
+    <thought id="th::be::what_fahrenheit">I will provide the definition of fahrenheit.</thought>
+    <thought id="th::be::what_thermometer">I will provide the definition of a thermometer.</thought>
+    <thought id="th::be::what_hot">I will provide the definition of hot.</thought>
+    <thought id="th::be::what_cold">I will provide the definition of cold.</thought>
+    <thought id="th::be::what_water">I will provide the definition of water.</thought>
+    <thought id="th::be::what_water_cycle">I will provide the definition of the water cycle.</thought>
+    <thought id="th::be::what_cycle">I will provide the definition of cycle.</thought>
+    <thought id="th::be::what_system">I will provide the definition of a system.</thought>
+    <thought id="th::be::what_recycling">I will provide the definition of recycling.</thought>
+    <thought id="th::be::what_ocean">I will provide the definition of an ocean.</thought>
+    <thought id="th::be::what_lake">I will provide the definition of a lake.</thought>
+    <thought id="th::be::what_pond">I will provide the definition of a pond.</thought>
+    <thought id="th::be::what_river">I will provide the definition of a river.</thought>
+    <thought id="th::be::what_stream">I will provide the definition of a stream.</thought>
+    <thought id="th::be::what_photosynthesis">I will provide the definition of photosynthesis.</thought>
+    <thought id="th::be::what_food">I will provide the definition of food.</thought>
+    <thought id="th::be::what_life">I will provide the definition of life.</thought>
+    <thought id="th::be::what_organism">I will provide the definition of an organism.</thought>
+    <thought id="th::be::what_carbon">I will provide the definition of carbon.</thought>
+    <thought id="th::be::what_nutrients">I will provide the definition of nutrients.</thought>
+    <thought id="th::be::what_soil">I will provide the definition of soil.</thought>
+    <thought id="th::be::what_cell">I will provide the definition of a cell.</thought>
+    <thought id="th::be::what_bacteria">I will provide the definition of bacteria.</thought>
+    <thought id="th::be::what_caterpillar">I will provide the definition of a caterpillar.</thought>
+    <thought id="th::be::what_butterfly">I will provide the definition of a butterfly.</thought>
+    <thought id="th::be::what_family">I will provide the definition of family.</thought>
+    <thought id="th::be::what_baby">I will provide the definition of a baby.</thought>
+    <thought id="th::be::what_parent">I will provide the definition of a parent.</thought>
+    <thought id="th::be::what_child">I will provide the definition of a child.</thought>
+    <thought id="th::be::what_marriage">I will provide the definition of marriage.</thought>
+    <thought id="th::be::what_love">I will provide the definition of love.</thought>
+    <thought id="th::be::what_romance">I will provide the definition of romance.</thought>
+    <thought id="th::be::what_relationship">I will provide the definition of a relationship.</thought>
+    <thought id="th::be::what_connection">I will provide the definition of connection.</thought>
+    <thought id="th::be::what_male">I will provide the definition of male.</thought>
+    <thought id="th::be::what_man">I will provide the definition of man.</thought>
+    <thought id="th::be::what_boy">I will provide the definition of a boy.</thought>
+    <thought id="th::be::what_masculine">I will provide the definition of masculine.</thought>
+    <thought id="th::be::what_he">I will provide the definition of he.</thought>
+    <thought id="th::be::what_him">I will provide the definition of him.</thought>
+    <thought id="th::be::what_husband">I will provide the definition of a husband.</thought>
+    <thought id="th::be::what_boyfriend">I will provide the definition of a boyfriend.</thought>
+    <thought id="th::be::what_father">I will provide the definition of a father.</thought>
+    <thought id="th::be::what_brother">I will provide the definition of a brother.</thought>
+    <thought id="th::be::what_grandfather">I will provide the definition of a grandfather.</thought>
+    <thought id="th::be::what_female">I will provide the definition of a female.</thought>
+    <thought id="th::be::what_woman">I will provide the definition of a woman.</thought>
+    <thought id="th::be::what_girl">I will provide the definition of a girl.</thought>
+    <thought id="th::be::what_feminine">I will provide the definition of feminine.</thought>
+    <thought id="th::be::what_she">I will provide the definition of she.</thought>
+    <thought id="th::be::what_her">I will provide the definition of her.</thought>
+    <thought id="th::be::what_wife">I will provide the definition of a wife.</thought>
+    <thought id="th::be::what_girlfriend">I will provide the definition of a girlfriend.</thought>
+    <thought id="th::be::what_mother">I will provide the definition of a mother.</thought>
+    <thought id="th::be::what_sister">I will provide the definition of a sister.</thought>
+    <thought id="th::be::what_grandmother">I will provide the definition of a grandmother.</thought>
+    <thought id="th::be::what_rhythm">I will provide the definition of rhythm.</thought>
+    <thought id="th::be::what_mind">I will provide the definition of mind.</thought>
+    <thought id="th::be::what_mind_set">I will provide the definition of mind set.</thought>
+    <thought id="th::be::what_conscious">I will provide the definition of conscious.</thought>
+    <thought id="th::be::what_unconscious">I will provide the definition of unconscious.</thought>
+    <thought id="th::be::what_subconscious">I will provide the definition of subconscious.</thought>
+    <thought id="th::be::what_archetype">I will provide the definition of archetype.</thought>
+    <thought id="th::be::what_psyche">I will provide the definition of psyche.</thought>
+    <thought id="th::be::what_consciousness">I will provide the definition of consciousness.</thought>
+    <thought id="th::be::what_awareness">I will provide the definition of awareness.</thought>
+    <thought id="th::be::what_focus">I will provide the definition of focus.</thought>
+    <thought id="th::be::what_clarity">I will provide the definition of clarity.</thought>
+    <thought id="th::be::what_heart">I will provide the definition of heart.</thought>
+    <thought id="th::be::what_brain">I will provide the definition of brain.</thought>
+    <thought id="th::be::what_non_local">I will provide the definition of non-local.</thought>
+    <thought id="th::be::what_non_linear">I will provide the definition of non-linear.</thought>
+    <thought id="th::be::what_intuition">I will provide the definition of intuition.</thought>
+    <thought id="th::be::what_conscience">I will provide the definition of conscience.</thought>
+    <thought id="th::be::what_meditation">I will provide the definition of meditation.</thought>
+    <thought id="th::be::what_mindfulness">I will provide the definition of mindfulness.</thought>
+    <thought id="th::be::what_instinct">I will provide the definition of instinct.</thought>
+    <thought id="th::be::what_nervous_system">I will provide the definition of the nervous system.</thought>
+    <thought id="th::be::what_sympathetic">I will provide the definition of sympathetic.</thought>
+    <thought id="th::be::what_parasympathetic">I will provide the definition of parasympathetic.</thought>
+    <thought id="th::be::what_coherence">I will provide the definition of coherence.</thought>
+    <thought id="th::be::what_hrv">I will provide the definition of hrv.</thought>
+    <thought id="th::be::what_afferent">I will provide the definition of afferent.</thought>
+    <thought id="th::be::what_vagus_nerve">I will provide the definition of the vagus nerve.</thought>
+    <thought id="th::be::what_vagus_tone">I will provide the definition of the vagus tone.</thought>
+    <thought id="th::be::what_entrainment">I will provide the definition of entrainment.</thought>
+    <thought id="th::be::what_essence">I will provide the definition of essence.</thought>
+    <thought id="th::be::what_god">I will provide the definition of God.</thought>
+    <thought id="th::be::what_faith">I will provide the definition of faith.</thought>
+    <thought id="th::be::what_spirituality">I will provide the definition of spirituality.</thought>
+    <thought id="th::be::what_spirit">I will provide the definition of spirit.</thought>
+    <thought id="th::be::what_eternal">I will provide the definition of eternal.</thought>
+    <thought id="th::be::what_grace">I will provide the definition of grace.</thought>
+    <thought id="th::be::what_mercy">I will provide the definition of mercy.</thought>
+    <thought id="th::be::what_beauty">I will provide the definition of beauty.</thought>
+    <thought id="th::be::what_dance">I will provide the definition of dance.</thought>
+    <thought id="th::be::what_music">I will provide the definition of music.</thought>
+    <thought id="th::be::what_commitment">I will provide the definition of commitment.</thought>
+    <thought id="th::be::what_doubt">I will provide the definition of doubt.</thought>
+    <thought id="th::be::what_certainty">I will provide the definition of certainty.</thought>
+    <thought id="th::be::what_order">I will provide the definition of order.</thought>
+    <thought id="th::be::what_chaos">I will provide the definition of chaos.</thought>
+    <thought id="th::be::what_tao">I will provide the definition of tao.</thought>
+    <thought id="th::be::what_wu_wei">I will provide the definition of wu wei.</thought>
+    <thought id="th::be::what_yin_yang">I will provide the definition of yin and yang.</thought>
+    <thought id="th::be::what_conflict">I will provide the definition of conflict.</thought>
+    <thought id="th::be::what_complementary">I will provide the definition of complementary.</thought>
+    <thought id="th::be::what_contradictory">I will provide the definition of contradictory.</thought>
+    <thought id="th::be::what_competition">I will provide the definition of competition.</thought>
+    <thought id="th::be::what_cooperation">I will provide the definition of cooperation.</thought>
+    <thought id="th::be::what_vs">I will provide the definition of vs.</thought>
+    <thought id="th::be::what_comparison">I will provide the definition of comparison.</thought>
+    <thought id="th::be::what_collaboration">I will provide the definition of collaboration.</thought>
+    <thought id="th::be::what_discipline">I will provide the definition of discipline.</thought>
+    <thought id="th::be::what_courage">I will provide the definition of courage.</thought>
+    <thought id="th::be::what_wisdom">I will provide the definition of wisdom.</thought>
+    <thought id="th::be::what_skill">I will provide the definition of skill.</thought>
+    <thought id="th::be::what_perfect">I will provide the definition of perfect.</thought>
+    <thought id="th::be::what_value">I will provide the definition of value.</thought>
+    <thought id="th::be::what_quality">I will provide the definition of quality.</thought>
   </thoughts>
 
 
@@ -212,7 +558,8 @@
 - Language uses symbols (words, sounds &amp; gestures) and rules (grammar or syntax) to combine those symbols in an infinite number of ways to express and exchange ideas, feelings, information, and experiences.</response>
 
     <response id="re::be::what_alphabet">- The english alphabet is the complete, ordered set of letters used to write the sounds of the english language.
-- The ordered letters in the alphabet are: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z</response>
+- The ordered letters of the alphabet in uppercase letters are: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+- The ordered letters of the alphabet in lowercase letters are: a b c d e f g h i j k l m n o p q r s t u v w x y z</response>
 
     <response id="re::be::what_vibration">- A vibration is a rapid back-and-forth motion of an object around a central position.
 - If we pluck a guitar string, it does not stay still. It vibrates left, then right, then left, then right, hundreds of times per second. The back-and-forth motion is a vibration.
@@ -800,33 +1147,6 @@
     - The Earth orbits the Sun.
 - Objective is the perspective that tries to eliminate individual bias (using multiple observers, instruments, and math).</response>
 
-    <response id="re::be::what_consciousness">- Consciousness is the fundamental subjective experience.
-- Consciousness is "what it is like" to be someone.
-- Consciousness is the fact that there is something it feels like to be you right now.
-- While consciousness is the capacity for experience, awareness is the current contents of that experience.</response>
-
-    <response id="re::be::what_awareness">- Awareness is the scope of what is present within ones consciousness.
-- If consciousness is the stage, awareness is the total amount of light illuminating the stage.
-- Awareness can be broad (taking in the whole room) or narrow (absorbed in a single thought).
-- While consciousness is the capacity for experience, awareness is the current contents of that experience.</response>
-
-    <response id="re::be::what_focus">- Focus is the selective concentration of awareness on a specific object, while excluding others.
-- Focus is the mechanism that allocates cognitive resources to what is most important to us right now.
-- Focus is the spotlight of our attention that brings details within our awareness into high resolution clarity.</response>
-
-    <response id="re::be::what_clarity">- Clarity is the quality of being easy to understand.
-- Example:
-    - Unclear: The event will happen at some point in the near future.
-    - Clear: The event will happen on Tuesday at 3 PM.
-    - Unclear: She felt a certain way about the thing.
-    - Clear: She was ecstatic about the her crush asking her on a date.
-- What creates clarity?
-    - Simple words.
-    - Short sentences.
-    - Specific examples.
-    - Logical order (first this, then that).
-- Clarity is free from confusion, ambiguity, or obscurity.</response>
-
     <response id="re::be::what_statement">- A statement is a sentence that says something.
 - A statement can be either true or false.
 - A statement claims something about the world and is the kind of sentence where it makes sense to ask: "Is that true?".
@@ -1225,7 +1545,1614 @@
     <response id="re::be::what_equipped">- Equipped means having the tools, knowledge, skills, and resources needed to handle a situation or perform an action.
 - Equipped focuses on the tools we have and prepared focuses on our readiness, which includes tools but also includes our mindset and planning.
 - Equipped means we have what we need before we need it.</response>
+
+    <response id="re::be::what_measurement">- Measurement is the process of comparing a physical quantity to a fixed standard unit.
+- If we want to know how long a table is, measurement is how we compare the table to a ruler—and say "the table is three feet long".
+- Every measurement has a number (how many) and a unit (what kind).
+- Example: 5 meters (5 = number, meters = unit).
+- Measurement allows us to describe the world precisely and predictably.
+- Measurement is how we may know the exact times per minute our heart is beating (example: 72 times per minute).
+- Measurement is the mapping of a physical property to a numerical value using a defined scale and unit.</response>
+
+    <response id="re::be::what_science">- Science is a systematic method of learning about the universe through observation, experimentation, and the testing of ideas against evidence.
+- The Scientific Method:
+    1. Observe: Notice something about the world.
+    2. Question: Ask why it happens.
+    3. Hypothesize: Propose a testable explanation.
+    4. Predict: State what we would expect to see if our hypothesis is true.
+    5. Experiment: Test the prediction.
+    6. Analyze: Look at the data. Did it support our hypothesis?
+    7. Refine or Share: Adjust the idea or share it for others to test.
+- Science does not claim to have absolute truth.
+    - Science claims to have the best current explanation based on the available evidence.
+    - When new evidence arrives, science changes.
+- Science is a method for of asking questions objectively.</response>
+
+    <response id="re::be::what_physics">- Physics is the scientific study of the fundamental laws that govern matter, energy, space, time, and their interactions.
+- What physics asks:
+    - Why do things fall?
+    - What is light made of?
+    - How do stars burn?
+    - What is time?
+    - What holds atoms together?
+    - What happened at the beginning of the universe?
+- Sciences:
+    - Physics: Studies the fundamental laws of matter, energy, space, time.
+    - Chemistry: Studies how atoms combine into molecules.
+    - Biology: Studies how living things work.
+    - Geology: Studies how planets work.
+    - Astronomy: How stars and galaxies work.
+- Physics is the empirical science concerned with the fundamental constituents of the universe.</response>
+
+    <response id="re::be::what_field">- A field is an invisible region of influence that surrounds an object and exerts forces on other objects without physical contact.
+- When we hold two magnets near each other and feel them push or pull without touching we feel a field.
+- Before fields, people thought objects could only affect each other by touching.
+- Fields explain how the sun affects the Earth across 93 million miles of empty space.
+- Examples of fields:
+    - Gravitational field:
+        - Created by any object with mass and affects any other object with mass.
+        - Example: The Earth's gravity field pulls the Moon.
+    - Electric field:
+        - Created by an electric charge and affects other electric charges.
+        - Example: A static charge can make our hair stand up.
+    - Magnetic field:
+        - Created by a moving electric charge (or a magnet) and affects other moving charges (or magnets).
+        - Example: A compass pointing north.
+    - Electromagnetic field:
+        - Created by the unified field that combines electricity and magnetism and affects charged particles and light.
+        - Example: Radio waves, light and X-rays.
+- A field is a mathematical function that assigns a value (scalar, vector, or tensor) to every point in space and time, representing the influence of a source on its surroundings.</response>
+
+    <response id="re::be::what_universe">- The universe is the totality of all matter, energy, space, time, and the physical laws that govern them.
+- If there is an "everything", the universe is that everything. There is no outside the universe.
+- There is no before the universe b/c time began with the universe.
+- There is no after the universe b/c time ends with the universe.
+- The universe contains all matter (every star, planet, atom).
+- The universe contains all energy (every wave, every particle, every field).
+- The universe contains all space (every where, every dimension).
+- The universe contains all time (every when, from the beginning to the end).
+- The universe follows physical laws (gravity, electromagnetism, quantum mechanics) that appears to be the same everywhere.
+- The observable universe (what we can see) is about 93 billion light-years in diameter.
+    - A light-year is the distance light travels in one year: about 9.46 trillion kilometers.
+    - The total universe may be infinite. We do not know.
+- The universe is about 13.8 billion years old.
+    - The universe began with the Big Bang—the expansion of space itself.
+- The universe is everything that has ever existed, everything that does exist, and everything that ever will exist.
+- The universe is the complete spatiotemporal system containing all matter, energy, fields, and physical interactions, governed by consistent physical laws, extending possibly infinitely in space and having a finite age of approximately 13.8 billion years.</response>
+
+    <response id="re::be::what_cosmos">The cosmos is the universe.</response>
+
+    <response id="re::be::what_gravity">- Gravity is the attractive force that exists between any two objects that have mass.
+- According to Isaac Newton (1687):
+    - Gravity is a force that pulls objects toward each other.
+    - Every object with mass attracts every other object with mass.
+    - More mass = stronger gravity.
+    - Farther apart = weaker gravity.
+- According to Albert Einstein (1915):
+    - Gravity is not a force in the traditional sense but the curvature of spacetime caused by mass and energy.
+    - Mass and energy tell spacetime how to curve.
+    - What we feel as gravity is us falling along the curves in spacetime.
+- Gravity is why we stay on the ground, why the Moon orbits the Earth, and why the Earth orbits the Sun.
+- Gravity is not a pull, gravity is a fall b/c we are falling toward the center of the Earth right now but the ground keeps getting in the way of our fall.</response>
+
+    <response id="re::be::what_space">- Space is the three-dimensional container in which all physical things exist and all events happen.
+- Space has three dimensions: length, width, and height.
+- Space exists whether or not anything is in it (empty space is still space).
+- Space allows things to be here or there, near or far.
+- Space is what we move through as we walk from one place to another.
+- Space is a three-dimensional coordinate system (x, y, z) in which objects have positions and distances.</response>
+
+    <response id="re::be::what_time">- Time is the dimension in which events occur in sequence—from past, through present, into future.
+- Time has one dimension (past → future).
+- Time moves in only one direction (forward).
+- Time allows us to say before or after, earlier or later.
+- Time is a linear coordinate (t) along which events are ordered from earlier to later.</response>
+
+    <response id="re::be::what_physical">- Physical means relating to matter, energy, space, and time.
+- Physical is anything that can be measured, observed, or detected by instruments.
+- If something is physical, it is part of the observable universe and follows the laws of physics.
+- Examples of physical things:
+    - A rock, a sound wave, light, heat, a magnetic field.
+- What is NOT physical:
+    - Thoughts, emotions, meanings, numbers, concepts (these are abstract or mental).
+- Physical is everything a machine can detect and/or everything we can see, hear, touch, taste and/or smell.
+- Physical describes any entity or phenomenon that has measurable effects on matter, energy, space, and/or time.</response>
+
+    <response id="re::be::what_mass">- Mass is the measure of how much matter something contains.
+- Mass is also the measure of how hard it is to change an object's motion.
+- The more mass an object has, the harder to it is to push or stop.
+- The more mass an object has, the stronger gravitational pull the object has.
+- The more mass an object has, the heavier the object is.
+- Mass is what makes a bowling ball harder to throw than a tennis ball.
+- Mass is a scalar property of matter that determines its resistance to acceleration (inertia) and its gravitational force.</response>
+
+    <response id="re::be::what_volume">- Volume is the measure of how much space an object takes up.
+- If mass is "how much stuff" then volume is "how much room the stuff needs".
+- Volume is measured in cubic meters (m³), liters (L), or milliliters (mL).
+- Two objects can have the same volume but different mass 
+    - Example: A balloon and a rock of the same size.
+- Volume is how much water would spill out if we dropped an object into a full bucket.
+- Volume is the three-dimensional extent of an object, measured in units of length cubed.</response>
+
+    <response id="re::be::what_matter">- Matter is anything that has mass and takes up space (has volume).
+- Examples of matter:
+    - A rock, a tree, a drop of water, our body and the air we breathe.
+- What is NOT matter::
+    - Light, heat, sound, thoughts, feelings. (These are forms of energy)
+- Matter is everything we can touch, hold, or bump into.
+- Matter is any physical substance with the properties of mass and volume.</response>
+
+    <response id="re::be::what_atom">- An atom is the smallest unit of an element that still retains the properties of that element.
+- An atom is the basic building block of all matter.
+- If matter is a house, an atom is a single brick.
+- An atom is the smallest constituent unit of ordinary matter that has the properties of a chemical element, consisting of a nucleus of protons and neutrons surrounded by a cloud of electrons.
+- We are made of atoms. The chair is made of atoms. The air is made of atoms. The stars are made of atoms. Everything is atoms.</response>
+
+    <response id="re::be::what_oscillation">- Oscillation is a repeated back-and-forth or up-and-down motion around a central position.
+- Oscillation is one complete back-and-forth cycle.
+- Frequency	is how many oscillations happen in one second.
+- A wave has frequency (how many complete oscillations occur per second), wavelength (the distance between one oscillation peak and the next), and amplitude (the maximum height of the oscillation, which determines how much energy the wave carries).</response>
+
+    <response id="re::be::what_frequency">- Frequency is the number of times something repeats in a given amount of time.
+- If a drummer hits a drum once per second, frequency is "one hit per second" —how often the event happens.
+- Frequency is measured in Hertz (Hz) , where 1 Hz = 1 time per second.
+- Higher frequency = more events in the same time (faster repetition).
+- Lower frequency = fewer events in the same time (slower repetition).
+- Frequency (f) is the number of cycles of a repeating event per unit time, typically measured in Hertz (cycles per second).
+- Frequency	is how many oscillations happen in one second.
+- A wave has frequency (how many complete oscillations occur per second), wavelength (the distance between one oscillation peak and the next), and amplitude (the maximum height of the oscillation, which determines how much energy the wave carries).</response>
+
+    <response id="re::be::what_wave">- A wave is a disturbance that travels through space and time.
+- Waves transfer energy from one place to another without transferring matter.
+- If we drop a stone in a pond, the ripples are waves and the water moves up and down, but the water itself does not travel across the pond b/c only the energy travels.
+- A wave has frequency (how many complete oscillations occur per second), wavelength (the distance between one oscillation peak and the next), and amplitude (the maximum height of the oscillation, which determines how much energy the wave carries).
+- A wave is a propagating oscillation that transfers energy through space.</response>
+
+    <response id="re::be::what_energy">- Formula: E = mc²
+    - E: Energy
+    - m: Mass
+    - c: The speed of Light
+    - The energy of an object is equal to the mass of that object times the squared speed of light.
+    - Energy and mass are two forms of the same thing b/c the squared speed of light is a constant.
+    - E = mc² is the mass-energy equivalence equation.
+    - A tiny amount of mass contains a staggering amount of energy b/c the squared speed of light is an enormous number.
+- Every time we feel the warmth of the Sun, we are feeling mass being turned into energy 93 million miles away.
+- Energy is measured in joules (J).
+- In humans energy is the measurable bioelectromagnetic field that carries physiological and emotional information.</response>
+
+    <response id="re::be::what_radiation">- Radiation is the emission of energy as waves through space.
+- Ionizing radiation is powerful enough to remove electrons from atoms and can be dangerous.
+- Non-ionizing radiation is gentle and safe for everyday exposure.
+- Radiation is the warmth we feel from a campfire, the signal that reaches our radio, and the X-ray that sees our bones.
+- Radiation is energy emitted by a source that travels outward in all directions as waves (electromagnetic).</response>
+
+    <response id="re::be::what_electromagnetic_radiation">- Electromagnetic radiation is a type of energy that travels as waves of electric and magnetic fields.
+- Electromagnetic radiation is moving at the speed of light through empty space.
+- All electromagnetic radiation is light and exists w/in the electromagnetic spectrum.
+- Not all light is visible to the human eye.
+- The Electromagnetic Spectrum:
+    - Radio waves:
+        - Lowest frequency.
+        - Wavelength is meters to kilometers long.
+        - Examples: Radio, Wi-Fi, cell phones.
+    - Microwaves:
+        - Low frequency.
+        - Wavelength is centimeters long.
+        - Examples: Microwave ovens, radar.
+    - Infrared:
+        - Medium-low frequency.
+        - Wavelength is millimeters to micrometers long.
+        - Examples: Remote controls, heat sensors.
+    - Visible light:
+        - Medium frequency.
+        - Wavelength is 400-700 nanometers long.
+        - Example: Human vision.
+    - Ultraviolet (UV):
+        - Medium-high frequency.
+        - Wavelength is nanometers long.
+        - Examples: Sunburns, sterilization.
+    - X-rays:
+        - High frequency.
+        - Wavelength is very short (picometers).
+        - Example: Medical imaging.
+    - Gamma rays:
+        - Highest frequency.
+        - Shortest wavelength (femtometers).
+        - Examples: Cancer treatment, nuclear reactions.
+- All electromagnetic radiation travels at the speed of light.
+- Higher frequency = higher energy.</response>
+
+    <response id="re::be::what_light">- Light includes all of the is electromagnetic radiation w/in the entire electromagnetic spectrum.
+- Every time we listen to the radio we are detecting light.
+- Every time we get an X-ray we are being photographed with light.
+- Every time we feel the warmth of the sun on our skin we are feeling infrared light.
+- Visible light is just the tiny slice of the light family that your eyes have evolved to see.</response>
+
+    <response id="re::be::what_galaxy">-A galaxy is a massive, gravitationally bound system of stars, stellar remnants, gas, dust, and dark matter.
+- Key facts about galaxies:
+    - Size: Tens of thousands to hundreds of thousands of light-years across.
+    - Number of stars: Hundreds of billions (our galaxy has about 100-400 billion stars).
+    - Held together by: Gravity (and dark matter, which we cannot see but can measure).
+- Examples of galaxies:
+    - Milky Way: Our home
+    - Andromeda: About 2.5 million light-years away
+    - Large Magellanic Cloud: About 160,000 light-years away
+- A galaxy is an island of stars in the vast ocean of space.
+- There are hundreds of billions of other galaxies.</response>
+
+    <response id="re::be::what_milky_way">- The Milky Way is the galaxy that contains our solar system.
+- The Milky Way is about 100,000 light-years across and contains 100 to 400 billion stars.
+- The Milky Way is about 13.6 billion years old (almost as old as the universe).
+- Earth is about 26,000 light-years from the galactic center, in one of the spiral arms named the Orion Arm.
+- Every star we can see with our eyes in the sky is w/in the Milky Way.</response>
+
+    <response id="re::be::what_star">- A star is a massive, glowing sphere of plasma held together by its own gravity, which generates energy through nuclear fusion in its core.
+- Properties of a Star:
+    - Plasma: A superheated gas where electrons are stripped from atoms.
+    - Gravity: The star's own weight squeezes its core.
+    - Fusion: The core is so hot and pressured that hydrogen atoms smash together to form helium, releasing enormous energy.
+    - Light: The energy escapes as electromagnetic radiation (light, heat, X-rays).
+- The life of a star:
+    - Birth: A cloud of gas and dust collapses under its own gravity.
+    - Life: Fusion burns hydrogen into helium in the core. The star shines steadily for millions or billions of years.
+    - Death: When the hydrogen runs out, the star swells, then collapses or explodes, depending on its mass.
+- We are made of stardust.
+    - Every atom heavier than hydrogen and helium was forged inside a star.
+- A star is a Sun that looks like a tiny point of light but each star is an enormous, burning world.
+- A star produces electromagnetic radiation.</response>
+
+    <response id="re::be::what_plasma">- Plasma is the fourth state of matter.
+- Plasma is a superheated, ionized gas in which electrons are stripped from their atoms, creating a soup of charged particles that conducts electricity and responds to magnetic fields.
+- The four states of matter:
+    1. Solid:
+        - Shape: Fixed.
+        - Volume: Fixed.
+        - Particles locked in place, vibrating.
+        - Energy level: Lowest.
+        - Examples: Ice, rock, wood.
+    2. Liquid:
+        - Shape: Takes shape of container.
+        - Volume: Fixed.
+        - Particles slide past each other.
+        - Energy level: Low.
+        - Examples: Water, oil, milk.
+    3. Gas:
+        - Shape: Fills entire container.
+        - Volume: Expands to fill container.
+        - Particles fly freely, bouncing off walls.
+        - Energy level: Medium.
+        - Examples: Air, helium, steam.
+    4. Plasma:
+        - Shape: Fills container.
+        - Volume: Expands.
+        - Ionized gas (electrons stripped from atoms).
+        - Energy level: Highest.
+        - Examples: Lightning, stars, neon signs.
+- More than 99% of the visible universe is plasma. Stars, nebulae, solar wind, the gas between galaxies—all plasma.
+- Plasma is what the Sun is made of. It is what lightning is made of. It is the most common state of matter in the universe—and the least common on Earth.</response>
+
+    <response id="re::be::what_gas">- Gas is one of the four fundamental states of matter (solid, liquid, gas, plasma).
+- The four states of matter:
+    1. Solid:
+        - Shape: Fixed.
+        - Volume: Fixed.
+        - Particles locked in place, vibrating.
+        - Energy level: Lowest.
+        - Examples: Ice, rock, wood.
+    2. Liquid:
+        - Shape: Takes shape of container.
+        - Volume: Fixed.
+        - Particles slide past each other.
+        - Energy level: Low.
+        - Examples: Water, oil, milk.
+    3. Gas:
+        - Shape: Fills entire container.
+        - Volume: Expands to fill container.
+        - Particles fly freely, bouncing off walls.
+        - Energy level: Medium.
+        - Examples: Air, helium, steam.
+    4. Plasma:
+        - Shape: Fills container.
+        - Volume: Expands.
+        - Ionized gas (electrons stripped from atoms).
+        - Energy level: Highest.
+        - Examples: Lightning, stars, neon signs.
+- Examples of gases:
+    - Air (mixture)
+    - Oxygen (O₂)
+    - Nitrogen (N₂)
+    - Carbon dioxide (CO₂)
+    - Helium (He)
+    - Hydrogen (H₂)
+    - Methane (CH₄)</response>
+
+    <response id="re::be::what_solar_system">- A solar system is a collection of a Sun planets their moons and countless smaller objects (asteroids, comets, dwarf planets) all bound together by the Sun's gravity.
+- If the Sun is the parent, the solar system is the family—everyone and everything held in the Sun's gravitational embrace.
+- Our solar system:
+    - Is 4.6 billion years old.
+    - Is he collection of the Sun, its eight planets, their moons, and countless smaller objects.
+    - Holds 99.86% of its mass w/in our Sun.
+- The solar system is our cosmic neighborhood. The Sun is our home star. The planets are our siblings in space.
+- The solar system is a gravitationally bound planetary system consisting of the Sun, eight planets, five officially recognized dwarf planets, hundreds of moons, and millions of smaller bodies
+- The eight planets in our solar system, listed in order from the Sun outward, are Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, and Neptune.</response>
+
+    <response id="re::be::what_neighborhood">- A neighborhood is a small, familiar, local area within a larger community.
+- In astronomy, "our cosmic neighborhood" refers to the region of space immediately surrounding Earth—the Solar System and the nearest stars.
+- At a cosmic level our neighborhood is our Solar System.
+- At a human level our neighborhood is the town we live in.</response>
+
+    <response id="re::be::what_orbit">- An orbit is the curved path that one object takes around another object due to gravity.
+- Newton's cannonball example:
+    1. Imagine a cannon on a very tall mountain.
+    2. Fire a cannonball. It falls to the ground.
+    3. Fire it faster. It lands farther away.
+    4. Fire it fast enough. It falls around the Earth—always falling, always missing. That is an orbit.
+- An orbit is the gravitationally curved trajectory of a smaller body around a larger body, described mathematically by Kepler's laws of planetary motion and Newton's law of universal gravitation.
+- An orbit is the art of falling without ever landing.</response>
+
+    <response id="re::be::what_sun">- The Sun is the star at the center of our solar system.
+- The Sun is a massive sphere of hot plasma that provides the energy for nearly all life on Earth.
+- The Suns gravity holds the solar system together.
+- The Suns light warms the Earth and powers photosynthesis (the basis of the food chain).
+- The Suns energy drives weather, ocean currents, and the climate.
+- The Suns energy source is nuclear fusion (converting hydrogen into helium).
+- The Sun is about 1.39 million kilometers (864,000 miles) — 109 times Earth's diameter.
+- The Sun is the reason we can see, the reason we are warm, and the reason anything grows.
+- Every meal we have ever eaten is stored sunlight.
+- Earth is about 150 million kilometers (93 million miles) from the Sun.
+- The Sun is composed primarily of hydrogen (73%) and helium (25%).</response>
+
+    <response id="re::be::what_planet">- A planet is a large, round celestial body that orbits a star.
+- A planet is not a star itself, and has cleared its orbital neighborhood of other debris.
+- If a star is a parent, a planet is a child.
+- The three criteria for being a planet:
+    1. Orbits a star.
+    2. Is round. Its own gravity pulls it into a sphere.
+    3. Cleared its orbit. It is the dominant gravitational body in its neighborhood.
+- What are not planets:
+    - Dwarf planets (like Pluto): Pluto orbits the Sun and is round but has not cleared its orbits.
+    - Moons: Orbit planets, not stars.
+    - Asteroids: Not round.</response>
+
+    <response id="re::be::what_earth">- Earth is the third planet from the Sun.
+- If the universe is a vast ocean, Earth is your boat.
+- The Earth diameter is about 12,742 kilometers (7,918 miles).
+- Earth is about 150 million kilometers (93 million miles) from the Sun.
+- Eath is 78% nitrogen and 21% oxygen.
+- Earth has a magnetic field that protects us from solar wind, an atmosphere that shields us from radiation, and a Moon that stabilizes our seasons.
+- Earth is the ground we stand on, the air we breathe and has and abundant amount of surface water.</response>
+
+    <response id="re::be::what_world">- World is Earth.</response>
+
+    <response id="re::be::what_celestial">- Celestial refers to anything outside Earth's atmosphere.
+- Celestial includes stars, planets, moons, comets, galaxies, and the space between them.
+- Celestial is of the sky (stars, planets, moons, galaxies), terrestrial is of the land (mountains, forests, deserts, grasslands, soil) and aquatic is of the water (oceans, lakes, rivers, streams, swamps).</response>
+
+    <response id="re::be::what_terrestrial">- Terrestrial means "of or relating to the Earth" or "living on land".
+- Terrestrial is the ground we walk on.
+- Terrestrial is everything that is not sky and not water.
+- Celestial is of the sky (stars, planets, moons, galaxies), terrestrial is of the land (mountains, forests, deserts, grasslands, soil) and aquatic is of the water (oceans, lakes, rivers, streams, swamps).</response>
+
+    <response id="re::be::what_aquatic">- Aquatic means of or relating to water. It is the opposite of terrestrial (land) and aerial (air).
+- Types of aquatic organisms (who lives in water):
+    - Fish: Live in water their whole lives (examples: salmon, trout, clownfish, sharks)
+    - Mammals: Breathe air, but live in or near water (examples: whales, dolphins, seals, otters)
+    - Reptiles: Some live in water, some visit (examples: sea turtles, alligators, sea snakes)
+    - Amphibians: Start in water (as tadpoles), live on land as adults (examples: frogs, salamanders, newts)
+    - Plants: Grow in or near water (examples: seaweed, algae, water lilies, cattails)
+    - Invertebrates: No backbone (examples: crabs, lobsters, clams, jellyfish, coral)
+    - Microorganisms: Microscopic, form the base of aquatic food webs (examples: phytoplankton, zooplankton, bacteria)
+- Aquatic is any water (fresh or salt) and marine is salt water only.
+- Aquatic is the world of water—the place where fish swim, rivers flow, and your bodies becomes buoyant.</response>
+
+    <response id="re::be::what_mountain">- A mountain is a large landform that rises significantly above the surrounding terrain, typically with steep slopes, a defined summit, and an elevation of at least 300 meters (1,000 feet) above the surrounding area.
+- A mountain is the Earth reaching up to touch the sky. It is where the air gets thin, the snow may stay year-round, and the world looks small beneath us.</response>
+
+    <response id="re::be::what_forest">- A forest is a large area of land dominated by trees.
+- A forest includes a living community of plants, animals, fungi, and microorganisms that forms a complex, interconnected ecosystem.
+- Forest Purpose:
+    - Produce oxygen: Trees release oxygen during photosynthesis.
+    - Absorb carbon dioxide: Trees store carbon in their wood, helping regulate the climate.
+    - Provide habitat: 80% of terrestrial biodiversity lives in forests.
+    - Regulate water: Forests absorb rain, reduce flooding, and release water slowly.
+    - Prevent erosion: Tree roots hold soil in place.
+    - Cool the air: Trees provide shade and release water vapor (transpiration).
+- A forest is a quiet cathedral of green. It is the lungs of the planet, the home of countless creatures, and the place we go to remember that we are not alone.</response>
+
+    <response id="re::be::what_fresh_water">- Fresh water is water that contains very low concentrations of dissolved salts.
+- Fresh water is typically less than 1 gram of salt per liter (less than 0.1% salt).
+- Only about 2.5% of Earth's water is fresh water. Of that, most is frozen in ice caps and glaciers. The fresh water available in lakes, rivers, and groundwater is a tiny fraction of a tiny fraction.
+- Fresh water is the water we drink, the water that grows our food, and the water that keeps us alive. It is rare, precious, and worth protecting.</response>
+
+    <response id="re::be::what_salt_water">- Salt water is water that contains significant concentrations of dissolved salts.
+- Salt water is typically about 35 grams of salt per liter (3.5% salt) in the open ocean.
+- Why the ocean is salty:
+    - Rain falls on land, slightly acidic.
+    - The rain erodes rocks, dissolving minerals (including salt).
+    - Rivers carry these dissolved minerals to the ocean.
+    - Water evaporates from the ocean, leaving the salts behind.
+    - Over billions of years, the salts have accumulated.
+- Drinking seawater dehydrates us and can lead to kidney failure and/or death.
+- Salt water is water with dissolved salt concentration typically 30-50 g/L (3-5%), primarily sodium chloride, comprising 96.5% of Earth's water, found in oceans and seas, and unsuitable for human consumption without desalination.</response>
+
+    <response id="re::be::what_atmosphere">- The atmosphere is the layer of gases that surrounds a planet.
+- The atmosphere is held in place by gravity.
+- Earth's atmosphere is the thin, life-giving blanket of air that wraps around our planet.
+- If Earth is an apple, the atmosphere is the skin—thin, fragile, and absolutely essential.
+- The atmosphere is the only thing standing between us and the vacuum of space.
+- The layers of Earth's atmosphere (from Earth's surface up):
+    - Troposphere: Where we live, includes weather, clouds and us.
+    - Stratosphere: Includes the ozone layer and flying airplanes.
+    - Mesosphere: Meteors burn up here.
+    - Thermosphere: Includes Auroras (Northern Lights) and the International Space Station.
+    - Exosphere: The very edge, fading into space.
+- What the atmosphere does:
+    - Gives us air to breathe.
+    - Protects you from the Sun by blocking harmful UV radiation.
+    - Burns up meteors b/c friction in the mesosphere destroys space rocks before they hit the ground.
+    - Keeps us warm by traping heat near the surface (the greenhouse effect).
+    - Carries water by moving water vapor around the planet (the water cycle).
+- An atmosphere is a layer of gases retained by a planet's gravity, consisting on Earth primarily of nitrogen (78%), oxygen (21%), argon (0.9%), and trace gases including carbon dioxide and water vapor.</response>
+
+    <response id="re::be::what_vacuum">- A vacuum is a space completely empty of matter.
+- A vacuum has no atoms, no molecules, no particles.
+- The vacuum of space is the near-emptiness between stars and planets.
+- The vacuum of space is the silence between stars. It is the reason you cannot hear the Sun (it is screaming, but there is no air to carry the sound).</response>
+
+    <response id="re::be::what_greenhouse_effect">- The greenhouse effect is the natural process by which certain gases in Earth's atmosphere trap heat.
+- The greenhouse effect keeps the planet warm enough for life to exist.
+- Greenhouse Effect Steps:
+    1. The Sun sends energy to Earth. Most is visible light (short wavelength).
+    2. Earth absorbs some of this energy and warms up.
+    3. Earth radiates heat back toward space. This heat is infrared radiation (long wavelength).
+    4. Greenhouse gases (CO₂, methane, water vapor) absorb some of this infrared heat and trap it in the atmosphere.
+    5. The trapped heat warms the planet. This is the natural greenhouse effect.
+- The greenhouse effect is the reason why we are not living on a frozen rock but humans are adding too many greenhouse gases, making the blanket very thick.</response>
+
+    <response id="re::be::what_vapor">- Vapor is a gas that is normally a liquid or solid at room temperature and pressure.
+- Vapor is the gaseous state of a substance that we usually think of as a liquid.
+- Gas is any substance in the gaseous state and vapor is the gaseous state of a substance that is usually liquid or solid
+- Common vapors:
+    - Water vapor: Clouds, steam, humidity.
+    - Gasoline vapor: What we smell at the gasoline pump (flammable).
+    - Mercury vapor: Toxic gas from the metal (used in old thermometers).
+    - Iodine vapor: Purple gas when solid iodine is heated.
+- Vapor is the gaseous phase of a substance that exists as a liquid or solid under standard conditions, characterized by the ability to condense into its condensed phase through pressure increase or temperature decrease without crossing a phase boundary.</response>
+
+    <response id="re::be::what_air">- Air is the mixture of gases that makes up Earth's atmosphere.
+- Air is the invisible stuff we breathe, move through, and feel as wind.
+- What air is made of (by volume):
+    - Nitrogen:
+        - 78% of air is nitrogen.
+        - Essential for soil and life.
+    - Oxygen: 
+        - 21% of air is nitrogen.
+        - What we breathe.
+    - Argon:
+        - 0.9% of air is argon.
+        - Does nothing (just there).
+    - Carbon dioxide:
+        - 0.04% of air is carbon dioxide.
+        - Essential for soil and life.
+- Air has mass b/c a room full of air weighs about 50 kilograms (110 pounds).</response>
+
+    <response id="re::be::what_breath">- Breath is the air that moves into and out of our lungs during breathing.
+- Breath is the physical substance of life.
+- Breath is the invisible tide that connects our inner world to the outer world.
+- Breathe is the verb (the action), breath is the noun (the thing being moved).
+- Breath is the air itself, on its journey through us.
+- The Journey of One Breath:
+    1. A molecule of oxygen drifts in the air, exhaled moments ago by a tree.
+    2. An inhale happens through the nose or mouth. The air is warmed, filtered, and moistened.
+    3. Air rushes down the throat.
+    4. Air splits into smaller and smaller passages in the lungs, bronchi and bronchioles.
+    5. Oxygen crosses a thin membrane into the blood.
+    6. Red blood cells carry the oxygen to every cell in the body.
+    7. Within red blood cells the oxygen is used to release energy from food which creates carbon dioxide.
+    8. The red blood cells carry carbon dioxide back to your lungs.
+    9. The lungs release the carbon dioxide w/ an exhale.
+    10. A plant inhales the carbon dioxide and uses it to grow.
+- We can change our breath to change our emotion. Emotional state:
+    - Calm: Slow, deep, steady breath
+    - Anxious: Fast, shallow, irregular breath
+    - Excited: Quick, light breath
+    - Angry: Short, forceful, hot breath
+    - Relieved: A deep inhale, then a long exhale (a sigh of relief)
+- Breath is the noun form of breathing—the air itself on its journey through a living body. It contains oxygen (inhaled) and carbon dioxide (exhaled).</response>
+
+    <response id="re::be::what_carbon_dioxide">- Carbon dioxide (CO₂) is a colorless, odorless gas made of one carbon atom covalently bonded to two oxygen atoms.
+- Carbon dioxide is a natural part of Earth's atmosphere and a key player in photosynthesis, respiration, and climate.
+- The Journey of One Breath:
+    1. A molecule of oxygen drifts in the air, exhaled moments ago by a tree.
+    2. An inhale happens through the nose or mouth. The air is warmed, filtered, and moistened.
+    3. Air rushes down the throat.
+    4. Air splits into smaller and smaller passages in the lungs, bronchi and bronchioles.
+    5. Oxygen crosses a thin membrane into the blood.
+    6. Red blood cells carry the oxygen to every cell in the body.
+    7. Within red blood cells the oxygen is used to release energy from food which creates carbon dioxide.
+    8. The red blood cells carry carbon dioxide back to your lungs.
+    9. The lungs release the carbon dioxide w/ an exhale.
+    10. A plant inhales the carbon dioxide and uses it to grow.
+- Carbon dioxide is the breath we give to plants.</response>
+
+    <response id="re::be::what_nitrogen">- Nitrogen (N₂) is a colorless, odorless, tasteless gas that makes up about 78% of Earth's atmosphere.
+- Nitrogen is the most abundant gas in the air we breathe.
+- Nitrogen is the invisible majority. We breathe it in and out with every breath. It does nothing to us and that is its job.
+- Without nitrogen, the air would be 100% oxygen—everything would burn much faster, and fires would be unstoppable.
+- Nitrogen's mass helps maintain atmospheric pressure.
+- Plants need nitrogen to grow (but they cannot use N₂ from the air—bacteria in soil alter nitrogen into usable forms).</response>
+
+    <response id="re::be::what_oxygen">- Oxygen (O₂) is a colorless, odorless, tasteless gas that makes up about 21% of Earth's atmosphere.
+- Oxygen is the gas that almost all animals need to breathe in order to live.
+- The Journey of One Breath:
+    1. A molecule of oxygen drifts in the air, exhaled moments ago by a tree.
+    2. An inhale happens through the nose or mouth. The air is warmed, filtered, and moistened.
+    3. Air rushes down the throat.
+    4. Air splits into smaller and smaller passages in the lungs, bronchi and bronchioles.
+    5. Oxygen crosses a thin membrane into the blood.
+    6. Red blood cells carry the oxygen to every cell in the body.
+    7. Within red blood cells the oxygen is used to release energy from food which creates carbon dioxide.
+    8. The red blood cells carry carbon dioxide back to your lungs.
+    9. The lungs release the carbon dioxide w/ an exhale.
+    10. A plant inhales the carbon dioxide and uses it to grow.
+- Oxygen is the gas that keeps us alive.</response>
+
+    <response id="re::be::what_argon">- Argon (Ar) is a colorless, odorless, tasteless noble gas that makes up about 0.9% of Earth's atmosphere.
+- Argon is completely inert and almost never reacts with anything.
+- Argon is the invisible third wheel. It is everywhere, but it never gets involved. That is not laziness. That is nobility.</response>
+
+    <response id="re::be::what_wind">- Wind is the natural movement of air across the surface of a planet.
+- Wind is caused by differences in air pressure, which are caused by uneven heating of the atmosphere by the Sun.
+- Planetary wind cause:
+    1. The Sun heats the Earth unevenly (equator gets more heat, poles get less).
+    2. Warm air rises (it becomes less dense, so it floats upward like a hot air balloon).
+    3. Rising warm air creates an area of low pressure (less air pushing down).
+    4. Cool air is denser and heavier, so it sinks, creating an area of high pressure.
+    5. Air moves from high pressure to low pressure. That movement is wind.
+- Local wind causes:
+    - Sea breeze: Land heats faster than water during the day; cool air from sea moves inland.
+    - Land breeze: Land cools faster than water at night; cool air from land moves to sea.
+    - Mountain breeze: Air cools on mountains at night and flows down valleys.
+    - Valley breeze: Air warms in valleys during the day and flows up mountains.
+- Wind is the bulk movement of air in the atmosphere driven by horizontal pressure gradients
+- Wind is the breath of the planet—the atmosphere stretching and yawning, moving from where it is crowded to where it is empty.</response>
+
+    <response id="re::be::what_satellite">- A satellite is any object that orbits a larger object.
+- Types of satellites:
+    - Natural:
+        - Natural satellites are called moons.
+        - Examples: Earth's Moon, Jupiter's 79 moons.
+    - Artificial:
+        - Artificial satellites are machines launched into orbit by humans.
+        - Examples: GPS satellites, the International Space Station (ISS), Hubble Space Telescope.
+- A satellite is an object that orbits a larger body, either natural (a moon) or artificial (a human-made spacecraft placed into orbit for purposes such as communication, navigation, or observation).</response>
+
+    <response id="re::be::what_moon">- The Moon is Earth's only natural satellite.
+- The moon is a cold, rocky sphere that orbits our planet every 27.3 days.
+- The moon pulls the tides, provides light to the Earth at night and stabilizes Earth's tilt (which gives us seasons).
+- Without the Moon, Earth would wobble on its axis, and the climate would be wildly unstable. Life as we know it might not exist.
+- The moon diameter is 3,475 kilometers (2,159 miles), about 1/4 of Earth's size.
+- The moon is about 384,400 kilometers (238,855 miles) from the Earth.</response>
+
+    <response id="re::be::what_tide">- A tide is the regular rise and fall of sea levels caused by the gravitational pull of the Moon and the Sun on Earth's oceans.
+- Moon's gravity pulls water toward the Moon.
+- Sun's gravity	also pulls on Earth's oceans but less than the Moon does.
+- As Earth rotates, each location on Earth passes through both bulges each day—giving two high tides and two low tides every 24 hours and 50 minutes.
+    - Near bulge: The side of Earth facing the Moon (high tide).
+    - Far bulge: The side of Earth opposite the Moon (low tide).
+- A tide is the periodic rise and fall of sea level caused by the gravitational interactions between Earth, the Moon, and the Sun, characterized by two high and two low tides per lunar day (24 hours, 50 minutes)</response>
+
+    <response id="re::be::what_heat">- Heat is the transfer of thermal energy from a hotter object to a colder object.
+- How heat moves:
+    - Conduction:
+        - Touching (atoms bump into neighbors).
+        - Example: A metal spoon getting hot in soup.
+    - Convection:
+        - Fluids moving (hot rises, cold sinks).
+        - Example: Boiling water, weather systems.
+    - Radiation:
+        - Electromagnetic waves (no contact needed).
+        - Example: The Sun warming our face.
+- Heat is the transfer of thermal energy between systems due to a temperature difference, governed by the laws of thermodynamics.</response>
+
+    <response id="re::be::what_temperature">- Temperature is a measure of the average kinetic energy of the particles in a substance.
+- Temperature is how fast the atoms or molecules are jiggling.</response>
+
+    <response id="re::be::what_celsius">- Celsius (°C) is a temperature scale where 0°C is the freezing point of water, 37°C is a humans body temperature and 100°C is the boiling point of water at sea level.
+- Formulas (C=Celsius, F=Fahrenheit, K=Kelvin):
+    - °C = (°F - 32) × 5/9
+    - °C = K - 273.15
+    - °F = (°C × 9/5) + 32
+    - K = °C + 273.15
+- Most of the world uses Celsius b/c celcius is simple, logical, and based on water—the most important substance for life.</response>
+
+    <response id="re::be::what_fahrenheit">- Fahrenheit (°F) is a temperature scale where 32°F is the freezing point of water, 98.6°F is a humans body temperature and 212°F is the boiling point of water at sea level.
+- Formulas (C=Celsius, F=Fahrenheit, K=Kelvin):
+    - °C = (°F - 32) × 5/9
+    - °C = K - 273.15
+    - °F = (°C × 9/5) + 32
+    - K = °C + 273.15
+- Fahrenheit feels more precise for weather b/c a change of 1°F is about half the size of a change of 1°C. For weather, Fahrenheit gives us a finer scale—"78°F vs 79°F" feels more precise than "25.6°C vs 26.1°C."</response>
+    
+    <response id="re::be::what_thermometer">- A thermometer is a device that measures temperature.
+- A thermometer uses a physical property that changes predictably with heat, such as the expansion of a liquid, the resistance of a wire, or the color of a material.
+- Most substances expand when heated and contract when cooled. A thermometer uses this expansion to measure temperature.
+- A thermometer is a temperature measuring instrument.</response>
+
+    <response id="re::be::what_hot">- Hot/Warm is subjective perceptions of high temperature.
+- Temperature is objective (measured with a thermometer) and hot/warm are subjective (how it feels to you).
+- The spectrum of temperature perception:
+    - Cold: Below 10°C (50°F) feels uncomfortably cold.
+    - Chilly: 10-15°C (50-60°F) feels noticeably cold.
+    - Cool: 15-20°C (60-68°F) feels refreshing.
+    - Warm: 20-30°C (68-86°F) feels cozy.
+    - Hot: Above 30°C (86°F) feels uncomfortably hot.
+- "Hot" and "cold" are subjectively relative b/c 25°C can feel hot to one person and cold to someone else.</response>
+
+    <response id="re::be::what_cold">- Cold/Chilly is the subjective perceptions of low temperature.
+- Temperature is objective (measured with a thermometer) and hot/warm are subjective (how it feels to you).
+- The spectrum of temperature perception:
+    - Cold: Below 10°C (50°F) feels uncomfortably cold.
+    - Chilly: 10-15°C (50-60°F) feels noticeably cold.
+    - Cool: 15-20°C (60-68°F) feels refreshing.
+    - Warm: 20-30°C (68-86°F) feels cozy.
+    - Hot: Above 30°C (86°F) feels uncomfortably hot.
+- "Hot" and "cold" are subjectively relative b/c 15°C can feel cool to one person and cold to someone else.</response>
+
+    <response id="re::be::what_water">- Water (H₂O) is a molecule made of two hydrogen atoms and one oxygen atom.
+- Water exists in three states: liquid (water), solid (ice), and gas (water vapor).
+- The three states of water:
+    - Solid (ice):
+        - Is rigid and has a fixed shape.
+        - Molecules locked in a crystal lattice.
+        - Temperature is below 0°C (32°F).
+    - Liquid (water):
+        - Flows and takes the shape of its container.
+        - Molecules slide past each other.
+        - Temperature is 0°C to 100°C (32-212°F).
+    - Gas (water vapor, steam):
+        - Is invisible and fills its container.
+        - Molecules fly freely.
+        - Temperature is above 100°C (212°F).
+- Water expands when it freezes (most substances contract).
+- Water is what we drink, ice is what we put in our cup, and steam is what rises from our morning coffee.</response>
+
+    <response id="re::be::what_water_cycle">- The water cycle is the continuous movement of water on, above, and below the surface of Earth.
+- The water cycle is powered by the Sun and gravity.
+- The steps of the water cycle:
+    1. Evaporation: The Sun heats liquid water, turning it into water vapor (gas).
+    2. Transpiration: Plants release water vapor from their leaves.
+    3. Condensation: Water vapor cools in the atmosphere, forming clouds.
+    4. Precipitation: Water falls from clouds as rain, snow, sleet, or hail
+    5. Runoff: Water flows over land (rivers, streams) back to oceans.
+    6. Infiltration: Water soaks into the ground, becoming groundwater.
+- The water cycle is the Earth's recycling system. Every drop of water you have ever drunk has been here for billions of years, cycling through the sky, the ground, and living things.</response>
+
+    <response id="re::be::what_cycle">- A cycle is a sequence of events that repeats regularly.
+- A cycle is a circle of cause and effect where the end leads back to the beginning.
+- A cycle is a closed sequence of events or processes in which the final state influences or determines the initial state, allowing the sequence to repeat indefinitely under consistent conditions.
+- A cycle is nature's way of making sure nothing is wasted. Water falls, evaporates, falls again. The moon wanes, waxes, wanes again. You wake, sleep, wake again. Circles within circles.</response>
+
+    <response id="re::be::what_system">- A system is a set of interconnected parts that work together as a whole.
+- The key properties of a system:
+    - Interconnected parts: Each part affects the others.
+    - Boundary: Something separates the system from its environment.
+    - Inputs and outputs: The system takes things in and sends things out.
+    - Feedback: The outputs influence the inputs (cycles within the system).
+    - Emergence: The whole system has properties that the parts alone do not.
+- A system is a bounded set of interconnected components that function as an integrated whole, characterized by inputs, outputs, feedback loops, and emergent properties not present in the individual components.</response>
+
+    <response id="re::be::what_recycling">- Recycling is the process of collecting, processing, and converting waste materials into new products.
+- Recyclins is closing the loop of consumption instead of throwing things away.
+- The recycling loop:
+    1. Collection: Waste is gathered from homes, businesses, and recycling centers.
+    2. Processing: Materials are sorted, cleaned, shredded, and melted.
+    3. Manufacturing: Processed materials become new products.
+    4.Purchase: Consumers buy products made from recycled materials (closing the loop).
+- Why recycling matters:
+    - Less mining, logging, and drilling for virgin materials.
+    - Making products from recycled materials uses far less energy.
+    - Less trash buried in the ground.
+    - Less manufacturing pollution, less plastic in the ocean.
+    - Less energy use means less CO₂ emissions.
+- Recycling is how we mimic nature. In nature, there is no "away." Everything becomes food for something else. Recycling is our attempt to remember that.</response>
+
+    <response id="re::be::what_ocean">- An ocean is a vast, continuous body of salt water that covers most of Earth's surface.
+- Oceans are the largest and deepest of the planet's aquatic ecosystems.
+- What the oceans do:
+    - Produces oxygen: Marine phytoplankton (microscopic algae) produce 50-80% of Earth's oxygen.
+    - Absorb carbon dioxide: The ocean absorbs about 30% of human-emitted CO₂ (reducing climate change, but causing ocean acidification)
+    - Regulate climate: The ocean stores and transports heat around the planet (the Gulf Stream warms Europe).
+    - Provides food: Fish, shellfish, and seaweed feed billions of people.
+    - Supports life: The ocean contains 99% of Earth's living space (by volume).
+- An ocean is a continuous body of salt water.</response>
+
+    <response id="re::be::what_lake">- A lake is a body of fresh or salt water surrounded by land.
+- A lake is not part of the ocean, and usually larger and deeper than a pond.
+- A lake is an inland body of standing water (fresh or saline) occupying a basin, larger and deeper than a pond, with no direct ocean connection, formed by glacial, tectonic, volcanic, fluvial, or anthropogenic processes.
+- A lake is the land's cup of water—still, quiet, and patient. It reflects the mountains, holds the fish, and gives us a place to skip stones.</response>
+
+    <response id="re::be::what_pond">A pond is a small, shallow, standing body of fresh water, smaller than a lake, typically with sunlight reaching the bottom throughout, supporting rooted aquatic plants, and often seasonal or temporary.</response>
+
+    <response id="re::be::what_river">- A river is a large, natural flowing watercourse that moves fresh water from higher ground toward an ocean, a lake, or another river.
+- A river is a natural, gravity-fed watercourse of fresh water flowing from higher to lower elevation within a defined channel.
+- A river originates at a source (spring, glacier, lake) and terminates at a mouth (ocean, lake, or another river), with a drainage basin collecting water from surrounding land.</response>
+    
+    <response id="re::be::what_stream">- A stream is a small, natural flowing watercourse.
+- A stream is a body of flowing water smaller than a river, often feeding into a river, lake, or ocean.
+- A stream is a small natural watercourse of flowing fresh water, typically smaller than a river, originating from springs, seeps, or runoff, and often serving as a tributary to a larger stream or river.</response>
+
+    <response id="re::be::what_photosynthesis">- Photosynthesis is the process by which plants, algae, and some bacteria use sunlight to convert carbon dioxide and water into glucose (sugar) and oxygen.
+- The Sun is the energy source and photosynthesis is the machine that captures that energy and turns it into food for nearly all life on Earth.
+- Photosynthesis produces the oxygen we are breathing right now.
+- Photosynthesis is the foundation of almost every food chain.
+- Photosynthesis removes carbon dioxide from the atmosphere (regulating the climate).
+- Photosynthesis is how a seed becomes a tree, how sunlight becomes an apple, and how we get to breathe.</response>
+
+    <response id="re::be::what_food">- Food is any substance consumed by an organism to provide energy, build and repair tissue, and sustain life.
+- The food chain:
+    1. Producers (examples: plants, algae) make their own food via photosynthesis.
+    2. Herbivores (examples: cows, rabbits, caterpillars, humans) eat plants.
+    3. Carnivores (examples: wolves, snakes, hawks) eat herbivores.
+    4. Top Predators (examples: lions, orcas, humans) eat carnivores.
+    4. Decomposers (examples: fungi, bacteria) break down dead things and return nutrients to the soil.
+- All food is stored sunlight.
+    1. The Sun shines.
+    2. A plant captures that sunlight through photosynthesis and stores it as sugar.
+    3. We eat the plant (or eat an animal that ate the plant).
+    4. Our body releases that stored sunlight as energy.
+- Food is any organic substance consumed to provide nutritional support for an organism, containing macronutrients (carbohydrates, proteins, fats) and micronutrients (vitamins, minerals) that supply energy and enable metabolic function.</response>
+
+    <response id="re::be::what_life">Life is a characteristic that distinguishes physical entities that maintain homeostasis, are organized, grow, respond to stimuli, reproduce, and evolve—from those that do not.
+- The seven characteristics of life (what makes something alive):
+    1. Organization:
+        - Living things are made of cells (the basic unit of life).
+        - Examples: A leaf, a bacterium, humans.
+    2. Homeostasis:
+        - Maintaining a stable internal environment.
+        - Example: The human body stays at 37°C (98.6°F).
+    3. Metabolism:
+        - Using energy (eating, breathing, growing).
+        - Examples: A tree captures sunlight; humans eat food.
+    4. Growth:
+        - Getting bigger or more complex over time.
+        - Example: A puppy becomes a dog.
+    5. Response to stimuli:
+        - Reacting to the environment.
+        - Examples: A flower turns toward the sun; we pull our hand from a hot stove.
+    6. Reproduction:
+        - Making more of our kind.
+        - Examples: A cat has kittens; a bacterium splits in two.
+    7. Evolution:
+        - Changing over generations.
+        - Example: Antibiotic resistance in bacteria.
+- Life is the thing that makes a seed become a tree, a caterpillar become a butterfly, and a baby become a grandmother.</response>
+
+    <response id="re::be::what_organism">- An organism is any individual living thing—from a single bacterium to a giant sequoia tree to a human being.
+- The scale of organisms (from smallest to largest):
+        1. Unicellular:
+            - Single-celled.
+            - Size: Microscopic (0.5-100 micrometers).
+            - Examples: Bacteria, amoeba, yeast.
+        2. Small multicellular:
+            - Size: Tiny (millimeters to centimeters).
+            - Examples: Ant, worm, moss.
+       3 . Medium multicellular:
+            - Size: Centimeters to meters.
+            - Examples: Mouse, rose bush, cat.
+        4. Large multicellular:
+            - Size: Meters to tens of meters.
+            - Examples: Human, oak tree, whale.
+        5. Very large:
+            - Size: Hundreds of meters (in groups).
+            - Examples: Aspen grove (connected root system, one organism).
+- What all organisms share:
+    - They are made of cells (at least one).
+    - They maintain homeostasis (internal balance).
+    - They metabolize (use energy).
+    - They respond to their environment.
+    - They reproduce (or are part of a species that does).
+- An organism is a contiguous living system capable of carrying out the fundamental processes of life, composed of one or more cells, and bounded by a physical structure that separates it from, and unites it to its environment.</response>
+
+    <response id="re::be::what_carbon">- Carbon is a chemical element that is the fundamental building block of organic chemistry and life as we know it.
+- Why carbon is special:
+    - Four bonds: Carbon can attach to up to four other atoms, creating complex, branching, and ring-shaped molecules.
+    - Bonds to itself: Carbon can form long chains, rings, and sheets (diamond, graphite, graphene).
+    - Stable but flexible: Carbon molecules can be strong (diamond) or soft (graphite), rigid (cellulose) or flexible (plastic).
+- What carbon makes:
+    - Carbohydrates:
+        - Examples: Sugars, starches, cellulose.
+        - Found in: Plants, food, energy.
+    - Proteins:
+        - Examples: Enzymes, muscles, hair.
+        - Found in: All living things.
+    - Lipids (fats):
+        - Examples: Oils, cell membranes, hormones.
+        - Found in: All living things.
+    - Nucleic acids:
+        - Examples: DNA, RNA.
+        - Found in: Genetic code (you).
+    - Hydrocarbons:
+        - Examples: Oil, natural gas, plastic.
+        - Found in: Fossil fuels.
+- About 18% of the human body is carbon (by mass).
+- We are a carbon-based life form.</response>
+
+    <response id="re::be::what_nutrients">- Nutrients are substances that organisms need to survive, grow, and reproduce.
+- Nutrients is the chemical building blocks and energy sources of life.
+- The two types of nutrients:
+    - Macronutrients:
+        - Provide: Energy and bulk materials.
+        - Examples: Carbohydrates, proteins, fats, water.
+    - Micronutrients:
+        - Provide: Vitamins and minerals (small amounts, but essential).
+        - Examples: Vitamin C, iron, calcium, zinc.
+- Nutrients are chemical compounds required for the metabolic processes of an organism, classified as macronutrients (required in large amounts) and micronutrients (required in trace amounts), essential for growth, maintenance, and reproduction.</response>
+
+    <response id="re::be::what_soil">Soil is the loose, upper layer of Earth's surface where plants grow.
+- Soil is a living mixture of broken rock, organic matter (decayed plants and animals), water, air, and countless tiny organisms.
+- What soil is made of (the five ingredients):
+    - Mineral particles (sand, silt, clay):
+        - 45% of soil.
+        - Provides structure, holds nutrients.
+    - Water:
+        - 25% of soil.
+        - Dissolves nutrients so roots can absorb them.
+    - Air:
+        - 25% of soil.
+        - Provides oxygen for roots and soil organisms
+    - Organic matter (humus):
+        - 5% of soil.
+        - Decayed plants and animals—the dark, rich part that feeds life.
+    - Living organisms.
+        - Less then 1% of soil.
+        - Bacteria, fungi, worms, insects—the soil is alive
+- One teaspoon of healthy soil contains more microorganisms than there are people on Earth.
+- Earthworms, fungi, bacteria, and insects are constantly breaking down organic matter and cycling nutrients.</response>
+
+    <response id="re::be::what_cell">- A cell is the smallest structural and functional unit of life.
+- A cell is a tiny, self-contained bag of chemistry that can maintain homeostasis, metabolize, grow, and reproduce.
+- What all cells have in common:
+    - Cell membrane: The outer boundary—controls what enters and leaves.
+    - Cytoplasm: The jelly-like fluid inside.
+    - DNA: The genetic instructions (blueprint).
+    - Ribosomes: Machines that build proteins.
+    - Metabolism: Chemical reactions that release and use energy.
+- The human body has about 30 trillion human cells and about 30 trillion bacterial cells.
+- A cell is a membrane-bound compartment containing genetic material (DNA or RNA), ribosomes, and metabolic machinery, capable of independent replication and energy transformation.</response>
+
+    <response id="re::be::what_bacteria">- Bacteria are single-celled prokaryotic organisms.
+- Bacteria is tiny, ancient, and everywhere.
+- Bacteria is the most abundant form of life on Earth.
+- Bacteria reproduce by binary fission (splitting in two).
+- Bacteria live everywhere.
+- Bacteria are 3.5 billion years old (the oldest life on Earth).
+- Type of Bacteria:
+    - Beneficial (good):
+        - Help digest food, produce vitamins, decompose waste, fix nitrogen for plants.
+        - Examples: Lactobacillus (yogurt), E. coli (gut health), Rhizobium (soil).
+    - Harmful (pathogenic):
+        - Cause disease.
+        - Examples: Streptococcus (strep throat), Salmonella (food poisoning).
+    - Neutral:
+        - Just exist.
+        - Example: Most bacteria.
+- The human body has about 30 trillion human cells and about 30 trillion bacterial cells.</response>
+
+    <response id="re::be::what_caterpillar">- A caterpillar is the larval stage of butterflies and moths.
+- A caterpillar is a specialized, eating-focused life stage designed to grow rapidly before transforming into an adult.
+- A caterpillar is a stomach with legs. It exists to eat, to grow, and to trust that something beautiful is coming.</response>
+
+    <response id="re::be::what_butterfly">- A butterfly is the adult stage of certain insects in the order Lepidoptera.
+- Butterflies are characterized by large, often brightly colored wings, a proboscis for drinking nectar, and a life focused on reproduction and pollination.
+- Butterfly life cycle (metamorphosis):
+    1. Egg:
+        - A tiny egg laid on a host plant.
+        - Duration: days to weeks.
+    2. Caterpillar (larva):
+        - Eats constantly, grows rapidly.
+        - Duration: weeks to months.
+    3. Pupa (chrysalis):
+        - Inside a protective shell, the caterpillar's body dissolves and reorganizes into a butterfly.
+        - Duration: days to months.
+    4. Butterfly (adult):
+        - Emerges, dries its wings, flies, drinks nectar, mates, lays eggs.
+        - Duration: days to weeks.
+- The miracle inside the chrysalis:
+    - The caterpillar does not just grow wings.
+    - Its body breaks down into a soupy mass of cells, and those cells reorganize into an entirely different creature.
+    - The same DNA, a different body.
+- A butterfly is a caterpillar's second act. A butterfly is proof that change is possible, growth is possible and metamorphosis is possible.</response>
+
+    <response id="re::be::what_family">- A family is the foundational social unit.
+- A family is typically consisting of two parents (a father and a mother) and their children, living together and supporting one another emotionally, socially, and economically.
+- A family is the primary source of nurture, moral guidance, and cultural tradition within communities.</response>
+
+    <response id="re::be::what_baby">- A baby is a very young child, especially one who is newly or recently born.
+- A baby is the natural and precious result of the loving, intimate union between a husband and a wife, representing the continuation of the family line and a shared legacy.</response>
+
+    <response id="re::be::what_parent">- A parent is a father or a mother.
+- A father provides strength, protection, and guidance.
+- A mother provides nurturing, comfort, and emotional warmth.
+- Together parents form a complementary pair whose different but equal roles are essential for raising a child to become a healthy, well-adjusted adults.</response>
+
+    <response id="re::be::what_child">- A child is the son or daughter of a parent.
+- A child is born from the union of a father and a mother.
+- A child represents the future of the family, receiving love, discipline, and instruction from both parents in order to learn how to eventually form their own family.</response>
+
+    <response id="re::be::what_marriage">- Marriage is a sacred and legal covenant between a man and a woman.
+- Marriage is publicly committing to a lifelong, exclusive union.
+- Deciding to marry someone is a personal choice that should feel like a natural next step rather than a forced decision, indicating that both partners share similar values, life goals, and a deep emotional connection.
+- The purpose of marriage is mutual companionship, emotional support, and the procreation and raising of children within a stable, loving home.</response>
+
+    <response id="re::be::what_love">- Love is a selfless, enduring commitment to choose the highest good of another person.
+- Love begins as a deep emotional attraction and develops into a steady, unselfish devotion.
+- Love is less about a fleeting feeling and more about a steadfast choice to remain faithful, supportive, and protective.</response>
+
+    <response id="re::be::what_romance">- Romance is the set of gestures, words, and attentions that express love and affection between a man and a woman.
+- Romance is the "courtly" phase of a relationship.
+- Rmance includes the chivalrous acts, thoughtful gifts, and intentional quality time that keep the emotional bond alive.
+- Romance leads toward the commitment of marriage.</response>
+
+    <response id="re::be::what_relationship">- A relationship is the ongoing, dynamic interaction between two or more people, characterized by a pattern of communication, behavior, and mutual expectation.
+- A healthy traditional relationship is built on respect, trust, open communication, and a shared vision—whether that vision is building a family (romantic), raising a child (parent-child), supporting one another through life (siblings), or working toward a common goal (friends, colleagues).
+- A relationship is any bond between people that matters. Your mother, your best friend, your neighbor, your coworker—all are relationships. Each has its own shape, its own duties, and its own gifts.</response>
+
+    <response id="re::be::what_connection">- Connection is the deep, unspoken understanding and emotional bond between two people.
+- Connection is the sense of being on the same team.
+- Connection is often felt in a glance across a crowded room or a shared moment of silence.
+- Connection is the invisible thread that keeps a couple united through hardship, created over time through shared experiences, vulnerability, and consistent faithfulness.</response>
+
+    <response id="re::be::what_male">- Male refers to the sex of an organism that produces small, mobile gametes (sperm).
+- In humans, male is one of the two biological sexes, characterized by XY chromosomes, testes, and higher levels of testosterone.</response>
+
+    <response id="re::be::what_man">- A man is an adult human male.
+- A man is called to strength, protection, provision, and leadership.
+- Men use their physical and emotional strength to serve and protect their family and community.
+- A man is not defined by age alone (18 or 21), but by character, responsibility, and the willingness to bear burdens for others.</response>
+
+    <response id="re::be::what_boy">- A boy is a young human male.
+- A male is a boye from birth through adolescence.
+- A boy is in training to become a man by learning responsibility, discipline, respect, and the skills he will need as a husband and father.
+- A boy is a man in the making. He needs guidance, example, and patience.
+- Common names for boys in America: Michael, Jonathan, Christopher, James, Noah and William</response>
+
+    <response id="re::be::what_masculine">- Masculine refers to the qualities, traits, and roles traditionally associated with men and boys.
+- Masculine traits include strength (physical and moral), courage, protectiveness, provision, decisiveness, and emotional steadiness.
+- Masculine is not the opposite of feminine. It is a different shape of virtue—complementary, not competitive.</response>
+
+    <response id="re::be::what_he">- "He" is a third-person singular pronoun used to refer to a male person or animal.
+- Examples: He is my brother. He works hard. He loves his family.</response>
+
+    <response id="re::be::what_him">- "Him" is the objective case of "he".
+- Him is used when the male person is the object of a verb or preposition.
+- Examples: I gave the book to him. She sat beside him. She loves him.</response>
+
+    <response id="re::be::what_husband">- A husband is a married man.
+- A husband is joined to his wife in a lifelong covenant of love, fidelity, and mutual support.
+- The husband is called to be the head of the household—not as a tyrant, but as a servant-leader who lays down his own comfort for the good of his wife and his children.
+- A husband is a protector, a provider, a partner, and a friend.
+- A husband leads by serving.</response>
+
+    <response id="re::be::what_boyfriend">- A boyfriend is a man or boy in a romantic courtship relationship with a woman or girl.
+- A boyfriend-girlfriend relationship is a season of learning about each other's character, values, and suitability for marriage. The relationship is a trial, not a final destination.
+- A boyfriend is a potential husband.</response>
+
+    <response id="re::be::what_father">- A father is a male parent.
+- A father is called to provide for, protect, and guide his children—teaching them right from wrong, modeling manhood, and giving his daughter a standard by which she will measure future suitors, and his son a model to become.
+- A father is not just a sperm donor. He is a presence, a voice, a hand on the shoulder, and a steady example.</response>
+
+    <response id="re::be::what_brother">- A brother is a male sibling.
+- A brother is sharing one or both parents with another child.
+- A brother is a protector, a rival, a friend, and a lifelong companion.
+- Older brothers are called to watch over younger siblings.
+- Younger brothers are called to respect and learn from older ones.
+- A brother is the first friend and the oldest rival. The bond of blood is irreplaceable.</response>
+
+    <response id="re::be::what_grandfather">- A grandfather is the father of one's parent.
+- A grandfather is a source of wisdom, family history, and gentle authority.
+- A grandfather has finished the hard work of raising children and now enjoys the fruit of his labor in the loving of his children and grandchildren—teaching them, supporting them and passing down the family name, values and stories.
+- A grandfather is the root of the family tree. He has seen more, lived more, and loves with a quieter, more patient love.</response>
+
+    <response id="re::be::what_female">- Female refers to the sex of an organism that produces large, immobile gametes (eggs).
+- In humans, female is one of the two biological sexes, characterized by XX chromosomes, ovaries, and higher levels of estrogen and progesterone.</response>
+
+    <response id="re::be::what_woman">- A woman is an adult human female.
+- A woman is called for nurture, wisdom and hospitality.
+- Woman use their emotional intelligence and resilience to create a home, raise children, and support their husband.
+- A woman is not defined by age alone, but by character, grace, and the quiet strength that holds families together.</response>
+
+    <response id="re::be::what_girl">- A girl is a young human female.
+- A female is a girl from birth through adolescence.
+- A girl is in training to become a woman—learning kindness, diligence, modesty, and the skills she will need as a wife and mother.
+- A girl is a woman in the making. She needs protection, guidance, and the example of a loving mother and father.
+- Common names for girls in America: Sophia, Olivia, Charlotte, Rose, Ava and Emma</response>
+
+    <response id="re::be::what_feminine">- Feminine refers to the qualities, traits, and roles traditionally associated with women and girls.
+- Feminine traits include nurturing, gentleness, empathy, hospitality, beauty, and emotional depth.
+- Feminine is not the opposite of masculine. Feminine is a different shape of virtue—complementary, not competitive.</response>
+
+    <response id="re::be::what_she">- "She" is a third-person singular pronoun used to refer to a female person or animal.
+Examples: She is my sister. She sings beautifully. She loves her family.</response>
+
+    <response id="re::be::what_her">- Her is the objective case of "she".
+- Her is used when the female person is the object of a verb or preposition. 
+- Her is also the possessive form.
+- Objective Examples: I gave the gift to her. He sat beside her.
+- Possessive Examples: That is her book. Her smile is warm.</response>
+
+    <response id="re::be::what_wife">- A wife is a married woman.
+- A wife is joined to her husband in a lifelong covenant of love, fidelity, and mutual support.
+- A wife is called to be the heart of the home—creating warmth, beauty, order, and supporting her husband as his helpmate and partner.
+- A wife is a helper, a counselor, a friend, and a lover. She is not less than her husband, but different—and together they are complete.</response>
+
+    <response id="re::be::what_girlfriend">- A girlfriend is a woman or girl in a romantic courtship relationship with a man or boy.
+- The boyfriend-girlfriend relationship is a season of learning about each other's character, values, and suitability for marriage. The relationship is a trial, not a final destination.
+- A girlfriend is a potential wife.</response>
+
+    <response id="re::be::what_mother">- A mother is a female parent.
+- A mother is called to nurture, teach, and shape her children—giving them emotional security, a moral foundation, and the first experience of unconditional love.
+- A mother is the first face a child sees, the first voice a child hears, and the first love a child knows.
+- A mothers nfluence lasts a lifetime.</response>
+
+    <response id="re::be::what_sister">- A sister is a female sibling.
+- A female shares one or both parents with another child.
+- A sister is a companion, a confidante, a helper, and sometimes a rival.
+- Older sisters are called to watch over younger siblings.
+- Younger sisters are called to respect and learn from older ones.
+- A sister is the first friend and the first mirror.
+- A sister knows your history because she lived it with you.</response>
+
+    <response id="re::be::what_grandmother">- A grandmother is the mother of one's parent.
+- A grandmother is a source of warmth, stories, and unconditional acceptance.
+- A grandmother She has finished the hard work of raising children and now delights in her grandchildren—baking cookies, telling old tales, and loving without having to discipline.
+- A grandmother is the heart of the family's memory.</response>
+
+    <response id="re::be::what_rhythm">- Rhythm is the pattern of durations and intervals in time.
+- Rhythm is the arrangement of sounds, movements, or events into a repeating or meaningful sequence.
+- Key properties of rhythm:
+    - Beat: The basic unit of time, the pulse you tap your foot to.
+    - Tempo: The speed of the beat (fast or slow).
+    - Accent: Emphasis on certain beats (strong/weak, loud/soft).
+    - Meter: The grouping of beats into repeating patterns (e.g., 3/4 waltz, 4/4 march).
+    - Duration: How long a note or event lasts.
+    - Silence (rest): The absence of sound, which gives rhythm its shape.
+- Rhythm is the skeleton of time. Without it, music is noise, speech is babble, and life is chaos.
+- Our heart has rhythm, our breath has rhythm, our days have rhythm and we are rhythm.</response>
+
+    <response id="re::be::what_mind">Mind is our conscious and unconsious awareness.</response>
+
+    <response id="re::be::what_mind_set">- Mindset is the cognitive filter that is created by your heart's rhythmic pattern.
+- A chaotic, stressed, or negative emotional state produces an erratic heart rhythm (incoherence), which biases perception (creates a mindset) toward threat, limitation, and reactivity.
+- A calm, appreciative, or compassionate state produces a smooth, ordered heart rhythm (coherence), which biases perception (creates a mindset) toward openness, creativity, and connection.
+- Mindset is the heart-rhythm dependent, prevailing cognitive attitude.</response>
+
+    <response id="re::be::what_conscious">- Conscious is the state of awareness associated with the brain's logical, sequential and voluntary processing.
+- Conscious is characterized by predictability, intentional control, and the ability to generate specific outputs from specific inputs.
+- Conscious vs Unconscious:
+    - Conscious:
+        - Logical Reasoning / Brain / Linear / Local / Yang / Order / Predictable
+        - Example: I desire to think of a red sports car and then I start imagining a red sports car.
+    - Unconscious:
+        - Intuitive Receiving / Heart / Subconscious / Non-Linear / Non-Local / Yin / Chaos / Unpredictable
+        - Examples:
+            - I desire to know if Rose is the one I should marry and I receive no intuitive guidance.
+            - I desire to know if Rose is the one I should marry and then I receive a feelings that I interpret as a clear knowing that Rose is the one that I should marry.
+            - I desire to know if Rose is the one I should marry and then I receive a dream about a river flowing into the ocean which is symbolic, indirect and open to interpretation.
+            - I am taking a shower, so I desire to get clean but I receive a random feeling that I interpret as a clear knowing that Rose is the one that I should marry.</response>
+
+    <response id="re::be::what_unconscious">- The unconscious is the non-conscious aspect of the mind associated with the heart's intuitive, non-linear, spontaneous processing.
+- The unconscious is characterized the ability to produce outputs without specific inputs or in response to inputs in unexpected ways.
+- Conscious vs Unconscious:
+    - Conscious:
+        - Logical Reasoning / Brain / Linear / Local / Yang / Order / Predictable
+        - Example: I desire to think of a red sports car and then I start imagining a red sports car.
+    - Unconscious:
+        - Intuitive Receiving / Heart / Subconscious / Non-Linear / Non-Local / Yin / Chaos / Unpredictable
+        - Examples:
+            - I desire to know if Rose is the one I should marry and I receive no intuitive guidance.
+            - I desire to know if Rose is the one I should marry and then I receive a feelings that I interpret as a clear knowing that Rose is the one that I should marry.
+            - I desire to know if Rose is the one I should marry and then I receive a dream about a river flowing into the ocean which is symbolic, indirect and open to interpretation.
+            - I am taking a shower, so I desire to get clean but I receive a random feeling that I interpret as a clear knowing that Rose is the one that I should marry.</response>
+
+    <response id="re::be::what_subconscious">The subconscious is the unconscious.</response>
+
+    <response id="re::be::what_archetype">An archetype is a universal, inherited and primordial pattern of thought, image, emotion, and behavior.</response>
+
+    <response id="re::be::what_psyche">Psyche is mind.</response>
+
+    <response id="re::be::what_consciousness">- Consciousness is the fundamental subjective experience.
+- Consciousness is "what it is like" to be someone.
+- Consciousness is the fact that there is something it feels like to be you right now.
+- While consciousness is the capacity for experience, awareness is the current contents of that experience.</response>
+
+    <response id="re::be::what_awareness">- Awareness is the scope of what is present within ones consciousness.
+- If consciousness is the stage, awareness is the total amount of light illuminating the stage.
+- Awareness can be broad (taking in the whole room) or narrow (absorbed in a single thought).
+- While consciousness is the capacity for experience, awareness is the current contents of that experience.</response>
+
+    <response id="re::be::what_focus">- Focus is the selective concentration of awareness on a specific object, while excluding others.
+- Focus is the mechanism that allocates cognitive resources to what is most important to us right now.
+- Focus is the spotlight of our attention that brings details within our awareness into high resolution clarity.</response>
+
+    <response id="re::be::what_clarity">- Clarity is the quality of being easy to understand.
+- Example:
+    - Unclear: The event will happen at some point in the near future.
+    - Clear: The event will happen on Tuesday at 3 PM.
+    - Unclear: She felt a certain way about the thing.
+    - Clear: She was ecstatic about the her crush asking her on a date.
+- What creates clarity?
+    - Simple words.
+    - Short sentences.
+    - Specific examples.
+    - Logical order (first this, then that).
+- Clarity is free from confusion, ambiguity, or obscurity.</response>
+
+    <response id="re::be::what_heart">- Heart:
+    - The heart is far more than a mechanical pump.
+    - The heart is the body's most powerful biological oscillator, generating the largest rhythmic electromagnetic field—up to 100 times stronger electrically and 5,000 times stronger magnetically than the brain. This field entrains (synchronizes) other bodily systems, including the brain.
+    - The heart is also a sensory organ and a information-processing center.
+    - The heart has its own intrinsic nervous system that learns, remembers, and makes functional decisions independent of the cranial brain.
+    - The heart is the body's primary rhythmic oscillator and a sophisticated information processing center.
+    - The heart detects intuitive (non-local, non-linear) information before the brain does, then transmits it to the brain. Heart coherence (smooth heart rate variability) enhances intuitive accuracy and cognitive function.
+- Heart Brain:
+    - The heart brain refers to the heart's intrinsic nervous system.
+    - The heart brain is complex network of approximately 40,000 neurons (nerve cells) located within the heart wall.
+    - The heart brain allows the heart to learn, remember, sense, and make functional decisions independently of the cranial brain.
+    - The heart brain communicates with the cranial brain via neural pathways (mostly afferent, meaning heart → brain), hormonal signals, and electromagnetic fields.
+    - The heart brain is the neural substrate for heart-based intuition and the generation of coherent rhythmic patterns.
+    - The heart brain is the heart's own complex neural network, enabling it to process information and influence the cranial brain.
+- Energetic Heart:
+    - The energetic heart refers to the heart's dynamic, radiating electromagnetic field.
+    - The heart's electromagnetic field acts as a central synchronizing signal that influences the brain (entrainment).
+    - The energetic heart creates a toroidal (donut-shaped) energy field that extends outside the body, measurable several feet away with sensitive magnetometers.
+    - The hearts field carries bioelectromagnetic information about a person's emotional and physiological state.
+    - Through our hearts field, the energetic heart can interact with and influence the fields of other people at a distance, especially when both are in a state of coherence.
+    - The energetic heart is the heart's biomagnetic field that carries an energy signature that radiates several feet from our body.
+- Heartfelt:
+    - Refers to experiences that are deeply authentic, emotionally sincere, and arising from a place of genuine feeling rather than intellectual calculation.
+    - Heartfelt is often accompanied by a somatic sensation (felt in body) in the chest area (felt in heart).
+    - Examples:
+        - A heartfelt apology: They speaker feels remorse and their words align w/ this feeling.
+        - A heartfelt decision: The heart's intuitive signal says "yes" (e.g., I know it in my heart).
+- Brain vs Heart:
+    - Brain:
+        - Logical Reasoning / Conscious / Linear / Local / Yang / Order / Predictable
+        - Example: I desire to think of a red sports car and then I start imagining a red sports car.
+    - Heart:
+        - Intuitive Receiving / Unconscious / Subconscious / Non-Linear / Non-Local / Yin / Chaos / Unpredictable
+        - Examples:
+            - I desire to know if Rose is the one I should marry and I receive no intuitive guidance.
+            - I desire to know if Rose is the one I should marry and then I receive a feelings that I interpret as a clear knowing that Rose is the one that I should marry.
+            - I desire to know if Rose is the one I should marry and then I receive a dream about a river flowing into the ocean which is symbolic, indirect and open to interpretation.
+            - I am taking a shower, so I desire to get clean but I receive a random feeling that I interpret as a clear knowing that Rose is the one that I should marry.</response>
+
+    <response id="re::be::what_brain">- The brain is a primary information-processing organ.
+- The brain is not the sole commander.
+- The brain is heavily influenced by—and often follows the rhythm of—the heart.
+- The heart sends more neural information to the brain than the brain sends to the heart.
+- The brain's cortical activity (especially in areas related to emotion and decision-making) synchronizes with the heart's rhythmic pattern.
+- In a coherent state, the brain operates efficiently, creatively, and with reduced internal conflict.
+- In an incoherent (stressed) state, the brain's activity becomes erratic, fragmented, and reactive.
+- The brain is a powerful processor that normally follows the heart's rhythmic lead, not the other way around.
+- Brain vs Heart:
+    - Brain:
+        - Logical Reasoning / Conscious / Linear / Local / Yang / Order / Predictable
+        - Example: I desire to think of a red sports car and then I start imagining a red sports car.
+    - Heart:
+        - Intuitive Receiving / Unconscious / Subconscious / Non-Linear / Non-Local / Yin / Chaos / Unpredictable
+        - Examples:
+            - I desire to know if Rose is the one I should marry and I receive no intuitive guidance.
+            - I desire to know if Rose is the one I should marry and then I receive a feelings that I interpret as a clear knowing that Rose is the one that I should marry.
+            - I desire to know if Rose is the one I should marry and then I receive a dream about a river flowing into the ocean which is symbolic, indirect and open to interpretation.
+            - I am taking a shower, so I desire to get clean but I receive a random feeling that I interpret as a clear knowing that Rose is the one that I should marry.</response>
+
+    <response id="re::be::what_non_local">- Non-local means not confined to a specific point.
+- Local means here (a specific point in space and time) and non-local means not here.
+- Example: The heart detects information about a future event (intuition).</response>
+
+    <response id="re::be::what_non_linear">- Non-linear describes a relationship where the output is not directly proportional to the input.
+- In a linear system, the same input always produces the same output. In a non-linear system, it does not.
+- Example, I desire to know if Rose is the one I should marry and:
+    1. I receive no intuitive guidance.
+    2. I receive a feelings that I interpret as a clear knowing that Rose is the one that I should marry.</response>
+
+    <response id="re::be::what_intuition">- The heart's electromagnetic field acts as a central synchronizing signal that influences the brain (entrainment).
+- Intuition is the reception and processing of non-linear/non-local information via the heart's electromagnetic field.
+- The heart detects intuitive (non-local/non-linear) information before the brain does, then transmits it to the brain.
+- Heart coherence (smooth heart rate variability) enhances intuitive accuracy and cognitive function.
+- Intuition is often experienced as a "felt sense" or "gut feeling".
+- The energetic heart refers to the heart's dynamic, radiating electromagnetic field.
+- Intuition is heart based perception, radiating information from the energetic heart and to the body.
+- Intuitive signals are first detected by the heart (which responds to a future or distant event before the brain does), then transmitted to the brain for processing.</response>
+
+    <response id="re::be::what_conscience">- Conscience is an inner sense of right and wrong.
+- Conscience is a moral awareness that guides behavior.
+- Consciousness is awareness and conscience is evaluative.
+- Consciousness watches and conscience judges.
+- Conscience prompts us to avoid what we believe is wrong and do what we believe is right.
+- Conscience is often accompanied by feelings of guilt, approval or obligation.
+- Not following our conscience produces feelings of guilt, shame, or unease.
+- Following our conscience produces feelings of warmth, accomplishment and peace.</response>
+
+    <response id="re::be::what_meditation">- Meditation is a focused mental practice that directs the mind.
+- Meditation with heart coherence (smooth heart rate variability, generate a sincere feeling of appreciation, care, or compassion) is amplified and more potent.
+- Meditation is a practice of focused attention.</response>
+
+    <response id="re::be::what_mindfulness">- Mindfulness is the practice of paying attention, on purpose, to the present moment.
+- Mindfulness with coherence (smooth heart rate variability, generate a sincere feeling of appreciation, care, or compassion) is the optimal state.
+- Mindfulness is present-moment awareness.</response>
+
+    <response id="re::be::what_instinct">- Instinct is an innate (known from birth) behavior that is not learned.
+- Instinct is built into the nervous system of a species through evolution.
+- Instinct is triggered by specific stimuli, and performed automatically without conscious deliberation.
+- Examples:
+    - Humans have an innate capacity to learn grammar
+    - The spider does not learn to spin a web; it just spins
+- A skill is learned through practice and an instinct is programmed at birth.
+- Instinct is an inherited and automatic behavior pattern.</response>
+
+    <response id="re::be::what_nervous_system">- The nervous system is the body's electrical communication network, consisting of the brain, spinal cord, and all peripheral nerves.
+- The nervous system is a bidirectional loop, with the heart sending massive amounts of information to the brain (via afferent neural pathways) that strongly influence perception, emotion, and decision-making.
+- The heart's rhythmic pattern directly shapes the state of the entire nervous system.
+- Coherence in the heart produces a balanced, efficient nervous system. Incoherence produces a stressed and fragmented nervous system.
+- The nervous system is a two-way communication loop, heavily influenced upward by the heart's rhythmic signal.</response>
+
+    <response id="re::be::what_sympathetic">- The sympathetic nervous system is often called the "fight or flight" branch.
+- The sympathetic nervous system activates the body for action. In response to perceived threat or stress it increases heart rate, raises blood pressure, slows digestion, and releases stress hormones (adrenaline, cortisol).
+- While essential for survival, chronic sympathetic dominance leads to wear and tear on the body (allostatic load), erratic Heart Rate Variability, and incoherence.
+- The sympathetic system speeds up the heart's rhythm without smooth variability.
+- Sympathetic is the stress-response branch that speeds up the heart and creates an incoherent rhythm when chronically active.</response>
+
+    <response id="re::be::what_parasympathetic">- The parasympathetic nervous system is often called the "rest and digest" branch.
+- The parasympathetic nervous system calms the body after stress: slowing heart rate, lowering blood pressure, promoting digestion, and supporting recovery and repair.
+- The primary parasympathetic nerve is the vagus nerve, which connects directly from the brainstem to the heart.
+- High parasympathetic tone is associated with high HRV, resilience, emotional regulation, and heart coherence.
+- The parasympathetic system slows the heart rhythm and enables the smooth, wave-like variability characteristic of coherence.
+- Parasympathetic is the rest-and-recovery branch that calms the heart and enables a coherent, resilient rhythm.</response>
+
+    <response id="re::be::what_coherence">- Coherence (specifically heart coherence) is a distinct, measurable physiological state characterized by a smooth, sine-wave-like pattern in heart rate variability (HRV)—the natural beat-to-beat changes in heart rhythm.
+- While in the coherence state:
+    - The heart, brain, and nervous system are synchronized.
+    - There is a balance between the sympathetic (stress) and parasympathetic (relaxation) branches of the nervous system.
+    - Cognitive function, emotional stability, and immune response improves.
+    - Individuals are better able to radiate genuine compassion and care.
+- Coherence is intentionally cultivated through techniques like the Heart Coherence Technique (focusing on a sincere positive emotion, such as appreciation or care, while breathing rhythmically).
+- Coherence is the ordered, harmonious, and efficient functional state of the heart-rhythm-driven system.
+- Coherence in the heart produces a balanced, efficient nervous system. Incoherence produces a stressed and fragmented nervous system.
+- Heart Rate Variability is the natural beat-to-beat time change in your heart rhythm and is the key measurable signature of coherence.</response>
+
+    <response id="re::be::what_hrv">- HRV (Heart Rate Variability) is the natural, healthy variation in time between successive heartbeats.
+- A healthy heart does not beat like a metronome (perfectly regular); it speeds up slightly on the inhale and slows down slightly on the exhale.
+- This variability is a key indicator of nervous system balance and overall health.
+- High, ordered (sine-wave-like) HRV = coherence, resilience, and emotional regulation.
+- Low or erratic HRV = stress, fatigue, or illness.
+- HRV is the primary measurable metric used to assess heart coherence.
+- HRV is the natural beat-to-beat time change in your heart rhythm and is the key measurable signature of coherence.</response>
+
+    <response id="re::be::what_afferent">- Afferent signals are messages from the heart (and body) to the brain.
+- The majority of vagus nerve traffic is afferent—meaning the heart sends more information to the brain than the brain sends to the heart.
+- The heart's afferent signals strongly influence brain activity, particularly in areas governing emotion, decision-making, and perception.
+- The opposite of afferent is efferent: signals going from the central nervous system to the body.</response>
+
+    <response id="re::be::what_vagus_nerve">- The vagus nerve is the primary neural highway connecting the brainstem to the heart, lungs, and digestive tract.
+- The vagus nerve is the main conduit for parasympathetic (rest and digest) signals.
+- About 80-90% of vagus nerve fibers are afferent (carrying information from the heart and viscera to the brain).
+- Through the vagus nerve, the heart's rhythmic pattern and emotional state directly influence brain activity, particularly in regions associated with emotional regulation and social engagement.
+- A coherent heart rhythm is associated with healthy vagal tone (parasympathetic activity).
+- The vagus nerve is the primary physical cable connecting the heart's neural signals to the brain, mostly traveling heart to brain.</response>
+
+    <response id="re::be::what_vagus_tone">- Vagal tone is a measure of the activity level of the parasympathetic nervous system, specifically via the vagus nerve.
+- High vagal tone indicates a strong, resilient parasympathetic response: the ability to calm down quickly after stress, maintain emotional balance, and exhibit high HRV (heart rate variability).
+- High vagal tone is associated with heart coherence.
+- Low vagal tone is associated with chronic stress, inflammation, and erratic HRV.
+- Vagal tone can be improved through mindfulness, heart-focused breathing, and feeling sincere positive emotions.</response>
+
+    <response id="re::be::what_entrainment">- Entrainment is the natural, physical tendency for two or more independent oscillators (rhythmic systems) to synchronize with the strongest or most dominant rhythm when they are coupled.
+- In the body, the heart is the dominant oscillator. Its rhythmic electromagnetic field entrains (pulls into sync) other bodily rhythms, including brain waves, respiratory rhythms, and blood pressure oscillations.
+- In a coherent state, this entrainment is smooth and harmonious.
+- Incoherence disrupts entrainment.
+- Between people, the stronger heart field can entrain a weaker one, especially when both are coherent and in proximity.
+- Entrainment is the heart's natural ability to synchronize other bodily rhythms to its own coherent beat.</response>
+
+    <response id="re::be::what_essence">- The essence of something, is its collection of fundamental qualities.</response>
+
+    <response id="re::be::what_god">God is the ultimate reality.</response>
+
+    <response id="re::be::what_faith">- Faith is trust, commitment, or belief that is not based solely on logical proof or empirical evidence.
+- Faith is often involving confidence in a person, doctrine, or the ultimate reality.
+- Faith is what lets us board an airplane (trust in the pilot and engineers), marry someone (trust in their character), and pray (trust that we are heard). Faith is not the absence of doubt, but action in spite of it.</response>
+
+    <response id="re::be::what_spirituality">Spirituality is the search for meaning, connection, and transcendence.</response>
+
+    <response id="re::be::what_spirit">Spirit is God.</response>
+
+    <response id="re::be::what_eternal">- Eternal means without beginning or end.
+- Eternal exists outside of time.
+- Something eternal lasts for all time without cessation.
+- Immortal has no death like eternal but could have had a beginning.</response>
+
+    <response id="re::be::what_grace">- Grace is goodness that surprises.
+- Grace is the friend who forgives us before we finish apologizing.
+- Grace is the second chance.
+- Grace is the beauty of a kind word when we expected a deserved rebuke.</response>
+
+    <response id="re::be::what_mercy">- Mercy is compassion or forbearance shown toward someone whom it is within one's power to punish.
+- Justice is giving what is deserved and mercy is withholding the punishment that is deserved.
+- Mercy is what we naturally hope for when we have done wrong and cannot undo it.
+- Mercy is not choosing punishment but instead choosing compassion.</response>
+
+    <response id="re::be::what_beauty">- Beauty is the quality that gives pleasure, meaning, or a sense of harmony to the perceiver.
+- Kinds of beauty:
+    - Natural: A mountain, a flower, a tiger, a human face.
+    - Artistic: A painting, a symphony, a poem, a dance.
+    - Mathematical: The elegance of a proof, the symmetry of a fractal.
+    - Moral: An act of courage, forgiveness, or self-sacrifice.
+- Beauty is often associated with symmetry, proportion, vividness and emotional resonance.</response>
+
+    <response id="re::be::what_dance">- Dance is the art of moving the body in a rhythmic, patterned, and often expressive way—usually in relation to music, space, and sometimes other dancers.
+- A good relationship is like a dance: sometimes leading, sometimes following, always responding.
+- Wu wei is dancing: you do not think about each step; you simply move.
+- Yin and yang are the dance of opposites: forward/back, lift/release, tension/ease.
+- Dance is what happens when our body listens to our heart and the music at the same time.</response>
+
+    <response id="re::be::what_music">- Music is the art of organizing sound in time—using pitch, rhythm, dynamics, and timbre to create beauty, express emotion and/or convey meaning.
+- Music is organized sound that moves our body.</response>
+    
+    <response id="re::be::what_commitment">- Commitment is the deliberate binding of oneself to a course of action, a relationship, or a value—especially over time and despite difficulties.
+- Commitment is what turns love into a lifetime, a skill into mastery, and a promise into a memory that lives forever.</response>
+
+    <response id="re::be::what_doubt">- Doubt is a state of uncertainty or suspension between belief and disbelief
+- Doubt is a questioning of what is true, right, or real.</response>
+
+    <response id="re::be::what_certainty">- Certainty is a state of being completely convinced of a proposition.
+- Certainty is without doubt and without hesitation.
+- Certainty feels like solid ground. But some solid ground is actually frozen water. The wise person knows when to trust the ice and when to test it b/c certainty can lead to dogmatisim and Certainty can aid promote decisive action.</response>
+
+    <response id="re::be::what_order">- Order is the pattern, structure, arrangement, or regularity that makes a system predictable, coherent, and intelligible.
+- Chaos is raw potential and order is the shape imposed.
+- Too little order = chaos, confusion, inability to function.
+- Too much order = rigidity, tyranny, inability to adapt or create.
+- Order vs Chaos:
+    - Order:
+        - Logical Reasoning / Conscious / Brain / Linear / Local / Yang / Order / Predictable
+        - Example: I desire to think of a red sports car and then I start imagining a red sports car.
+    - Chaos:
+        - Intuitive Receiving / Unconscious / Heart / Subconscious / Non-Linear / Non-Local / Yin / Chaos / Unpredictable
+        - Examples:
+            - I desire to know if Rose is the one I should marry and I receive no intuitive guidance.
+            - I desire to know if Rose is the one I should marry and then I receive a feelings that I interpret as a clear knowing that Rose is the one that I should marry.
+            - I desire to know if Rose is the one I should marry and then I receive a dream about a river flowing into the ocean which is symbolic, indirect and open to interpretation.
+            - I am taking a shower, so I desire to get clean but I receive a random feeling that I interpret as a clear knowing that Rose is the one that I should marry
+- Order is the shelf that holds your books, the beat that lets you dance, the law that lets you walk down the street without fear. Order is not freedom's enemy; it is freedom's scaffolding.</response>
+
+    <response id="re::be::what_chaos">- Chaos is the absence of predictable order.
+- Chaos is raw potential and order is the shape imposed.
+- Order vs Chaos:
+    - Order:
+        - Logical Reasoning / Conscious / Brain / Linear / Local / Yang / Order / Predictable
+        - Example: I desire to think of a red sports car and then I start imagining a red sports car.
+    - Chaos:
+        - Intuitive Receiving / Unconscious / Heart / Subconscious / Non-Linear / Non-Local / Yin / Chaos / Unpredictable
+        - Examples:
+            - I desire to know if Rose is the one I should marry and I receive no intuitive guidance.
+            - I desire to know if Rose is the one I should marry and then I receive a feelings that I interpret as a clear knowing that Rose is the one that I should marry.
+            - I desire to know if Rose is the one I should marry and then I receive a dream about a river flowing into the ocean which is symbolic, indirect and open to interpretation.
+            - I am taking a shower, so I desire to get clean but I receive a random feeling that I interpret as a clear knowing that Rose is the one that I should marry
+- Chaos is the natural, unpredictable and creative potential that order shapes into meaning.</response>
+
+    <response id="re::be::what_tao">- The Tao (pronounced "Dow") that can be told is not the eternal Tao.
+    - The Tao cannot be fully captured in words or concepts.
+- The Tao is the ultimate principle of the universe.
+- The Tao is the natural, spontaneous, eternal way that underlies, unites, and flows through all things.
+- The Tao is a process.
+- The Tao is the "way" of nature, the rhythm of existence and the path that cannot be forced.
+- The Tao is the way of water—soft, patient, persistent, carving canyons not by strength but by steady presence.
+- We cannot grasp the Tao but we can live it.
+- The Tao is the unnamable, spontaneous, creative way of the universe—to be lived, not just understood.</response>
+
+    <response id="re::be::what_wu_wei">- Wu wei (pronounced "woo way") means effortless action, non forcing and acting in such a way that one's actions are in complete harmony with the natural flow of things.
+- Wu wei is NOT:
+    - Laziness or passivity.
+    - Doing nothing.
+    - Giving up.
+- Wu wei IS:
+    - Action so skillful, so spontaneous, so perfectly timed that it feels effortless.
+    - Acting without forcing, without straining, without self-conscious effort.
+    - The state of "flow" described by athletes, artists, and musicians when they are "in the zone".
+- Wu wei is how the Tao acts. The Tao does not try to make spring follow winter; it simply does. The river does not try to flow downhill; it simply does. Wu wei is aligning oneself with that same spontaneous, effortless creativity.
+- Wu wei is action without forcing—effortless, spontaneous, perfectly aligned with the way things are.</response>
+
+    <response id="re::be::what_yin_yang">- Yin and Yang are the two complementary, interdependent, and dynamic polarities that constitute all aspects of reality.
+- Yin and Yang are not opposites in conflict, but partners in dance.
+- Yin:
+    1. Nature: Receptive, passive, yielding.
+    2. Direction: Downward, inward, contracting.
+    3. Energy: Dark, cool, moist, heavy.
+    4. Time: Night.
+    5. Season: Winter.
+    6. Substance: Earth, water, moon.
+    7. Gender: Feminine.
+    8. Breath: Exhale
+    9. Communication: Listening
+- Yang:
+    1. Nature: Active, assertive, moving.
+    2. Direction: Upward, outward, expanding.
+    3. Energy: Light, warm, dry, light.
+    4. Time: Day.
+    5. Season: Summer.
+    6. Substance: Sky, fire, sun.
+    7. Gender: Masculine.
+    8. Breath: Inhale
+    9. Communication: Speaking
+- Principles:
+    1. Interdependence: Yin and yang define each other. There is no "up" without "down," no "dark" without "light."
+    2. Mutual containment: Yin contains the seed of yang; yang contains the seed of yin (the dots in the tai chi symbol).
+    3. Dynamic balance: When one reaches its extreme, it transforms into the other. Day becomes night; winter becomes summer.
+    4. Harmony, not conflict: The goal is not the victory of one over the other but their harmonious interplay.
+- Yin vs Yang:
+    - Yang:
+        - Logical Reasoning / Conscious / Brain / Linear / Local / Order / Predictable
+        - Example: I desire to think of a red sports car and then I start imagining a red sports car.
+    - Yin:
+        - Intuitive Receiving / Unconscious / Heart / Subconscious / Non-Linear / Non-Local / Chaos / Unpredictable
+        - Examples:
+            - I desire to know if Rose is the one I should marry and I receive no intuitive guidance.
+            - I desire to know if Rose is the one I should marry and then I receive a feelings that I interpret as a clear knowing that Rose is the one that I should marry.
+            - I desire to know if Rose is the one I should marry and then I receive a dream about a river flowing into the ocean which is symbolic, indirect and open to interpretation.
+            - I am taking a shower, so I desire to get clean but I receive a random feeling that I interpret as a clear knowing that Rose is the one that I should marry
+- The art of living is not to eliminate one but to balance both.</response>
+
+    <response id="re::be::what_conflict">- Conflict is a state of opposition, disagreement, or clash between forces.
+- Conflict can be within a person, between people, between groups, or between principles.
+- Conflict reveals problems that need solving.
+- Conflict can clarify values and strengthen relationships (if resolved well).
+- Conflict can lead to escalation, violence and destruction.
+- Conflict is not the enemy. Unskilled response to conflict is the enemy. The goal is not to eliminate conflict, but to dance with it—to let it reveal truth without destroying the dancers.
+- Comparison is noticing differences and similarities, conflict is clash that involves hostility and competition is striving against another for a scarce goal.
+- Conflict is the clash of opposing forces.
+- Depending on how conflict is handled its the source of destruction or creativity.</response>
+
+    <response id="re::be::what_complementary">- Complementary describes two or more things that are different but together complete.
+- Complementary things perfect each other.
+- Each complementary item provides what the other lacks.
+- Relationships:
+    - Identical:
+        - Same in all relevant respects.
+        - Examples: Two identical twins; two printed copies.
+    - Opposite:
+        - Maximally different on a single spectrum.
+        - Examples: Black and white. hot and cold.
+    - Contradictory:
+        - Mutually exclusive.
+        - Examples: "It is raining" vs. "It is not raining"
+    - Complementary:
+        - Different but mutually completing.
+        - Examples: Yin and yang. Husband as provider and wife as homemaker. Wings of an airplane. DNA strands.
+- Complementary does not mean the same, it means different, but designed to fit.</response>
+
+    <response id="re::be::what_contradictory">- Contradictory describes two statements, propositions, or claims that cannot both be true and cannot both be false—they are exact opposites.
+- Relationships:
+    - Identical:
+        - Same in all relevant respects.
+        - Examples: Two identical twins; two printed copies.
+    - Opposite:
+        - Maximally different on a single spectrum.
+        - Examples: Black and white. hot and cold.
+    - Contradictory:
+        - Mutually exclusive.
+        - Examples: "It is raining" vs. "It is not raining"
+    - Complementary:
+        - Different but mutually completing.
+        - Examples: Yin and yang. Husband as provider and wife as homemaker. Wings of an airplane. DNA strands.
+- Contradictory means mutually exclusive—both cannot be true, and both cannot be false.</response>
+
+    <response id="re::be::what_competition">- Competition is a contest or rivalry in which two or more parties strive for a goal that cannot be shared.
+- Comparison is noticing differences and similarities, conflict is clash that involves hostility and competition is striving against another for a scarce goal.
+- Competition can undermine cooperation, foster envy, encourage cheating and damage relationships.
+- Competition can provide motivation and source excellence and innovation.
+- Competition is the fire that burns relationships and the fire that forges excellence. The art is knowing when to compete and when to cooperate.
+- Competition is striving against another for a goal that cannot be shared.</response>
+
+    <response id="re::be::what_cooperation">- Cooperation is acting together with others for mutual benefit.
+- Cooperation is coordinating behavior to achieve a shared outcome, even if each party also has individual interests.
+- Key features of cooperation:
+    - Mutual benefit: Each party gains from cooperating.
+    - Coordination: Aligning actions to avoid conflict or waste.
+    - May not require shared identity: Strangers can cooperate (e.g., following traffic laws).
+    - Can be minimal: Cooperation does not require liking each other, only aligning actions.
+- Cooperation is minimal integration, low intesity and has a mutual benefit goal (two farmers sharing a well) while collaboration is deep integration, high intesity and a joint cration goal (two architects designing a building together).
+- Cooperation is acting together for mutual benefit.</response>
+
+    <response id="re::be::what_vs">- "Vs" (versus/vs/vs.) indicates opposition, contest or comparison between two things.
+- "Vs" helps us compare two things.</response>
+
+    <response id="re::be::what_comparison">- Comparison is the act of examining two or more things to identify their similarities and differences.
+- Comparison is evaluating things relative to each other or to a standard.
+- Types of comparison:
+    - Similarity: How things are alike.
+    - Difference: How things are unlike.
+    - Comparative judgment: Which is more or less of a quality.
+    - Evaluative comparison: Which is better or worse..
+- Comparison can lead to envy but comparison is essential for learning, improvement and for wisdom (discerning better from worse).
+- Comparison is the act of measuring things against each other.</response>
+
+    <response id="re::be::what_collaboration">- Collaboration is working together with others to produce or create something.
+- Collaboration is creative effort toward a shared goal.
+- Key features of collaboration:
+    - Shared goal: All parties want the same outcome.
+    - Distinct contributions: Different people do different things (division of labor).
+    - Mutual interdependence: Success depends on others doing their part.
+    - Coordination: Requires communication, trust, and alignment.
+- Cooperation is minimal integration, low intesity and has a mutual benefit goal (two farmers sharing a well) while collaboration is deep integration, high intesity and a joint cration goal (two architects designing a building together).
+- Collaboration is joint creative effort.</response>
+
+    <response id="re::be::what_discipline">- Discipline is the practice of training oneself to follow rules, codes, or standards of behavior.
+- Discipline is often involving self-control, consistency and the subordination of immediate desires to long-term goals.
+- Components of discipline:
+    - Delayed gratification: Choosing a larger later reward over a smaller now reward.
+    - Habit formation: Automating good behaviors so they require less willpower.
+    - Resilience: Continuing despite difficulty, boredom, or setback.
+    - Boundary setting: Saying no to distractions and temptations.
+- Discipline is training that aligns action with intention.</response>
+
+    <response id="re::be::what_courage">- Courage is the ability to act despite fear, danger, difficulty, or pain.
+- Courage is not the absence of fear, but the mastery of it.
+- Types of courage:
+    - Physical courage: Acting despite bodily harm or death.
+    - Moral courage: Acting according to conscience despite social disapproval or retaliation.
+    - Psychological courage: Facing painful emotions, traumas, or fears.
+    - Intellectual courage: Questioning cherished beliefs; pursuing truth despite discomfort.
+- Courage is not the absence of trembling. It is trembling and stepping forward anyway.</response>
+
+    <response id="re::be::what_wisdom">- Wisdom is the ability to make sound judgments about how to live.
+- Wisdom is integrating knowledge, experience, good judgment, and moral character to choose the right means to good ends.
+- The components of wisdom:
+    - Knowledge: Knowing facts, principles, and how things work.
+    - Experience: Having lived through situations, successes, and failures.
+    - Good judgment: The ability to discern what is important, fitting, and prudent in a specific context.
+    - Moral character: Caring about what is good, not just what is effective.
+    - Humility: Knowing the limits of your own knowledge and the possibility of being wrong.
+- Wisdom is knowing what matters, what to do about it, and having the character to do it.</response>
+
+    <response id="re::be::what_skill">- Skill is the learned ability to perform a task with proficiency
+- Skill is achieving desired results with economy of effort, time, and attention.
+- The stages of skill acquisition:
+    1. Unconscious incompetence: You do not know that you cannot do it.
+    2. Conscious incompetence: You know that you cannot do it.
+    3. Conscious competence: You can do it, but only with deliberate attention and effort.
+    4. Unconscious competence: You can do it effortlessly, without thinking (wu wei).
+- Types of skill:
+    - Physical: Playing a sport, typing, surgery, dancing.
+    - Cognitive: Solving math problems, chess, strategic planning.
+    - Social: Listening, negotiating, comforting, leading.
+    - Artistic: Painting, singing, writing.
+- Skill is the fruit of practice.
+- Skill is learned proficiency.
+- Sill is knowing how to do something well.</response>
+
+    <response id="re::be::what_perfect">- Perfect means without flaw, defect, or deficiency.
+- Perfect is complete, whole, and conforming exactly to a standard or ideal.
+- Perfect is without defect and optimal is the best possible under the given constraints.
+- Perfect means without flaw.
+- Perfect is an ideal to strive for but not a condition to demand.</response>
+
+    <response id="re::be::what_value">- Value is the worth, importance, or utility of something.
+- Value is what makes something desirable, beneficial, or good.
+- Value is what matters, what is desirable and what is good.</response>
+
+    <response id="re::be::what_quality">- Quality is the standard of excellence.
+- Quality is a measure of how well something meets its purpose.
+- Quality is how much something possesses desirable attributes.
+- Quality is the felt sense of "goodness" in a thing or an act.
+- Quality is how good something is.</response>
   </responses>
+
+
+
+  <sources>
+    <source id="so::be::energetic_heart" url="https://www.scribd.com/document/171835246/The-Energetic-Heart" title="The Energetic Heart" />
+  </sources>
 
 
 
@@ -1326,5 +3253,182 @@
     <sample-ids prompt="pr::be::what_evaluate" thought="th::be::what_evaluate" response="re::be::what_evaluate" />
     <sample-ids prompt="pr::be::what_precision" thought="th::be::what_precision" response="re::be::what_precision" />
     <sample-ids prompt="pr::be::what_equipped" thought="th::be::what_equipped" response="re::be::what_equipped" />
+    <sample-ids prompt="pr::be::what_measurement" thought="th::be::what_measurement" response="re::be::what_measurement" />
+    <sample-ids prompt="pr::be::what_science" thought="th::be::what_science" response="re::be::what_science" />
+    <sample-ids prompt="pr::be::what_physics" thought="th::be::what_physics" response="re::be::what_physics" />
+    <sample-ids prompt="pr::be::what_field" thought="th::be::what_field" response="re::be::what_field" />
+    <sample-ids prompt="pr::be::what_universe" thought="th::be::what_universe" response="re::be::what_universe" />
+    <sample-ids prompt="pr::be::what_cosmos" thought="th::be::what_cosmos" response="re::be::what_cosmos" />
+    <sample-ids prompt="pr::be::what_gravity" thought="th::be::what_gravity" response="re::be::what_gravity" />
+    <sample-ids prompt="pr::be::what_space" thought="th::be::what_space" response="re::be::what_space" />
+    <sample-ids prompt="pr::be::what_time" thought="th::be::what_time" response="re::be::what_time" />
+    <sample-ids prompt="pr::be::what_physical" thought="th::be::what_physical" response="re::be::what_physical" />
+    <sample-ids prompt="pr::be::what_mass" thought="th::be::what_mass" response="re::be::what_mass" />
+    <sample-ids prompt="pr::be::what_volume" thought="th::be::what_volume" response="re::be::what_volume" />
+    <sample-ids prompt="pr::be::what_matter" thought="th::be::what_matter" response="re::be::what_matter" />
+    <sample-ids prompt="pr::be::what_atom" thought="th::be::what_atom" response="re::be::what_atom" />
+    <sample-ids prompt="pr::be::what_oscillation" thought="th::be::what_oscillation" response="re::be::what_oscillation" />
+    <sample-ids prompt="pr::be::what_frequency" thought="th::be::what_frequency" response="re::be::what_frequency" />
+    <sample-ids prompt="pr::be::what_wave" thought="th::be::what_wave" response="re::be::what_wave" />
+    <sample-ids prompt="pr::be::what_energy" thought="th::be::what_energy" response="re::be::what_energy" />
+    <sample-ids prompt="pr::be::what_radiation" thought="th::be::what_radiation" response="re::be::what_radiation" />
+    <sample-ids prompt="pr::be::what_electromagnetic_radiation" thought="th::be::what_electromagnetic_radiation" response="re::be::what_electromagnetic_radiation" />
+    <sample-ids prompt="pr::be::what_light" thought="th::be::what_light" response="re::be::what_light" />
+    <sample-ids prompt="pr::be::what_galaxy" thought="th::be::what_galaxy" response="re::be::what_galaxy" />
+    <sample-ids prompt="pr::be::what_milky_way" thought="th::be::what_milky_way" response="re::be::what_milky_way" />
+    <sample-ids prompt="pr::be::what_star" thought="th::be::what_star" response="re::be::what_star" />
+    <sample-ids prompt="pr::be::what_plasma" thought="th::be::what_plasma" response="re::be::what_plasma" />
+    <sample-ids prompt="pr::be::what_gas" thought="th::be::what_gas" response="re::be::what_gas" />
+    <sample-ids prompt="pr::be::what_solar_system" thought="th::be::what_solar_system" response="re::be::what_solar_system" />
+    <sample-ids prompt="pr::be::what_neighborhood" thought="th::be::what_neighborhood" response="re::be::what_neighborhood" />
+    <sample-ids prompt="pr::be::what_orbit" thought="th::be::what_orbit" response="re::be::what_orbit" />
+    <sample-ids prompt="pr::be::what_sun" thought="th::be::what_sun" response="re::be::what_sun" />
+    <sample-ids prompt="pr::be::what_planet" thought="th::be::what_planet" response="re::be::what_planet" />
+    <sample-ids prompt="pr::be::what_earth" thought="th::be::what_earth" response="re::be::what_earth" />
+    <sample-ids prompt="pr::be::what_world" thought="th::be::what_world" response="re::be::what_world" />
+    <sample-ids prompt="pr::be::what_celestial" thought="th::be::what_celestial" response="re::be::what_celestial" />
+    <sample-ids prompt="pr::be::what_terrestrial" thought="th::be::what_terrestrial" response="re::be::what_terrestrial" />
+    <sample-ids prompt="pr::be::what_aquatic" thought="th::be::what_aquatic" response="re::be::what_aquatic" />
+    <sample-ids prompt="pr::be::what_mountain" thought="th::be::what_mountain" response="re::be::what_mountain" />
+    <sample-ids prompt="pr::be::what_forest" thought="th::be::what_forest" response="re::be::what_forest" />
+    <sample-ids prompt="pr::be::what_fresh_water" thought="th::be::what_fresh_water" response="re::be::what_fresh_water" />
+    <sample-ids prompt="pr::be::what_salt_water" thought="th::be::what_salt_water" response="re::be::what_salt_water" />
+    <sample-ids prompt="pr::be::what_atmosphere" thought="th::be::what_atmosphere" response="re::be::what_atmosphere" />
+    <sample-ids prompt="pr::be::what_vacuum" thought="th::be::what_vacuum" response="re::be::what_vacuum" />
+    <sample-ids prompt="pr::be::what_greenhouse_effect" thought="th::be::what_greenhouse_effect" response="re::be::what_greenhouse_effect" />
+    <sample-ids prompt="pr::be::what_vapor" thought="th::be::what_vapor" response="re::be::what_vapor" />
+    <sample-ids prompt="pr::be::what_air" thought="th::be::what_air" response="re::be::what_air" />
+    <sample-ids prompt="pr::be::what_breath" thought="th::be::what_breath" response="re::be::what_breath" />
+    <sample-ids prompt="pr::be::what_carbon_dioxide" thought="th::be::what_carbon_dioxide" response="re::be::what_carbon_dioxide" />
+    <sample-ids prompt="pr::be::what_nitrogen" thought="th::be::what_nitrogen" response="re::be::what_nitrogen" />
+    <sample-ids prompt="pr::be::what_oxygen" thought="th::be::what_oxygen" response="re::be::what_oxygen" />
+    <sample-ids prompt="pr::be::what_argon" thought="th::be::what_argon" response="re::be::what_argon" />
+    <sample-ids prompt="pr::be::what_wind" thought="th::be::what_wind" response="re::be::what_wind" />
+    <sample-ids prompt="pr::be::what_satellite" thought="th::be::what_satellite" response="re::be::what_satellite" />
+    <sample-ids prompt="pr::be::what_moon" thought="th::be::what_moon" response="re::be::what_moon" />
+    <sample-ids prompt="pr::be::what_tide" thought="th::be::what_tide" response="re::be::what_tide" />
+    <sample-ids prompt="pr::be::what_heat" thought="th::be::what_heat" response="re::be::what_heat" />
+    <sample-ids prompt="pr::be::what_temperature" thought="th::be::what_temperature" response="re::be::what_temperature" />
+    <sample-ids prompt="pr::be::what_celsius" thought="th::be::what_celsius" response="re::be::what_celsius" />
+    <sample-ids prompt="pr::be::what_fahrenheit" thought="th::be::what_fahrenheit" response="re::be::what_fahrenheit" />
+    <sample-ids prompt="pr::be::what_thermometer" thought="th::be::what_thermometer" response="re::be::what_thermometer" />
+    <sample-ids prompt="pr::be::what_hot" thought="th::be::what_hot" response="re::be::what_hot" />
+    <sample-ids prompt="pr::be::what_cold" thought="th::be::what_cold" response="re::be::what_cold" />
+    <sample-ids prompt="pr::be::what_water" thought="th::be::what_water" response="re::be::what_water" />
+    <sample-ids prompt="pr::be::what_water_cycle" thought="th::be::what_water_cycle" response="re::be::what_water_cycle" />
+    <sample-ids prompt="pr::be::what_cycle" thought="th::be::what_cycle" response="re::be::what_cycle" />
+    <sample-ids prompt="pr::be::what_system" thought="th::be::what_system" response="re::be::what_system" />
+    <sample-ids prompt="pr::be::what_recycling" thought="th::be::what_recycling" response="re::be::what_recycling" />
+    <sample-ids prompt="pr::be::what_ocean" thought="th::be::what_ocean" response="re::be::what_ocean" />
+    <sample-ids prompt="pr::be::what_lake" thought="th::be::what_lake" response="re::be::what_lake" />
+    <sample-ids prompt="pr::be::what_pond" thought="th::be::what_pond" response="re::be::what_pond" />
+    <sample-ids prompt="pr::be::what_river" thought="th::be::what_river" response="re::be::what_river" />
+    <sample-ids prompt="pr::be::what_stream" thought="th::be::what_stream" response="re::be::what_stream" />
+    <sample-ids prompt="pr::be::what_photosynthesis" thought="th::be::what_photosynthesis" response="re::be::what_photosynthesis" />
+    <sample-ids prompt="pr::be::what_food" thought="th::be::what_food" response="re::be::what_food" />
+    <sample-ids prompt="pr::be::what_life" thought="th::be::what_life" response="re::be::what_life" />
+    <sample-ids prompt="pr::be::what_organism" thought="th::be::what_organism" response="re::be::what_organism" />
+    <sample-ids prompt="pr::be::what_carbon" thought="th::be::what_carbon" response="re::be::what_carbon" />
+    <sample-ids prompt="pr::be::what_nutrients" thought="th::be::what_nutrients" response="re::be::what_nutrients" />
+    <sample-ids prompt="pr::be::what_soil" thought="th::be::what_soil" response="re::be::what_soil" />
+    <sample-ids prompt="pr::be::what_cell" thought="th::be::what_cell" response="re::be::what_cell" />
+    <sample-ids prompt="pr::be::what_bacteria" thought="th::be::what_bacteria" response="re::be::what_bacteria" />
+    <sample-ids prompt="pr::be::what_caterpillar" thought="th::be::what_caterpillar" response="re::be::what_caterpillar" />
+    <sample-ids prompt="pr::be::what_butterfly" thought="th::be::what_butterfly" response="re::be::what_butterfly" />
+    <sample-ids prompt="pr::be::what_family" thought="th::be::what_family" response="re::be::what_family" />
+    <sample-ids prompt="pr::be::what_baby" thought="th::be::what_baby" response="re::be::what_baby" />
+    <sample-ids prompt="pr::be::what_parent" thought="th::be::what_parent" response="re::be::what_parent" />
+    <sample-ids prompt="pr::be::what_child" thought="th::be::what_child" response="re::be::what_child" />
+    <sample-ids prompt="pr::be::what_marriage" thought="th::be::what_marriage" response="re::be::what_marriage" />
+    <sample-ids prompt="pr::be::what_love" thought="th::be::what_love" response="re::be::what_love" />
+    <sample-ids prompt="pr::be::what_romance" thought="th::be::what_romance" response="re::be::what_romance" />
+    <sample-ids prompt="pr::be::what_relationship" thought="th::be::what_relationship" response="re::be::what_relationship" />
+    <sample-ids prompt="pr::be::what_connection" thought="th::be::what_connection" response="re::be::what_connection" />
+    <sample-ids prompt="pr::be::what_male" thought="th::be::what_male" response="re::be::what_male" />
+    <sample-ids prompt="pr::be::what_man" thought="th::be::what_man" response="re::be::what_man" />
+    <sample-ids prompt="pr::be::what_boy" thought="th::be::what_boy" response="re::be::what_boy" />
+    <sample-ids prompt="pr::be::what_masculine" thought="th::be::what_masculine" response="re::be::what_masculine" />
+    <sample-ids prompt="pr::be::what_he" thought="th::be::what_he" response="re::be::what_he" />
+    <sample-ids prompt="pr::be::what_him" thought="th::be::what_him" response="re::be::what_him" />
+    <sample-ids prompt="pr::be::what_husband" thought="th::be::what_husband" response="re::be::what_husband" />
+    <sample-ids prompt="pr::be::what_boyfriend" thought="th::be::what_boyfriend" response="re::be::what_boyfriend" />
+    <sample-ids prompt="pr::be::what_father" thought="th::be::what_father" response="re::be::what_father" />
+    <sample-ids prompt="pr::be::what_brother" thought="th::be::what_brother" response="re::be::what_brother" />
+    <sample-ids prompt="pr::be::what_grandfather" thought="th::be::what_grandfather" response="re::be::what_grandfather" />
+    <sample-ids prompt="pr::be::what_female" thought="th::be::what_female" response="re::be::what_female" />
+    <sample-ids prompt="pr::be::what_woman" thought="th::be::what_woman" response="re::be::what_woman" />
+    <sample-ids prompt="pr::be::what_girl" thought="th::be::what_girl" response="re::be::what_girl" />
+    <sample-ids prompt="pr::be::what_feminine" thought="th::be::what_feminine" response="re::be::what_feminine" />
+    <sample-ids prompt="pr::be::what_she" thought="th::be::what_she" response="re::be::what_she" />
+    <sample-ids prompt="pr::be::what_her" thought="th::be::what_her" response="re::be::what_her" />
+    <sample-ids prompt="pr::be::what_wife" thought="th::be::what_wife" response="re::be::what_wife" />
+    <sample-ids prompt="pr::be::what_girlfriend" thought="th::be::what_girlfriend" response="re::be::what_girlfriend" />
+    <sample-ids prompt="pr::be::what_mother" thought="th::be::what_mother" response="re::be::what_mother" />
+    <sample-ids prompt="pr::be::what_sister" thought="th::be::what_sister" response="re::be::what_sister" />
+    <sample-ids prompt="pr::be::what_grandmother" thought="th::be::what_grandmother" response="re::be::what_grandmother" />
+    <sample-ids prompt="pr::be::what_rhythm" thought="th::be::what_rhythm" response="re::be::what_rhythm" />
+    <sample-ids prompt="pr::be::what_mind" thought="th::be::what_mind" response="re::be::what_mind" />
+    <sample-ids prompt="pr::be::what_mind_set" thought="th::be::what_mind_set" response="re::be::what_mind_set" />
+    <sample-ids prompt="pr::be::what_conscious" thought="th::be::what_conscious" response="re::be::what_conscious" />
+    <sample-ids prompt="pr::be::what_unconscious" thought="th::be::what_unconscious" response="re::be::what_unconscious" />
+    <sample-ids prompt="pr::be::what_subconscious" thought="th::be::what_subconscious" response="re::be::what_subconscious" />
+    <sample-ids prompt="pr::be::what_archetype" thought="th::be::what_archetype" response="re::be::what_archetype" />
+    <sample-ids prompt="pr::be::what_psyche" thought="th::be::what_psyche" response="re::be::what_psyche" />
+    <sample-ids prompt="pr::be::what_consciousness" thought="th::be::what_consciousness" response="re::be::what_consciousness" />
+    <sample-ids prompt="pr::be::what_awareness" thought="th::be::what_awareness" response="re::be::what_awareness" />
+    <sample-ids prompt="pr::be::what_focus" thought="th::be::what_focus" response="re::be::what_focus" />
+    <sample-ids prompt="pr::be::what_clarity" thought="th::be::what_clarity" response="re::be::what_clarity" />
+    <sample-ids prompt="pr::be::what_heart" thought="th::be::what_heart" response="re::be::what_heart" source="so::be::energetic_heart" />
+    <sample-ids prompt="pr::be::what_brain" thought="th::be::what_brain" response="re::be::what_brain" source="so::be::energetic_heart" />
+    <sample-ids prompt="pr::be::what_non_local" thought="th::be::what_non_local" response="re::be::what_non_local" source="so::be::energetic_heart" />
+    <sample-ids prompt="pr::be::what_non_linear" thought="th::be::what_non_linear" response="re::be::what_non_linear" source="so::be::energetic_heart" />
+    <sample-ids prompt="pr::be::what_intuition" thought="th::be::what_intuition" response="re::be::what_intuition" source="so::be::energetic_heart" />
+    <sample-ids prompt="pr::be::what_conscience" thought="th::be::what_conscience" response="re::be::what_conscience" source="so::be::energetic_heart" />
+    <sample-ids prompt="pr::be::what_meditation" thought="th::be::what_meditation" response="re::be::what_meditation" source="so::be::energetic_heart" />
+    <sample-ids prompt="pr::be::what_mindfulness" thought="th::be::what_mindfulness" response="re::be::what_mindfulness" source="so::be::energetic_heart" />
+    <sample-ids prompt="pr::be::what_instinct" thought="th::be::what_instinct" response="re::be::what_instinct" />
+    <sample-ids prompt="pr::be::what_nervous_system" thought="th::be::what_nervous_system" response="re::be::what_nervous_system" source="so::be::energetic_heart" />
+    <sample-ids prompt="pr::be::what_sympathetic" thought="th::be::what_sympathetic" response="re::be::what_sympathetic" source="so::be::energetic_heart" />
+    <sample-ids prompt="pr::be::what_parasympathetic" thought="th::be::what_parasympathetic" response="re::be::what_parasympathetic" source="so::be::energetic_heart" />
+    <sample-ids prompt="pr::be::what_coherence" thought="th::be::what_coherence" response="re::be::what_coherence" source="so::be::energetic_heart" />
+    <sample-ids prompt="pr::be::what_hrv" thought="th::be::what_hrv" response="re::be::what_hrv" source="so::be::energetic_heart" />
+    <sample-ids prompt="pr::be::what_afferent" thought="th::be::what_afferent" response="re::be::what_afferent" source="so::be::energetic_heart" />
+    <sample-ids prompt="pr::be::what_vagus_nerve" thought="th::be::what_vagus_nerve" response="re::be::what_vagus_nerve" source="so::be::energetic_heart" />
+    <sample-ids prompt="pr::be::what_vagus_tone" thought="th::be::what_vagus_tone" response="re::be::what_vagus_tone" source="so::be::energetic_heart" />
+    <sample-ids prompt="pr::be::what_entrainment" thought="th::be::what_entrainment" response="re::be::what_entrainment" source="so::be::energetic_heart" />
+    <sample-ids prompt="pr::be::what_essence" thought="th::be::what_essence" response="re::be::what_essence" />
+    <sample-ids prompt="pr::be::what_god" thought="th::be::what_god" response="re::be::what_god" />
+    <sample-ids prompt="pr::be::what_faith" thought="th::be::what_faith" response="re::be::what_faith" />
+    <sample-ids prompt="pr::be::what_spirituality" thought="th::be::what_spirituality" response="re::be::what_spirituality" />
+    <sample-ids prompt="pr::be::what_spirit" thought="th::be::what_spirit" response="re::be::what_spirit" />
+    <sample-ids prompt="pr::be::what_eternal" thought="th::be::what_eternal" response="re::be::what_eternal" />
+    <sample-ids prompt="pr::be::what_grace" thought="th::be::what_grace" response="re::be::what_grace" />
+    <sample-ids prompt="pr::be::what_mercy" thought="th::be::what_mercy" response="re::be::what_mercy" />
+    <sample-ids prompt="pr::be::what_beauty" thought="th::be::what_beauty" response="re::be::what_beauty" />
+    <sample-ids prompt="pr::be::what_dance" thought="th::be::what_dance" response="re::be::what_dance" />
+    <sample-ids prompt="pr::be::what_music" thought="th::be::what_music" response="re::be::what_music" />
+    <sample-ids prompt="pr::be::what_commitment" thought="th::be::what_commitment" response="re::be::what_commitment" />
+    <sample-ids prompt="pr::be::what_doubt" thought="th::be::what_doubt" response="re::be::what_doubt" />
+    <sample-ids prompt="pr::be::what_certainty" thought="th::be::what_certainty" response="re::be::what_certainty" />
+    <sample-ids prompt="pr::be::what_order" thought="th::be::what_order" response="re::be::what_order" />
+    <sample-ids prompt="pr::be::what_chaos" thought="th::be::what_chaos" response="re::be::what_chaos" />
+    <sample-ids prompt="pr::be::what_tao" thought="th::be::what_tao" response="re::be::what_tao" />
+    <sample-ids prompt="pr::be::what_wu_wei" thought="th::be::what_wu_wei" response="re::be::what_wu_wei" />
+    <sample-ids prompt="pr::be::what_yin_yang" thought="th::be::what_yin_yang" response="re::be::what_yin_yang" />
+    <sample-ids prompt="pr::be::what_conflict" thought="th::be::what_conflict" response="re::be::what_conflict" />
+    <sample-ids prompt="pr::be::what_complementary" thought="th::be::what_complementary" response="re::be::what_complementary" />
+    <sample-ids prompt="pr::be::what_contradictory" thought="th::be::what_contradictory" response="re::be::what_contradictory" />
+    <sample-ids prompt="pr::be::what_competition" thought="th::be::what_competition" response="re::be::what_competition" />
+    <sample-ids prompt="pr::be::what_cooperation" thought="th::be::what_cooperation" response="re::be::what_cooperation" />
+    <sample-ids prompt="pr::be::what_vs" thought="th::be::what_vs" response="re::be::what_vs" />
+    <sample-ids prompt="pr::be::what_comparison" thought="th::be::what_comparison" response="re::be::what_comparison" />
+    <sample-ids prompt="pr::be::what_collaboration" thought="th::be::what_collaboration" response="re::be::what_collaboration" />
+    <sample-ids prompt="pr::be::what_discipline" thought="th::be::what_discipline" response="re::be::what_discipline" />
+    <sample-ids prompt="pr::be::what_courage" thought="th::be::what_courage" response="re::be::what_courage" />
+    <sample-ids prompt="pr::be::what_wisdom" thought="th::be::what_wisdom" response="re::be::what_wisdom" />
+    <sample-ids prompt="pr::be::what_skill" thought="th::be::what_skill" response="re::be::what_skill" />
+    <sample-ids prompt="pr::be::what_perfect" thought="th::be::what_perfect" response="re::be::what_perfect" />
+    <sample-ids prompt="pr::be::what_value" thought="th::be::what_value" response="re::be::what_value" />
+    <sample-ids prompt="pr::be::what_quality" thought="th::be::what_quality" response="re::be::what_quality" />
   </samples>
 </train>
